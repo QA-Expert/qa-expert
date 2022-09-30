@@ -1,6 +1,6 @@
 module.exports = {
   ...require('config/eslint-api'),
-  // custom-api lives in turborepo rootFolder/packages/eslint-config-custom-api
+  // config/eslint-api lives in turborepo rootFolder/packages/config/eslint-api.js
   parserOptions: {
     root: true,
     project: 'tsconfig.json',

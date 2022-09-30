@@ -1,5 +1,5 @@
 module.exports = {
-  // custom-web lives in turborepo rootFolder/packages/eslint-config-custom-web
+  // config/eslint-web lives in turborepo rootFolder/packages/config/eslint-web.js
   ...require('config/eslint-web.js'),
   parserOptions: {
     tsconfigRootDir: __dirname,
