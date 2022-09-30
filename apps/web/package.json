@@ -23,6 +23,7 @@
     "postcss": "^8.1.0",
     "tsconfig": "*",
     "typescript": "4.8.3",
-    "eslint-config-custom-web": "*"
+    "config": "*",
+    "eslint": "^7.23.0"
   }
 }
