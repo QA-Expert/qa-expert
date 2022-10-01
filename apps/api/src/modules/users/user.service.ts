@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 
 import { User, UserInput } from './user.model';
 
@@ -16,8 +16,14 @@ export class UserService {
   }
 
   async createUser(data: UserInput) {
+    //TODO has passwrod
+    const newUser: DeepPartial<User> = {
+      hashedPassword: data.password,
+      ...data,
+    };
+
     const user = await this.userRepository.save(
-      this.userRepository.create(data),
+      this.userRepository.create(newUser),
     );
 
     return user;
