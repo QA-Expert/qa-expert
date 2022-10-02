@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Field, InterfaceType } from '@nestjs/graphql';
-import { User } from '../users/entities/user.entity';
+import { User } from '../users/user.entity';
 
 @InterfaceType()
 export abstract class Base extends BaseEntity {
