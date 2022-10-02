@@ -1,42 +1,59 @@
-import { Column, Entity, ManyToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+} from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Base } from 'src/modules/common/base.entity';
 import { Cours } from 'src/modules/courses/entities/course.entity';
 import { Quiz } from 'src/modules/quizzes/quiz.entity';
 import { CoursPage } from 'src/modules/course-pages/entities/course-page.entity';
 import { QuizPage } from 'src/modules/quiz-pages/quiz-page.entity';
+import { Answer } from 'src/modules/answers/answers.entity';
 
 @Entity('users')
 @ObjectType({ implements: [Base] })
 export class User extends Base {
   @Field()
-  @Column('text', { nullable: false })
+  @Index({ unique: true })
+  @Column('varchar', { length: 320, nullable: false })
   email: string;
 
   @Field()
-  @Column({ nullable: true })
+  @Column('varchar', { length: 100 })
   firstName: string;
 
   @Field()
-  @Column({ nullable: true })
+  @Column('varchar', { length: 100 })
   lastName: string;
 
   @Column('text', { nullable: false })
   hashedPassword: string;
 
-  @ManyToMany(() => Cours, (cours) => cours.users)
-  @Field(() => [Cours], { nullable: false })
+  @ManyToMany(() => Cours)
+  @JoinTable()
+  @Field(() => [Cours])
   courses: Promise<Cours[]>;
 
-  @ManyToMany(() => Quiz, (quiz) => quiz.users)
-  @Field(() => [Quiz], { nullable: false })
+  @ManyToMany(() => Quiz)
+  @JoinTable()
+  @Field(() => [Quiz])
   quizzes: Promise<Quiz[]>;
 
-  @ManyToMany(() => CoursPage, (coursPage) => coursPage.users)
-  @Field(() => [CoursPage], { nullable: false })
+  @ManyToMany(() => CoursPage)
+  @JoinTable()
+  @Field(() => [CoursPage])
   coursPages: Promise<CoursPage[]>;
 
-  @ManyToMany(() => QuizPage, (quizPage) => quizPage.users)
-  @Field(() => [QuizPage], { nullable: false })
+  @ManyToMany(() => QuizPage)
+  @JoinTable()
+  @Field(() => [QuizPage])
   quizPages: Promise<QuizPage[]>;
+
+  @OneToMany(() => Answer, (userQuizAnswer) => userQuizAnswer.user)
+  @Field(() => [Answer])
+  answers: Promise<Answer[]>;
 }

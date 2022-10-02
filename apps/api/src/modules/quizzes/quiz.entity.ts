@@ -1,9 +1,8 @@
-import { Column, Entity, ManyToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseContnet } from 'src/modules/common/base-content.entity';
 import { Base } from 'src/modules/common/base.entity';
 import { QuizPage } from '../quiz-pages/quiz-page.entity';
-import { User } from '../users/entities/user.entity';
 import { Cours } from '../courses/entities/course.entity';
 
 export enum QuizType {
@@ -23,19 +22,16 @@ export class Quiz extends BaseContnet {
   @Column({ type: 'enum', enum: QuizType, nullable: false })
   type: QuizType;
 
-  @ManyToMany(() => QuizPage, (quizPage) => quizPage.quizzes)
-  @Field(() => [QuizPage], { nullable: false })
+  @ManyToMany(() => QuizPage)
+  @JoinTable()
+  @Field(() => [QuizPage])
   quizPages: Promise<QuizPage[]>;
 
-  @ManyToMany(() => User, (user) => user.quizzes)
-  @Field(() => [User], { nullable: false })
-  users: Promise<User[]>;
-
   @ManyToMany(() => Cours, (cours) => cours.quizzes)
-  @Field(() => [Cours], { nullable: false })
+  @Field(() => [Cours])
   courses: Promise<Cours[]>;
 
   @Field()
-  @Column('text', { nullable: false })
+  @Column('text')
   expectedResult: string;
 }

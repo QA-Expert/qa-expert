@@ -20,9 +20,9 @@ export abstract class Base extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ nullable: true })
+  @Column()
   createdBy: User;
 
-  @Column({ nullable: true })
+  @Column()
   updatedBy: User;
 }

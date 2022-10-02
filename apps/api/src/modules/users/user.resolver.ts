@@ -7,7 +7,7 @@ import { UserService } from './user.service';
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(() => User, { nullable: true })
+  @Query(() => User)
   async getUserById(@Args('id') id: string): Promise<User | null> {
     return await this.userService.findById(id);
   }
