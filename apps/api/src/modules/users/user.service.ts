@@ -15,17 +15,17 @@ export class UserService {
     return await this.userRepository.findOneBy({ id });
   }
 
-  async createUser(data: UserInput) {
+  async create(data: UserInput) {
     //TODO has passwrod
     const newUser: DeepPartial<User> = {
       hashedPassword: data.password,
       ...data,
     };
 
-    const user = await this.userRepository.save(
+    const response = await this.userRepository.save(
       this.userRepository.create(newUser),
     );
 
-    return user;
+    return response;
   }
 }

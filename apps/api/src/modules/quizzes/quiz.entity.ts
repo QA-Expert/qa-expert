@@ -3,7 +3,7 @@ import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseContnet } from 'src/modules/common/base-content.entity';
 import { Base } from 'src/modules/common/base.entity';
 import { QuizPage } from '../quiz-pages/quiz-page.entity';
-import { Cours } from '../courses/entities/course.entity';
+import { Cours } from '../courses/cours.entity';
 
 export enum QuizType {
   QUESTIONEER = 'Questioneer',

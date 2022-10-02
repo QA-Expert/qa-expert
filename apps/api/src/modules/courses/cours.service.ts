@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Quiz } from './quiz.entity';
+import { Cours } from './cours.entity';
 
 @Injectable()
-export class QuizService {
+export class CoursService {
   constructor(
-    @InjectRepository(Quiz)
-    private readonly repository: Repository<Quiz>,
+    @InjectRepository(Cours)
+    private readonly repository: Repository<Cours>,
   ) {}
 
   async findById(id: string) {
