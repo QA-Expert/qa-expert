@@ -6,7 +6,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Field, InterfaceType } from '@nestjs/graphql';
-import { User } from '../users/user.entity';
 
 @InterfaceType()
 export abstract class Base extends BaseEntity {
@@ -20,9 +19,9 @@ export abstract class Base extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
-  createdBy: User;
+  @Column({ nullable: true })
+  createdBy: string;
 
-  @Column()
-  updatedBy: User;
+  @Column({ nullable: true })
+  updatedBy: string;
 }

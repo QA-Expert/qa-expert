@@ -8,7 +8,7 @@ export class QuizProgressResolver {
   constructor(private readonly service: QuizProgressService) {}
 
   @Query(() => [QuizProgress])
-  async quizProgresses(
+  public async quizProgresses(
     @Args('userId') userId: string,
     @Args('quizId') coursId: string,
   ): Promise<QuizProgress[] | null> {
@@ -16,7 +16,7 @@ export class QuizProgressResolver {
   }
 
   @Mutation(() => QuizProgress)
-  async createQuizProgress(
+  public async createQuizProgress(
     @Args('data') input: QuizProgressInput,
   ): Promise<QuizProgress> {
     return await this.service.create(input);

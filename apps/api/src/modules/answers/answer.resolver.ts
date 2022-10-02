@@ -8,7 +8,7 @@ export class AnswerResolver {
   constructor(private readonly service: AnswerService) {}
 
   @Query(() => Answer)
-  async answer(
+  public async answer(
     @Args('userId') userId: string,
     @Args('quizPageId') quizPageId: string,
   ): Promise<Answer | null> {
@@ -16,7 +16,7 @@ export class AnswerResolver {
   }
 
   @Mutation(() => Answer)
-  async createAnswer(@Args('data') input: AnswerInput): Promise<Answer> {
+  public async createAnswer(@Args('data') input: AnswerInput): Promise<Answer> {
     return await this.service.create(input);
   }
 }

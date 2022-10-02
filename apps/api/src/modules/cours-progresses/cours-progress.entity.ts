@@ -5,7 +5,7 @@ import { User } from '../users/user.entity';
 import { CoursPage } from '../cours-pages/cours-page.entity';
 import { Cours } from '../courses/cours.entity';
 
-@Entity('Cours-progresses')
+@Entity('cours-progresses')
 @ObjectType({ implements: [Base] })
 export class CoursProgress extends Base {
   @Column()

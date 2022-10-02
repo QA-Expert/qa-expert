@@ -7,12 +7,12 @@ export class QuizResolver {
   constructor(private readonly service: QuizService) {}
 
   @Query(() => Quiz)
-  async quiz(@Args('id') id: string): Promise<Quiz | null> {
+  public async quiz(@Args('id') id: string): Promise<Quiz | null> {
     return await this.service.findById(id);
   }
 
   @Query(() => [Quiz])
   public async quizzes(): Promise<Quiz[]> {
-    return this.service.findAll();
+    return await this.service.findAll();
   }
 }
