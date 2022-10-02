@@ -5,7 +5,7 @@ import { QuizQuestion } from '../quiz-questions/quiz-questions.entity';
 
 @Entity('user-quiz-answers')
 @ObjectType({ implements: [Base] })
-export class UserQuizAnswers extends Base {
+export class UserQuizAnswer extends Base {
   @Field()
   @Column('text', { nullable: false })
   answer: string; // TODO: figure out how to pass boolean, id
@@ -13,5 +13,5 @@ export class UserQuizAnswers extends Base {
   @Field()
   @ManyToMany(() => QuizQuestion, (quizQuestion) => quizQuestion.userAnswers)
   @Field(() => [QuizQuestion], { nullable: true })
-  quizQuestions: Promise<QuizQuestion[]>;
+  questions: Promise<QuizQuestion[]>;
 }

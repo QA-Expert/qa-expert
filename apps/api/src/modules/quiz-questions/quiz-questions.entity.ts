@@ -2,7 +2,7 @@ import { Column, Entity, ManyToMany } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Base } from 'src/modules/common/base.entity';
 import { QuizPage } from '../quiz-pages/quiz-page.entity';
-import { UserQuizAnswers } from '../user-quiz-answers/user-quiz-answers.entity';
+import { UserQuizAnswer } from '../user-quiz-answers/user-quiz-answers.entity';
 
 @Entity('quiz-questions')
 @ObjectType({ implements: [Base] })
@@ -17,13 +17,10 @@ export class QuizQuestion extends Base {
 
   @Field()
   @ManyToMany(() => QuizPage, (quiz) => quiz.questions)
-  @Field(() => [QuizPage], { nullable: true })
+  @Field(() => [QuizPage], { nullable: false })
   quizPages: Promise<QuizPage[]>;
 
-  @ManyToMany(
-    () => UserQuizAnswers,
-    (userQuizAnswers) => userQuizAnswers.answer,
-  )
-  @Field(() => [UserQuizAnswers], { nullable: false })
-  userAnswers: Promise<UserQuizAnswers[]>;
+  @ManyToMany(() => UserQuizAnswer, (userQuizAnswers) => userQuizAnswers.answer)
+  @Field(() => [UserQuizAnswer], { nullable: false })
+  userAnswers: Promise<UserQuizAnswer[]>;
 }
