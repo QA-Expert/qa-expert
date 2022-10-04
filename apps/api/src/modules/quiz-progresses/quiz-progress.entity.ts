@@ -24,21 +24,21 @@ export class QuizProgress extends Base {
   @Column({ type: 'enum', enum: QuizPageProgressState, nullable: false })
   state: QuizPageProgressState;
 
-  @Column()
+  @Column('uuid')
   @Field()
   quizId: string;
 
   @ManyToOne(() => Quiz)
   quiz: Promise<Quiz>;
 
-  @Column()
+  @Column('uuid')
   @Field()
   quizPageId: string;
 
   @ManyToOne(() => QuizPage)
   quizPage: Promise<QuizPage>;
 
-  @Column({ nullable: false })
+  @Column('uuid', { nullable: false })
   @Field()
   userId: string;
 

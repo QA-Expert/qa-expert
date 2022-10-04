@@ -7,7 +7,7 @@
     "eslint-api.js"
   ],
   "private": true,
-  "license": "MIT",
+  "license": "",
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",

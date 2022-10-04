@@ -11,8 +11,8 @@ export default function Content({ children }: Props) {
 }
 
 const Element = styled(Block, {
-  alignItems: 'start',
-  alignContent: 'start',
+  flexDirection: 'column',
+  justifyContent: 'start',
   flexWrap: 'wrap',
   gap: '$4',
   backgroundColor: '$backround',

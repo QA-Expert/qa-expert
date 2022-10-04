@@ -19,9 +19,9 @@ export abstract class Base extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ nullable: true })
+  @Column('uuid', { nullable: true })
   createdBy: string;
 
-  @Column({ nullable: true })
+  @Column('uuid', { nullable: true })
   updatedBy: string;
 }

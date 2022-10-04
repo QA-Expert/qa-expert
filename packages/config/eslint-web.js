@@ -6,7 +6,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   plugins: ['prettier', '@typescript-eslint'],
-  ignorePatterns: ['node_modules', 'build', 'dist', 'public'],
+  ignorePatterns: ['node_modules', 'build', 'dist', 'public', "**/schema.gen.ts"],
   parserOptions: {
     ecmaVersion: 6,
     sourceType: 'module',

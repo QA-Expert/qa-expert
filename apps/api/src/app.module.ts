@@ -23,16 +23,27 @@ import { UserModule } from './modules/users/user.module';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile: join(
+        process.cwd(),
+        '../../packages/graphql-schema/schema.gen.gql',
+      ), // TODO: put under env
+      definitions: {
+        // TODO: put under env
+        path: join(
+          process.cwd(),
+          '../../packages/graphql-schema/schema.gen.ts',
+        ),
+        outputAs: 'class',
+      },
       sortSchema: true,
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'localhost', // TODO: put under env
       port: 3306,
-      username: 'root',
-      password: 'zxypt!4F',
-      database: 'qa-school',
+      username: 'root', // TODO: put under env
+      password: 'zxypt!4F', // TODO: put under env
+      database: 'qa-school', // TODO: put under env
       entities: [
         User,
         Cours,
@@ -44,7 +55,7 @@ import { UserModule } from './modules/users/user.module';
         CoursProgress,
         QuizProgress,
       ],
-      synchronize: true,
+      synchronize: true, // TODO: put under env. IMPORTANT - if we keep it in prod it will drop all of the data when shema changes
     }),
     UserModule,
     AnswerModule,

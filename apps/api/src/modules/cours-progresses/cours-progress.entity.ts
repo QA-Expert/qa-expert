@@ -8,21 +8,21 @@ import { Cours } from '../courses/cours.entity';
 @Entity('cours-progresses')
 @ObjectType({ implements: [Base] })
 export class CoursProgress extends Base {
-  @Column()
+  @Column('uuid')
   @Field()
   coursId: string;
 
   @ManyToOne(() => Cours)
   cours: Promise<Cours>;
 
-  @Column()
+  @Column('uuid')
   @Field()
   coursPageId: string;
 
   @ManyToOne(() => CoursPage)
   coursPage: Promise<CoursPage>;
 
-  @Column({ nullable: false })
+  @Column('uuid', { nullable: false })
   @Field()
   userId: string;
 

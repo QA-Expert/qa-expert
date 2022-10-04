@@ -10,7 +10,7 @@ export default function Sidebar() {
   };
 
   return (
-    <Element isOpen={isOpen} width="description">
+    <Element width="description" isOpen={isOpen}>
       <Toggle as="button" onClick={handleOpen}>
         <Chewron>{isOpen ? '›' : '‹'}</Chewron>
       </Toggle>
@@ -22,6 +22,7 @@ const Element = styled(Block, {
   height: '100%',
   backgroundColor: '$navBackground',
   color: '$primaryText',
+  transition: 'width 0.5s',
   variants: {
     width: {
       description: {

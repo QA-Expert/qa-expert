@@ -11,14 +11,14 @@ export class Answer extends Base {
   @Column('text', { nullable: false })
   answer: string; // TODO: figure out how to pass boolean, id
 
-  @Column({ nullable: false })
+  @Column('uuid', { nullable: false })
   @Field()
   quizPageId: string;
 
   @ManyToOne(() => QuizPage)
   quizPage: QuizPage;
 
-  @Column({ nullable: false })
+  @Column('uuid', { nullable: false })
   @Field()
   userId: string;
 

@@ -1,0 +1,10 @@
+{
+  "name": "graphql-schema",
+  "version": "0.0.0",
+  "main": "index.js",
+  "files": [
+    "schema.gen.gql",
+    "schema.gen.ts"
+  ],
+  "private": true
+}
