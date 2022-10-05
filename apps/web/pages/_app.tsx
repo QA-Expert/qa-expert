@@ -14,6 +14,7 @@ type AppPropsWithLayout<Props> = AppProps & {
 
 export default function MyApp({
   Component,
+  // @ts-ignore
   pageProps,
 }: AppPropsWithLayout<typeof pageProps>) {
   // Use the layout defined at the page level, if available

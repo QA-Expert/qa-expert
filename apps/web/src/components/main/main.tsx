@@ -9,7 +9,7 @@ type Props = {
 
 export default function Main({ children }: Props) {
   return (
-    <Element as="main" size="fill">
+    <Element as="main">
       <ClientOnly>{children}</ClientOnly>
     </Element>
   );
@@ -18,4 +18,5 @@ export default function Main({ children }: Props) {
 const Element = styled(Block, {
   backgroundColor: '$background',
   color: '$primaryText',
+  flex: 1,
 });

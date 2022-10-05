@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { styled } from '../../stitches.config';
 import { Block } from './block/block';
-import Main from './main/main';
 
 /**
  *

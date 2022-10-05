@@ -27,6 +27,9 @@ export const {
       coursCardBackground: `hsl(${hue} 25% 90%)`,
       border: `hsl(${hue} 10% 70%)`,
     },
+    sizes: {
+      1: '0.0625rem', // 1px
+    },
     space: {
       1: '0.25rem', // 4px
       2: '0.5rem', // 8px
