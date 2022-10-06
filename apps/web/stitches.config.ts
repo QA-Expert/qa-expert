@@ -26,9 +26,20 @@ export const {
       sidebarBackground: `hsl(${hue} 25% 90%)`,
       coursCardBackground: `hsl(${hue} 25% 90%)`,
       border: `hsl(${hue} 10% 70%)`,
+      disabled: `hsl(${hue} 10% 98%)`,
+      disabledText: `hsl(${hue} 10% 60%)`,
     },
     sizes: {
       1: '0.0625rem', // 1px
+      2: '0.125rem', // 2px
+      3: '0.25rem', // 4px
+      4: '0.5rem', // 8px,
+      5: '0.75rem', // 12px,
+      6: '1rem', // 16px,
+      '6-2': '1.5rem', // 24px,
+      7: '2rem', // 32px
+      8: '3rem', // 48px
+      9: '4rem', // 64px
     },
     space: {
       1: '0.25rem', // 4px

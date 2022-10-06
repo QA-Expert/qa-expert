@@ -12,5 +12,13 @@ export const Block = styled('div', {
         height: '100%',
       },
     },
+    orientation: {
+      column: {
+        flexDirection: 'column',
+      },
+      row: {
+        flexDirection: 'row',
+      },
+    },
   },
 });

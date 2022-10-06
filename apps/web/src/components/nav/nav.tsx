@@ -29,7 +29,7 @@ const Header = styled('h1', {
 
 const Navigation = styled(Block, {
   width: '100%',
-  height: '$6',
+  height: '$8',
   backgroundColor: '$navBackground',
   color: '$primaryText',
   padding: '$3',

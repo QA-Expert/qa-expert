@@ -1,6 +1,7 @@
 import { styled } from '@stitches/react';
 import { useState } from 'react';
 import { Block } from '../block/block';
+import { Chewron } from '../chewron/chewron';
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -11,9 +12,10 @@ export default function Sidebar() {
 
   return (
     <Element width="description" isOpen={isOpen}>
-      <Toggle as="button" onClick={handleOpen}>
-        <Chewron>{isOpen ? '›' : '‹'}</Chewron>
-      </Toggle>
+      <Toggle
+        direction={isOpen ? 'forward' : 'backward'}
+        onClick={handleOpen}
+      />
     </Element>
   );
 }
@@ -30,23 +32,17 @@ const Element = styled(Block, {
       },
     },
     isOpen: {
-      true: {
-        width: '24px',
+      false: {
+        width: '$6-2',
       },
     },
   },
 });
 
-const Toggle = styled(Block, {
+const Toggle = styled(Chewron, {
   height: '100%',
-  width: '24px',
+  width: '$6-2',
   borderStyle: 'none',
   marginLeft: 'auto',
   backgroundColor: 'inherit',
-});
-
-const Chewron = styled('span', {
-  color: '$primaryText',
-  fontSize: '32px',
-  fontWeight: 900,
 });

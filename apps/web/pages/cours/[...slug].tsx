@@ -1,42 +1,51 @@
-import { Cours } from 'graphql-schema/schema.gen';
+import {
+  Cours as CoursType,
+  CoursPage as CoursPageType,
+} from 'graphql-schema/schema.gen';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { Fragment, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import client from '../../appolo-client';
-import { Content } from '../../src/components/content/content';
+import { Block } from '../../src/components/block/block';
+import CoursPage from '../../src/components/cours-page/cours-page';
 import Layout from '../../src/components/layout/layout';
+import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
 import Sidebar from '../../src/components/sidebar/sidebar';
 import { GET_COURS } from '../../src/graphql/quieries/quieries';
 import { NextPageWithLayout } from '../_app';
 
-const CoursPage: NextPageWithLayout<
+const Cours: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = (props) => {
   return (
     <>
       <Sidebar />
-      <Content size="fill">
+      <Block
+        size="fill"
+        orientation="column"
+        css={{
+          justifyContent: 'start',
+          padding: '$4',
+        }}
+      >
         <h1>{props?.cours?.title}</h1>
         <h2>{props?.cours?.desciption}</h2>
         <span>{props?.cours?.icon}</span>
-        {props?.cours?.coursPages.map((page, i) => {
-          return (
-            <Fragment key={i}>
-              <div>{page.title}</div>
-              <div>{page.desciption}</div>
-              <div>{page.content}</div>
-            </Fragment>
-          );
-        })}
-      </Content>
+        <Block css={{ flexGrow: 1 }} size="fill">
+          <PageCarousel
+            pages={props?.cours?.coursPages}
+            getPage={(page: CoursPageType) => <CoursPage {...page} />}
+          />
+        </Block>
+      </Block>
     </>
   );
 };
 
-CoursPage.getLayout = function getLayout(page: ReactElement) {
+Cours.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export default CoursPage;
+export default Cours;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { slug } = context.query;
@@ -50,7 +59,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const { data } = await client.query<{
-    cours: Cours;
+    cours: CoursType;
   }>({
     query: GET_COURS,
     variables: {

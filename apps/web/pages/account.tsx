@@ -1,12 +1,12 @@
 import { ReactElement } from 'react';
-import Content from '../src/components/content/content';
+import { Block } from '../src/components/block/block';
 import Layout from '../src/components/layout/layout';
 
 function Account() {
   return (
-    <Content>
+    <Block>
       <h1>Account</h1>
-    </Content>
+    </Block>
   );
 }
 

@@ -1,51 +1,55 @@
-import { Quiz } from 'graphql-schema/schema.gen';
+import {
+  Quiz as QuizType,
+  QuizPage as QuizPageType,
+} from 'graphql-schema/schema.gen';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { Fragment, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import client from '../../appolo-client';
-import { Content } from '../../src/components/content/content';
+import { Block } from '../../src/components/block/block';
 import Layout from '../../src/components/layout/layout';
+import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
+import QuizPage from '../../src/components/quiz-page/quiz-page';
 import Sidebar from '../../src/components/sidebar/sidebar';
 import { GET_QUIZ } from '../../src/graphql/quieries/quieries';
 import { NextPageWithLayout } from '../_app';
 
-const QuizPage: NextPageWithLayout<
+const Quiz: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = (props) => {
   return (
     <>
       <Sidebar />
-      <Content size="fill">
-        <h1>{props?.quiz?.title}</h1>
-        <h2>{props?.quiz?.desciption}</h2>
-        <span>{props?.quiz?.type}</span>
-        <span>{props?.quiz?.expectedResult}</span>
-        {props?.quiz?.quizPages.map((page, i) => {
-          return (
-            <Fragment key={i}>
-              <div>{page.title}</div>
-              <div>{page.desciption}</div>
-              <div>{page.expectedResult}</div>
-              {page.questions.map((quistion, j) => {
-                return (
-                  <Fragment key={j}>
-                    <div>{quistion.content}</div>
-                    <div>{quistion.expectedResult}</div>
-                  </Fragment>
-                );
-              })}
-            </Fragment>
-          );
-        })}
-      </Content>
+      <Block
+        size="fill"
+        orientation="column"
+        css={{
+          justifyContent: 'start',
+          padding: '$4',
+        }}
+      >
+        <Block orientation="column">
+          <h1>{props?.quiz?.title}</h1>
+          <h2>{props?.quiz?.desciption}</h2>
+          <span>{props?.quiz?.type}</span>
+          <span>{props?.quiz?.expectedResult}</span>{' '}
+        </Block>
+
+        <Block css={{ flexGrow: 1 }} size="fill">
+          <PageCarousel
+            pages={props?.quiz?.quizPages}
+            getPage={(page: QuizPageType) => <QuizPage {...page} />}
+          />
+        </Block>
+      </Block>
     </>
   );
 };
 
-QuizPage.getLayout = function getLayout(page: ReactElement) {
+Quiz.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export default QuizPage;
+export default Quiz;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { slug } = context.query;
@@ -59,7 +63,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const { data } = await client.query<{
-    quiz: Quiz;
+    quiz: QuizType;
   }>({
     query: GET_QUIZ,
     variables: {

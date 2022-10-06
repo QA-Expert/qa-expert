@@ -14,13 +14,13 @@ export const Button = styled('button', {
   variants: {
     size: {
       sm: {
-        fontSize: '13px',
+        fontSize: '$2',
         height: '25px',
         paddingRight: '10px',
         paddingLeft: '10px',
       },
       lg: {
-        fontSize: '15px',
+        fontSize: '$3',
         height: '35px',
         paddingLeft: '15px',
         paddingRight: '15px',

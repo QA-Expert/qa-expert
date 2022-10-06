@@ -1,12 +1,12 @@
-import Content from '../src/components/content/content';
+import { Block } from '../src/components/block/block';
 import Main from '../src/components/main/main';
 
 function Login() {
   return (
     <Main>
-      <Content>
+      <Block>
         <h1>Login</h1>
-      </Content>
+      </Block>
     </Main>
   );
 }
