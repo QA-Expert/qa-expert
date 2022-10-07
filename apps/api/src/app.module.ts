@@ -2,48 +2,57 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path';
-import { Answer } from './modules/answers/answer.entity';
 import { AnswerModule } from './modules/answers/answer.module';
-import { CoursPage } from './modules/cours-pages/cours-page.entity';
-import { CoursProgress } from './modules/cours-progresses/cours-progress.entity';
 import { CoursProgressModule } from './modules/cours-progresses/cours-progress.module';
-import { Cours } from './modules/courses/cours.entity';
 import { CoursrModule } from './modules/courses/cours.module';
-import { Question } from './modules/questions/question.entity';
-import { QuizPage } from './modules/quiz-pages/quiz-page.entity';
-import { QuizProgress } from './modules/quiz-progresses/quiz-progress.entity';
 import { QuizProgressModule } from './modules/quiz-progresses/quiz-progress.module';
-import { Quiz } from './modules/quizzes/quiz.entity';
 import { QuizModule } from './modules/quizzes/quiz.module';
-import { User } from './modules/users/user.entity';
 import { UserModule } from './modules/users/user.module';
+import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { Cours } from './modules/courses/cours.entity';
+import { Quiz } from './modules/quizzes/quiz.entity';
+import { CoursPage } from './modules/cours-pages/cours-page.entity';
+import { QuizPage } from './modules/quiz-pages/quiz-page.entity';
+import { Question } from './modules/questions/question.entity';
+import { Answer } from './modules/answers/answer.entity';
+import { CoursProgress } from './modules/cours-progresses/cours-progress.entity';
+import { QuizProgress } from './modules/quiz-progresses/quiz-progress.entity';
+import { User } from './modules/users/user.entity';
+import { join } from 'path';
 
 @Module({
   imports: [
+    JwtModule.register({
+      secret: process.env.AUTH_SECRET,
+      signOptions: {
+        expiresIn: process.env.AUTH_TOKEN_EXPIRES_IN,
+      },
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env.development.local'],
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(
-        process.cwd(),
-        '../../packages/graphql-schema/schema.gen.gql',
-      ), // TODO: put under env
+      autoSchemaFile: Boolean(process.env.SHOULD_GENERATE_GQL_SHEMA)
+        ? join(process.cwd(), '../../packages/graphql-schema/schema.gen.gql')
+        : undefined,
       definitions: {
-        // TODO: put under env
-        path: join(
-          process.cwd(),
-          '../../packages/graphql-schema/schema.gen.ts',
-        ),
+        path: Boolean(process.env.SHOULD_GENERATE_GQL_SHEMA)
+          ? join(process.cwd(), '../../packages/graphql-schema/schema.gen.ts')
+          : undefined,
         outputAs: 'class',
       },
       sortSchema: true,
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost', // TODO: put under env
-      port: 3306,
-      username: 'root', // TODO: put under env
-      password: 'zxypt!4F', // TODO: put under env
-      database: 'qa-school', // TODO: put under env
+      host: process.env.DATABASE_HOST,
+      port: Number(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
       entities: [
         User,
         Cours,
@@ -55,7 +64,7 @@ import { UserModule } from './modules/users/user.module';
         CoursProgress,
         QuizProgress,
       ],
-      synchronize: true, // TODO: put under env. IMPORTANT - if we keep it in prod it will drop all of the data when shema changes
+      synchronize: Boolean(process.env.DATABASE_SYNC_SCHEMA),
     }),
     UserModule,
     AnswerModule,

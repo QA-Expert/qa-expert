@@ -38,10 +38,8 @@ export class QuizProgressInput {
     userId: string;
 }
 
-export class UserInput {
+export class UserInputLogin {
     email: string;
-    firstName?: Nullable<string>;
-    lastName?: Nullable<string>;
     password: string;
 }
 
@@ -91,8 +89,6 @@ export abstract class IMutation {
     abstract createCoursProgress(data: CoursProgressInput): CoursProgress | Promise<CoursProgress>;
 
     abstract createQuizProgress(data: QuizProgressInput): QuizProgress | Promise<QuizProgress>;
-
-    abstract createUser(data: UserInput): User | Promise<User>;
 }
 
 export abstract class IQuery {
@@ -104,13 +100,17 @@ export abstract class IQuery {
 
     abstract courses(): Cours[] | Promise<Cours[]>;
 
+    abstract login(data: UserInputLogin): UserOutputLogin | Promise<UserOutputLogin>;
+
     abstract quiz(id: string): Quiz | Promise<Quiz>;
 
     abstract quizProgresses(quizId: string, userId: string): QuizProgress[] | Promise<QuizProgress[]>;
 
     abstract quizzes(): Quiz[] | Promise<Quiz[]>;
 
-    abstract user(id: string): User | Promise<User>;
+    abstract userByEmail(email: string): User | Promise<User>;
+
+    abstract userById(id: string): User | Promise<User>;
 }
 
 export class Question implements Base {
@@ -150,6 +150,11 @@ export class User implements Base {
     firstName: string;
     id: string;
     lastName: string;
+}
+
+export class UserOutputLogin {
+    access_token: string;
+    email: string;
 }
 
 type Nullable<T> = T | null;

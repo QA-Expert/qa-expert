@@ -58,7 +58,6 @@ type Mutation {
   createAnswer(data: AnswerInput!): Answer!
   createCoursProgress(data: CoursProgressInput!): CoursProgress!
   createQuizProgress(data: QuizProgressInput!): QuizProgress!
-  createUser(data: UserInput!): User!
 }
 
 type Query {
@@ -66,10 +65,12 @@ type Query {
   cours(id: String!): Cours!
   coursProgresses(coursId: String!, userId: String!): [CoursProgress!]!
   courses: [Cours!]!
+  login(data: UserInputLogin!): UserOutputLogin!
   quiz(id: String!): Quiz!
   quizProgresses(quizId: String!, userId: String!): [QuizProgress!]!
   quizzes: [Quiz!]!
-  user(id: String!): User!
+  userByEmail(email: String!): User!
+  userById(id: String!): User!
 }
 
 type Question implements Base {
@@ -133,9 +134,12 @@ type User implements Base {
   lastName: String!
 }
 
-input UserInput {
+input UserInputLogin {
   email: String!
-  firstName: String
-  lastName: String
   password: String!
+}
+
+type UserOutputLogin {
+  access_token: String!
+  email: String!
 }
