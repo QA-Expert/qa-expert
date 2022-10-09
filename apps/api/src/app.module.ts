@@ -44,6 +44,7 @@ import { join } from 'path';
           : undefined,
         outputAs: 'class',
       },
+      context: ({ req }) => ({ ...req }),
       sortSchema: true,
     }),
     TypeOrmModule.forRoot({

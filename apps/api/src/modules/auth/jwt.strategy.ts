@@ -7,12 +7,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
+      ignoreExpiration: false, // delegates the responsibility of ensuring that a JWT has not expired to the Passport module
       secretOrKey: process.env.AUTH_SECRET,
     });
   }
 
   async validate(payload: any) {
-    return { userId: payload.sub, username: payload.username };
+    console.log('PAYLOAD --------', payload);
+
+    return payload;
   }
 }

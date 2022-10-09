@@ -1,7 +1,6 @@
-import { UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from '../auth/auth.service';
-import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { UserInputCreate } from './create-user.input';
 import { UserInputLogin } from './login-user.input';
 import { UserOutputLogin } from './login-user.output';
 import { User } from './user.entity';
@@ -14,6 +13,7 @@ export class UserResolver {
     private readonly authService: AuthService,
   ) {}
 
+  // @UseGuards(GqlAuthGuard)
   @Query(() => User)
   public async userById(@Args('id') id: string): Promise<User | null> {
     return await this.userService.findById(id);
@@ -24,20 +24,19 @@ export class UserResolver {
     return await this.userService.findByEmail(email);
   }
 
-  @UseGuards(LocalAuthGuard)
-  @Query(() => UserOutputLogin)
+  @Mutation(() => UserOutputLogin)
   public async login(
     @Args('data') data: UserInputLogin,
   ): Promise<UserOutputLogin | null> {
-    return await this.authService.validateUser(data);
+    return await this.authService.validateUserAndLogin(data);
   }
 
-  // @Mutation(() => User)
-  // public async register(@Args('data') input: UserInputCreate): Promise<User> {
-  //   const { id, email } = await this.userService.create(input);
+  @Mutation(() => UserOutputLogin)
+  public async register(
+    @Args('data') data: UserInputCreate,
+  ): Promise<UserOutputLogin> {
+    const user = await this.userService.create(data);
 
-  //   if (id && email) {
-  //     return await this.userService.createToken({ id, email });
-  //   }
-  // }
+    return await this.authService.login(user);
+  }
 }

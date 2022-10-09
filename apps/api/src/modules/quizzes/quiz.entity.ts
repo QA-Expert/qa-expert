@@ -1,6 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { BaseContnet } from 'src/modules/common/base-content.entity';
+import { BaseContnet } from 'src/modules/common/content-base.entity';
 import { Base } from 'src/modules/common/base.entity';
 import { QuizPage } from '../quiz-pages/quiz-page.entity';
 import { Cours } from '../courses/cours.entity';

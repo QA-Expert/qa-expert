@@ -1,7 +1,8 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InterfaceType } from '@nestjs/graphql';
 import { MaxLength } from 'class-validator';
-@InputType()
-export class UserInputCreate {
+
+@InterfaceType()
+export abstract class UserBaseModel {
   @Field()
   @MaxLength(320)
   email: string;
@@ -11,7 +12,4 @@ export class UserInputCreate {
 
   @Field({ nullable: true })
   lastName?: string;
-
-  @Field()
-  password: string;
 }

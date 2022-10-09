@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, Repository } from 'typeorm';
 import { UserInputCreate } from './create-user.input';
 import { User } from './user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -20,10 +21,11 @@ export class UserService {
   }
 
   async create(data: UserInputCreate) {
-    //TODO has passwrod
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(data.password, saltRounds);
     const newUser: DeepPartial<User> = {
-      hashedPassword: data.password,
       ...data,
+      hashedPassword,
     };
 
     const response = await this.userRepository.save(

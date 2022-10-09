@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../users/user.service';
-import { User } from '../users/user.entity';
 import { UserInputLogin } from '../users/login-user.input';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -13,7 +12,9 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(data: UserInputLogin): Promise<UserOutputLogin | null> {
+  async validateUserAndLogin(
+    data: UserInputLogin,
+  ): Promise<UserOutputLogin | null> {
     const user = await this.usersService.findByEmail(data.email);
 
     if (!user) {
@@ -29,13 +30,25 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User): Promise<UserOutputLogin> {
-    const payload: Pick<User, 'email'> = { email: user.email };
+  async login(user: UserOutputLogin): Promise<UserOutputLogin> {
     return {
-      email: user.email,
-      access_token: this.jwtService.sign(payload, {
-        secret: process.env.AUTH_SECRET,
-      }),
+      ...user,
+      access_token: this.jwtService.sign(
+        { ...user },
+        {
+          secret: process.env.AUTH_SECRET,
+        },
+      ),
     };
+  }
+
+  async validateToken(token: string): Promise<UserOutputLogin | null> {
+    try {
+      const validationResult = this.jwtService.verify<any>(token);
+      const user = await this.usersService.findById(validationResult.userId);
+      return user;
+    } catch (e) {
+      return null;
+    }
   }
 }

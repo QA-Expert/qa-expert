@@ -1,10 +1,8 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { UserBaseModel } from './user-base.model';
 
-@ObjectType()
-export class UserOutputLogin {
+@ObjectType({ implements: UserBaseModel })
+export class UserOutputLogin extends UserBaseModel {
   @Field()
-  email: string;
-
-  @Field()
-  access_token: string;
+  access_token?: string;
 }

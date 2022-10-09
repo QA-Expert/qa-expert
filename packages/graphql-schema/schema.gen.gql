@@ -58,6 +58,8 @@ type Mutation {
   createAnswer(data: AnswerInput!): Answer!
   createCoursProgress(data: CoursProgressInput!): CoursProgress!
   createQuizProgress(data: QuizProgressInput!): QuizProgress!
+  login(data: UserInputLogin!): UserOutputLogin!
+  register(data: UserInputCreate!): UserOutputLogin!
 }
 
 type Query {
@@ -65,7 +67,6 @@ type Query {
   cours(id: String!): Cours!
   coursProgresses(coursId: String!, userId: String!): [CoursProgress!]!
   courses: [Cours!]!
-  login(data: UserInputLogin!): UserOutputLogin!
   quiz(id: String!): Quiz!
   quizProgresses(quizId: String!, userId: String!): [QuizProgress!]!
   quizzes: [Quiz!]!
@@ -129,9 +130,22 @@ enum QuizType {
 
 type User implements Base {
   email: String!
-  firstName: String!
+  firstName: String
   id: String!
-  lastName: String!
+  lastName: String
+}
+
+interface UserBaseModel {
+  email: String!
+  firstName: String
+  lastName: String
+}
+
+input UserInputCreate {
+  email: String!
+  firstName: String
+  lastName: String
+  password: String!
 }
 
 input UserInputLogin {
@@ -139,7 +153,9 @@ input UserInputLogin {
   password: String!
 }
 
-type UserOutputLogin {
+type UserOutputLogin implements UserBaseModel {
   access_token: String!
   email: String!
+  firstName: String
+  lastName: String
 }
