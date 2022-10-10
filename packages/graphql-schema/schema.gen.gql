@@ -65,13 +65,12 @@ type Mutation {
 type Query {
   answer(quizPageId: String!, userId: String!): Answer!
   cours(id: String!): Cours!
-  coursProgresses(coursId: String!, userId: String!): [CoursProgress!]!
+  coursProgresses(coursId: String!): [CoursProgress!]!
   courses: [Cours!]!
   quiz(id: String!): Quiz!
-  quizProgresses(quizId: String!, userId: String!): [QuizProgress!]!
+  quizProgresses(quizId: String!): [QuizProgress!]!
   quizzes: [Quiz!]!
-  userByEmail(email: String!): User!
-  userById(id: String!): User!
+  user: User!
 }
 
 type Question implements Base {

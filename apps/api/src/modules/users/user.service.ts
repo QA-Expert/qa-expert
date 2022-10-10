@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, Repository } from 'typeorm';
 import { UserInputCreate } from './create-user.input';
@@ -13,11 +13,23 @@ export class UserService {
   ) {}
 
   async findById(id: string) {
-    return await this.userRepository.findOneBy({ id });
+    const user = await this.userRepository.findOneBy({ id });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 
   async findByEmail(email: string) {
-    return await this.userRepository.findOneBy({ email });
+    const user = this.userRepository.findOneBy({ email });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 
   async create(data: UserInputCreate) {

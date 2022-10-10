@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../users/user.service';
 import { UserInputLogin } from '../users/login-user.input';
 import * as bcrypt from 'bcrypt';
@@ -18,7 +22,7 @@ export class AuthService {
     const user = await this.usersService.findByEmail(data.email);
 
     if (!user) {
-      return null;
+      throw new NotFoundException(`User ${data.email} is not found`);
     }
 
     const match = await bcrypt.compare(data.password, user.hashedPassword);
@@ -27,7 +31,7 @@ export class AuthService {
       return await this.login(user);
     }
 
-    return null;
+    throw new UnauthorizedException('Incorrect credantials');
   }
 
   async login(user: UserOutputLogin): Promise<UserOutputLogin> {
@@ -40,15 +44,5 @@ export class AuthService {
         },
       ),
     };
-  }
-
-  async validateToken(token: string): Promise<UserOutputLogin | null> {
-    try {
-      const validationResult = this.jwtService.verify<any>(token);
-      const user = await this.usersService.findById(validationResult.userId);
-      return user;
-    } catch (e) {
-      return null;
-    }
   }
 }

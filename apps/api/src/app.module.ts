@@ -74,5 +74,6 @@ import { join } from 'path';
     CoursProgressModule,
     QuizProgressModule,
   ],
+  providers: [],
 })
 export class AppModule {}

@@ -1,5 +1,8 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from '../auth/auth.service';
+import { GqlAuthGuard } from '../auth/graphql-auth.guard';
+import { CurrentUser } from './user.decorator';
 import { UserInputCreate } from './create-user.input';
 import { UserInputLogin } from './login-user.input';
 import { UserOutputLogin } from './login-user.output';
@@ -13,15 +16,10 @@ export class UserResolver {
     private readonly authService: AuthService,
   ) {}
 
-  // @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Query(() => User)
-  public async userById(@Args('id') id: string): Promise<User | null> {
-    return await this.userService.findById(id);
-  }
-
-  @Query(() => User)
-  public async userByEmail(@Args('email') email: string): Promise<User | null> {
-    return await this.userService.findByEmail(email);
+  public async user(@CurrentUser() user: User): Promise<User> {
+    return user;
   }
 
   @Mutation(() => UserOutputLogin)
