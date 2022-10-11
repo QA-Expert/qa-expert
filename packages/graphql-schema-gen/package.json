@@ -1,0 +1,10 @@
+{
+  "name": "graphql-schema-gen",
+  "version": "0.0.0",
+  "files": [
+    "schema.gen.gql",
+    "schema.gen.ts"
+  ],
+  "private": true,
+  "license": ""
+}

@@ -4,7 +4,7 @@ import client from '../appolo-client';
 import { CoursCard } from '../src/components/cours-card/cours-card';
 import Layout from '../src/components/layout/layout';
 import { NextPageWithLayout } from './_app';
-import { Cours, Quiz } from 'graphql-schema/schema.gen';
+import { Cours, Quiz } from 'graphql-schema-gen/schema.gen';
 import { InferGetServerSidePropsType } from 'next';
 import { GET_ALL_COURSES_AND_QUIZZES } from '../src/graphql/quieries/quieries';
 import { Devider } from '../src/components/devider/devider';

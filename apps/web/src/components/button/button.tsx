@@ -11,6 +11,15 @@ export const Button = styled('button', {
   color: 'white',
   padding: '$2',
   fontSize: '$2',
+
+  '&:disabled': {
+    backgroundColor: '$disabled',
+    color: '$disabledText',
+    '&:hover': {
+      backgroundColor: '$disabled',
+    },
+  },
+
   variants: {
     size: {
       sm: {

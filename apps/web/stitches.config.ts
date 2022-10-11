@@ -26,8 +26,9 @@ export const {
       sidebarBackground: `hsl(${hue} 25% 90%)`,
       coursCardBackground: `hsl(${hue} 25% 90%)`,
       border: `hsl(${hue} 10% 70%)`,
-      disabled: `hsl(${hue} 10% 98%)`,
+      disabled: `hsl(${hue} 15% 85%)`,
       disabledText: `hsl(${hue} 10% 60%)`,
+      errorMessage: 'red',
     },
     sizes: {
       1: '0.0625rem', // 1px
@@ -51,6 +52,7 @@ export const {
       30: '30rem', // 480px
     },
     fontSizes: {
+      '0-1': '0.675rem', // 10px
       1: '0.75rem', // 12px
       2: '0.875rem', // 14px
       3: '1rem', // 16px
@@ -73,6 +75,14 @@ export const {
       sm: '1px',
     },
     borderStyles: {},
+    radii: {
+      1: '0.0625rem', // 1px
+      2: '0.125rem', // 2px
+      3: '0.25rem', // 4px
+      4: '0.5rem', // 8px,
+      5: '0.75rem', // 12px,
+      6: '1rem', // 16px,
+    },
   },
   media: {
     bp1: '(min-width: 640px)',

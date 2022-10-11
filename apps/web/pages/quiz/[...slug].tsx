@@ -1,7 +1,7 @@
 import {
   Quiz as QuizType,
   QuizPage as QuizPageType,
-} from 'graphql-schema/schema.gen';
+} from 'graphql-schema-gen/schema.gen';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { ReactElement } from 'react';
 import client from '../../appolo-client';

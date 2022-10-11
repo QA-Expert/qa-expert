@@ -1,4 +1,4 @@
-import { QuizPage as Props } from 'graphql-schema/schema.gen';
+import { QuizPage as Props } from 'graphql-schema-gen/schema.gen';
 import { Block } from '../block/block';
 
 export default function QuizPage(props: Props) {

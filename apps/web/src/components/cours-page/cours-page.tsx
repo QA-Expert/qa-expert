@@ -1,4 +1,4 @@
-import { CoursPage as Props } from 'graphql-schema/schema.gen';
+import { CoursPage as Props } from 'graphql-schema-gen/schema.gen';
 import { Block } from '../block/block';
 
 export default function CoursPage(props: Props) {
