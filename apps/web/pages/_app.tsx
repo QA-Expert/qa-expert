@@ -3,6 +3,8 @@ import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import HeadComponent from '../src/components/head/head';
 import '../src/styles/globals.css';
+import { useApollo } from '../appolo/client';
+import { ApolloProvider } from '@apollo/client';
 
 export type NextPageWithLayout<Props> = NextPage<Props> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -17,13 +19,15 @@ export default function MyApp({
   // @ts-ignore
   pageProps,
 }: AppPropsWithLayout<typeof pageProps>) {
+  const apolloClient = useApollo(pageProps.initialApolloState);
+
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
   return getLayout(
-    <>
+    <ApolloProvider client={apolloClient}>
       <HeadComponent />
       {/* @ts-ignore */}
       <Component {...pageProps} />
-    </>,
+    </ApolloProvider>,
   );
 }

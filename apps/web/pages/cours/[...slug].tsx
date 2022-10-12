@@ -1,21 +1,43 @@
+import { useLazyQuery } from '@apollo/client';
 import {
   Cours as CoursType,
   CoursPage as CoursPageType,
 } from 'graphql-schema-gen/schema.gen';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { ReactElement } from 'react';
-import client from '../../appolo-client';
+import { useRouter } from 'next/router';
+import { ReactElement, useEffect } from 'react';
 import { Block } from '../../src/components/block/block';
 import CoursPage from '../../src/components/cours-page/cours-page';
 import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
 import Sidebar from '../../src/components/sidebar/sidebar';
 import { GET_COURS } from '../../src/graphql/quieries/quieries';
-import { NextPageWithLayout } from '../_app';
 
-const Cours: NextPageWithLayout<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> = (props) => {
+const Cours = () => {
+  const route = useRouter();
+  const { slug } = route.query;
+  const [getData, { loading, data, error }] = useLazyQuery<{
+    cours: CoursType;
+  }>(GET_COURS);
+
+  // This boilerplate is used to handle slug[0] could be undefined on first render
+  useEffect(() => {
+    if (slug && getData) {
+      getData({
+        variables: {
+          coursId: slug[0],
+        },
+      });
+    }
+  }, [getData, slug]);
+
+  /* TODO: Add TOASTS */
+  if (error) {
+    return null;
+  }
+
+  if (!data) {
+    return null;
+  }
   return (
     <>
       <Sidebar />
@@ -27,12 +49,15 @@ const Cours: NextPageWithLayout<
           padding: '$4',
         }}
       >
-        <h1>{props?.cours?.title}</h1>
-        <h2>{props?.cours?.desciption}</h2>
-        <span>{props?.cours?.icon}</span>
+        {/* TODO: Add Loading indicator */}
+        {loading && <p>..... LOADING ......</p>}
+
+        <h1>{data.cours.title}</h1>
+        <h2>{data.cours.desciption}</h2>
+        <span>{data.cours.icon}</span>
         <Block css={{ flexGrow: 1 }} size="fill">
           <PageCarousel
-            pages={props?.cours?.coursPages}
+            pages={data.cours.coursPages}
             getPage={(page: CoursPageType) => <CoursPage {...page} />}
           />
         </Block>
@@ -46,30 +71,3 @@ Cours.getLayout = function getLayout(page: ReactElement) {
 };
 
 export default Cours;
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { slug } = context.query;
-
-  if (!slug?.length) {
-    return {
-      props: {
-        cours: null,
-      },
-    };
-  }
-
-  const { data } = await client.query<{
-    cours: CoursType;
-  }>({
-    query: GET_COURS,
-    variables: {
-      coursId: slug[0],
-    },
-  });
-
-  return {
-    props: {
-      cours: data.cours,
-    },
-  };
-}

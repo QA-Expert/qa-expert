@@ -6,10 +6,15 @@ import { Formik, FormikProps, FormikHelpers, ErrorMessage } from 'formik';
 import { UserInputLogin } from 'graphql-schema-gen/schema.gen';
 import * as Yup from 'yup';
 import { ErrorMessage as ErrorMessageComponent } from '../src/components/error-message/error-message';
-import client from '../appolo-client';
 import { LOGIN } from '../src/graphql/mutations/mutations';
+import { useApolloClient, useMutation } from '@apollo/client';
+import { ACCESS_TOKEN_KEY } from '../src/constants/constants';
+import { useRouter } from 'next/router';
+import { ACCESS_TOKEN } from '../src/graphql/quieries/quieries';
 
 function Login() {
+  const client = useApolloClient();
+  const [login] = useMutation(LOGIN);
   const schema = Yup.object().shape({
     email: Yup.string()
       .required('Email is a required field')
@@ -22,7 +27,7 @@ function Login() {
     email: '',
     password: '',
   };
-  // const router = useRouter();
+  const router = useRouter();
 
   return (
     <Main>
@@ -34,9 +39,9 @@ function Login() {
           actions: FormikHelpers<UserInputLogin>,
         ) => {
           actions.setSubmitting(true);
+          await client.resetStore();
 
-          const { data, errors } = await client.mutate({
-            mutation: LOGIN,
+          const { data, errors } = await login({
             variables: values,
           });
 
@@ -47,7 +52,14 @@ function Login() {
           }
 
           if (data?.login?.access_token) {
-            // await router.push('/');
+            client.cache.writeQuery({
+              query: ACCESS_TOKEN,
+              data: {
+                access_token: data?.login?.access_token,
+              },
+            });
+            localStorage.setItem(ACCESS_TOKEN_KEY, data?.login?.access_token);
+            await router.push('/');
           }
         }}
       >

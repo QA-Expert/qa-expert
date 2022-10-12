@@ -49,3 +49,9 @@ export const GET_COURS = gql`
     }
   }
 `;
+
+export const ACCESS_TOKEN = gql`
+  query AccessToken($access_token: String) {
+    access_token
+  }
+`;
