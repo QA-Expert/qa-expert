@@ -52,6 +52,13 @@ function Login() {
           }
 
           if (data?.login?.access_token) {
+            client.cache.writeQuery({
+              query: ACCESS_TOKEN,
+              data: {
+                access_token: data?.login?.access_token,
+              },
+            });
+            localStorage.setItem(ACCESS_TOKEN_KEY, data?.login?.access_token);
             await router.push('/');
           }
         }}

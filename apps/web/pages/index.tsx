@@ -62,3 +62,16 @@ HomePage.getLayout = function getLayout(page: ReactElement) {
 };
 
 export default HomePage;
+
+// export async function getServerSideProps() {
+//   const { data } = await client.query<Props>({
+//     query: GET_ALL_COURSES_AND_QUIZZES,
+//   });
+
+//   return {
+//     props: {
+//       courses: data.courses,
+//       quizzes: data.quizzes,
+//     },
+//   };
+// }

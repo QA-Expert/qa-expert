@@ -50,12 +50,8 @@ import { join } from 'path';
           : undefined,
         outputAs: 'class',
       },
-      context: ({ req, res }) => ({ req, res }),
+      context: ({ req }) => ({ ...req }),
       sortSchema: true,
-      cors: {
-        origin: true,
-        credentials: true,
-      },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
