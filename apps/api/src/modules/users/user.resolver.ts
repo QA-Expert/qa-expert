@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from '../auth/auth.service';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { CurrentUser } from './user.decorator';
@@ -8,6 +8,8 @@ import { UserInputLogin } from './login-user.input';
 import { UserOutputLogin } from './login-user.output';
 import { User } from './user.entity';
 import { UserService } from './user.service';
+import { setTokenCookie } from 'src/utils/auth-cookies';
+import { ServerResponse } from 'http';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -25,8 +27,13 @@ export class UserResolver {
   @Mutation(() => UserOutputLogin)
   public async login(
     @Args('data') data: UserInputLogin,
+    @Context() context: { res: ServerResponse },
   ): Promise<UserOutputLogin | null> {
-    return await this.authService.validateUserAndLogin(data);
+    const result = await this.authService.validateUserAndLogin(data);
+
+    setTokenCookie(context.res, result?.access_token ?? '');
+
+    return result;
   }
 
   @Mutation(() => UserOutputLogin)
