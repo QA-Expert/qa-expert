@@ -25,8 +25,8 @@ interface BaseContnet implements Base {
   title: String!
 }
 
-type Cours implements Base & BaseContnet {
-  coursPages: [CoursPage!]!
+type Course implements Base & BaseContnet {
+  coursePages: [CoursePage!]!
   desciption: String!
   icon: String!
   id: String!
@@ -34,29 +34,29 @@ type Cours implements Base & BaseContnet {
   title: String!
 }
 
-type CoursPage implements Base & BaseContnet {
+type CoursePage implements Base & BaseContnet {
   content: String!
   desciption: String!
   id: String!
   title: String!
 }
 
-type CoursProgress implements Base {
-  coursId: String!
-  coursPageId: String!
+type CourseProgress implements Base {
+  courseId: String!
+  coursePageId: String!
   id: String!
   userId: String!
 }
 
-input CoursProgressInput {
-  coursId: String!
-  coursPageId: String!
+input CourseProgressInput {
+  courseId: String!
+  coursePageId: String!
   userId: String!
 }
 
 type Mutation {
   createAnswer(data: AnswerInput!): Answer!
-  createCoursProgress(data: CoursProgressInput!): CoursProgress!
+  createCoursProgress(data: CourseProgressInput!): CourseProgress!
   createQuizProgress(data: QuizProgressInput!): QuizProgress!
   login(data: UserInputLogin!): UserOutputLogin!
   register(data: UserInputCreate!): UserOutputLogin!
@@ -64,9 +64,9 @@ type Mutation {
 
 type Query {
   answer(quizPageId: String!, userId: String!): Answer!
-  cours(id: String!): Cours!
-  coursProgresses(coursId: String!): [CoursProgress!]!
-  courses: [Cours!]!
+  coursProgresses(courseId: String!): [CourseProgress!]!
+  course(id: String!): Course!
+  courses: [Course!]!
   quiz(id: String!): Quiz!
   quizProgresses(quizId: String!): [QuizProgress!]!
   quizzes: [Quiz!]!
@@ -80,7 +80,7 @@ type Question implements Base {
 }
 
 type Quiz implements Base & BaseContnet {
-  courses: [Cours!]!
+  courses: [Course!]!
   desciption: String!
   expectedResult: String!
   id: String!

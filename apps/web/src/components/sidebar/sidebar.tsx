@@ -1,9 +1,13 @@
 import { styled } from '@stitches/react';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Block } from '../block/block';
 import { Chewron } from '../chewron/chewron';
 
-export default function Sidebar() {
+type Props = {
+  children: ReactNode;
+};
+
+export default function Sidebar({ children }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleOpen = () => {
@@ -12,6 +16,9 @@ export default function Sidebar() {
 
   return (
     <Element width="description" isOpen={isOpen}>
+      <Content isOpen={isOpen} orientation="column" size="fill">
+        {children}
+      </Content>
       <Toggle
         direction={isOpen ? 'forward' : 'backward'}
         onClick={handleOpen}
@@ -33,7 +40,7 @@ const Element = styled(Block, {
     },
     isOpen: {
       false: {
-        width: '$6-2',
+        width: '$7',
       },
     },
   },
@@ -45,4 +52,20 @@ const Toggle = styled(Chewron, {
   borderStyle: 'none',
   marginLeft: 'auto',
   backgroundColor: 'inherit',
+  padding: 0,
+  marginRight: '$1-2',
+});
+
+const Content = styled(Block, {
+  overflow: 'hidden',
+  justifyContent: 'start',
+  transition: 'opacity 0.5s linear',
+
+  variants: {
+    isOpen: {
+      false: {
+        opacity: 0,
+      },
+    },
+  },
 });

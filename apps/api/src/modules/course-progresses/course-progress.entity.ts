@@ -2,25 +2,25 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Base } from 'src/modules/common/base.entity';
 import { User } from '../users/user.entity';
-import { CoursPage } from '../cours-pages/cours-page.entity';
-import { Cours } from '../courses/cours.entity';
+import { CoursePage } from '../course-pages/course-page.entity';
+import { Course } from '../courses/course.entity';
 
-@Entity('cours-progresses')
+@Entity('course-progresses')
 @ObjectType({ implements: [Base] })
-export class CoursProgress extends Base {
+export class CourseProgress extends Base {
   @Column('uuid')
   @Field()
-  coursId: string;
+  courseId: string;
 
-  @ManyToOne(() => Cours)
-  cours: Promise<Cours>;
+  @ManyToOne(() => Course)
+  course: Promise<Course>;
 
   @Column('uuid')
   @Field()
-  coursPageId: string;
+  coursePageId: string;
 
-  @ManyToOne(() => CoursPage)
-  coursPage: Promise<CoursPage>;
+  @ManyToOne(() => CoursePage)
+  coursePage: Promise<CoursePage>;
 
   @Column('uuid', { nullable: false })
   @Field()

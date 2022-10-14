@@ -27,6 +27,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
   const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+
   operation.setContext({
     headers: {
       authorization: token ? `Bearer ${token}` : '',
@@ -36,7 +37,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 });
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:3001/graphql',
+  uri: process.env.NEXT_PUBLIC_API_URL,
 });
 
 function createApolloClient() {
@@ -45,7 +46,6 @@ function createApolloClient() {
     ssrMode: typeof window === 'undefined',
     link: from([errorLink, concat(authMiddleware, httpLink)]),
     cache: new InMemoryCache(),
-    connectToDevTools: true, // TODO: put under env
   });
 }
 

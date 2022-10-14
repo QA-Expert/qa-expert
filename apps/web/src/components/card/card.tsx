@@ -1,6 +1,6 @@
 import { styled } from '@stitches/react';
 
-export const CoursCard = styled('button', {
+export const Card = styled('button', {
   // base styles
   display: 'flex',
   justifyContent: 'center',

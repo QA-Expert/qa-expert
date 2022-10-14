@@ -3,7 +3,7 @@ import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseContnet } from 'src/modules/common/content-base.entity';
 import { Base } from 'src/modules/common/base.entity';
 import { QuizPage } from '../quiz-pages/quiz-page.entity';
-import { Cours } from '../courses/cours.entity';
+import { Course } from '../courses/course.entity';
 
 export enum QuizType {
   QUESTIONEER = 'Questioneer',
@@ -27,9 +27,9 @@ export class Quiz extends BaseContnet {
   @Field(() => [QuizPage])
   quizPages: Promise<QuizPage[]>;
 
-  @ManyToMany(() => Cours, (cours) => cours.quizzes)
-  @Field(() => [Cours])
-  courses: Promise<Cours[]>;
+  @ManyToMany(() => Course, (course) => course.quizzes)
+  @Field(() => [Course])
+  courses: Promise<Course[]>;
 
   @Field()
   @Column('text')

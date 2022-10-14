@@ -15,9 +15,9 @@ export class QuizProgressResolver {
   @Query(() => [QuizProgress])
   public async quizProgresses(
     @CurrentUser() user: User,
-    @Args('quizId') coursId: string,
+    @Args('quizId') courseId: string,
   ): Promise<QuizProgress[] | null> {
-    return await this.service.findAll(user.id, coursId);
+    return await this.service.findAll(user.id, courseId);
   }
 
   @UseGuards(GqlAuthGuard)

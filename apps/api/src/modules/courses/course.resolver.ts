@@ -1,22 +1,22 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
-import { Cours } from './cours.entity';
-import { CoursService } from './cours.service';
+import { Course } from './course.entity';
+import { CourseService } from './course.service';
 
-@Resolver(() => Cours)
+@Resolver(() => Course)
 export class CoursResolver {
-  constructor(private readonly service: CoursService) {}
+  constructor(private readonly service: CourseService) {}
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => Cours)
-  async cours(@Args('id') id: string): Promise<Cours | null> {
+  @Query(() => Course)
+  async course(@Args('id') id: string): Promise<Course | null> {
     return await this.service.findById(id);
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => [Cours])
-  public async courses(): Promise<Cours[]> {
+  @Query(() => [Course])
+  public async courses(): Promise<Course[]> {
     return this.service.findAll();
   }
 }

@@ -1,15 +1,15 @@
 import Link from 'next/link';
 import { ReactElement } from 'react';
-import { CoursCard } from '../src/components/cours-card/cours-card';
+import { Card } from '../src/components/card/card';
 import Layout from '../src/components/layout/layout';
-import { Cours, Quiz } from 'graphql-schema-gen/schema.gen';
+import { Course, Quiz } from 'graphql-schema-gen/schema.gen';
 import { GET_ALL_COURSES_AND_QUIZZES } from '../src/graphql/quieries/quieries';
 import { Devider } from '../src/components/devider/devider';
 import { Block } from '../src/components/block/block';
 import { useQuery } from '@apollo/client';
 
 interface Props {
-  courses: Cours[];
+  courses: Course[];
   quizzes: Quiz[];
 }
 
@@ -31,12 +31,12 @@ const HomePage = () => {
       {/* TODO: Add Loading indicator */}
       {loading && <p>..... LOADING ......</p>}
       <Block orientation="row" css={{ gap: '$4', flexWrap: 'wrap' }}>
-        {data?.courses.map((cours: Cours) => (
-          <CoursCard key={cours.id}>
-            <Link href={`/cours/${cours.id}`}>
-              <a>{cours.title}</a>
+        {data?.courses.map((course: Course) => (
+          <Card key={course.id}>
+            <Link href={`/course/${course.id}`}>
+              <a>{course.title}</a>
             </Link>
-          </CoursCard>
+          </Card>
         ))}
       </Block>
 
@@ -46,11 +46,11 @@ const HomePage = () => {
 
       <Block orientation="row" css={{ gap: '$4', flexWrap: 'wrap' }}>
         {data?.quizzes.map((quiz: Quiz) => (
-          <CoursCard key={quiz.id}>
+          <Card key={quiz.id}>
             <Link href={`/quiz/${quiz.id}`}>
               <a>{quiz.title}</a>
             </Link>
-          </CoursCard>
+          </Card>
         ))}
       </Block>
     </Block>

@@ -1,17 +1,17 @@
 import { gql } from '@apollo/client';
 import {
-  COURS_HEADING_FRAGMENT,
+  COURSE_HEADING_FRAGMENT,
   QUIZ_HEADING_FRAGMENT,
   QUIZ_PAGE_FRAGMENT,
 } from '../fragments/fragments';
 
 export const GET_ALL_COURSES_AND_QUIZZES = gql`
-  ${COURS_HEADING_FRAGMENT}
+  ${COURSE_HEADING_FRAGMENT}
   ${QUIZ_HEADING_FRAGMENT}
   query GetAllCoursesAndQuizzes {
     courses {
       id
-      ...CoursHeadingFragment
+      ...CourseHeadingFragment
     }
     quizzes {
       id
@@ -36,12 +36,12 @@ export const GET_QUIZ = gql`
   }
 `;
 
-export const GET_COURS = gql`
-  ${COURS_HEADING_FRAGMENT}
-  query GetCours($coursId: String!) {
-    cours(id: $coursId) {
-      ...CoursHeadingFragment
-      coursPages {
+export const GET_COURSE = gql`
+  ${COURSE_HEADING_FRAGMENT}
+  query GetCourse($courseId: String!) {
+    course(id: $courseId) {
+      ...CourseHeadingFragment
+      coursePages {
         id
         title
         desciption

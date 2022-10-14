@@ -7,8 +7,8 @@ export const QUIESTION_FRAGMENT = gql`
   }
 `;
 
-export const COURS_HEADING_FRAGMENT = gql`
-  fragment CoursHeadingFragment on Cours {
+export const COURSE_HEADING_FRAGMENT = gql`
+  fragment CourseHeadingFragment on Course {
     title
     desciption
   }

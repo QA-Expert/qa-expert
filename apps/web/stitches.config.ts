@@ -44,6 +44,7 @@ export const {
     },
     space: {
       1: '0.25rem', // 4px
+      '1-2': '0.375rem', // 6px
       2: '0.5rem', // 8px
       3: '1rem', // 16px
       4: '2rem', // 32px

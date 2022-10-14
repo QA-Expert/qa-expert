@@ -1,25 +1,25 @@
 import { useQuery } from '@apollo/client';
 import {
-  Quiz as QuizType,
-  QuizPage as QuizPageType,
+  Course as CourseType,
+  CoursePage as CoursePageType,
 } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import { Block } from '../../src/components/block/block';
+import CoursePage from '../../src/components/course-page/course-page';
 import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
-import QuizPage from '../../src/components/quiz-page/quiz-page';
 import Sidebar from '../../src/components/sidebar/sidebar';
-import { GET_QUIZ } from '../../src/graphql/quieries/quieries';
+import { GET_COURSE } from '../../src/graphql/quieries/quieries';
 
-const Quiz = () => {
+const Course = () => {
   const route = useRouter();
   const slug = route.query.slug ? route.query.slug[0] : null;
 
   const { loading, data, error } = useQuery<{
-    quiz: QuizType;
-  }>(GET_QUIZ, {
-    variables: { quizId: slug },
+    course: CourseType;
+  }>(GET_COURSE, {
+    variables: { courseId: slug },
     skip: !slug,
   });
 
@@ -31,7 +31,6 @@ const Quiz = () => {
   if (!data) {
     return null;
   }
-
   return (
     <>
       <Sidebar>Test</Sidebar>
@@ -46,17 +45,13 @@ const Quiz = () => {
         {/* TODO: Add Loading indicator */}
         {loading && <p>..... LOADING ......</p>}
 
-        <Block orientation="column">
-          <h1>{data.quiz.title}</h1>
-          <h2>{data.quiz.desciption}</h2>
-          <span>{data.quiz.type}</span>
-          <span>{data.quiz.expectedResult}</span>{' '}
-        </Block>
-
+        <h1>{data.course.title}</h1>
+        <h2>{data.course.desciption}</h2>
+        <span>{data.course.icon}</span>
         <Block css={{ flexGrow: 1 }} size="fill">
           <PageCarousel
-            pages={data.quiz.quizPages}
-            getPage={(page: QuizPageType) => <QuizPage {...page} />}
+            pages={data.course.coursePages}
+            getPage={(page: CoursePageType) => <CoursePage {...page} />}
           />
         </Block>
       </Block>
@@ -64,8 +59,8 @@ const Quiz = () => {
   );
 };
 
-Quiz.getLayout = function getLayout(page: ReactElement) {
+Course.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export default Quiz;
+export default Course;
