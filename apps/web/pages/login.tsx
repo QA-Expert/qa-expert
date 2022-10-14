@@ -8,9 +8,7 @@ import * as Yup from 'yup';
 import { ErrorMessage as ErrorMessageComponent } from '../src/components/error-message/error-message';
 import { LOGIN } from '../src/graphql/mutations/mutations';
 import { useApolloClient, useMutation } from '@apollo/client';
-import { ACCESS_TOKEN_KEY } from '../src/constants/constants';
 import { useRouter } from 'next/router';
-import { ACCESS_TOKEN } from '../src/graphql/quieries/quieries';
 
 function Login() {
   const client = useApolloClient();
@@ -52,13 +50,6 @@ function Login() {
           }
 
           if (data?.login?.access_token) {
-            client.cache.writeQuery({
-              query: ACCESS_TOKEN,
-              data: {
-                access_token: data?.login?.access_token,
-              },
-            });
-            localStorage.setItem(ACCESS_TOKEN_KEY, data?.login?.access_token);
             await router.push('/');
           }
         }}

@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ExecutionContext,
   Injectable,
   UnauthorizedException,
@@ -7,6 +6,7 @@ import {
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
+import { getTokenCookie } from 'src/utls/auth-cookie';
 import { User } from '../users/user.entity';
 import { UserService } from '../users/user.service';
 
@@ -35,22 +35,9 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const req = this.getRequest(context);
-    const authHeader = req.headers.authorization as string;
-
-    if (!authHeader) {
-      throw new BadRequestException('Authorization header not found.');
-    }
-
-    const [type, token] = authHeader.split(' ');
-
-    if (type !== 'Bearer') {
-      throw new BadRequestException(
-        `Authentication type \'Bearer\' required. Found \'${type}\'`,
-      );
-    }
-
     try {
+      const req = this.getRequest(context);
+      const token = getTokenCookie(req);
       const { id } = this.jwtService.verify(token, {
         secret: process.env.AUTH_SECRET,
       });
