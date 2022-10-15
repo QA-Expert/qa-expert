@@ -29,6 +29,7 @@ export const {
       disabled: `hsl(${hue} 15% 85%)`,
       disabledText: `hsl(${hue} 10% 60%)`,
       errorMessage: 'red',
+      white: 'white',
     },
     sizes: {
       1: '0.0625rem', // 1px
@@ -66,11 +67,12 @@ export const {
     shadows: {
       color: `hsl(${hue} 10% 70%)`,
       around: `0 0 3px 3px $color`,
-      botton: `1px 1px 2px 2px $color`,
+      bottom: `1px 1px 2px 2px $color`,
     },
     zIndices: {
       navbar: 1,
       sidebar: 2,
+      dropdownMenu: 3,
     },
     borderWidths: {
       sm: '1px',

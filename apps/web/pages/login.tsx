@@ -97,6 +97,7 @@ function Login() {
             >
               <label htmlFor="password">Password:</label>
               <Input
+                autoComplete="on"
                 type="password"
                 name="password"
                 id="password"
