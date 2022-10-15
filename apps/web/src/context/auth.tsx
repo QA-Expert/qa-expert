@@ -15,14 +15,11 @@ const PUBLIC_ROUTES = ['/login', '/register'];
 export const AuthUserProvider = ({ children }: Props) => {
   const router = useRouter();
   const shouldAuth = !PUBLIC_ROUTES.includes(router.pathname);
-  console.log(shouldAuth, router.pathname);
   const { data, error } = useQuery<{ user: User | null }>(GET_USER, {
     skip: !shouldAuth || !router.isReady,
   });
 
   if (error) {
-    console.log(error);
-
     router.push('/login');
   }
 
