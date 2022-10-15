@@ -5,6 +5,7 @@ import HeadComponent from '../src/components/head/head';
 import '../src/styles/globals.css';
 import { useApollo } from '../appolo/client';
 import { ApolloProvider } from '@apollo/client';
+import { AuthUserProvider } from '../src/context/auth';
 
 export type NextPageWithLayout<Props> = NextPage<Props> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -25,9 +26,11 @@ export default function MyApp({
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
   return getLayout(
     <ApolloProvider client={apolloClient}>
-      <HeadComponent />
-      {/* @ts-ignore */}
-      <Component {...pageProps} />
+      <AuthUserProvider>
+        <HeadComponent />
+        {/* @ts-ignore */}
+        <Component {...pageProps} />
+      </AuthUserProvider>
     </ApolloProvider>,
   );
 }

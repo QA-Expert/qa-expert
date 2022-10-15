@@ -7,6 +7,7 @@ import { GET_ALL_COURSES_AND_QUIZZES } from '../src/graphql/quieries/quieries';
 import { Devider } from '../src/components/devider/devider';
 import { Block } from '../src/components/block/block';
 import { useQuery } from '@apollo/client';
+import { useUser } from '../src/context/auth';
 
 interface Props {
   courses: Course[];
@@ -15,6 +16,7 @@ interface Props {
 
 const HomePage = () => {
   const { data, loading, error } = useQuery<Props>(GET_ALL_COURSES_AND_QUIZZES);
+  const user = useUser();
 
   /* TODO: Add TOASTS */
   if (error) {
@@ -27,6 +29,7 @@ const HomePage = () => {
 
   return (
     <Block orientation="column" css={{ gap: '$4', padding: '$4' }}>
+      <h1>{user?.email}</h1>
       <h1>Courses</h1>
       {/* TODO: Add Loading indicator */}
       {loading && <p>..... LOADING ......</p>}

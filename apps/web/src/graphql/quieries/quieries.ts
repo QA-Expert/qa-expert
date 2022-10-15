@@ -55,3 +55,13 @@ export const ACCESS_TOKEN = gql`
     access_token
   }
 `;
+
+export const GET_USER = gql`
+  query GetUser {
+    user {
+      email
+      firstName
+      lastName
+    }
+  }
+`;

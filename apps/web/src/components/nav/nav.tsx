@@ -14,6 +14,11 @@ export default function Nav() {
           <a>Navigation</a>
         </Link>
       </Header>
+      <Link href={`/login`}>
+        <Button as="a" bg="primary" position="left">
+          Login
+        </Button>
+      </Link>
       <Button type="button" bg="primary" position="left" onClick={toggleTheme}>
         {themName}
       </Button>
