@@ -2,6 +2,7 @@ import { styled } from '@stitches/react';
 import Link from 'next/link';
 import { Block } from '../block/block';
 import { Button } from '../button/button';
+import { Logout } from '../logout/logout';
 import { useTheme } from './theme.hook';
 
 export default function Nav() {
@@ -19,6 +20,7 @@ export default function Nav() {
           Login
         </Button>
       </Link>
+      <Logout />
       <Button type="button" bg="primary" position="left" onClick={toggleTheme}>
         {themName}
       </Button>

@@ -105,6 +105,8 @@ export abstract class IMutation {
 
     abstract login(data: UserInputLogin): UserOutputLogin | Promise<UserOutputLogin>;
 
+    abstract logout(): boolean | Promise<boolean>;
+
     abstract register(data: UserInputCreate): UserOutputLogin | Promise<UserOutputLogin>;
 }
 

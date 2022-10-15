@@ -4,7 +4,6 @@ import {
   CoursePage as CoursePageType,
 } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
-import { ReactElement } from 'react';
 import { Block } from '../../src/components/block/block';
 import CoursePage from '../../src/components/course-page/course-page';
 import Layout from '../../src/components/layout/layout';
@@ -32,7 +31,7 @@ const Course = () => {
     return null;
   }
   return (
-    <>
+    <Layout>
       <Sidebar>Test</Sidebar>
       <Block
         size="fill"
@@ -55,12 +54,8 @@ const Course = () => {
           />
         </Block>
       </Block>
-    </>
+    </Layout>
   );
-};
-
-Course.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
 };
 
 export default Course;

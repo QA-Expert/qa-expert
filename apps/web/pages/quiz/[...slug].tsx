@@ -4,7 +4,6 @@ import {
   QuizPage as QuizPageType,
 } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
-import { ReactElement } from 'react';
 import { Block } from '../../src/components/block/block';
 import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
@@ -33,7 +32,7 @@ const Quiz = () => {
   }
 
   return (
-    <>
+    <Layout>
       <Sidebar>Test</Sidebar>
       <Block
         size="fill"
@@ -60,12 +59,8 @@ const Quiz = () => {
           />
         </Block>
       </Block>
-    </>
+    </Layout>
   );
-};
-
-Quiz.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
 };
 
 export default Quiz;

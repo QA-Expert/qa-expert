@@ -29,7 +29,7 @@ const httpLink = new HttpLink({
   credentials: 'include',
 });
 
-function createApolloClient() {
+export function createApolloClient() {
   return new ApolloClient({
     name: 'qa-school-web-client',
     ssrMode: typeof window === 'undefined',

@@ -9,7 +9,7 @@ import { UserOutputLogin } from './login-user.output';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { ServerResponse } from 'http';
-import { setTokenCookie } from 'src/utls/auth-cookie';
+import { setTokenCookie, removeTokenCookie } from 'src/utls/auth-cookie';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -47,5 +47,15 @@ export class UserResolver {
     setTokenCookie(context.res, result?.access_token ?? '');
 
     return result;
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  public async logout(
+    @Context() context: { res: ServerResponse },
+  ): Promise<boolean> {
+    removeTokenCookie(context.res);
+
+    return true;
   }
 }

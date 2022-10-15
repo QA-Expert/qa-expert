@@ -59,6 +59,7 @@ type Mutation {
   createCoursProgress(data: CourseProgressInput!): CourseProgress!
   createQuizProgress(data: QuizProgressInput!): QuizProgress!
   login(data: UserInputLogin!): UserOutputLogin!
+  logout: Boolean!
   register(data: UserInputCreate!): UserOutputLogin!
 }
 

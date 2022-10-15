@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { ReactElement } from 'react';
 import { Card } from '../src/components/card/card';
 import Layout from '../src/components/layout/layout';
 import { Course, Quiz } from 'graphql-schema-gen/schema.gen';
@@ -28,53 +27,38 @@ const HomePage = () => {
   }
 
   return (
-    <Block orientation="column" css={{ gap: '$4', padding: '$4' }}>
-      <h1>{user?.email}</h1>
-      <h1>Courses</h1>
-      {/* TODO: Add Loading indicator */}
-      {loading && <p>..... LOADING ......</p>}
-      <Block orientation="row" css={{ gap: '$4', flexWrap: 'wrap' }}>
-        {data?.courses.map((course: Course) => (
-          <Card key={course.id}>
-            <Link href={`/course/${course.id}`}>
-              <a>{course.title}</a>
-            </Link>
-          </Card>
-        ))}
+    <Layout>
+      <Block orientation="column" css={{ gap: '$4', padding: '$4' }}>
+        <h1>{user?.email}</h1>
+        <h1>Courses</h1>
+        {/* TODO: Add Loading indicator */}
+        {loading && <p>..... LOADING ......</p>}
+        <Block orientation="row" css={{ gap: '$4', flexWrap: 'wrap' }}>
+          {data?.courses.map((course: Course) => (
+            <Card key={course.id}>
+              <Link href={`/course/${course.id}`}>
+                <a>{course.title}</a>
+              </Link>
+            </Card>
+          ))}
+        </Block>
+
+        <Devider orientation={'horizontal'} />
+
+        <h1>Quizzes</h1>
+
+        <Block orientation="row" css={{ gap: '$4', flexWrap: 'wrap' }}>
+          {data?.quizzes.map((quiz: Quiz) => (
+            <Card key={quiz.id}>
+              <Link href={`/quiz/${quiz.id}`}>
+                <a>{quiz.title}</a>
+              </Link>
+            </Card>
+          ))}
+        </Block>
       </Block>
-
-      <Devider orientation={'horizontal'} />
-
-      <h1>Quizzes</h1>
-
-      <Block orientation="row" css={{ gap: '$4', flexWrap: 'wrap' }}>
-        {data?.quizzes.map((quiz: Quiz) => (
-          <Card key={quiz.id}>
-            <Link href={`/quiz/${quiz.id}`}>
-              <a>{quiz.title}</a>
-            </Link>
-          </Card>
-        ))}
-      </Block>
-    </Block>
+    </Layout>
   );
 };
 
-HomePage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
-};
-
 export default HomePage;
-
-// export async function getServerSideProps() {
-//   const { data } = await client.query<Props>({
-//     query: GET_ALL_COURSES_AND_QUIZZES,
-//   });
-
-//   return {
-//     props: {
-//       courses: data.courses,
-//       quizzes: data.quizzes,
-//     },
-//   };
-// }
