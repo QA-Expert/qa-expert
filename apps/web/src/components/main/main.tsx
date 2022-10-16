@@ -1,6 +1,5 @@
-import { styled } from '@stitches/react';
+import { Box } from '@mui/material';
 import { ReactNode, useEffect, useState } from 'react';
-import { Block } from '../block/block';
 
 /**
  *
@@ -27,14 +26,17 @@ export default function Main({
   }
 
   return (
-    <Element as="main" {...delegated}>
+    <Box
+      sx={{
+        display: 'flex',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      component="main"
+      {...delegated}
+    >
       {children}
-    </Element>
+    </Box>
   );
 }
-
-const Element = styled(Block, {
-  backgroundColor: '$background',
-  color: '$primaryText',
-  flex: 1,
-});

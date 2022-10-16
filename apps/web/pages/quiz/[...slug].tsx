@@ -1,10 +1,10 @@
 import { useQuery } from '@apollo/client';
+import { Box, Container } from '@mui/material';
 import {
   Quiz as QuizType,
   QuizPage as QuizPageType,
 } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
-import { Block } from '../../src/components/block/block';
 import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
 import QuizPage from '../../src/components/quiz-page/quiz-page';
@@ -34,31 +34,51 @@ const Quiz = () => {
   return (
     <Layout>
       <Sidebar>Test</Sidebar>
-      <Block
-        size="fill"
-        orientation="column"
-        css={{
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
           justifyContent: 'start',
-          padding: '$4',
+          alignItems: 'center',
+          flexDirection: 'column',
+          flex: 1,
         }}
       >
         {/* TODO: Add Loading indicator */}
         {loading && <p>..... LOADING ......</p>}
 
-        <Block orientation="column">
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }}
+        >
           <h1>{data.quiz.title}</h1>
-          <h2>{data.quiz.desciption}</h2>
+          <h2>{data.quiz.description}</h2>
           <span>{data.quiz.type}</span>
-          <span>{data.quiz.expectedResult}</span>{' '}
-        </Block>
+          <span>{data.quiz.expectedResult}</span>
+        </Box>
 
-        <Block css={{ flexGrow: 1 }} size="fill">
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            flexGrow: 1,
+          }}
+        >
           <PageCarousel
             pages={data.quiz.quizPages}
             getPage={(page: QuizPageType) => <QuizPage {...page} />}
           />
-        </Block>
-      </Block>
+        </Box>
+      </Box>
     </Layout>
   );
 };

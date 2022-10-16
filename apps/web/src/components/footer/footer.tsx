@@ -1,14 +1,12 @@
-import { styled } from '@stitches/react';
-import { Block } from '../block/block';
+import { Box } from '@mui/material';
 
 export default function Footer() {
-  return <Element as="footer">Footer</Element>;
+  return (
+    <Box
+      sx={{ display: 'flex', backgroundColor: 'primary.main', color: 'white' }}
+      component="footer"
+    >
+      Footer
+    </Box>
+  );
 }
-
-const Element = styled(Block, {
-  backgroundColor: '$navBackground',
-  color: '$primaryText',
-  padding: '$2',
-  width: '100%',
-  boxShadow: '$around',
-});

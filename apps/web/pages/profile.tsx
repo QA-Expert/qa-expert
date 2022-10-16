@@ -1,12 +1,12 @@
-import { Block } from '../src/components/block/block';
+import { Grid } from '@mui/material';
 import Layout from '../src/components/layout/layout';
 
 function Account() {
   return (
     <Layout>
-      <Block>
+      <Grid>
         <h1>Account</h1>
-      </Block>
+      </Grid>
     </Layout>
   );
 }

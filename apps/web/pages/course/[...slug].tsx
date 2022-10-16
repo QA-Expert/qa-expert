@@ -1,10 +1,10 @@
 import { useQuery } from '@apollo/client';
+import { Container, Box } from '@mui/material';
 import {
   Course as CourseType,
   CoursePage as CoursePageType,
 } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
-import { Block } from '../../src/components/block/block';
 import CoursePage from '../../src/components/course-page/course-page';
 import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
@@ -33,27 +33,50 @@ const Course = () => {
   return (
     <Layout>
       <Sidebar>Test</Sidebar>
-      <Block
-        size="fill"
-        orientation="column"
-        css={{
-          justifyContent: 'start',
-          padding: '$4',
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          flex: 1,
         }}
       >
         {/* TODO: Add Loading indicator */}
         {loading && <p>..... LOADING ......</p>}
 
-        <h1>{data.course.title}</h1>
-        <h2>{data.course.desciption}</h2>
-        <span>{data.course.icon}</span>
-        <Block css={{ flexGrow: 1 }} size="fill">
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }}
+        >
+          <h1>{data.course.title}</h1>
+          <h2>{data.course.description}</h2>
+          <span>{data.course.icon}</span>
+        </Box>
+
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            flexGrow: 1,
+          }}
+        >
           <PageCarousel
             pages={data.course.coursePages}
             getPage={(page: CoursePageType) => <CoursePage {...page} />}
           />
-        </Block>
-      </Block>
+        </Box>
+      </Box>
     </Layout>
   );
 };

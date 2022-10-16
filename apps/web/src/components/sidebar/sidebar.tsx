@@ -1,8 +1,7 @@
-import { styled } from '@stitches/react';
+import { Drawer, IconButton, Box, Divider, Paper } from '@mui/material';
 import { ReactNode, useState } from 'react';
-import { Block } from '../block/block';
-import { Chewron } from '../chewron/chewron';
-
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 type Props = {
   children: ReactNode;
 };
@@ -15,57 +14,49 @@ export default function Sidebar({ children }: Props) {
   };
 
   return (
-    <Element width="description" isOpen={isOpen}>
-      <Content isOpen={isOpen} orientation="column" size="fill">
-        {children}
-      </Content>
-      <Toggle
-        direction={isOpen ? 'forward' : 'backward'}
-        onClick={handleOpen}
-      />
-    </Element>
+    <Paper
+      sx={{
+        width: isOpen ? '25%' : '2.5rem',
+        marginRight: 'auto',
+        height: '100%',
+        transition: 'width 0.5s',
+        borderRadius: 0,
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          flex: '1',
+          height: '100%',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: '1',
+            overflow: 'hidden',
+            height: '100%',
+            justifyContent: 'start',
+            alignItems: 'center',
+          }}
+        >
+          {children}
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >
+          <IconButton component="button" onClick={handleOpen}>
+            {isOpen ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </Box>
+      </Box>
+    </Paper>
   );
 }
-
-const Element = styled(Block, {
-  height: '100%',
-  backgroundColor: '$navBackground',
-  color: '$primaryText',
-  transition: 'width 0.5s',
-  variants: {
-    width: {
-      description: {
-        width: '35%',
-      },
-    },
-    isOpen: {
-      false: {
-        width: '$7',
-      },
-    },
-  },
-});
-
-const Toggle = styled(Chewron, {
-  height: '100%',
-  width: '$6-2',
-  borderStyle: 'none',
-  marginLeft: 'auto',
-  backgroundColor: 'inherit',
-  padding: 0,
-  marginRight: '$1-2',
-});
-
-const Content = styled(Block, {
-  overflow: 'hidden',
-  justifyContent: 'start',
-  transition: 'opacity 0.5s linear',
-
-  variants: {
-    isOpen: {
-      false: {
-        opacity: 0,
-      },
-    },
-  },
-});

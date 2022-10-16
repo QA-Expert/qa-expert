@@ -1,16 +1,24 @@
+import { Box } from '@mui/material';
 import { QuizPage as Props } from 'graphql-schema-gen/schema.gen';
-import { Block } from '../block/block';
 
 export default function QuizPage(props: Props) {
   return (
-    <Block orientation="column" size="fill">
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <h2>{props.title}</h2>
-      <p>{props.desciption}</p>
-      <Block orientation="column" css={{ gap: '$3', alignItems: 'start' }}>
+      <p>{props.description}</p>
+      <Box>
         {props.questions.map((q, i) => (
           <div key={i}>{q.content}</div>
         ))}
-      </Block>
-    </Block>
+      </Box>
+    </Box>
   );
 }

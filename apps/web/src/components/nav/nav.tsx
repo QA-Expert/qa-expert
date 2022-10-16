@@ -6,18 +6,13 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { styled } from '@stitches/react';
 import Link from 'next/link';
-import { Block } from '../block/block';
 import { ProfileMenu } from '../profile-menu/profile-menu';
-import { useTheme } from './theme.hook';
 
 export default function Nav() {
-  const { themName, toggleTheme } = useTheme();
-
   return (
-    <AppBar component="nav">
-      <Container maxWidth="xl">
+    <AppBar component="nav" position="static">
+      <Container>
         <Toolbar disableGutters>
           <Link href={`/`}>
             <Typography
@@ -27,7 +22,6 @@ export default function Nav() {
               noWrap
               sx={{
                 fontSize: '2rem',
-                letterSpacing: '.3rem',
                 textDecoration: 'none',
               }}
             >
@@ -48,12 +42,6 @@ export default function Nav() {
               </Button>
             </Link>
 
-            <Button
-              sx={{ color: 'white', display: 'block' }}
-              onClick={toggleTheme}
-            >
-              {themName}
-            </Button>
             <ProfileMenu />
           </Box>
         </Toolbar>

@@ -1,6 +1,6 @@
+import { Button, Box } from '@mui/material';
 import { ReactNode, useState } from 'react';
-import { Block } from '../block/block';
-import { Chewron } from '../chewron/chewron';
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 
 interface Props<T> {
   pages?: T[];
@@ -30,26 +30,30 @@ export function PageCarousel<T>({ pages, getPage }: Props<T>) {
   };
 
   return (
-    <Block orientation="row" size="fill">
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%',
+        alignItems: 'center',
+      }}
+    >
       {pages?.length > 1 && (
-        <Chewron
-          direction={'backward'}
-          css={{ fontSize: '$5' }}
-          onClick={handleBackwardClick}
-          disabled={currentPageIndex === 0}
-        />
+        <Button onClick={handleBackwardClick} disabled={currentPageIndex === 0}>
+          <ArrowBackIos />
+        </Button>
       )}
 
       {getPage(pages[currentPageIndex])}
 
       {pages?.length > 1 && (
-        <Chewron
-          direction={'forward'}
-          css={{ fontSize: '$5' }}
+        <Button
           onClick={handleForwardClick}
           disabled={currentPageIndex === pages.length - 1}
-        />
+        >
+          <ArrowForwardIos />
+        </Button>
       )}
-    </Block>
+    </Box>
   );
 }

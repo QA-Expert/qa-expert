@@ -1,14 +1,19 @@
-import { Block } from '../src/components/block/block';
-import { Button } from '../src/components/button/button';
-import { Input } from '../src/components/input/input';
 import Main from '../src/components/main/main';
 import { Formik, FormikProps, FormikHelpers, ErrorMessage } from 'formik';
 import { UserInputLogin } from 'graphql-schema-gen/schema.gen';
 import * as Yup from 'yup';
-import { ErrorMessage as ErrorMessageComponent } from '../src/components/error-message/error-message';
 import { LOGIN } from '../src/graphql/mutations/mutations';
 import { useApolloClient, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
+import {
+  Button,
+  FormControl,
+  FormHelperText,
+  Box,
+  Input,
+  InputLabel,
+  Typography,
+} from '@mui/material';
 
 function Login() {
   const client = useApolloClient();
@@ -62,23 +67,25 @@ function Login() {
           handleBlur,
           errors,
         }: FormikProps<UserInputLogin>) => (
-          <Block
-            orientation="column"
-            as="form"
-            css={{
-              gap: '$3',
-              width: '25%',
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '1rem',
+              flexDirection: 'column',
             }}
+            direction="column"
+            component="form"
             noValidate
             onSubmit={handleSubmit}
           >
-            <h1>Login</h1>
+            <Typography sx={{ fontSize: '2rem' }} variant="h1">
+              Login
+            </Typography>
 
-            <Block
-              orientation="column"
-              css={{ alignItems: 'start', gap: '$1' }}
-            >
-              <label htmlFor="email">Email:</label>
+            <FormControl>
+              <InputLabel htmlFor="email">Email address</InputLabel>
               <Input
                 type="email"
                 name="email"
@@ -87,15 +94,18 @@ function Login() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
+                error={Boolean(errors.email)}
               />
-              <ErrorMessage name="email" component={ErrorMessageComponent} />
-            </Block>
+              <FormHelperText
+                error={Boolean(errors.email)}
+                id="email-error-text"
+              >
+                {errors.email}
+              </FormHelperText>
+            </FormControl>
 
-            <Block
-              orientation="column"
-              css={{ alignItems: 'start', gap: '$1' }}
-            >
-              <label htmlFor="password">Password:</label>
+            <FormControl>
+              <InputLabel htmlFor="email">Password</InputLabel>
               <Input
                 autoComplete="on"
                 type="password"
@@ -105,9 +115,15 @@ function Login() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.password}
+                error={Boolean(errors.password)}
               />
-              <ErrorMessage name="password" component={ErrorMessageComponent} />
-            </Block>
+              <FormHelperText
+                error={Boolean(errors.password)}
+                id="password-error-text"
+              >
+                {errors.password}
+              </FormHelperText>
+            </FormControl>
 
             <Button
               disabled={
@@ -115,13 +131,11 @@ function Login() {
                 Boolean(errors.email) ||
                 Boolean(errors.password)
               }
-              bg="primary"
-              size="lg"
               type="submit"
             >
               Login
             </Button>
-          </Block>
+          </Box>
         )}
       </Formik>
     </Main>

@@ -54,8 +54,8 @@ export interface Base {
     id: string;
 }
 
-export interface BaseContnet extends Base {
-    desciption: string;
+export interface BaseContent extends Base {
+    description: string;
     id: string;
     title: string;
 }
@@ -73,18 +73,18 @@ export class Answer implements Base {
     userId: string;
 }
 
-export class Course implements Base, BaseContnet {
+export class Course implements Base, BaseContent {
     coursePages: CoursePage[];
-    desciption: string;
+    description: string;
     icon: string;
     id: string;
     quizzes: Quiz[];
     title: string;
 }
 
-export class CoursePage implements Base, BaseContnet {
+export class CoursePage implements Base, BaseContent {
     content: string;
-    desciption: string;
+    description: string;
     id: string;
     title: string;
 }
@@ -134,9 +134,9 @@ export class Question implements Base {
     id: string;
 }
 
-export class Quiz implements Base, BaseContnet {
+export class Quiz implements Base, BaseContent {
     courses: Course[];
-    desciption: string;
+    description: string;
     expectedResult: string;
     id: string;
     quizPages: QuizPage[];
@@ -144,8 +144,8 @@ export class Quiz implements Base, BaseContnet {
     type: QuizType;
 }
 
-export class QuizPage implements Base, BaseContnet {
-    desciption: string;
+export class QuizPage implements Base, BaseContent {
+    description: string;
     expectedResult: string;
     id: string;
     questions: Question[];

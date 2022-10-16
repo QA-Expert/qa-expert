@@ -1,6 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { BaseContnet } from 'src/modules/common/content-base.entity';
+import { BaseContent } from 'src/modules/common/content-base.entity';
 import { Base } from 'src/modules/common/base.entity';
 import { QuizPage } from '../quiz-pages/quiz-page.entity';
 import { Course } from '../courses/course.entity';
@@ -16,8 +16,8 @@ registerEnumType(QuizType, {
 });
 
 @Entity('quizzes')
-@ObjectType({ implements: [BaseContnet, Base] })
-export class Quiz extends BaseContnet {
+@ObjectType({ implements: [BaseContent, Base] })
+export class Quiz extends BaseContent {
   @Field(() => QuizType)
   @Column({ type: 'enum', enum: QuizType, nullable: false })
   type: QuizType;

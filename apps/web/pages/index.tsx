@@ -1,12 +1,11 @@
-import Link from 'next/link';
-import { Card } from '../src/components/card/card';
 import Layout from '../src/components/layout/layout';
 import { Course, Quiz } from 'graphql-schema-gen/schema.gen';
 import { GET_ALL_COURSES_AND_QUIZZES } from '../src/graphql/quieries/quieries';
-import { Devider } from '../src/components/devider/devider';
-import { Block } from '../src/components/block/block';
 import { useQuery } from '@apollo/client';
 import { useUser } from '../src/context/auth';
+import { Box, Typography } from '@mui/material';
+import { CardComponent } from '../src/components/card/card';
+import { useRouter } from 'next/router';
 
 interface Props {
   courses: Course[];
@@ -16,6 +15,7 @@ interface Props {
 const HomePage = () => {
   const { data, loading, error } = useQuery<Props>(GET_ALL_COURSES_AND_QUIZZES);
   const user = useUser();
+  const router = useRouter();
 
   /* TODO: Add TOASTS */
   if (error) {
@@ -28,35 +28,67 @@ const HomePage = () => {
 
   return (
     <Layout>
-      <Block orientation="column" css={{ gap: '$4', padding: '$4' }}>
-        <h1>{user?.email}</h1>
-        <h1>Courses</h1>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'start',
+          alignItems: 'center',
+          gap: '2rem',
+          paddingBottom: '2rem',
+        }}
+      >
+        <Typography variant="h2" sx={{ fontSize: '3rem' }}>
+          Courses
+        </Typography>
+
         {/* TODO: Add Loading indicator */}
         {loading && <p>..... LOADING ......</p>}
-        <Block orientation="row" css={{ gap: '$4', flexWrap: 'wrap' }}>
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'start',
+            alignItems: 'center',
+            gap: '2rem',
+            flexWrap: 'wrap',
+          }}
+        >
           {data?.courses.map((course: Course) => (
-            <Card key={course.id}>
-              <Link href={`/course/${course.id}`}>
-                <a>{course.title}</a>
-              </Link>
-            </Card>
+            <CardComponent
+              key={course.id}
+              id={course.id}
+              type="course"
+              title={course.title}
+              description={course.description}
+            />
           ))}
-        </Block>
+        </Box>
 
-        <Devider orientation={'horizontal'} />
+        <Typography variant="h2" sx={{ fontSize: '3rem' }}>
+          Quizzes
+        </Typography>
 
-        <h1>Quizzes</h1>
-
-        <Block orientation="row" css={{ gap: '$4', flexWrap: 'wrap' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'start',
+            alignItems: 'center',
+            gap: '2rem',
+            flexWrap: 'wrap',
+          }}
+        >
           {data?.quizzes.map((quiz: Quiz) => (
-            <Card key={quiz.id}>
-              <Link href={`/quiz/${quiz.id}`}>
-                <a>{quiz.title}</a>
-              </Link>
-            </Card>
+            <CardComponent
+              key={quiz.id}
+              id={quiz.id}
+              type="quiz"
+              title={quiz.title}
+              description={quiz.description}
+            />
           ))}
-        </Block>
-      </Block>
+        </Box>
+      </Box>
     </Layout>
   );
 };

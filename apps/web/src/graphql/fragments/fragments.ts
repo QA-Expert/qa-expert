@@ -10,14 +10,14 @@ export const QUIESTION_FRAGMENT = gql`
 export const COURSE_HEADING_FRAGMENT = gql`
   fragment CourseHeadingFragment on Course {
     title
-    desciption
+    description
   }
 `;
 
 export const QUIZ_HEADING_FRAGMENT = gql`
   fragment QuizHeadingFragment on Quiz {
     title
-    desciption
+    description
   }
 `;
 
@@ -25,7 +25,7 @@ export const QUIZ_PAGE_FRAGMENT = gql`
   ${QUIESTION_FRAGMENT}
   fragment QuizPageFragment on QuizPage {
     title
-    desciption
+    description
     expectedResult
     questions {
       ...QuestionFragment

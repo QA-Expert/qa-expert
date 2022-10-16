@@ -44,7 +44,7 @@ export const GET_COURSE = gql`
       coursePages {
         id
         title
-        desciption
+        description
       }
     }
   }

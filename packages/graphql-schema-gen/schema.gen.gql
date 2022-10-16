@@ -19,24 +19,24 @@ interface Base {
   id: String!
 }
 
-interface BaseContnet implements Base {
-  desciption: String!
+interface BaseContent implements Base {
+  description: String!
   id: String!
   title: String!
 }
 
-type Course implements Base & BaseContnet {
+type Course implements Base & BaseContent {
   coursePages: [CoursePage!]!
-  desciption: String!
+  description: String!
   icon: String!
   id: String!
   quizzes: [Quiz!]!
   title: String!
 }
 
-type CoursePage implements Base & BaseContnet {
+type CoursePage implements Base & BaseContent {
   content: String!
-  desciption: String!
+  description: String!
   id: String!
   title: String!
 }
@@ -80,9 +80,9 @@ type Question implements Base {
   id: String!
 }
 
-type Quiz implements Base & BaseContnet {
+type Quiz implements Base & BaseContent {
   courses: [Course!]!
-  desciption: String!
+  description: String!
   expectedResult: String!
   id: String!
   quizPages: [QuizPage!]!
@@ -90,8 +90,8 @@ type Quiz implements Base & BaseContnet {
   type: QuizType!
 }
 
-type QuizPage implements Base & BaseContnet {
-  desciption: String!
+type QuizPage implements Base & BaseContent {
+  description: String!
   expectedResult: String!
   id: String!
   questions: [Question!]!
