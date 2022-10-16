@@ -1,4 +1,4 @@
-import { Drawer, IconButton, Box, Divider, Paper } from '@mui/material';
+import { IconButton, Box, Paper } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';

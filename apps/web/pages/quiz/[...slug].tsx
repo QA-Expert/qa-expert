@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import {
   Quiz as QuizType,
   QuizPage as QuizPageType,

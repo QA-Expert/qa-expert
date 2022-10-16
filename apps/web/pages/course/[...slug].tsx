@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Container, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import {
   Course as CourseType,
   CoursePage as CoursePageType,

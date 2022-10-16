@@ -1,5 +1,5 @@
 import Main from '../src/components/main/main';
-import { Formik, FormikProps, FormikHelpers, ErrorMessage } from 'formik';
+import { Formik, FormikProps, FormikHelpers } from 'formik';
 import { UserInputLogin } from 'graphql-schema-gen/schema.gen';
 import * as Yup from 'yup';
 import { LOGIN } from '../src/graphql/mutations/mutations';

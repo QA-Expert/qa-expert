@@ -2,10 +2,8 @@ import Layout from '../src/components/layout/layout';
 import { Course, Quiz } from 'graphql-schema-gen/schema.gen';
 import { GET_ALL_COURSES_AND_QUIZZES } from '../src/graphql/quieries/quieries';
 import { useQuery } from '@apollo/client';
-import { useUser } from '../src/context/auth';
 import { Box, Typography } from '@mui/material';
 import { CardComponent } from '../src/components/card/card';
-import { useRouter } from 'next/router';
 
 interface Props {
   courses: Course[];
@@ -14,8 +12,6 @@ interface Props {
 
 const HomePage = () => {
   const { data, loading, error } = useQuery<Props>(GET_ALL_COURSES_AND_QUIZZES);
-  const user = useUser();
-  const router = useRouter();
 
   /* TODO: Add TOASTS */
   if (error) {
