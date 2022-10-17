@@ -1,8 +1,8 @@
 import Main from '../src/components/main/main';
 import { Formik, FormikProps, FormikHelpers } from 'formik';
-import { UserInputLogin } from 'graphql-schema-gen/schema.gen';
+import { UserInputCreate } from 'graphql-schema-gen/schema.gen';
 import * as Yup from 'yup';
-import { LOGIN } from '../src/graphql/mutations/mutations';
+import { REGISTER } from '../src/graphql/mutations/mutations';
 import { useApolloClient, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
@@ -15,9 +15,9 @@ import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Link from 'next/link';
 
-function Login() {
+function Register() {
   const client = useApolloClient();
-  const [login] = useMutation(LOGIN);
+  const [register] = useMutation(REGISTER);
   const schema = Yup.object().shape({
     email: Yup.string()
       .required('Email is a required field')
@@ -25,10 +25,14 @@ function Login() {
     password: Yup.string()
       .required('Password is a required field')
       .min(2, 'Password must be at least 2 characters'),
+    firstName: Yup.string().nullable().max(100, 'First Name is too long'),
+    lastName: Yup.string().nullable().max(100, 'First Name is too long'),
   });
-  const initialValues: UserInputLogin = {
+  const initialValues: UserInputCreate = {
     email: '',
     password: '',
+    firstName: '',
+    lastName: '',
   };
   const router = useRouter();
 
@@ -38,13 +42,12 @@ function Login() {
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={async (
-          values: UserInputLogin,
-          actions: FormikHelpers<UserInputLogin>,
+          values: UserInputCreate,
+          actions: FormikHelpers<UserInputCreate>,
         ) => {
           actions.setSubmitting(true);
           await client.resetStore();
-
-          const { data, errors } = await login({
+          const { data, errors } = await register({
             variables: values,
           });
 
@@ -54,7 +57,7 @@ function Login() {
             throw errors;
           }
 
-          if (data?.login?.access_token) {
+          if (data?.register?.access_token) {
             await router.push('/');
           }
         }}
@@ -66,7 +69,7 @@ function Login() {
           handleSubmit,
           handleBlur,
           errors,
-        }: FormikProps<UserInputLogin>) => (
+        }: FormikProps<UserInputCreate>) => (
           <form noValidate onSubmit={handleSubmit}>
             <Paper
               sx={{
@@ -79,12 +82,13 @@ function Login() {
               }}
             >
               <Typography sx={{ fontSize: '2rem' }} variant="h1">
-                Login
+                Register
               </Typography>
 
               <FormControl>
                 <InputLabel htmlFor="email">Email address</InputLabel>
                 <Input
+                  autoComplete="on"
                   type="email"
                   name="email"
                   id="email"
@@ -103,13 +107,13 @@ function Login() {
               </FormControl>
 
               <FormControl>
-                <InputLabel htmlFor="email">Password</InputLabel>
+                <InputLabel htmlFor="password">Password</InputLabel>
                 <Input
-                  autoComplete="on"
+                  autoComplete="new-password"
                   type="password"
                   name="password"
                   id="password"
-                  placeholder="Password your email ..."
+                  placeholder="Enter your password ..."
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}
@@ -123,10 +127,52 @@ function Login() {
                 </FormHelperText>
               </FormControl>
 
+              <FormControl>
+                <InputLabel htmlFor="first-name">First Name</InputLabel>
+                <Input
+                  autoComplete="on"
+                  type="text"
+                  name="firstName"
+                  id="first-name"
+                  placeholder="Enter your first name ..."
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.firstName}
+                  error={Boolean(errors.firstName)}
+                />
+                <FormHelperText
+                  error={Boolean(errors.firstName)}
+                  id="first-name-error-text"
+                >
+                  {errors.firstName}
+                </FormHelperText>
+              </FormControl>
+
+              <FormControl>
+                <InputLabel htmlFor="lastName">Last Name</InputLabel>
+                <Input
+                  autoComplete="on"
+                  type="text"
+                  name="lastName"
+                  id="last-name"
+                  placeholder="Enter your last name ..."
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.lastName}
+                  error={Boolean(errors.lastName)}
+                />
+                <FormHelperText
+                  error={Boolean(errors.lastName)}
+                  id="last-name-error-text"
+                >
+                  {errors.lastName}
+                </FormHelperText>
+              </FormControl>
+
               <Typography>
-                {'If you do not have an account, please '}
-                <Link href="/register">
-                  <MuiLink>register</MuiLink>
+                {'If you already have an account, please '}
+                <Link href="/login">
+                  <MuiLink>login</MuiLink>
                 </Link>
                 .
               </Typography>
@@ -139,7 +185,7 @@ function Login() {
                 }
                 type="submit"
               >
-                Login
+                Register
               </Button>
             </Paper>
           </form>
@@ -149,4 +195,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

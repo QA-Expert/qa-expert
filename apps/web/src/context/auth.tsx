@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { User } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
 import { createContext, ReactNode, useContext } from 'react';
-import { GET_USER } from '../graphql/quieries/quieries';
+import { GET_USER } from '../graphql/queries/queries';
 
 const AuthUserContext = createContext<User | null | undefined>(null);
 

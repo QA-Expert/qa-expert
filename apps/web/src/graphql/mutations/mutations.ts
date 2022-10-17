@@ -13,3 +13,23 @@ export const LOGOUT = gql`
     logout
   }
 `;
+
+export const REGISTER = gql`
+  mutation Register(
+    $email: String!
+    $password: String!
+    $firstName: String
+    $lastName: String
+  ) {
+    register(
+      data: {
+        email: $email
+        password: $password
+        firstName: $firstName
+        lastName: $lastName
+      }
+    ) {
+      access_token
+    }
+  }
+`;

@@ -1,9 +1,10 @@
 import Layout from '../src/components/layout/layout';
 import { Course, Quiz } from 'graphql-schema-gen/schema.gen';
-import { GET_ALL_COURSES_AND_QUIZZES } from '../src/graphql/quieries/quieries';
+import { GET_ALL_COURSES_AND_QUIZZES } from '../src/graphql/queries/queries';
 import { useQuery } from '@apollo/client';
-import { Box, Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { CardComponent } from '../src/components/card/card';
+import { Box } from '../src/components/box/box';
 
 interface Props {
   courses: Course[];
@@ -26,10 +27,7 @@ const HomePage = () => {
     <Layout>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
           justifyContent: 'start',
-          alignItems: 'center',
           gap: '2rem',
           paddingBottom: '2rem',
         }}
@@ -43,9 +41,8 @@ const HomePage = () => {
 
         <Box
           sx={{
-            display: 'flex',
+            flexDirection: 'row',
             justifyContent: 'start',
-            alignItems: 'center',
             gap: '2rem',
             flexWrap: 'wrap',
           }}
@@ -67,9 +64,8 @@ const HomePage = () => {
 
         <Box
           sx={{
-            display: 'flex',
+            flexDirection: 'row',
             justifyContent: 'start',
-            alignItems: 'center',
             gap: '2rem',
             flexWrap: 'wrap',
           }}

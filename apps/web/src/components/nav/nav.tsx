@@ -1,12 +1,10 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import Link from 'next/link';
+import { Box } from '../box/box';
 import { ProfileMenu } from '../profile-menu/profile-menu';
 
 export default function Nav() {
@@ -30,10 +28,8 @@ export default function Nav() {
           </Link>
           <Box
             sx={{
+              flexDirection: 'row',
               marginLeft: 'auto',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
             }}
           >
             <Link href={`/login`}>

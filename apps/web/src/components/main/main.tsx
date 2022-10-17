@@ -1,5 +1,5 @@
-import { Box } from '@mui/material';
 import { ReactNode, useEffect, useState } from 'react';
+import { Box } from '../box/box';
 
 /**
  *
@@ -28,10 +28,9 @@ export default function Main({
   return (
     <Box
       sx={{
-        display: 'flex',
+        flexDirection: 'row',
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: 'grey[500]',
       }}
       component="main"
       {...delegated}

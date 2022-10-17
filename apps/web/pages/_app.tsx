@@ -4,7 +4,8 @@ import '../src/styles/globals.css';
 import { InitialState, useApollo } from '../appolo/client';
 import { ApolloProvider } from '@apollo/client';
 import { AuthUserProvider } from '../src/context/auth';
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/';
 import theme from '../src/theme';
 
 interface Props {

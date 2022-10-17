@@ -1,9 +1,9 @@
-import { Box } from '@mui/material';
+import { Box } from '../box/box';
 
 export default function Footer() {
   return (
     <Box
-      sx={{ display: 'flex', backgroundColor: 'primary.main', color: 'white' }}
+      sx={{ backgroundColor: 'primary.main', color: 'primary.contrastText' }}
       component="footer"
     >
       Footer

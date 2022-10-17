@@ -1,15 +1,11 @@
-import { Box } from '@mui/material';
 import { QuizPage as Props } from 'graphql-schema-gen/schema.gen';
+import { Box } from '../box/box';
 
 export default function QuizPage(props: Props) {
   return (
     <Box
       sx={{
         width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
       }}
     >
       <h2>{props.title}</h2>

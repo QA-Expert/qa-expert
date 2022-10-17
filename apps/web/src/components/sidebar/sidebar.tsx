@@ -1,7 +1,8 @@
-import { IconButton, Box, Paper } from '@mui/material';
+import { IconButton, Paper } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Box } from '../box/box';
 type Props = {
   children: ReactNode;
 };
@@ -25,7 +26,6 @@ export default function Sidebar({ children }: Props) {
     >
       <Box
         sx={{
-          display: 'flex',
           flexDirection: 'row',
           flex: '1',
           height: '100%',
@@ -33,22 +33,16 @@ export default function Sidebar({ children }: Props) {
       >
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
             flex: '1',
             overflow: 'hidden',
             height: '100%',
             justifyContent: 'start',
-            alignItems: 'center',
           }}
         >
           {children}
         </Box>
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
             height: '100%',
           }}
         >

@@ -9,7 +9,7 @@ import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
 import QuizPage from '../../src/components/quiz-page/quiz-page';
 import Sidebar from '../../src/components/sidebar/sidebar';
-import { GET_QUIZ } from '../../src/graphql/quieries/quieries';
+import { GET_QUIZ } from '../../src/graphql/queries/queries';
 
 const Quiz = () => {
   const route = useRouter();
@@ -43,6 +43,7 @@ const Quiz = () => {
           alignItems: 'center',
           flexDirection: 'column',
           flex: 1,
+          padding: '2rem',
         }}
       >
         {/* TODO: Add Loading indicator */}

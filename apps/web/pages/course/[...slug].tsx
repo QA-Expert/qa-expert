@@ -9,7 +9,7 @@ import CoursePage from '../../src/components/course-page/course-page';
 import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
 import Sidebar from '../../src/components/sidebar/sidebar';
-import { GET_COURSE } from '../../src/graphql/quieries/quieries';
+import { GET_COURSE } from '../../src/graphql/queries/queries';
 
 const Course = () => {
   const route = useRouter();
@@ -42,6 +42,7 @@ const Course = () => {
           alignItems: 'center',
           flexDirection: 'column',
           flex: 1,
+          padding: '2rem',
         }}
       >
         {/* TODO: Add Loading indicator */}

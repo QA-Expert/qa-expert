@@ -1,6 +1,8 @@
-import { Button, Box } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import { ReactNode, useState } from 'react';
-import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
+import { Box } from '../box/box';
 
 interface Props<T> {
   pages?: T[];
@@ -30,12 +32,12 @@ export function PageCarousel<T>({ pages, getPage }: Props<T>) {
   };
 
   return (
-    <Box
+    <Paper
+      component={Box}
       sx={{
-        display: 'flex',
-        justifyContent: 'center',
+        height: '100%',
         width: '100%',
-        alignItems: 'center',
+        flexDirection: 'row',
       }}
     >
       {pages?.length > 1 && (
@@ -54,6 +56,6 @@ export function PageCarousel<T>({ pages, getPage }: Props<T>) {
           <ArrowForwardIos />
         </Button>
       )}
-    </Box>
+    </Paper>
   );
 }

@@ -1,10 +1,8 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Typography,
-} from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
 import { Course, Quiz } from 'graphql-schema-gen/schema.gen';
 import Image from 'next/image';
 import Link from 'next/link';
