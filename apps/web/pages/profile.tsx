@@ -1,4 +1,5 @@
-import { Paper, Typography } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { Box } from '../src/components/box/box';
 import Layout from '../src/components/layout/layout';
