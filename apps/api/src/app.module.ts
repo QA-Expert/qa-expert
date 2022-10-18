@@ -2,7 +2,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AnswerModule } from './modules/answers/answer.module';
 import { CourseProgressModule } from './modules/course-progresses/course-progress.module';
 import { CourseModule } from './modules/courses/course.module';
 import { QuizProgressModule } from './modules/quiz-progresses/quiz-progress.module';
@@ -78,7 +77,6 @@ import { join } from 'path';
       synchronize: Boolean(process.env.DATABASE_SYNC_SCHEMA),
     }),
     UserModule,
-    AnswerModule,
     QuizModule,
     CourseModule,
     CourseProgressModule,

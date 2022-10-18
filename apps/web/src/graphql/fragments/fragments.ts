@@ -3,7 +3,14 @@ import { gql } from '@apollo/client';
 export const QUIESTION_FRAGMENT = gql`
   fragment QuestionFragment on Question {
     content
-    expectedResult
+    answers {
+      id
+      content
+    }
+    options {
+      id
+      content
+    }
   }
 `;
 
@@ -26,8 +33,7 @@ export const QUIZ_PAGE_FRAGMENT = gql`
   fragment QuizPageFragment on QuizPage {
     title
     description
-    expectedResult
-    questions {
+    question {
       ...QuestionFragment
     }
   }

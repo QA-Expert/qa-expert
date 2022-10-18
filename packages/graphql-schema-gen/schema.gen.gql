@@ -3,16 +3,8 @@
 # ------------------------------------------------------
 
 type Answer implements Base {
-  answer: String!
+  content: String!
   id: String!
-  quizPageId: String!
-  userId: String!
-}
-
-input AnswerInput {
-  answer: String!
-  quizPageId: String!
-  userId: String!
 }
 
 interface Base {
@@ -55,7 +47,6 @@ input CourseProgressInput {
 }
 
 type Mutation {
-  createAnswer(data: AnswerInput!): Answer!
   createCoursProgress(data: CourseProgressInput!): CourseProgress!
   createQuizProgress(data: QuizProgressInput!): QuizProgress!
   login(data: UserInputLogin!): UserOutputLogin!
@@ -64,7 +55,6 @@ type Mutation {
 }
 
 type Query {
-  answer(quizPageId: String!, userId: String!): Answer!
   coursProgresses(courseId: String!): [CourseProgress!]!
   course(id: String!): Course!
   courses: [Course!]!
@@ -75,9 +65,10 @@ type Query {
 }
 
 type Question implements Base {
+  answers: [Answer!]!
   content: String!
-  expectedResult: String!
   id: String!
+  options: [Answer!]!
 }
 
 type Quiz implements Base & BaseContent {
@@ -92,9 +83,8 @@ type Quiz implements Base & BaseContent {
 
 type QuizPage implements Base & BaseContent {
   description: String!
-  expectedResult: String!
   id: String!
-  questions: [Question!]!
+  question: Question!
   title: String!
 }
 
@@ -108,6 +98,7 @@ enum QuizPageProgressState {
 }
 
 type QuizProgress implements Base {
+  answerIds: [Answer!]!
   id: String!
   quizId: String!
   quizPageId: String!
@@ -116,6 +107,7 @@ type QuizProgress implements Base {
 }
 
 input QuizProgressInput {
+  answerIds: [String!]!
   quizId: String!
   quizPageId: String!
   state: QuizPageProgressState!

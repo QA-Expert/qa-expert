@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Box } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import {
   Course as CourseType,
   CoursePage as CoursePageType,
@@ -42,7 +42,9 @@ const Course = () => {
           alignItems: 'center',
           flexDirection: 'column',
           flex: 1,
-          padding: '2rem',
+          padding: '1rem',
+          gap: '1rem',
+          borderRadius: 0,
         }}
       >
         {/* TODO: Add Loading indicator */}
@@ -55,12 +57,18 @@ const Course = () => {
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'column',
+            gap: '1rem',
           }}
         >
-          <h1>{data.course.title}</h1>
-          <h2>{data.course.description}</h2>
-          <span>{data.course.icon}</span>
+          <Typography variant="h2" sx={{ fontSize: '2rem' }}>
+            {data.course.title}
+          </Typography>
+          <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
+            {data.course.description}
+          </Typography>
         </Box>
+
+        <Divider sx={{ width: '100%' }} />
 
         <Box
           sx={{

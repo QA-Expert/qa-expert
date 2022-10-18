@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Box } from '@mui/material';
+import { Box, Divider, Paper, Typography } from '@mui/material';
 import {
   Quiz as QuizType,
   QuizPage as QuizPageType,
@@ -34,7 +34,8 @@ const Quiz = () => {
   return (
     <Layout>
       <Sidebar>Test</Sidebar>
-      <Box
+      <Paper
+        component={Box}
         sx={{
           width: '100%',
           height: '100%',
@@ -43,7 +44,9 @@ const Quiz = () => {
           alignItems: 'center',
           flexDirection: 'column',
           flex: 1,
-          padding: '2rem',
+          padding: '1rem',
+          gap: '1rem',
+          borderRadius: 0,
         }}
       >
         {/* TODO: Add Loading indicator */}
@@ -56,14 +59,17 @@ const Quiz = () => {
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'column',
+            gap: '1rem',
           }}
         >
-          <h1>{data.quiz.title}</h1>
-          <h2>{data.quiz.description}</h2>
-          <span>{data.quiz.type}</span>
-          <span>{data.quiz.expectedResult}</span>
+          <Typography variant="h2" sx={{ fontSize: '2rem' }}>
+            {data.quiz.title}
+          </Typography>
+          <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
+            {data.quiz.description}
+          </Typography>
         </Box>
-
+        <Divider sx={{ width: '100%' }} />
         <Box
           sx={{
             width: '100%',
@@ -79,7 +85,7 @@ const Quiz = () => {
             getPage={(page: QuizPageType) => <QuizPage {...page} />}
           />
         </Box>
-      </Box>
+      </Paper>
     </Layout>
   );
 };

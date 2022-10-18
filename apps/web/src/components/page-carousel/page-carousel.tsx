@@ -32,8 +32,7 @@ export function PageCarousel<T>({ pages, getPage }: Props<T>) {
   };
 
   return (
-    <Paper
-      component={Box}
+    <Box
       sx={{
         height: '100%',
         width: '100%',
@@ -56,6 +55,6 @@ export function PageCarousel<T>({ pages, getPage }: Props<T>) {
           <ArrowForwardIos />
         </Button>
       )}
-    </Paper>
+    </Box>
   );
 }

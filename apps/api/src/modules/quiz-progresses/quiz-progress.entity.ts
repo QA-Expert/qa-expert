@@ -1,9 +1,17 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  RelationId,
+} from 'typeorm';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Base } from 'src/modules/common/base.entity';
 import { User } from '../users/user.entity';
 import { QuizPage } from '../quiz-pages/quiz-page.entity';
 import { Quiz } from '../quizzes/quiz.entity';
+import { Answer } from '../answers/answer.entity';
 
 export enum QuizPageProgressState {
   VISITED = 'visited',
@@ -44,4 +52,12 @@ export class QuizProgress extends Base {
 
   @ManyToOne(() => User)
   user: Promise<User>;
+
+  @Field(() => [Answer])
+  @RelationId('answers')
+  answerIds?: string[];
+
+  @ManyToMany(() => Answer)
+  @JoinTable()
+  answers: Answer[];
 }

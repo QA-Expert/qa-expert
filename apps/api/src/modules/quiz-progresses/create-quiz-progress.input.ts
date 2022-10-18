@@ -13,4 +13,7 @@ export class QuizProgressInput {
 
   @Field()
   userId: string;
+
+  @Field(() => [String])
+  answerIds: string[];
 }
