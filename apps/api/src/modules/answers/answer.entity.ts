@@ -3,6 +3,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Base } from 'src/modules/common/base.entity';
 import { Question } from '../questions/question.entity';
 
+// TODO: add description to all props
 @Entity('answers')
 @ObjectType({ implements: [Base] })
 export class Answer extends Base {
@@ -10,7 +11,11 @@ export class Answer extends Base {
   @Column('text', { nullable: false })
   content: string;
 
-  @ManyToMany(() => Question)
+  @ManyToMany(() => Question, (question) => question.answers)
   @JoinTable()
-  questions: Question[];
+  questions: Promise<Question[]>;
+
+  @ManyToMany(() => Question, (question) => question.options)
+  @JoinTable()
+  options: Promise<Question[]>;
 }

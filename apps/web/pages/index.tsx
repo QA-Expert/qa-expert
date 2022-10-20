@@ -42,7 +42,6 @@ const HomePage = () => {
         <Box
           sx={{
             flexDirection: 'row',
-            justifyContent: 'start',
             gap: '2rem',
             flexWrap: 'wrap',
           }}
@@ -65,7 +64,6 @@ const HomePage = () => {
         <Box
           sx={{
             flexDirection: 'row',
-            justifyContent: 'start',
             gap: '2rem',
             flexWrap: 'wrap',
           }}

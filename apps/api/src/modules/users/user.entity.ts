@@ -3,6 +3,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Base } from 'src/modules/common/base.entity';
 import { MaxLength } from 'class-validator';
 
+// TODO: add description to all props
 @Entity('users')
 @ObjectType({ implements: [Base] })
 export class User extends Base {

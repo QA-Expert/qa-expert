@@ -1,18 +1,17 @@
-import { Button, Paper } from '@mui/material';
+import Button from '@mui/material/Button';
 import { ReactNode, useState } from 'react';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import { Box } from '../box/box';
 
-interface Props<T> {
-  pages?: T[];
-  getPage: (page: T) => ReactNode;
+interface Props {
+  children: ReactNode[];
 }
 
-export function PageCarousel<T>({ pages, getPage }: Props<T>) {
+export function PageCarousel({ children }: Props) {
   const [currentPageIndex, setCurrentPageIndex] = useState<number>(0);
 
-  if (!pages?.length) {
+  if (!children?.length) {
     return null;
   }
 
@@ -24,7 +23,7 @@ export function PageCarousel<T>({ pages, getPage }: Props<T>) {
   };
   const handleForwardClick = () => {
     const newIndex =
-      currentPageIndex < pages.length - 1
+      currentPageIndex < children.length - 1
         ? currentPageIndex + 1
         : currentPageIndex;
 
@@ -39,18 +38,18 @@ export function PageCarousel<T>({ pages, getPage }: Props<T>) {
         flexDirection: 'row',
       }}
     >
-      {pages?.length > 1 && (
+      {children?.length > 1 && (
         <Button onClick={handleBackwardClick} disabled={currentPageIndex === 0}>
           <ArrowBackIos />
         </Button>
       )}
 
-      {getPage(pages[currentPageIndex])}
+      {children[currentPageIndex]}
 
-      {pages?.length > 1 && (
+      {children?.length > 1 && (
         <Button
           onClick={handleForwardClick}
-          disabled={currentPageIndex === pages.length - 1}
+          disabled={currentPageIndex === children.length - 1}
         >
           <ArrowForwardIos />
         </Button>

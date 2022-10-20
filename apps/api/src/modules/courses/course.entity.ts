@@ -5,6 +5,7 @@ import { BaseContent } from 'src/modules/common/content-base.entity';
 import { Base } from 'src/modules/common/base.entity';
 import { Quiz } from 'src/modules/quizzes/quiz.entity';
 
+// TODO: add description to all props
 @Entity('courses')
 @ObjectType({ implements: [BaseContent, Base] })
 export class Course extends BaseContent {

@@ -15,9 +15,14 @@ registerEnumType(QuizType, {
   description: 'Defines different type of quizzes platform could have',
 });
 
+// TODO: add description to all props
 @Entity('quizzes')
 @ObjectType({ implements: [BaseContent, Base] })
 export class Quiz extends BaseContent {
+  @Field()
+  @Column('text')
+  icon: string;
+
   @Field(() => QuizType)
   @Column({ type: 'enum', enum: QuizType, nullable: false })
   type: QuizType;

@@ -1,8 +1,33 @@
+import FormGroup from '@mui/material/FormGroup';
+import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
 import { QuizPage as Props } from 'graphql-schema-gen/schema.gen';
 import { Box } from '../box/box';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import RadioGroup from '@mui/material/RadioGroup';
+import Radio from '@mui/material/Radio';
+import { ChangeEvent, useState } from 'react';
 
 export default function QuizPage(props: Props) {
+  const [answers, setAnswers] = useState<string[]>([]);
+  const isSingleAnswerQuestion = props.question.answers.length === 1;
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (isSingleAnswerQuestion) {
+      setAnswers([e.target.value]);
+    } else {
+      let newAnswers = answers.map((a) => a);
+
+      if (e.target.checked) {
+        newAnswers.push(e.target.value);
+      } else {
+        newAnswers = newAnswers.filter((answer) => answer !== e.target.value);
+      }
+
+      setAnswers(newAnswers);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -17,10 +42,47 @@ export default function QuizPage(props: Props) {
         {props.title}
       </Typography>
       <Typography>{props.description}</Typography>
-      <Box sx={{ flex: 1 }}>
-        {props.questions.map((q, i) => (
-          <Typography key={i}>{q.content}</Typography>
-        ))}
+      <Box sx={{ flex: 1, gap: '1rem' }}>
+        <Typography variant="h4" sx={{ fontSize: '1.5rem' }}>
+          {props.question.content}
+        </Typography>
+        <Box>
+          <FormGroup>
+            {isSingleAnswerQuestion ? (
+              <RadioGroup>
+                {props.question.options.map((option, i) => (
+                  <FormControlLabel
+                    key={i}
+                    value={option.id}
+                    control={<Radio onChange={handleChange} />}
+                    label={option.content}
+                  />
+                ))}
+              </RadioGroup>
+            ) : (
+              props.question.options.map((option, i) => (
+                <FormControlLabel
+                  key={i}
+                  value={option.id}
+                  control={<Checkbox onChange={handleChange} />}
+                  label={option.content}
+                />
+              ))
+            )}
+          </FormGroup>
+        </Box>
+
+        {/* TODO: Just for testing - remove */}
+        <Box>
+          <Typography fontWeight="bold">Correct answers:</Typography>
+          {props.question.answers.map((a, i) => (
+            <span key={i}>{a.content}</span>
+          ))}
+          <Typography fontWeight="bold">Users answers:</Typography>
+          {answers.map((a, i) => (
+            <span key={i}>{a}</span>
+          ))}
+        </Box>
       </Box>
     </Box>
   );

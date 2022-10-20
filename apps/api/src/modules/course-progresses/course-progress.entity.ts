@@ -5,6 +5,7 @@ import { User } from '../users/user.entity';
 import { CoursePage } from '../course-pages/course-page.entity';
 import { Course } from '../courses/course.entity';
 
+// TODO: add description to all props
 @Entity('course-progresses')
 @ObjectType({ implements: [Base] })
 export class CourseProgress extends Base {

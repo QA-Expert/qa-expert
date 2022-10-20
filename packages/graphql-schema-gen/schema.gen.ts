@@ -128,6 +128,7 @@ export class Quiz implements Base, BaseContent {
     courses: Course[];
     description: string;
     expectedResult: string;
+    icon: string;
     id: string;
     quizPages: QuizPage[];
     title: string;

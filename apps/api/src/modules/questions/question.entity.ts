@@ -1,8 +1,9 @@
-import { Column, Entity, JoinTable, ManyToMany, RelationId } from 'typeorm';
+import { Column, Entity, ManyToMany } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Base } from 'src/modules/common/base.entity';
 import { Answer } from '../answers/answer.entity';
 
+// TODO: add description to all props
 @Entity('questions')
 @ObjectType({ implements: [Base] })
 export class Question extends Base {
@@ -10,17 +11,11 @@ export class Question extends Base {
   @Column('text', { nullable: false })
   content: string;
 
-  @RelationId('answers')
-  answerIds: string[];
-
   @ManyToMany(() => Answer, (answer) => answer.questions)
   @Field(() => [Answer])
-  answers: Answer[];
+  answers: Promise<Answer[]>;
 
-  @RelationId('options')
-  optionIds: string[];
-
-  @ManyToMany(() => Answer, (answer) => answer.questions)
+  @ManyToMany(() => Answer, (answer) => answer.options)
   @Field(() => [Answer])
-  options: Answer[];
+  options: Promise<Answer[]>;
 }

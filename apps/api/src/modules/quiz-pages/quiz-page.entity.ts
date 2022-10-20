@@ -4,10 +4,11 @@ import { BaseContent } from 'src/modules/common/content-base.entity';
 import { Base } from 'src/modules/common/base.entity';
 import { Question } from '../questions/question.entity';
 
+// TODO: add description to all props
 @Entity('quiz-pages')
 @ObjectType({ implements: [BaseContent, Base] })
 export class QuizPage extends BaseContent {
   @Field(() => Question)
   @ManyToOne(() => Question)
-  question: Question;
+  question: Promise<Question>;
 }

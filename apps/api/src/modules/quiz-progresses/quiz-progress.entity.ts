@@ -25,6 +25,7 @@ registerEnumType(QuizPageProgressState, {
     'Defines whether User passed or failed or just visited current quiz page',
 });
 
+// TODO: add description to all props
 @Entity('quiz-progresses')
 @ObjectType({ implements: [Base] })
 export class QuizProgress extends Base {

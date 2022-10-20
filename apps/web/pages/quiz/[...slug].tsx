@@ -80,10 +80,11 @@ const Quiz = () => {
             flexGrow: 1,
           }}
         >
-          <PageCarousel
-            pages={data.quiz.quizPages}
-            getPage={(page: QuizPageType) => <QuizPage {...page} />}
-          />
+          <PageCarousel>
+            {data.quiz.quizPages.map((page, i) => (
+              <QuizPage key={i} {...page} />
+            ))}
+          </PageCarousel>
         </Box>
       </Paper>
     </Layout>

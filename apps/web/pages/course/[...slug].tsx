@@ -80,10 +80,11 @@ const Course = () => {
             flexGrow: 1,
           }}
         >
-          <PageCarousel
-            pages={data.course.coursePages}
-            getPage={(page: CoursePageType) => <CoursePage {...page} />}
-          />
+          <PageCarousel>
+            {data.course.coursePages.map((page, i) => (
+              <CoursePage key={i} {...page} />
+            ))}
+          </PageCarousel>
         </Box>
       </Box>
     </Layout>

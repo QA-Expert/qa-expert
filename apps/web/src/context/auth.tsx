@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client';
 import { User } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
 import { createContext, ReactNode, useContext } from 'react';
@@ -14,13 +14,14 @@ const PUBLIC_ROUTES = ['/login', '/register'];
 
 export const AuthUserProvider = ({ children }: Props) => {
   const router = useRouter();
+  const client = useApolloClient();
   const shouldAuth = !PUBLIC_ROUTES.includes(router.pathname);
   const { data, error } = useQuery<{ user: User | null }>(GET_USER, {
     skip: !shouldAuth || !router.isReady,
   });
 
   if (error) {
-    router.push('/login');
+    client.resetStore().then(() => router.push('/login'));
   }
 
   return (

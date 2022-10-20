@@ -75,6 +75,7 @@ type Quiz implements Base & BaseContent {
   courses: [Course!]!
   description: String!
   expectedResult: String!
+  icon: String!
   id: String!
   quizPages: [QuizPage!]!
   title: String!
