@@ -13,7 +13,7 @@ export class CourseProgressResolver {
 
   @UseGuards(GqlAuthGuard)
   @Query(() => [CourseProgress])
-  public async coursProgresses(
+  public async courseProgresses(
     @CurrentUser() user: User,
     @Args('courseId') courseId: string,
   ): Promise<CourseProgress[] | null> {
@@ -22,7 +22,7 @@ export class CourseProgressResolver {
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => CourseProgress)
-  public async createCoursProgress(
+  public async createCourseProgress(
     @Args('data') input: CourseProgressInput,
   ): Promise<CourseProgress> {
     return await this.service.create(input);

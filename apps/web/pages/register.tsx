@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Link from 'next/link';
+import { Box } from '../src/components/box/box';
 
 function Register() {
   const client = useApolloClient();
@@ -73,13 +74,10 @@ function Register() {
           <form noValidate onSubmit={handleSubmit}>
             <Paper
               sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
                 gap: '1rem',
-                flexDirection: 'column',
                 padding: '2rem',
               }}
+              component={Box}
             >
               <Typography sx={{ fontSize: '2rem' }} variant="h1">
                 Register
@@ -149,7 +147,7 @@ function Register() {
               </FormControl>
 
               <FormControl>
-                <InputLabel htmlFor="lastName">Last Name</InputLabel>
+                <InputLabel htmlFor="last-name">Last Name</InputLabel>
                 <Input
                   autoComplete="on"
                   type="text"

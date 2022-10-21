@@ -47,7 +47,7 @@ input CourseProgressInput {
 }
 
 type Mutation {
-  createCoursProgress(data: CourseProgressInput!): CourseProgress!
+  createCourseProgress(data: CourseProgressInput!): CourseProgress!
   createQuizProgress(data: QuizProgressInput!): QuizProgress!
   login(data: UserInputLogin!): UserOutputLogin!
   logout: Boolean!
@@ -55,11 +55,10 @@ type Mutation {
 }
 
 type Query {
-  coursProgresses(courseId: String!): [CourseProgress!]!
   course(id: String!): Course!
+  courseProgresses(courseId: String!): [CourseProgress!]!
   courses: [Course!]!
   quiz(id: String!): Quiz!
-  quizProgresses(quizId: String!): [QuizProgress!]!
   quizzes: [Quiz!]!
   user: User!
 }
@@ -85,6 +84,7 @@ type Quiz implements Base & BaseContent {
 type QuizPage implements Base & BaseContent {
   description: String!
   id: String!
+  progresses(id: String!): [QuizProgress!]!
   question: Question!
   title: String!
 }
@@ -99,7 +99,7 @@ enum QuizPageProgressState {
 }
 
 type QuizProgress implements Base {
-  answerIds: [Answer!]!
+  answerIds: [String!]!
   id: String!
   quizId: String!
   quizPageId: String!
@@ -108,11 +108,11 @@ type QuizProgress implements Base {
 }
 
 input QuizProgressInput {
-  answerIds: [String!]!
+  answerIds: [String!]
   quizId: String!
   quizPageId: String!
   state: QuizPageProgressState!
-  userId: String!
+  userId: String
 }
 
 """Defines different type of quizzes platform could have"""

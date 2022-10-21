@@ -54,7 +54,7 @@ export class QuizProgress extends Base {
   @ManyToOne(() => User)
   user: Promise<User>;
 
-  @Field(() => [Answer])
+  @Field(() => [String])
   @RelationId('answers')
   answerIds?: string[];
 

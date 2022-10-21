@@ -2,6 +2,7 @@ import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Base } from 'src/modules/common/base.entity';
 import { Question } from '../questions/question.entity';
+import { QuizProgress } from '../quiz-progresses/quiz-progress.entity';
 
 // TODO: add description to all props
 @Entity('answers')
@@ -18,4 +19,7 @@ export class Answer extends Base {
   @ManyToMany(() => Question, (question) => question.options)
   @JoinTable()
   options: Promise<Question[]>;
+
+  @ManyToMany(() => QuizProgress, (quizProgress) => quizProgress.answers)
+  quizProgresses: Promise<QuizProgress[]>;
 }

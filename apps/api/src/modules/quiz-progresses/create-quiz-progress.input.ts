@@ -11,9 +11,9 @@ export class QuizProgressInput {
   @Field()
   quizPageId: string;
 
-  @Field()
+  @Field(() => String, { nullable: true })
   userId: string;
 
-  @Field(() => [String])
-  answerIds: string[];
+  @Field(() => [String], { nullable: true })
+  answerIds?: string[];
 }

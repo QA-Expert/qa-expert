@@ -22,7 +22,6 @@ function Account() {
         <Paper
           component={Box}
           sx={{
-            alignItems: 'center',
             justifyContent: 'start',
             flex: 1,
             height: '100%',
@@ -47,7 +46,6 @@ function Account() {
         <Paper
           component={Box}
           sx={{
-            alignItems: 'center',
             justifyContent: 'start',
             height: '100%',
             flex: 3.5,

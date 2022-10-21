@@ -33,3 +33,23 @@ export const REGISTER = gql`
     }
   }
 `;
+
+export const CREATE_QUIZ_PROGRESS = gql`
+  mutation CreateQuizProgress(
+    $state: QuizPageProgressState!
+    $quizId: String!
+    $quizPageId: String!
+    $answerIds: [String!]
+  ) {
+    createQuizProgress(
+      data: {
+        state: $state
+        quizId: $quizId
+        quizPageId: $quizPageId
+        answerIds: $answerIds
+      }
+    ) {
+      quizId
+    }
+  }
+`;

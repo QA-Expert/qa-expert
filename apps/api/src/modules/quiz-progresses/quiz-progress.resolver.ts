@@ -1,4 +1,4 @@
-import { Args, Query, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { QuizProgressService } from './quiz-progress.service';
 import { QuizProgressInput } from './create-quiz-progress.input';
 import { QuizProgress } from './quiz-progress.entity';
@@ -12,19 +12,11 @@ export class QuizProgressResolver {
   constructor(private readonly service: QuizProgressService) {}
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => [QuizProgress])
-  public async quizProgresses(
-    @CurrentUser() user: User,
-    @Args('quizId') quizId: string,
-  ): Promise<QuizProgress[] | null> {
-    return await this.service.findAll(user.id, quizId);
-  }
-
-  @UseGuards(GqlAuthGuard)
   @Mutation(() => QuizProgress)
   public async createQuizProgress(
+    @CurrentUser() user: User,
     @Args('data') input: QuizProgressInput,
   ): Promise<QuizProgress> {
-    return await this.service.create(input);
+    return await this.service.create(input, user.id);
   }
 }

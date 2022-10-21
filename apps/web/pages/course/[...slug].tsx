@@ -1,9 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { Box, Divider, Typography } from '@mui/material';
-import {
-  Course as CourseType,
-  CoursePage as CoursePageType,
-} from 'graphql-schema-gen/schema.gen';
+import { Course as CourseType } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
 import CoursePage from '../../src/components/course-page/course-page';
 import Layout from '../../src/components/layout/layout';
@@ -37,10 +34,6 @@ const Course = () => {
         sx={{
           width: '100%',
           height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
           flex: 1,
           padding: '1rem',
           gap: '1rem',
@@ -53,10 +46,6 @@ const Course = () => {
         <Box
           sx={{
             width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
             gap: '1rem',
           }}
         >
@@ -73,10 +62,6 @@ const Course = () => {
         <Box
           sx={{
             width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
             flexGrow: 1,
           }}
         >

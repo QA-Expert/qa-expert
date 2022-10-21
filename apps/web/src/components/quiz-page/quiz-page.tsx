@@ -7,11 +7,27 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import { ChangeEvent, useState } from 'react';
+import Button from '@mui/material/Button';
+import { useMutation } from '@apollo/client';
+import { CREATE_QUIZ_PROGRESS } from '../../graphql/mutations/mutations';
+import { useRouter } from 'next/router';
 
 export default function QuizPage(props: Props) {
+  const router = useRouter();
+  const slug = router.query.slug ? router.query.slug[0] : null;
   const [answers, setAnswers] = useState<string[]>([]);
   const isSingleAnswerQuestion = props.question.answers.length === 1;
-
+  const [createQuizProgress] = useMutation(CREATE_QUIZ_PROGRESS);
+  const handleSubmit = async () => {
+    await createQuizProgress({
+      variables: {
+        state: 'VISITED',
+        quizId: slug,
+        quizPageId: props.id,
+        answerIds: answers,
+      },
+    });
+  };
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (isSingleAnswerQuestion) {
       setAnswers([e.target.value]);
@@ -84,6 +100,7 @@ export default function QuizPage(props: Props) {
           ))}
         </Box>
       </Box>
+      <Button onClick={handleSubmit}>Submit</Button>
     </Box>
   );
 }

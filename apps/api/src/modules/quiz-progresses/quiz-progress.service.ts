@@ -11,7 +11,7 @@ export class QuizProgressService {
     private readonly repository: Repository<QuizProgress>,
   ) {}
 
-  async findAll(userId: string, quizId: string) {
+  async findAll(quizId: string, userId: string) {
     return await this.repository.find({
       where: {
         userId,
@@ -20,7 +20,9 @@ export class QuizProgressService {
     });
   }
 
-  async create(data: QuizProgressInput) {
+  async create(data: QuizProgressInput, userId: string) {
+    data.userId = userId;
+
     const response = await this.repository.save(this.repository.create(data));
 
     return response;

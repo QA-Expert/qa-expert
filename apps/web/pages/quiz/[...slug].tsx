@@ -1,9 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { Box, Divider, Paper, Typography } from '@mui/material';
-import {
-  Quiz as QuizType,
-  QuizPage as QuizPageType,
-} from 'graphql-schema-gen/schema.gen';
+import { Quiz as QuizType } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
 import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
@@ -39,10 +36,6 @@ const Quiz = () => {
         sx={{
           width: '100%',
           height: '100%',
-          display: 'flex',
-          justifyContent: 'start',
-          alignItems: 'center',
-          flexDirection: 'column',
           flex: 1,
           padding: '1rem',
           gap: '1rem',
@@ -55,10 +48,6 @@ const Quiz = () => {
         <Box
           sx={{
             width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
             gap: '1rem',
           }}
         >
@@ -73,10 +62,6 @@ const Quiz = () => {
         <Box
           sx={{
             width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
             flexGrow: 1,
           }}
         >

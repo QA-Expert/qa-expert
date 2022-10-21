@@ -19,6 +19,7 @@ import { CourseProgress } from './modules/course-progresses/course-progress.enti
 import { QuizProgress } from './modules/quiz-progresses/quiz-progress.entity';
 import { User } from './modules/users/user.entity';
 import { join } from 'path';
+import { QuizPageModule } from './modules/quiz-pages/quiz-page.module';
 
 @Module({
   imports: [
@@ -81,6 +82,7 @@ import { join } from 'path';
     CourseModule,
     CourseProgressModule,
     QuizProgressModule,
+    QuizPageModule,
   ],
   providers: [],
 })

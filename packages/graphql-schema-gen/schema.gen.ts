@@ -26,11 +26,11 @@ export class CourseProgressInput {
 }
 
 export class QuizProgressInput {
-    answerIds: string[];
+    answerIds?: Nullable<string[]>;
     quizId: string;
     quizPageId: string;
     state: QuizPageProgressState;
-    userId: string;
+    userId?: Nullable<string>;
 }
 
 export class UserInputCreate {
@@ -90,7 +90,7 @@ export class CourseProgress implements Base {
 }
 
 export abstract class IMutation {
-    abstract createCoursProgress(data: CourseProgressInput): CourseProgress | Promise<CourseProgress>;
+    abstract createCourseProgress(data: CourseProgressInput): CourseProgress | Promise<CourseProgress>;
 
     abstract createQuizProgress(data: QuizProgressInput): QuizProgress | Promise<QuizProgress>;
 
@@ -102,15 +102,13 @@ export abstract class IMutation {
 }
 
 export abstract class IQuery {
-    abstract coursProgresses(courseId: string): CourseProgress[] | Promise<CourseProgress[]>;
-
     abstract course(id: string): Course | Promise<Course>;
+
+    abstract courseProgresses(courseId: string): CourseProgress[] | Promise<CourseProgress[]>;
 
     abstract courses(): Course[] | Promise<Course[]>;
 
     abstract quiz(id: string): Quiz | Promise<Quiz>;
-
-    abstract quizProgresses(quizId: string): QuizProgress[] | Promise<QuizProgress[]>;
 
     abstract quizzes(): Quiz[] | Promise<Quiz[]>;
 
@@ -138,12 +136,13 @@ export class Quiz implements Base, BaseContent {
 export class QuizPage implements Base, BaseContent {
     description: string;
     id: string;
+    progresses: QuizProgress[];
     question: Question;
     title: string;
 }
 
 export class QuizProgress implements Base {
-    answerIds: Answer[];
+    answerIds: string[];
     id: string;
     quizId: string;
     quizPageId: string;

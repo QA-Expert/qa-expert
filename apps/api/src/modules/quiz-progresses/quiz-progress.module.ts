@@ -9,6 +9,6 @@ import { JwtService } from '@nestjs/jwt';
 @Module({
   imports: [TypeOrmModule.forFeature([QuizProgress]), UserModule],
   providers: [QuizProgressService, QuizProgressResolver, JwtService],
-  exports: [],
+  exports: [QuizProgressService],
 })
 export class QuizProgressModule {}
