@@ -7,7 +7,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { getTokenCookie } from 'src/utls/auth-cookie';
-import { User } from '../users/user.entity';
+import { User } from '../users/user.schema';
 import { UserService } from '../users/user.service';
 
 @Injectable()

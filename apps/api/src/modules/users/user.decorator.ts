@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { User } from './user.entity';
+import { User } from './user.schema';
 
 /**
  * Decorator that is used in graphql queries as parameter.

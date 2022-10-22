@@ -6,10 +6,10 @@ import { CurrentUser } from './user.decorator';
 import { UserInputCreate } from './create-user.input';
 import { UserInputLogin } from './login-user.input';
 import { UserOutputLogin } from './login-user.output';
-import { User } from './user.entity';
 import { UserService } from './user.service';
 import { ServerResponse } from 'http';
 import { setTokenCookie, removeTokenCookie } from 'src/utls/auth-cookie';
+import { User } from './user.schema';
 
 @Resolver(() => User)
 export class UserResolver {
