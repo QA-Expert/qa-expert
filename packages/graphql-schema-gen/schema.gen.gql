@@ -2,48 +2,38 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Answer implements Base {
+type Answer {
+  _id: String!
   content: String!
-  id: String!
 }
 
-interface Base {
-  id: String!
-}
-
-interface BaseContent implements Base {
-  description: String!
-  id: String!
-  title: String!
-}
-
-type Course implements Base & BaseContent {
+type Course {
+  _id: String!
   coursePages: [CoursePage!]!
   description: String!
   icon: String!
-  id: String!
   quizzes: [Quiz!]!
   title: String!
 }
 
-type CoursePage implements Base & BaseContent {
+type CoursePage {
+  _id: String!
   content: String!
   description: String!
-  id: String!
   title: String!
 }
 
-type CourseProgress implements Base {
-  courseId: String!
-  coursePageId: String!
-  id: String!
-  userId: String!
+type CourseProgress {
+  _id: String!
+  course: String!
+  coursePage: String!
+  user: String!
 }
 
 input CourseProgressInput {
-  courseId: String!
-  coursePageId: String!
-  userId: String!
+  course: String!
+  coursePage: String!
+  user: String!
 }
 
 type Mutation {
@@ -63,27 +53,27 @@ type Query {
   user: User!
 }
 
-type Question implements Base {
+type Question {
+  _id: String!
   answers: [Answer!]!
   content: String!
-  id: String!
   options: [Answer!]!
 }
 
-type Quiz implements Base & BaseContent {
+type Quiz {
+  _id: String!
   courses: [Course!]!
   description: String!
   expectedResult: String!
   icon: String!
-  id: String!
   quizPages: [QuizPage!]!
   title: String!
   type: QuizType!
 }
 
-type QuizPage implements Base & BaseContent {
+type QuizPage {
+  _id: String!
   description: String!
-  id: String!
   progresses(id: String!): [QuizProgress!]!
   question: Question!
   title: String!
@@ -98,21 +88,20 @@ enum QuizPageProgressState {
   VISITED
 }
 
-type QuizProgress implements Base {
-  answerIds: [String!]!
-  id: String!
-  quizId: String!
-  quizPageId: String!
+type QuizProgress {
+  _id: String!
+  answers: [String!]!
+  quiz: String!
+  quizPage: String!
   state: QuizPageProgressState!
-  userId: String!
+  user: String!
 }
 
 input QuizProgressInput {
-  answerIds: [String!]
-  quizId: String!
-  quizPageId: String!
+  answers: [String!]
+  quiz: String!
+  quizPage: String!
   state: QuizPageProgressState!
-  userId: String
 }
 
 """Defines different type of quizzes platform could have"""
@@ -121,14 +110,15 @@ enum QuizType {
   QUESTIONEER
 }
 
-type User implements Base {
+type User {
+  _id: String!
   email: String!
   firstName: String
-  id: String!
   lastName: String
 }
 
 interface UserBaseModel {
+  _id: String!
   email: String!
   firstName: String
   lastName: String
@@ -147,6 +137,7 @@ input UserInputLogin {
 }
 
 type UserOutputLogin implements UserBaseModel {
+  _id: String!
   access_token: String!
   email: String!
   firstName: String

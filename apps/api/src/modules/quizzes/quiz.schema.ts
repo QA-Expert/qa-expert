@@ -22,6 +22,9 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 @Schema()
 @ObjectType()
 export class Quiz extends Document {
+  @Field(() => String)
+  _id: string;
+
   @Field()
   @Prop()
   title: string;
@@ -42,7 +45,7 @@ export class Quiz extends Document {
   @Field(() => [QuizPage])
   quizPages: QuizPage[];
 
-  @Prop({ type: [{ type: ObjectId, ref: Course.name }] })
+  @Prop({ type: [{ type: ObjectId, ref: 'Course' }] })
   @Field(() => [Course])
   courses: Course[];
 

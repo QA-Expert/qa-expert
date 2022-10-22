@@ -14,16 +14,19 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 @Schema()
 @ObjectType()
 export class CourseProgress extends Document {
+  @Field(() => String)
+  _id: string;
+
   @Prop({ type: ObjectId, ref: Course.name })
-  @Field()
+  @Field(() => String)
   course: typeof ObjectId;
 
   @Prop({ type: ObjectId, ref: CoursePage.name })
-  @Field()
+  @Field(() => String)
   coursePage: typeof ObjectId;
 
   @Prop({ type: ObjectId, ref: User.name })
-  @Field()
+  @Field(() => String)
   user: typeof ObjectId;
 
   @Prop({ type: Meta })

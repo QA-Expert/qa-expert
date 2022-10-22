@@ -9,6 +9,9 @@ export type AnswerDocument = Answer & Document;
 @Schema()
 @ObjectType()
 export class Answer extends Document {
+  @Field(() => String)
+  _id: string;
+
   @Field()
   @Prop()
   content: string;

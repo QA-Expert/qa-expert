@@ -19,19 +19,26 @@ export class AuthService {
   async validateUserAndLogin(
     data: UserInputLogin,
   ): Promise<UserOutputLogin | null> {
-    const user = await this.usersService.findByEmail(data.email);
+    const result = await this.usersService.findByEmail(data.email);
 
-    if (!user) {
+    if (!result) {
       throw new NotFoundException(`User ${data.email} is not found`);
     }
 
-    const match = await bcrypt.compare(data.password, user.hashedPassword);
+    const match = await bcrypt.compare(data.password, result.hashedPassword);
 
     if (match) {
+      const user = {
+        _id: result._id,
+        email: result.email,
+        firstName: result.firstName,
+        lastName: result.lastName,
+      };
+
       return await this.login(user);
     }
 
-    throw new UnauthorizedException('Incorrect credantials');
+    throw new UnauthorizedException('Incorrect credentials');
   }
 
   async login(user: UserOutputLogin): Promise<UserOutputLogin> {

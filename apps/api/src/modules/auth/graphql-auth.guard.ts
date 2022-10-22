@@ -38,14 +38,14 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     try {
       const req = this.getRequest(context);
       const token = getTokenCookie(req);
-      const { id } = this.jwtService.verify(token, {
+      const { _id } = this.jwtService.verify(token, {
         secret: process.env.AUTH_SECRET,
       });
 
       // hydrating user for req context
-      const userFromDb = await this.userService.findById(id);
-      const user: Pick<User, 'id' | 'email' | 'firstName' | 'lastName'> = {
-        id: userFromDb.id,
+      const userFromDb = await this.userService.findById(_id);
+      const user: Pick<User, '_id' | 'email' | 'firstName' | 'lastName'> = {
+        _id: userFromDb._id,
         email: userFromDb.email,
         firstName: userFromDb.firstName,
         lastName: userFromDb.lastName,

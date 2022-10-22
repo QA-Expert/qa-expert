@@ -12,6 +12,9 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 @Schema()
 @ObjectType()
 export class Question extends Document {
+  @Field(() => String)
+  _id: string;
+
   @Prop()
   @Field()
   content: string;

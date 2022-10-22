@@ -9,6 +9,9 @@ export type CoursePageDocument = CoursePage & Document;
 @Schema()
 @ObjectType()
 export class CoursePage extends Document {
+  @Field(() => String)
+  _id: string;
+
   @Field()
   @Prop()
   title: string;

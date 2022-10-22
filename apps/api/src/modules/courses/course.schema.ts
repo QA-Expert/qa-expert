@@ -13,6 +13,9 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 @Schema()
 @ObjectType()
 export class Course extends Document {
+  @Field(() => String)
+  _id: string;
+
   @Field()
   @Prop()
   title: string;

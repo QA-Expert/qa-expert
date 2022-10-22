@@ -9,7 +9,7 @@ import { User } from './user.schema';
 export const CurrentUser = createParamDecorator<
   unknown,
   ExecutionContext,
-  Pick<User, 'id' | 'email' | 'firstName' | 'lastName'>
+  Pick<User, '_id' | 'email' | 'firstName' | 'lastName'>
 >((_data: unknown, context: ExecutionContext) => {
   const ctx = GqlExecutionContext.create(context);
 

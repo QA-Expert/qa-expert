@@ -13,7 +13,7 @@ export class UserService {
   ) {}
 
   async findById(id: string) {
-    const user = await this.userModel.findById(id).exec();
+    const user = await this.userModel.findById(id);
 
     if (!user) {
       throw new NotFoundException();
@@ -23,7 +23,7 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    const user = this.userModel.findOne({ email }).exec();
+    const user = await this.userModel.findOne({ email });
 
     if (!user) {
       throw new NotFoundException();

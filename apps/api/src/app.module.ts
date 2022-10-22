@@ -13,6 +13,7 @@ import { QuizPageModule } from './modules/quiz-pages/quiz-page.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AnswerModule } from './modules/answers/answer.module';
 import { QuestionModule } from './modules/questions/question.module';
+import { CoursePageModule } from './modules/course-pages/course-page.module';
 
 @Module({
   imports: [
@@ -54,10 +55,11 @@ import { QuestionModule } from './modules/questions/question.module';
     AnswerModule,
     QuestionModule,
     UserModule,
+    QuizProgressModule,
     QuizModule,
+    CoursePageModule,
     CourseModule,
     CourseProgressModule,
-    QuizProgressModule,
     QuizPageModule,
   ],
   providers: [],
