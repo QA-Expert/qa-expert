@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { CourseService } from './course.service';
 import { CoursResolver } from './course.resolver';
-import { Course } from './course.entity';
+import { Course, CourseSchema } from './course.schema';
 import { UserModule } from '../users/user.module';
 import { JwtService } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Course]), UserModule],
+  imports: [
+    MongooseModule.forFeature([{ name: Course.name, schema: CourseSchema }]),
+    UserModule,
+  ],
   providers: [CourseService, CoursResolver, JwtService],
   exports: [],
 })

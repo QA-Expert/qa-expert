@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Course } from './course.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Course } from './course.schema';
 
 @Injectable()
 export class CourseService {
   constructor(
-    @InjectRepository(Course)
-    private readonly repository: Repository<Course>,
+    @InjectModel(Course.name)
+    private courseModel: Model<Course>,
   ) {}
 
   async findById(id: string) {
-    return await this.repository.findOneBy({ id });
+    return await this.courseModel.findById(id);
   }
 
   async findAll() {
-    return await this.repository.find();
+    return await this.courseModel.find().exec();
   }
 }

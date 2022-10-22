@@ -1,20 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Quiz } from './quiz.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Quiz } from './quiz.schema';
 
 @Injectable()
 export class QuizService {
-  constructor(
-    @InjectRepository(Quiz)
-    private readonly repository: Repository<Quiz>,
-  ) {}
+  constructor(@InjectModel(Quiz.name) private quizModel: Model<Quiz>) {}
 
   async findById(id: string) {
-    return await this.repository.findOneBy({ id });
+    return await this.quizModel.findById(id).exec();
   }
 
   async findAll() {
-    return await this.repository.find();
+    return await this.quizModel.find().exec();
   }
 }

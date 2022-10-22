@@ -1,12 +1,15 @@
 import { Field, InputType } from '@nestjs/graphql';
+import * as mongoose from 'mongoose';
+
+type ObjectId = mongoose.Schema.Types.ObjectId;
 @InputType()
 export class CourseProgressInput {
-  @Field()
-  courseId: string;
+  @Field(() => String)
+  course: ObjectId;
 
-  @Field()
-  coursePageId: string;
+  @Field(() => String)
+  coursePage: ObjectId;
 
-  @Field()
-  userId: string;
+  @Field(() => String)
+  user: ObjectId;
 }

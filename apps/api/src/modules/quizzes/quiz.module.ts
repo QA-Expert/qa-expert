@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { QuizService } from './quiz.service';
 import { QuizResolver } from './quiz.resolver';
-import { Quiz } from './quiz.entity';
+import { Quiz, QuizSchema } from './quiz.schema';
 import { UserModule } from '../users/user.module';
 import { JwtService } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Quiz]), UserModule],
+  imports: [
+    MongooseModule.forFeature([{ name: Quiz.name, schema: QuizSchema }]),
+    UserModule,
+  ],
   providers: [QuizService, QuizResolver, JwtService],
   exports: [],
 })

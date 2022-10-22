@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
-import { Course } from './course.entity';
+import { Course } from './course.schema';
 import { CourseService } from './course.service';
 
 @Resolver(() => Course)

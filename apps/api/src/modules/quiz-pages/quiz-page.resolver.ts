@@ -2,10 +2,10 @@ import { Resolver, ResolveField, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { CurrentUser } from '../users/user.decorator';
-import { User } from '../users/user.entity';
-import { QuizPage } from '../quiz-pages/quiz-page.entity';
+import { QuizPage } from './quiz-page.schema';
 import { QuizProgressService } from '../quiz-progresses/quiz-progress.service';
-import { QuizProgress } from '../quiz-progresses/quiz-progress.entity';
+import { QuizProgress } from '../quiz-progresses/quiz-progress.schema';
+import { User } from '../users/user.schema';
 
 @Resolver(() => QuizPage)
 export class QuizPageResolver {

@@ -1,19 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
 import { UserInputCreate } from './create-user.input';
-import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
+import { User } from './user.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectModel(User.name)
+    private userModel: Model<User>,
   ) {}
 
   async findById(id: string) {
-    const user = await this.userRepository.findOneBy({ id });
+    const user = await this.userModel.findById(id).exec();
 
     if (!user) {
       throw new NotFoundException();
@@ -23,7 +23,7 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    const user = this.userRepository.findOneBy({ email });
+    const user = this.userModel.findOne({ email }).exec();
 
     if (!user) {
       throw new NotFoundException();
@@ -35,15 +35,16 @@ export class UserService {
   async create(data: UserInputCreate) {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(data.password, saltRounds);
-    const newUser: DeepPartial<User> = {
+    const newUser = {
       ...data,
       hashedPassword,
     };
+    const createdUser = new this.userModel(newUser);
 
-    const response = await this.userRepository.save(
-      this.userRepository.create(newUser),
-    );
+    if (!createdUser) {
+      throw new Error('Failed to create new user');
+    }
 
-    return response;
+    return await createdUser.save();
   }
 }

@@ -1,30 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/mongoose';
+import mongoose, { Model } from 'mongoose';
 import { QuizProgressInput } from './create-quiz-progress.input';
-import { QuizProgress } from './quiz-progress.entity';
+import { QuizProgress } from './quiz-progress.schema';
 
 @Injectable()
 export class QuizProgressService {
   constructor(
-    @InjectRepository(QuizProgress)
-    private readonly repository: Repository<QuizProgress>,
+    @InjectModel(QuizProgress.name)
+    private quizProgressModel: Model<QuizProgress>,
   ) {}
 
   async findAll(quizId: string, userId: string) {
-    return await this.repository.find({
-      where: {
-        userId,
-        quizId,
-      },
-    });
+    return await this.quizProgressModel
+      .find({
+        user: {
+          id: userId,
+        },
+        quiz: {
+          id: quizId,
+        },
+      })
+      .exec();
   }
 
   async create(data: QuizProgressInput, userId: string) {
-    data.userId = userId;
+    const newQuizProgress = {
+      ...data,
+      user: new mongoose.Schema.Types.ObjectId(userId),
+    };
 
-    const response = await this.repository.save(this.repository.create(data));
+    const model = new this.quizProgressModel(newQuizProgress);
 
-    return response;
+    if (!model) {
+      throw new Error('Failed to create new quiz progress');
+    }
+
+    return await model.save();
   }
 }

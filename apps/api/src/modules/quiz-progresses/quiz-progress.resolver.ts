@@ -1,11 +1,11 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { QuizProgressService } from './quiz-progress.service';
 import { QuizProgressInput } from './create-quiz-progress.input';
-import { QuizProgress } from './quiz-progress.entity';
+import { QuizProgress } from './quiz-progress.schema';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { CurrentUser } from '../users/user.decorator';
-import { User } from '../users/user.entity';
+import { User } from '../users/user.schema';
 
 @Resolver(() => QuizProgress)
 export class QuizProgressResolver {

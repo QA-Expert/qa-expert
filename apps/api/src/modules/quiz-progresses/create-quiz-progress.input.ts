@@ -1,19 +1,20 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { QuizPageProgressState } from './quiz-progress.entity';
+import * as mongoose from 'mongoose';
+import { QuizPageProgressState } from './quiz-progress.schema';
+
+type ObjectId = mongoose.Schema.Types.ObjectId;
+
 @InputType()
 export class QuizProgressInput {
   @Field(() => QuizPageProgressState)
   state: QuizPageProgressState;
 
-  @Field()
-  quizId: string;
+  @Field(() => String)
+  quiz: ObjectId;
 
-  @Field()
-  quizPageId: string;
-
-  @Field(() => String, { nullable: true })
-  userId: string;
+  @Field(() => String)
+  quizPage: ObjectId;
 
   @Field(() => [String], { nullable: true })
-  answerIds?: string[];
+  answers?: ObjectId[];
 }
