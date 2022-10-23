@@ -7,13 +7,13 @@ import { Course, Quiz } from 'graphql-schema-gen/schema.gen';
 import Image from 'next/image';
 import Link from 'next/link';
 
-interface Props extends Pick<Course | Quiz, 'id' | 'title' | 'description'> {
+interface Props extends Pick<Course | Quiz, '_id' | 'title' | 'description'> {
   type: 'course' | 'quiz';
 }
 
-export const CardComponent = ({ id, title, description, type }: Props) => {
+export const CardComponent = ({ _id, title, description, type }: Props) => {
   return (
-    <Link href={`/${type}/${id}`}>
+    <Link href={`/${type}/${_id}`}>
       <a>
         <Card
           sx={{

@@ -48,8 +48,8 @@ const HomePage = () => {
         >
           {data?.courses.map((course: Course) => (
             <CardComponent
-              key={course.id}
-              id={course.id}
+              key={course._id}
+              _id={course._id}
               type="course"
               title={course.title}
               description={course.description}
@@ -70,8 +70,8 @@ const HomePage = () => {
         >
           {data?.quizzes.map((quiz: Quiz) => (
             <CardComponent
-              key={quiz.id}
-              id={quiz.id}
+              key={quiz._id}
+              _id={quiz._id}
               type="quiz"
               title={quiz.title}
               description={quiz.description}

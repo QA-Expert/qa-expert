@@ -14,10 +14,10 @@ export class CourseProgressService {
   async findAll(userId: string, courseId: string) {
     return await this.courseProgressModel.find({
       user: {
-        id: userId,
+        _id: userId,
       },
       course: {
-        id: courseId,
+        _id: courseId,
       },
     });
   }

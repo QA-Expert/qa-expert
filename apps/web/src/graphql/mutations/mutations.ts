@@ -44,9 +44,9 @@ export const CREATE_QUIZ_PROGRESS = gql`
     createQuizProgress(
       data: {
         state: $state
-        quizId: $quizId
-        quizPageId: $quizPageId
-        answerIds: $answerIds
+        quiz: $quizId
+        quizPage: $quizPageId
+        answers: $answerIds
       }
     ) {
       quizId

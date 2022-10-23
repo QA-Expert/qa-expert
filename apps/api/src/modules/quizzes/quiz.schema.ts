@@ -7,7 +7,7 @@ import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
 
 export enum QuizType {
-  QUESTIONEER = 'Questioneer',
+  QUESTIONER = 'Questioner',
   PRACTICE = 'Practice',
 }
 

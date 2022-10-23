@@ -17,6 +17,6 @@ export class QuizProgressResolver {
     @CurrentUser() user: User,
     @Args('data') input: QuizProgressInput,
   ): Promise<QuizProgress> {
-    return await this.service.create(input, user.id);
+    return await this.service.create(input, user._id);
   }
 }

@@ -15,10 +15,10 @@ export class QuizProgressService {
     return await this.quizProgressModel
       .find({
         user: {
-          id: userId,
+          _id: userId,
         },
         quiz: {
-          id: quizId,
+          _id: quizId,
         },
       })
       .exec();

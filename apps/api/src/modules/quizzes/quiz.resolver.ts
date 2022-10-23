@@ -10,8 +10,8 @@ export class QuizResolver {
 
   @UseGuards(GqlAuthGuard)
   @Query(() => Quiz)
-  public async quiz(@Args('id') id: string): Promise<Quiz | null> {
-    return await this.service.findById(id);
+  public async quiz(@Args('_id') _id: string): Promise<Quiz | null> {
+    return await this.service.findById(_id);
   }
 
   @UseGuards(GqlAuthGuard)

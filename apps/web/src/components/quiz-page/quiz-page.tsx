@@ -23,8 +23,8 @@ export default function QuizPage(props: Props) {
       variables: {
         state: 'VISITED',
         quizId: slug,
-        quizPageId: props.id,
-        answerIds: answers,
+        quizPage: props._id,
+        answers: answers,
       },
     });
   };
@@ -69,7 +69,7 @@ export default function QuizPage(props: Props) {
                 {props.question.options.map((option, i) => (
                   <FormControlLabel
                     key={i}
-                    value={option.id}
+                    value={option._id}
                     control={<Radio onChange={handleChange} />}
                     label={option.content}
                   />
@@ -79,7 +79,7 @@ export default function QuizPage(props: Props) {
               props.question.options.map((option, i) => (
                 <FormControlLabel
                   key={i}
-                  value={option.id}
+                  value={option._id}
                   control={<Checkbox onChange={handleChange} />}
                   label={option.content}
                 />

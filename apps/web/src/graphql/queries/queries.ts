@@ -29,7 +29,7 @@ export const GET_QUIZ = gql`
       _id
       ...QuizHeadingFragment
       quizPages {
-        id
+        _id
         ...QuizPageFragment
       }
     }

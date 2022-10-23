@@ -45,10 +45,10 @@ type Mutation {
 }
 
 type Query {
-  course(id: String!): Course!
+  course(_id: String!): Course!
   courseProgresses(courseId: String!): [CourseProgress!]!
   courses: [Course!]!
-  quiz(id: String!): Quiz!
+  quiz(_id: String!): Quiz!
   quizzes: [Quiz!]!
   user: User!
 }
@@ -74,7 +74,7 @@ type Quiz {
 type QuizPage {
   _id: String!
   description: String!
-  progresses(id: String!): [QuizProgress!]!
+  progresses(_id: String!): [QuizProgress!]!
   question: Question!
   title: String!
 }
@@ -107,7 +107,7 @@ input QuizProgressInput {
 """Defines different type of quizzes platform could have"""
 enum QuizType {
   PRACTICE
-  QUESTIONEER
+  QUESTIONER
 }
 
 type User {

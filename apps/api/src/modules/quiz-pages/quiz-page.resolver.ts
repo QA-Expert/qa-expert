@@ -15,8 +15,8 @@ export class QuizPageResolver {
   @ResolveField('progresses', () => [QuizProgress])
   public async quizProgresses(
     @CurrentUser() user: User,
-    @Args('id') id: string,
+    @Args('_id') _id: string,
   ): Promise<QuizProgress[] | null> {
-    return await this.service.findAll(id, user.id);
+    return await this.service.findAll(_id, user._id);
   }
 }

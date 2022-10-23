@@ -16,7 +16,7 @@ export enum QuizPageProgressState {
 
 export enum QuizType {
     PRACTICE = "PRACTICE",
-    QUESTIONEER = "QUESTIONEER"
+    QUESTIONER = "QUESTIONER"
 }
 
 export class CourseProgressInput {
@@ -92,13 +92,13 @@ export abstract class IMutation {
 }
 
 export abstract class IQuery {
-    abstract course(id: string): Course | Promise<Course>;
+    abstract course(_id: string): Course | Promise<Course>;
 
     abstract courseProgresses(courseId: string): CourseProgress[] | Promise<CourseProgress[]>;
 
     abstract courses(): Course[] | Promise<Course[]>;
 
-    abstract quiz(id: string): Quiz | Promise<Quiz>;
+    abstract quiz(_id: string): Quiz | Promise<Quiz>;
 
     abstract quizzes(): Quiz[] | Promise<Quiz[]>;
 

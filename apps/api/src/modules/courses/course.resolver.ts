@@ -5,13 +5,13 @@ import { Course } from './course.schema';
 import { CourseService } from './course.service';
 
 @Resolver(() => Course)
-export class CoursResolver {
+export class CourseResolver {
   constructor(private readonly service: CourseService) {}
 
   @UseGuards(GqlAuthGuard)
   @Query(() => Course)
-  async course(@Args('id') id: string): Promise<Course | null> {
-    return await this.service.findById(id);
+  async course(@Args('_id') _id: string): Promise<Course | null> {
+    return await this.service.findById(_id);
   }
 
   @UseGuards(GqlAuthGuard)

@@ -17,7 +17,7 @@ export class CourseProgressResolver {
     @CurrentUser() user: User,
     @Args('courseId') courseId: string,
   ): Promise<CourseProgress[] | null> {
-    return await this.service.findAll(user.id, courseId);
+    return await this.service.findAll(user._id, courseId);
   }
 
   @UseGuards(GqlAuthGuard)
@@ -26,6 +26,6 @@ export class CourseProgressResolver {
     @CurrentUser() user: User,
     @Args('data') input: CourseProgressInput,
   ): Promise<CourseProgress> {
-    return await this.service.create(input, user.id);
+    return await this.service.create(input, user._id);
   }
 }

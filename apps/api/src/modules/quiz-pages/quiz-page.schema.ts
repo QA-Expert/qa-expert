@@ -23,7 +23,7 @@ export class QuizPage extends Document {
   @Prop()
   description: string;
 
-  @Prop({ type: [{ type: ObjectId, ref: Question.name }] })
+  @Prop({ type: ObjectId, ref: Question.name })
   @Field(() => Question)
   question: Question;
 
