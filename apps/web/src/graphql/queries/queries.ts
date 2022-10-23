@@ -31,6 +31,13 @@ export const GET_QUIZ = gql`
       quizPages {
         _id
         ...QuizPageFragment
+        progress(quizId: $quizId) {
+          _id
+          state
+          quiz
+          quizPage
+          answers
+        }
       }
     }
   }

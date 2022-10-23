@@ -1,7 +1,8 @@
 import { useQuery } from '@apollo/client';
-import { Box, Divider, Paper, Typography } from '@mui/material';
+import { Divider, Paper, Typography } from '@mui/material';
 import { Quiz as QuizType } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
+import { Box } from '../../src/components/box/box';
 import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
 import QuizPage from '../../src/components/quiz-page/quiz-page';

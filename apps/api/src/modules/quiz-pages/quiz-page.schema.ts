@@ -27,11 +27,8 @@ export class QuizPage extends Document {
   @Field(() => Question)
   question: Question;
 
-  @Prop({
-    type: [{ type: ObjectId, ref: QuizProgress.name }],
-  })
-  @Field(() => [QuizProgress], { nullable: true })
-  progresses: QuizProgress[];
+  @Field(() => QuizProgress, { nullable: true })
+  progress?: QuizProgress;
 
   @Prop({ type: Meta })
   meta: Meta;

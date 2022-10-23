@@ -126,7 +126,7 @@ export class Quiz {
 export class QuizPage {
     _id: string;
     description: string;
-    progresses: QuizProgress[];
+    progress?: Nullable<QuizProgress>;
     question: Question;
     title: string;
 }

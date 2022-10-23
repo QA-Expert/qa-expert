@@ -1,12 +1,8 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { QuizPage } from '../quiz-pages/quiz-page.schema';
-import { Answer } from '../answers/answer.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
 import { Meta } from '../common/meta.schema';
-import { User } from '../users/user.schema';
-import { Quiz } from '../quizzes/quiz.schema';
 
 export enum QuizPageProgressState {
   VISITED = 'visited',

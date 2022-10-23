@@ -37,19 +37,19 @@ export const REGISTER = gql`
 export const CREATE_QUIZ_PROGRESS = gql`
   mutation CreateQuizProgress(
     $state: QuizPageProgressState!
-    $quizId: String!
-    $quizPageId: String!
-    $answerIds: [String!]
+    $quiz: String!
+    $quizPage: String!
+    $answers: [String!]
   ) {
     createQuizProgress(
       data: {
         state: $state
-        quiz: $quizId
-        quizPage: $quizPageId
-        answers: $answerIds
+        quiz: $quiz
+        quizPage: $quizPage
+        answers: $answers
       }
     ) {
-      quizId
+      quiz
     }
   }
 `;

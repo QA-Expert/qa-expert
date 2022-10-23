@@ -11,14 +11,17 @@ export class QuizProgressService {
     private quizProgressModel: Model<QuizProgress>,
   ) {}
 
-  async findAll(quizId: string, userId: string) {
+  async findOne(quizId: string, quizPageId: string, userId: string) {
     return await this.quizProgressModel
-      .find({
+      .findOne({
         user: {
           _id: userId,
         },
         quiz: {
           _id: quizId,
+        },
+        quizPage: {
+          _id: quizPageId,
         },
       })
       .exec();
@@ -27,7 +30,9 @@ export class QuizProgressService {
   async create(data: QuizProgressInput, userId: string) {
     const newQuizProgress = {
       ...data,
-      user: new mongoose.Schema.Types.ObjectId(userId),
+      quiz: new mongoose.Types.ObjectId(data.quiz),
+      quizPage: new mongoose.Types.ObjectId(data.quizPage),
+      user: new mongoose.Types.ObjectId(userId),
     };
 
     const model = new this.quizProgressModel(newQuizProgress);
