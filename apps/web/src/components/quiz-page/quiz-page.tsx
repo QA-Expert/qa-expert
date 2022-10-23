@@ -43,6 +43,21 @@ export default function QuizPage(props: Props) {
   const isAnsweredCorrectly = (expected: string[], actual: string[]) =>
     isEqual(expected, actual);
 
+  const getStylesForOptionsWhenAnswered = (
+    actualAnswers: string[] | null | undefined,
+    expectedAnswers: string[],
+    optionId: string,
+  ) =>
+    actualAnswers && {
+      margin: 0,
+      border: 'solid 0.125rem',
+      borderRadius: '0.25rem',
+      padding: '0.25rem',
+      borderColor: expectedAnswers.includes(optionId)
+        ? 'success.main'
+        : 'error.main',
+    };
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (isSingleAnswerQuestion) {
       setAnswers([e.target.value]);
@@ -79,41 +94,55 @@ export default function QuizPage(props: Props) {
         </Typography>
 
         <Box>
-          <FormGroup>
-            {isSingleAnswerQuestion ? (
-              <RadioGroup>
-                {props.question.options.map((option, i) => (
-                  <FormControlLabel
-                    key={i}
-                    value={option._id}
-                    disabled={Boolean(props.progress?.answers)}
-                    control={
-                      <Radio
-                        checked={props.progress?.answers.includes(option._id)}
-                        onChange={handleChange}
-                      />
-                    }
-                    label={option.content}
-                  />
-                ))}
-              </RadioGroup>
-            ) : (
-              props.question.options.map((option, i) => (
+          {isSingleAnswerQuestion ? (
+            <RadioGroup sx={{ gap: '0.5rem' }}>
+              {props.question.options.map((option, i) => (
                 <FormControlLabel
+                  sx={{
+                    ...getStylesForOptionsWhenAnswered(
+                      props.progress?.answers,
+                      props.question.answers.map((a) => a._id),
+                      option._id,
+                    ),
+                  }}
                   key={i}
                   value={option._id}
                   disabled={Boolean(props.progress?.answers)}
                   control={
-                    <Checkbox
-                      checked={props.progress?.answers.includes(option._id)}
+                    <Radio
+                      checked={props.progress?.answers?.includes(option._id)}
                       onChange={handleChange}
                     />
                   }
                   label={option.content}
                 />
-              ))
-            )}
-          </FormGroup>
+              ))}
+            </RadioGroup>
+          ) : (
+            <FormGroup sx={{ gap: '0.5rem' }}>
+              {props.question.options.map((option, i) => (
+                <FormControlLabel
+                  sx={{
+                    ...getStylesForOptionsWhenAnswered(
+                      props.progress?.answers,
+                      props.question.answers.map((a) => a._id),
+                      option._id,
+                    ),
+                  }}
+                  key={i}
+                  value={option._id}
+                  disabled={Boolean(props.progress?.answers)}
+                  control={
+                    <Checkbox
+                      checked={props.progress?.answers?.includes(option._id)}
+                      onChange={handleChange}
+                    />
+                  }
+                  label={option.content}
+                />
+              ))}
+            </FormGroup>
+          )}
         </Box>
 
         {/* TODO: Just for testing - remove */}

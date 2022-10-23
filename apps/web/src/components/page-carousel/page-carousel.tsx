@@ -3,6 +3,7 @@ import { ReactNode, useState } from 'react';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import { Box } from '../box/box';
+import Pagination from '@mui/material/Pagination';
 
 interface Props {
   children: ReactNode[];
@@ -30,6 +31,11 @@ export function PageCarousel({ children }: Props) {
     setCurrentPageIndex(newIndex);
   };
 
+  const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    // MUI pagination passes pages position not an index
+    setCurrentPageIndex(value - 1);
+  };
+
   return (
     <Box
       sx={{
@@ -44,7 +50,18 @@ export function PageCarousel({ children }: Props) {
         </Button>
       )}
 
-      {children[currentPageIndex]}
+      <Box>
+        {children[currentPageIndex]}
+        {children.length && (
+          <Pagination
+            shape="rounded"
+            // MUI pagination takes pages position not an index
+            page={currentPageIndex + 1}
+            onChange={handleChange}
+            count={children.length}
+          />
+        )}
+      </Box>
 
       {children?.length > 1 && (
         <Button
