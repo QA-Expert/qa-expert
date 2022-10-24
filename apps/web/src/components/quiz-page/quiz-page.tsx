@@ -81,14 +81,16 @@ export default function QuizPage(props: Props) {
         justifyContent: 'start',
         height: '100%',
         padding: '1rem',
-        gap: '0.75rem',
+        gap: '2rem',
       }}
     >
       <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
         {props.title}
       </Typography>
+
       <Typography>{props.description}</Typography>
-      <Box sx={{ flex: 1, gap: '1rem' }}>
+
+      <Box sx={{ flex: 1, gap: '2rem' }}>
         <Typography variant="h4" sx={{ fontSize: '1.5rem' }}>
           {props.question.content}
         </Typography>
@@ -146,7 +148,7 @@ export default function QuizPage(props: Props) {
         </Box>
 
         {/* TODO: Just for testing - remove */}
-        <Box>
+        {/* <Box>
           <Typography fontWeight="bold">Correct answers:</Typography>
           {props.question.answers.map((a, i) => (
             <span key={i}>{a.content}</span>
@@ -155,14 +157,16 @@ export default function QuizPage(props: Props) {
           {answers.map((a, i) => (
             <span key={i}>{a}</span>
           ))}
-        </Box>
+        </Box> */}
+
+        <Button
+          variant="contained"
+          disabled={Boolean(props.progress?.answers)}
+          onClick={handleSubmit}
+        >
+          Submit
+        </Button>
       </Box>
-      <Button
-        disabled={Boolean(props.progress?.answers)}
-        onClick={handleSubmit}
-      >
-        Submit
-      </Button>
     </Box>
   );
 }

@@ -49,7 +49,18 @@ export const CREATE_QUIZ_PROGRESS = gql`
         answers: $answers
       }
     ) {
+      state
       quiz
+      quizPage
+      answers
+    }
+  }
+`;
+
+export const UPDATE_COURSE_PAGE_CONTENT = gql`
+  mutation UpdateCoursePageContent($coursePageId: String!, $content: String!) {
+    updateCoursePageContent(data: { Id: $coursePageId, content: $content }) {
+      content
     }
   }
 `;

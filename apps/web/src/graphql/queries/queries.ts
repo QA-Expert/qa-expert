@@ -52,6 +52,7 @@ export const GET_COURSE = gql`
         _id
         title
         description
+        content
       }
     }
   }

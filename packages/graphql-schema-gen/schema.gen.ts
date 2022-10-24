@@ -19,6 +19,10 @@ export enum QuizType {
     QUESTIONER = "QUESTIONER"
 }
 
+export class CoursePageContentInput {
+    content: string;
+}
+
 export class CourseProgressInput {
     course: string;
     coursePage: string;
@@ -101,6 +105,8 @@ export abstract class IQuery {
     abstract quiz(_id: string): Quiz | Promise<Quiz>;
 
     abstract quizzes(): Quiz[] | Promise<Quiz[]>;
+
+    abstract updateCoursePageContent(_id: string, data: CoursePageContentInput): CoursePage | Promise<CoursePage>;
 
     abstract user(): User | Promise<User>;
 }

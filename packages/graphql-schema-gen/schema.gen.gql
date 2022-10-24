@@ -23,6 +23,10 @@ type CoursePage {
   title: String!
 }
 
+input CoursePageContentInput {
+  content: String!
+}
+
 type CourseProgress {
   _id: String!
   course: String!
@@ -50,6 +54,7 @@ type Query {
   courses: [Course!]!
   quiz(_id: String!): Quiz!
   quizzes: [Quiz!]!
+  updateCoursePageContent(_id: String!, data: CoursePageContentInput!): CoursePage!
   user: User!
 }
 

@@ -4,6 +4,7 @@ import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import { Box } from '../box/box';
 import Pagination from '@mui/material/Pagination';
+import { useRouter } from 'next/router';
 
 interface Props {
   children: ReactNode[];
@@ -50,7 +51,7 @@ export function PageCarousel({ children }: Props) {
         </Button>
       )}
 
-      <Box>
+      <Box sx={{ gap: '1rem', height: '100%' }}>
         {children[currentPageIndex]}
         {children.length && (
           <Pagination
