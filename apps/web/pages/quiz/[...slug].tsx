@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Divider, Paper, Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { Quiz as QuizType } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
 import { Box } from '../../src/components/box/box';
@@ -32,8 +32,7 @@ const Quiz = () => {
   return (
     <Layout>
       <Sidebar>Test</Sidebar>
-      <Paper
-        component={Box}
+      <Box
         sx={{
           width: '100%',
           height: '100%',
@@ -52,14 +51,14 @@ const Quiz = () => {
             gap: '1rem',
           }}
         >
-          <Typography variant="h2" sx={{ fontSize: '2rem' }}>
+          <Typography variant="h2" sx={{ fontSize: '1.5rem' }}>
             {data.quiz.title}
           </Typography>
-          <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
+          <Typography variant="h3" sx={{ fontSize: '1rem' }}>
             {data.quiz.description}
           </Typography>
         </Box>
-        <Divider sx={{ width: '100%' }} />
+
         <Box
           sx={{
             width: '100%',
@@ -72,7 +71,7 @@ const Quiz = () => {
             ))}
           </PageCarousel>
         </Box>
-      </Paper>
+      </Box>
     </Layout>
   );
 };

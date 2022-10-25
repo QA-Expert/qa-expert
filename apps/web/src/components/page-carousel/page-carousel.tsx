@@ -4,6 +4,7 @@ import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import { Box } from '../box/box';
 import Pagination from '@mui/material/Pagination';
+import Paper from '@mui/material/Paper';
 
 interface Props {
   children: ReactNode[];
@@ -37,7 +38,8 @@ export function PageCarousel({ children }: Props) {
   };
 
   return (
-    <Box
+    <Paper
+      component={Box}
       sx={{
         height: '100%',
         width: '100%',
@@ -50,7 +52,7 @@ export function PageCarousel({ children }: Props) {
         </Button>
       )}
 
-      <Box sx={{ gap: '1rem', height: '100%' }}>
+      <Box sx={{ gap: '1rem', height: '100%', width: '100%', padding: '2rem' }}>
         {children[currentPageIndex]}
         {children.length && (
           <Pagination
@@ -71,6 +73,6 @@ export function PageCarousel({ children }: Props) {
           <ArrowForwardIos />
         </Button>
       )}
-    </Box>
+    </Paper>
   );
 }

@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { CoursePage } from './course-page.schema';
 import { CoursePageService } from './course-page.service';
@@ -14,7 +14,7 @@ export class CoursePageResolver {
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.ADMIN)
-  @Query(() => CoursePage)
+  @Mutation(() => CoursePage)
   async updateCoursePageContent(
     @Args('_id') _id: string,
     @Args('data') data: CoursePageContentInput,

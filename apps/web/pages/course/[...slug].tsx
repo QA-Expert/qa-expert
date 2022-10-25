@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Divider, Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { Course as CourseType } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
 import { Box } from '../../src/components/box/box';
@@ -50,15 +50,13 @@ const Course = () => {
             gap: '1rem',
           }}
         >
-          <Typography variant="h2" sx={{ fontSize: '2rem' }}>
+          <Typography variant="h2" sx={{ fontSize: '1.5rem' }}>
             {data.course.title}
           </Typography>
-          <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
+          <Typography variant="h3" sx={{ fontSize: '1rem' }}>
             {data.course.description}
           </Typography>
         </Box>
-
-        <Divider sx={{ width: '100%' }} />
 
         <Box
           sx={{

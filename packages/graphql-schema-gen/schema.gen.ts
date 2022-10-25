@@ -93,6 +93,8 @@ export abstract class IMutation {
     abstract logout(): boolean | Promise<boolean>;
 
     abstract register(data: UserInputCreate): UserOutputLogin | Promise<UserOutputLogin>;
+
+    abstract updateCoursePageContent(_id: string, data: CoursePageContentInput): CoursePage | Promise<CoursePage>;
 }
 
 export abstract class IQuery {
@@ -105,8 +107,6 @@ export abstract class IQuery {
     abstract quiz(_id: string): Quiz | Promise<Quiz>;
 
     abstract quizzes(): Quiz[] | Promise<Quiz[]>;
-
-    abstract updateCoursePageContent(_id: string, data: CoursePageContentInput): CoursePage | Promise<CoursePage>;
 
     abstract user(): User | Promise<User>;
 }
@@ -151,6 +151,7 @@ export class User {
     email: string;
     firstName?: Nullable<string>;
     lastName?: Nullable<string>;
+    roles: string[];
 }
 
 export class UserOutputLogin implements UserBaseModel {

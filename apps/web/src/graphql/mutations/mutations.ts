@@ -59,7 +59,7 @@ export const CREATE_QUIZ_PROGRESS = gql`
 
 export const UPDATE_COURSE_PAGE_CONTENT = gql`
   mutation UpdateCoursePageContent($coursePageId: String!, $content: String!) {
-    updateCoursePageContent(data: { Id: $coursePageId, content: $content }) {
+    updateCoursePageContent(_id: $coursePageId, data: { content: $content }) {
       content
     }
   }

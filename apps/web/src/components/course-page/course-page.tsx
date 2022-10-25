@@ -20,7 +20,7 @@ export default function CoursePage(props: Props) {
 
       <Typography>{props.description}</Typography>
 
-      <TextEditor initialContent={props.content} />
+      <TextEditor initialContent={props.content} coursePageId={props._id} />
     </Box>
   );
 }

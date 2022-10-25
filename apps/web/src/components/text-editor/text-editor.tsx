@@ -5,6 +5,10 @@ import 'react-quill/dist/quill.snow.css';
 import { Box } from '../box/box';
 import { DeltaStatic, Sources } from 'quill';
 import { UnprivilegedEditor } from 'react-quill';
+import { UPDATE_COURSE_PAGE_CONTENT } from '../../graphql/mutations/mutations';
+import { useMutation } from '@apollo/client';
+import { useUser } from '../../context/auth';
+import styled from '@emotion/styled';
 
 const ReactQuill = dynamic(
   () => {
@@ -13,36 +17,41 @@ const ReactQuill = dynamic(
   { ssr: false },
 );
 
-const fullToolBar = {
-  toolbar: [
-    [{ font: [] }, { size: ['small', false, 'large', 'huge'] }], // custom dropdown
-    ['bold', 'italic', 'underline', 'strike'],
-    [{ color: [] }, { background: [] }],
-    [{ script: 'sub' }, { script: 'super' }],
-    [{ header: 1 }, { header: 2 }, 'blockquote', 'code-block'],
-    [
-      { list: 'ordered' },
-      { list: 'bullet' },
-      { indent: '-1' },
-      { indent: '+1' },
-    ],
-    [{ direction: 'rtl' }, { align: [] }],
-    ['link', 'image', 'video', 'formula'],
-    ['clean'],
-  ],
-};
-
+const fullToolBar = [
+  [{ font: [] }, { size: ['small', false, 'large', 'huge'] }], // custom dropdown
+  ['bold', 'italic', 'underline', 'strike'],
+  [{ color: [] }, { background: [] }],
+  [{ script: 'sub' }, { script: 'super' }],
+  [{ header: 1 }, { header: 2 }, 'blockquote', 'code-block'],
+  [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+  [{ direction: 'rtl' }, { align: [] }],
+  ['link', 'image', 'video', 'formula'],
+  ['clean'],
+];
 interface Props {
-  initialContent: string | DeltaStatic;
+  initialContent: string;
+  coursePageId: string;
 }
 
-export const TextEditor = ({ initialContent }: Props) => {
-  const [content, setContent] = useState<string | DeltaStatic>(initialContent);
+export const TextEditor = ({ initialContent, coursePageId }: Props) => {
+  const user = useUser();
+  const isAdmin = user?.roles.includes('admin');
+  const initContent = JSON.parse(initialContent);
+  const [content, setContent] = useState<string | DeltaStatic>(initContent);
   const [deltaStatic, setDeltaStatic] = useState<DeltaStatic | null>(null);
+  const [updateCoursePageContent] = useMutation(UPDATE_COURSE_PAGE_CONTENT);
 
-  const handleClick = () => {
-    console.log(deltaStatic);
+  const handleClick = async () => {
+    const stringified = JSON.stringify(deltaStatic);
+
+    await updateCoursePageContent({
+      variables: {
+        coursePageId,
+        content: stringified,
+      },
+    });
   };
+
   const handleChange = (
     content: string,
     _delta: DeltaStatic,
@@ -54,17 +63,30 @@ export const TextEditor = ({ initialContent }: Props) => {
   };
 
   return (
-    <Box>
-      <ReactQuill
-        modules={fullToolBar}
-        theme="snow"
+    <Box sx={{ width: '100%', gap: '1rem' }}>
+      <Editor
+        isAdmin={Boolean(isAdmin)}
+        modules={{
+          toolbar: isAdmin ? fullToolBar : false,
+        }}
+        theme={isAdmin ? 'snow' : ''}
         value={content}
         onChange={handleChange}
+        readOnly={!isAdmin}
       />
-      ;
-      <Button variant="contained" onClick={handleClick}>
-        Submit
-      </Button>
+
+      {isAdmin && (
+        <Button variant="contained" onClick={handleClick}>
+          Submit
+        </Button>
+      )}
     </Box>
   );
 };
+
+const Editor = styled(ReactQuill)(({ isAdmin }: { isAdmin: boolean }) => ({
+  width: '100%',
+  '.ql-container': {
+    border: isAdmin ? '1px solid #ccc' : 'none',
+  },
+}));

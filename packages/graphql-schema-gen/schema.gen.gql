@@ -46,6 +46,7 @@ type Mutation {
   login(data: UserInputLogin!): UserOutputLogin!
   logout: Boolean!
   register(data: UserInputCreate!): UserOutputLogin!
+  updateCoursePageContent(_id: String!, data: CoursePageContentInput!): CoursePage!
 }
 
 type Query {
@@ -54,7 +55,6 @@ type Query {
   courses: [Course!]!
   quiz(_id: String!): Quiz!
   quizzes: [Quiz!]!
-  updateCoursePageContent(_id: String!, data: CoursePageContentInput!): CoursePage!
   user: User!
 }
 
@@ -120,6 +120,7 @@ type User {
   email: String!
   firstName: String
   lastName: String
+  roles: [String!]!
 }
 
 interface UserBaseModel {
