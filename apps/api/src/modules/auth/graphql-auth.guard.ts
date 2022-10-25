@@ -3,12 +3,12 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { getTokenCookie } from 'src/utls/auth-cookie';
 import { User } from '../users/user.schema';
 import { UserService } from '../users/user.service';
+import { getRequest } from './helpers';
 
 @Injectable()
 export class GqlAuthGuard extends AuthGuard('jwt') {
@@ -19,24 +19,9 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  // Override this method so it can be used in graphql
-  getRequest(context: ExecutionContext) {
-    const ctx = GqlExecutionContext.create(context);
-    const gqlReq = ctx.getContext().req;
-
-    if (gqlReq) {
-      const { variables } = ctx.getArgs();
-      gqlReq.body = variables;
-
-      return gqlReq;
-    }
-
-    return context.switchToHttp().getRequest();
-  }
-
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
-      const req = this.getRequest(context);
+      const req = getRequest(context);
       const token = getTokenCookie(req);
       const { _id } = this.jwtService.verify(token, {
         secret: process.env.AUTH_SECRET,
@@ -44,11 +29,15 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
 
       // hydrating user for req context
       const userFromDb = await this.userService.findById(_id);
-      const user: Pick<User, '_id' | 'email' | 'firstName' | 'lastName'> = {
+      const user: Pick<
+        User,
+        '_id' | 'email' | 'firstName' | 'lastName' | 'roles'
+      > = {
         _id: userFromDb._id,
         email: userFromDb.email,
         firstName: userFromDb.firstName,
         lastName: userFromDb.lastName,
+        roles: userFromDb.roles,
       };
 
       req.user = user;

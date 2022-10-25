@@ -5,13 +5,16 @@ import { CurrentUser } from '../users/user.decorator';
 import { QuizPage } from './quiz-page.schema';
 import { QuizProgressService } from '../quiz-progresses/quiz-progress.service';
 import { QuizProgress } from '../quiz-progresses/quiz-progress.schema';
-import { User } from '../users/user.schema';
+import { User, Roles as RolesEnum } from '../users/user.schema';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 
 @Resolver(() => QuizPage)
 export class QuizPageResolver {
   constructor(private readonly service: QuizProgressService) {}
 
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.USER)
   @ResolveField('progress', () => QuizProgress, { nullable: true })
   public async quizProgresses(
     @CurrentUser() user: User,

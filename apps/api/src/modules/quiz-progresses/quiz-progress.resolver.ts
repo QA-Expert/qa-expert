@@ -5,13 +5,16 @@ import { QuizProgress } from './quiz-progress.schema';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { CurrentUser } from '../users/user.decorator';
-import { User } from '../users/user.schema';
+import { User, Roles as RolesEnum } from '../users/user.schema';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 
 @Resolver(() => QuizProgress)
 export class QuizProgressResolver {
   constructor(private readonly service: QuizProgressService) {}
 
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.USER)
   @Mutation(() => QuizProgress)
   public async createQuizProgress(
     @CurrentUser() user: User,

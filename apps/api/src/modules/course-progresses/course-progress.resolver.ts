@@ -1,8 +1,10 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Mutation, Resolver } from '@nestjs/graphql';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 import { CurrentUser } from '../users/user.decorator';
-import { User } from '../users/user.schema';
+import { User, Roles as RolesEnum } from '../users/user.schema';
 import { CourseProgress } from './course-progress.schema';
 import { CourseProgressService } from './course-progress.service';
 import { CourseProgressInput } from './create-course-progress.input';
@@ -11,7 +13,8 @@ import { CourseProgressInput } from './create-course-progress.input';
 export class CourseProgressResolver {
   constructor(private readonly service: CourseProgressService) {}
 
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.USER)
   @Query(() => [CourseProgress])
   public async courseProgresses(
     @CurrentUser() user: User,
@@ -20,7 +23,8 @@ export class CourseProgressResolver {
     return await this.service.findAll(user._id, courseId);
   }
 
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.USER)
   @Mutation(() => CourseProgress)
   public async createCourseProgress(
     @CurrentUser() user: User,

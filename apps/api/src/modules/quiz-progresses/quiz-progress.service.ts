@@ -12,7 +12,7 @@ export class QuizProgressService {
   ) {}
 
   async findOne(quizId: string, quizPageId: string, userId: string) {
-    return await this.quizProgressModel
+    const result = await this.quizProgressModel
       .findOne({
         user: {
           _id: userId,
@@ -25,6 +25,8 @@ export class QuizProgressService {
         },
       })
       .exec();
+
+    return result;
   }
 
   async create(data: QuizProgressInput, userId: string) {

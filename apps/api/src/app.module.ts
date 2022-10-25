@@ -29,14 +29,14 @@ import { CoursePageModule } from './modules/course-pages/course-page.module';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: Boolean(process.env.SHOULD_GENERATE_GQL_SHEMA)
+      autoSchemaFile: Boolean(process.env.SHOULD_GENERATE_GQL_SCHEMA)
         ? join(
             process.cwd(),
             '../../packages/graphql-schema-gen/schema.gen.gql',
           )
         : undefined,
       definitions: {
-        path: Boolean(process.env.SHOULD_GENERATE_GQL_SHEMA)
+        path: Boolean(process.env.SHOULD_GENERATE_GQL_SCHEMA)
           ? join(
               process.cwd(),
               '../../packages/graphql-schema-gen/schema.gen.ts',

@@ -9,7 +9,10 @@ import { UserOutputLogin } from './login-user.output';
 import { UserService } from './user.service';
 import { ServerResponse } from 'http';
 import { setTokenCookie, removeTokenCookie } from 'src/utls/auth-cookie';
+import { Roles as RolesEnum } from '../users/user.schema';
 import { User } from './user.schema';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -18,7 +21,8 @@ export class UserResolver {
     private readonly authService: AuthService,
   ) {}
 
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.USER)
   @Query(() => User)
   public async user(@CurrentUser() user: User): Promise<User> {
     return user;
