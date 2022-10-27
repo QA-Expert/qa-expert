@@ -11,7 +11,10 @@ import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
 import { CREATE_QUIZ_PROGRESS } from '../../graphql/mutations/mutations';
 import { useRouter } from 'next/router';
-import { isEqual } from 'lodash';
+import { difference } from 'lodash';
+import { GET_QUIZ } from '../../graphql/queries/queries';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 export default function QuizPage(props: Props) {
   const router = useRouter();
@@ -20,7 +23,14 @@ export default function QuizPage(props: Props) {
     props.progress?.answers ?? [],
   );
   const isSingleAnswerQuestion = props.question.answers.length === 1;
-  const [createQuizProgress] = useMutation(CREATE_QUIZ_PROGRESS);
+  const [createQuizProgress] = useMutation(CREATE_QUIZ_PROGRESS, {
+    refetchQueries: [
+      {
+        query: GET_QUIZ,
+        variables: { quizId: slug },
+      },
+    ],
+  });
 
   const handleSubmit = async () => {
     const expectedAnswerIds = props.question.answers.map(
@@ -41,7 +51,7 @@ export default function QuizPage(props: Props) {
   };
 
   const isAnsweredCorrectly = (expected: string[], actual: string[]) =>
-    isEqual(expected, actual);
+    !difference(expected, actual).length;
 
   const getStylesForOptionsWhenAnswered = (
     actualAnswers: string[] | null | undefined,
@@ -91,9 +101,17 @@ export default function QuizPage(props: Props) {
       <Typography>{props.description}</Typography>
 
       <Box sx={{ flex: 1, gap: '2rem' }}>
-        <Typography variant="h4" sx={{ fontSize: '1.5rem' }}>
-          {props.question.content}
-        </Typography>
+        <Box sx={{ flexDirection: 'row', gap: '1rem' }}>
+          {props.progress?.state === 'PASS' && (
+            <CheckCircleIcon sx={{ color: 'success.main', fontSize: '3rem' }} />
+          )}
+          {props.progress?.state === 'FAIL' && (
+            <CancelIcon sx={{ color: 'error.main', fontSize: '3rem' }} />
+          )}
+          <Typography variant="h4" sx={{ fontSize: '1.5rem' }}>
+            {props.question.content}
+          </Typography>
+        </Box>
 
         <Box>
           {isSingleAnswerQuestion ? (
@@ -146,18 +164,6 @@ export default function QuizPage(props: Props) {
             </FormGroup>
           )}
         </Box>
-
-        {/* TODO: Just for testing - remove */}
-        {/* <Box>
-          <Typography fontWeight="bold">Correct answers:</Typography>
-          {props.question.answers.map((a, i) => (
-            <span key={i}>{a.content}</span>
-          ))}
-          <Typography fontWeight="bold">Users answers:</Typography>
-          {answers.map((a, i) => (
-            <span key={i}>{a}</span>
-          ))}
-        </Box> */}
 
         <Button
           variant="contained"

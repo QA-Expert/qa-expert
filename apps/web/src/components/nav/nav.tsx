@@ -1,5 +1,4 @@
 import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -32,12 +31,6 @@ export default function Nav() {
               marginLeft: 'auto',
             }}
           >
-            <Link href={`/login`}>
-              <Button href="/login" sx={{ color: 'white', display: 'block' }}>
-                Login
-              </Button>
-            </Link>
-
             <ProfileMenu />
           </Box>
         </Toolbar>
