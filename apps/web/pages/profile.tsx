@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { Box } from '../src/components/box/box';
 import Layout from '../src/components/layout/layout';
-import { useUser } from '../src/context/auth';
+import { useUser } from '../src/context/user';
 
 function Account() {
   const user = useUser();

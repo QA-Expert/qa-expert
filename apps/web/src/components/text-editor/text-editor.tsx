@@ -7,7 +7,7 @@ import { DeltaStatic, Sources } from 'quill';
 import { UnprivilegedEditor } from 'react-quill';
 import { UPDATE_COURSE_PAGE_CONTENT } from '../../graphql/mutations/mutations';
 import { useMutation } from '@apollo/client';
-import { useUser } from '../../context/auth';
+import { useUser } from '../../context/user';
 import styled from '@emotion/styled';
 
 const ReactQuill = dynamic(

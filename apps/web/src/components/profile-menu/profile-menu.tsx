@@ -1,6 +1,6 @@
 import { useApolloClient, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { useUser } from '../../context/auth';
+import { useUser } from '../../context/user';
 import { LOGOUT } from '../../graphql/mutations/mutations';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
