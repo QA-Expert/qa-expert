@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
+import { User } from '../users/user.schema';
 import { QuizProgressInput } from './create-quiz-progress.input';
 import { QuizProgress } from './quiz-progress.schema';
 
@@ -29,12 +30,32 @@ export class QuizProgressService {
     return result;
   }
 
+  async findQuizProgress(quizId: string, userId: string) {
+    const result = await this.quizProgressModel
+      .find({
+        user: {
+          _id: userId,
+        },
+        quiz: {
+          _id: quizId,
+        },
+      })
+      .exec();
+
+    return result;
+  }
+
   async create(data: QuizProgressInput, userId: string) {
-    const newQuizProgress = {
+    const newQuizProgress: Partial<QuizProgress> = {
       ...data,
+      answers: data.answers?.map(
+        (answer) => new mongoose.Types.ObjectId(answer),
+      ),
       quiz: new mongoose.Types.ObjectId(data.quiz),
       quizPage: new mongoose.Types.ObjectId(data.quizPage),
       user: new mongoose.Types.ObjectId(userId),
+      createdBy: new mongoose.Types.ObjectId(userId),
+      updatedBy: new mongoose.Types.ObjectId(userId),
     };
 
     const model = new this.quizProgressModel(newQuizProgress);

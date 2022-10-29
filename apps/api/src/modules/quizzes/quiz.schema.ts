@@ -2,9 +2,9 @@ import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { QuizPage } from '../quiz-pages/quiz-page.schema';
 import { Course } from '../courses/course.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Meta } from '../common/meta.schema';
 import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
+import { User } from '../users/user.schema';
 
 export enum QuizType {
   QUESTIONER = 'questioner',
@@ -19,7 +19,7 @@ registerEnumType(QuizType, {
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // TODO: add description to all props
-@Schema()
+@Schema({ timestamps: true })
 @ObjectType()
 export class Quiz extends Document {
   @Field(() => String)
@@ -53,8 +53,20 @@ export class Quiz extends Document {
   @Field()
   expectedResult: string;
 
-  @Prop({ type: Meta })
-  meta: Meta;
+  @Field(() => Number, { nullable: true })
+  progress?: number;
+
+  @Prop({
+    type: ObjectId,
+    ref: User.name,
+  })
+  createdBy: User | mongoose.Types.ObjectId;
+
+  @Prop({
+    type: ObjectId,
+    ref: User.name,
+  })
+  updatedBy: User | mongoose.Types.ObjectId;
 }
 
 export const QuizSchema = SchemaFactory.createForClass(Quiz);

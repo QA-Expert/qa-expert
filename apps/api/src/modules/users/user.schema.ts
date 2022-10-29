@@ -1,7 +1,7 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Meta } from '../common/meta.schema';
+import * as mongoose from 'mongoose';
 
 export enum Roles {
   USER = 'user',
@@ -13,7 +13,9 @@ registerEnumType(Roles, {
   description: 'Defines different type of user roles',
 });
 
-@Schema()
+const ObjectId = mongoose.Schema.Types.ObjectId;
+
+@Schema({ timestamps: true })
 @ObjectType()
 export class User extends Document {
   @Field(() => String)
@@ -38,8 +40,17 @@ export class User extends Document {
   @Field(() => [String])
   roles: Roles[];
 
-  @Prop({ type: Meta })
-  meta: Meta;
+  @Prop({
+    type: ObjectId,
+    ref: User.name,
+  })
+  createdBy: User | mongoose.Types.ObjectId;
+
+  @Prop({
+    type: ObjectId,
+    ref: User.name,
+  })
+  updatedBy: User | mongoose.Types.ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

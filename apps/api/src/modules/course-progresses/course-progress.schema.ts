@@ -1,7 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { CoursePage } from '../course-pages/course-page.schema';
 import { Course } from '../courses/course.schema';
-import { Meta } from '../common/meta.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from '../users/user.schema';
 import * as mongoose from 'mongoose';
@@ -11,7 +10,7 @@ import { Document } from 'mongoose';
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // TODO: add description to all props
-@Schema()
+@Schema({ timestamps: true })
 @ObjectType()
 export class CourseProgress extends Document {
   @Field(() => String)
@@ -19,18 +18,27 @@ export class CourseProgress extends Document {
 
   @Prop({ type: ObjectId, ref: Course.name })
   @Field(() => String)
-  course: typeof ObjectId;
+  course: Course | mongoose.Types.ObjectId;
 
   @Prop({ type: ObjectId, ref: CoursePage.name })
   @Field(() => String)
-  coursePage: typeof ObjectId;
+  coursePage: CoursePage | mongoose.Types.ObjectId;
 
   @Prop({ type: ObjectId, ref: User.name })
   @Field(() => String)
-  user: typeof ObjectId;
+  user: User | mongoose.Types.ObjectId;
 
-  @Prop({ type: Meta })
-  meta: Meta;
+  @Prop({
+    type: ObjectId,
+    ref: User.name,
+  })
+  createdBy: User | mongoose.Types.ObjectId;
+
+  @Prop({
+    type: ObjectId,
+    ref: User.name,
+  })
+  updatedBy: User | mongoose.Types.ObjectId;
 }
 
 export const CourseProgressSchema =

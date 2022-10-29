@@ -4,12 +4,12 @@ import * as mongoose from 'mongoose';
 import { Question } from '../questions/question.schema';
 import { QuizProgress } from '../quiz-progresses/quiz-progress.schema';
 import { Document } from 'mongoose';
-import { Meta } from '../common/meta.schema';
+import { User } from '../users/user.schema';
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // TODO: add description to all props
-@Schema()
+@Schema({ timestamps: true })
 @ObjectType()
 export class QuizPage extends Document {
   @Field(() => String)
@@ -30,8 +30,17 @@ export class QuizPage extends Document {
   @Field(() => QuizProgress, { nullable: true })
   progress?: QuizProgress;
 
-  @Prop({ type: Meta })
-  meta: Meta;
+  @Prop({
+    type: ObjectId,
+    ref: User.name,
+  })
+  createdBy: User | mongoose.Types.ObjectId;
+
+  @Prop({
+    type: ObjectId,
+    ref: User.name,
+  })
+  updatedBy: User | mongoose.Types.ObjectId;
 }
 
 export const QuizPageSchema = SchemaFactory.createForClass(QuizPage);

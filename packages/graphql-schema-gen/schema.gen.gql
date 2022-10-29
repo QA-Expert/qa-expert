@@ -71,6 +71,7 @@ type Quiz {
   description: String!
   expectedResult: String!
   icon: String!
+  progress: Float
   quizPages: [QuizPage!]!
   title: String!
   type: QuizType!
