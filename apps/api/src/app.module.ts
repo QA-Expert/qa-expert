@@ -1,19 +1,16 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { CourseProgressModule } from './modules/course-progresses/course-progress.module';
 import { CourseModule } from './modules/courses/course.module';
-import { QuizProgressModule } from './modules/quiz-progresses/quiz-progress.module';
-import { QuizModule } from './modules/quizzes/quiz.module';
 import { UserModule } from './modules/users/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { join } from 'path';
-import { QuizPageModule } from './modules/quiz-pages/quiz-page.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AnswerModule } from './modules/answers/answer.module';
 import { QuestionModule } from './modules/questions/question.module';
-import { CoursePageModule } from './modules/course-pages/course-page.module';
+import { PageModule } from './modules/pages/page.module';
+import { PageProgressModule } from './modules/page-progresses/page-progress.module';
 
 @Module({
   imports: [
@@ -55,12 +52,9 @@ import { CoursePageModule } from './modules/course-pages/course-page.module';
     AnswerModule,
     QuestionModule,
     UserModule,
-    QuizProgressModule,
-    QuizModule,
-    CoursePageModule,
     CourseModule,
-    CourseProgressModule,
-    QuizPageModule,
+    PageModule,
+    PageProgressModule,
   ],
   providers: [],
 })

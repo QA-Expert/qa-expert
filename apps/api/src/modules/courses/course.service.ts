@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import { CoursePage } from '../course-pages/course-page.schema';
-import { CourseProgressService } from '../course-progresses/course-progress.service';
+import { PageProgressState } from '../page-progresses/page-progress.schema';
+import { PageProgressService } from '../page-progresses/page-progress.service';
+import { Page } from '../pages/page.schema';
 import { User } from '../users/user.schema';
 import { Course } from './course.schema';
 
@@ -11,15 +12,15 @@ export class CourseService {
   constructor(
     @InjectModel(Course.name)
     private courseModel: Model<Course>,
-    private readonly serviceCourseProgress: CourseProgressService,
+    private readonly servicePageProgress: PageProgressService,
   ) {}
 
   async findById(id: string) {
     return await this.courseModel
       .findById(id)
       .populate({
-        path: 'coursePages',
-        model: CoursePage.name,
+        path: 'pages',
+        model: Page.name,
       })
       .exec();
   }
@@ -32,7 +33,7 @@ export class CourseService {
     return await this.courseModel
       .findByIdAndUpdate(courseId, {
         $push: {
-          coursePages: new mongoose.Types.ObjectId(pageId),
+          pages: new mongoose.Types.ObjectId(pageId),
         },
         updatedBy: new mongoose.Types.ObjectId(userId),
       })
@@ -45,27 +46,33 @@ export class CourseService {
       fail: 0,
     };
 
-    if (!course?.coursePages.length) {
+    if (!course?.pages.length) {
       return initValue;
     }
 
-    const progresses = await this.serviceCourseProgress.findAll(
+    const progresses = await this.servicePageProgress.findAll(
+      course?.pages.map((page) => page._id),
       user._id,
-      course._id,
     );
 
     if (!progresses?.length) {
       return initValue;
     }
 
-    const numberOfPassed = progresses?.length;
-    const total = course?.coursePages.length ?? 0;
+    const total = course?.pages.length ?? 0;
+    const numberOfFailed = progresses?.filter(
+      (process) => process.state === PageProgressState.FAIL,
+    ).length;
+    const numberOfPassed = progresses?.filter(
+      (process) => process.state === PageProgressState.PASS,
+    ).length;
 
+    const fail = Number(((numberOfFailed * 100) / total).toFixed());
     const pass = Number(((numberOfPassed * 100) / total).toFixed());
 
     return {
       pass,
-      fail: 0,
+      fail,
     };
   }
 }

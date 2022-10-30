@@ -1,10 +1,25 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { CoursePage } from '../course-pages/course-page.schema';
-import { Quiz } from 'src/modules/quizzes/quiz.schema';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { User } from '../users/user.schema';
-import { ProgressPercentage } from '../common/common';
+import { Page } from '../pages/page.schema';
+@ObjectType()
+export class ProgressPercentage {
+  @Field({ defaultValue: 0 })
+  fail: number;
+  @Field({ defaultValue: 0 })
+  pass: number;
+}
+
+export enum CourseType {
+  COURSE = 'course',
+  QUIZ = 'quiz',
+}
+
+registerEnumType(CourseType, {
+  name: 'CourseType',
+  description: 'Defines the type of the course',
+});
 
 // @typescript-eslint/no-unused-vars
 const ObjectId = mongoose.Schema.Types.ObjectId;
@@ -28,13 +43,9 @@ export class Course extends mongoose.Document {
   @Prop()
   icon: string;
 
-  @Prop({ type: [{ type: ObjectId, ref: CoursePage.name }] })
-  @Field(() => [CoursePage])
-  coursePages: CoursePage[];
-
-  @Prop({ type: [{ type: ObjectId, ref: Quiz.name }] })
-  @Field(() => [Quiz])
-  quizzes: Quiz[];
+  @Prop({ type: [{ type: ObjectId, ref: Page.name }] })
+  @Field(() => [Page])
+  pages: Page[];
 
   @Field(() => ProgressPercentage)
   progress: ProgressPercentage;

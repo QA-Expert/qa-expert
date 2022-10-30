@@ -8,13 +8,12 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
-import { Course } from './course.schema';
+import { Course, ProgressPercentage } from './course.schema';
 import { CourseService } from './course.service';
 import { Roles as RolesEnum, User } from '../users/user.schema';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { CurrentUser } from '../users/user.decorator';
-import { ProgressPercentage } from '../common/common';
 
 @Resolver(() => Course)
 export class CourseResolver {
@@ -47,7 +46,7 @@ export class CourseResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.ADMIN)
   @Mutation(() => Course)
-  public async addCoursePage(
+  public async addPage(
     @CurrentUser() user: User,
     @Args('_id') _id: string,
     @Args('pageId') pageId: string,

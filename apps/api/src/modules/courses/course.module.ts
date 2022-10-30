@@ -5,13 +5,13 @@ import { Course, CourseSchema } from './course.schema';
 import { UserModule } from '../users/user.module';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CourseProgressModule } from '../course-progresses/course-progress.module';
+import { PageProgressModule } from '../page-progresses/page-progress.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Course.name, schema: CourseSchema }]),
     UserModule,
-    CourseProgressModule,
+    PageProgressModule,
   ],
   providers: [CourseService, CourseResolver, JwtService],
   exports: [],

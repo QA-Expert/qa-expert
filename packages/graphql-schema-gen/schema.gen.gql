@@ -9,53 +9,63 @@ type Answer {
 
 type Course {
   _id: String!
-  coursePages: [CoursePage!]!
   description: String!
   icon: String!
+  pages: [Page!]!
   progress: ProgressPercentage!
-  quizzes: [Quiz!]!
   title: String!
 }
 
-type CoursePage {
-  _id: String!
-  content: String!
-  description: String!
-  progress(courseId: String!): CourseProgress
-  title: String!
+input CoursePageProgressInput {
+  page: String!
 }
 
-input CoursePageContentInput {
-  content: String!
-}
-
-input CoursePageInput {
-  content: String!
-  description: String!
-  title: String!
-}
-
-type CourseProgress {
-  _id: String!
-  course: String!
-  coursePage: String!
-  user: String!
-}
-
-input CourseProgressInput {
-  course: String!
-  coursePage: String!
+"""Defines the type of the course"""
+enum CourseType {
+  COURSE
+  QUIZ
 }
 
 type Mutation {
-  addCoursePage(_id: String!, pageId: String!): Course!
-  createCoursePage(data: CoursePageInput!): CoursePage!
-  createCourseProgress(data: CourseProgressInput!): CourseProgress!
-  createQuizProgress(data: QuizProgressInput!): QuizProgress!
+  addPage(_id: String!, pageId: String!): Course!
+  createCoursePage(data: NewCoursePageInput!): Page!
+  createCoursePageProgress(data: CoursePageProgressInput!): PageProgress!
+  createQuizPage(data: QuizPageInput!): Page!
+  createQuizPageProgress(data: QuizPageProgressInput!): PageProgress!
   login(data: UserInputLogin!): UserOutputLogin!
   logout: Boolean!
   register(data: UserInputCreate!): UserOutputLogin!
-  updateCoursePageContent(_id: String!, data: CoursePageContentInput!): CoursePage!
+}
+
+input NewCoursePageInput {
+  content: String!
+  description: String!
+  title: String!
+}
+
+type Page {
+  _id: String!
+  content: String
+  description: String!
+  progress: PageProgress
+  question: Question
+  title: String!
+  type: CourseType!
+}
+
+type PageProgress {
+  _id: String!
+  answers: [String!]
+  page: String!
+  state: PageProgressState!
+  type: CourseType!
+  user: String!
+}
+
+"""Defines whether User passed or failed or just visited current page"""
+enum PageProgressState {
+  FAIL
+  PASS
 }
 
 type ProgressPercentage {
@@ -65,10 +75,7 @@ type ProgressPercentage {
 
 type Query {
   course(_id: String!): Course!
-  courseProgresses(courseId: String!): [CourseProgress!]!
   courses: [Course!]!
-  quiz(_id: String!): Quiz!
-  quizzes: [Quiz!]!
   user: User!
 }
 
@@ -79,54 +86,16 @@ type Question {
   options: [Answer!]!
 }
 
-type Quiz {
-  _id: String!
-  courses: [Course!]!
+input QuizPageInput {
   description: String!
-  expectedResult: String!
-  icon: String!
-  progress: ProgressPercentage!
-  quizPages: [QuizPage!]!
-  title: String!
-  type: QuizType!
-}
-
-type QuizPage {
-  _id: String!
-  description: String!
-  progress(quizId: String!): QuizProgress
-  question: Question!
+  question: String!
   title: String!
 }
 
-"""
-Defines whether User passed or failed or just visited current quiz page
-"""
-enum QuizPageProgressState {
-  FAIL
-  PASS
-}
-
-type QuizProgress {
-  _id: String!
+input QuizPageProgressInput {
   answers: [String!]!
-  quiz: String!
-  quizPage: String!
-  state: QuizPageProgressState!
-  user: String!
-}
-
-input QuizProgressInput {
-  answers: [String!]
-  quiz: String!
-  quizPage: String!
-  state: QuizPageProgressState!
-}
-
-"""Defines different type of quizzes platform could have"""
-enum QuizType {
-  PRACTICE
-  QUESTIONER
+  page: String!
+  state: PageProgressState!
 }
 
 type User {
