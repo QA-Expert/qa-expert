@@ -4,14 +4,16 @@ import { Model } from 'mongoose';
 import { Answer } from '../answers/answer.schema';
 import { Question } from '../questions/question.schema';
 import { QuizPage } from '../quiz-pages/quiz-page.schema';
-import { QuizProgress } from '../quiz-progresses/quiz-progress.schema';
+import { QuizPageProgressState } from '../quiz-progresses/quiz-progress.schema';
+import { QuizProgressService } from '../quiz-progresses/quiz-progress.service';
+import { User } from '../users/user.schema';
 import { Quiz } from './quiz.schema';
 
 @Injectable()
 export class QuizService {
   constructor(
     @InjectModel(Quiz.name) private quizModel: Model<Quiz>,
-    @InjectModel(QuizProgress.name) private quizProgress: Model<QuizProgress>,
+    private readonly serviceQuizProgress: QuizProgressService,
   ) {}
 
   async findById(id: string) {
@@ -36,23 +38,39 @@ export class QuizService {
     return await this.quizModel.find().exec();
   }
 
-  async findProgress(quizId: string, userId: string) {
-    const quiz = await this.findById(quizId);
-    const progresses = await this.quizProgress
-      .find({
-        quiz: {
-          _id: quizId,
-        },
-        user: {
-          _id: userId,
-        },
-      })
-      .exec();
+  async findProgress(quiz: Quiz, user: User) {
+    const initValue = {
+      pass: 0,
+      fail: 0,
+    };
 
-    if (quiz?.quizPages?.length && progresses?.length) {
-      return Math.floor(quiz?.quizPages.length / progresses?.length) * 100;
+    if (!quiz?.quizPages.length) {
+      return initValue;
     }
 
-    return 0;
+    const progresses = await this.serviceQuizProgress.findAll(
+      quiz._id,
+      user._id,
+    );
+
+    if (!progresses?.length) {
+      return initValue;
+    }
+
+    const numberOfFailed = progresses?.filter(
+      (process) => process.state === QuizPageProgressState.FAIL,
+    ).length;
+    const numberOfPassed = progresses?.filter(
+      (process) => process.state === QuizPageProgressState.PASS,
+    ).length;
+    const total = quiz?.quizPages.length ?? 0;
+
+    const fail = Number(((numberOfFailed * 100) / total).toFixed());
+    const pass = Number(((numberOfPassed * 100) / total).toFixed());
+
+    return {
+      pass,
+      fail,
+    };
   }
 }

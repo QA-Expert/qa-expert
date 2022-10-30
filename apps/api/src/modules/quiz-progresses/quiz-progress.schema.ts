@@ -1,14 +1,12 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { Document } from 'mongoose';
 import { Answer } from '../answers/answer.schema';
 import { QuizPage } from '../quiz-pages/quiz-page.schema';
 import { Quiz } from '../quizzes/quiz.schema';
 import { User } from '../users/user.schema';
 
 export enum QuizPageProgressState {
-  VISITED = 'visited',
   PASS = 'pass',
   FAIL = 'fail',
 }
@@ -19,14 +17,12 @@ registerEnumType(QuizPageProgressState, {
     'Defines whether User passed or failed or just visited current quiz page',
 });
 
-export type QuizProgressDocument = QuizProgress & Document;
-
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // TODO: add description to all props
 @Schema({ timestamps: true })
 @ObjectType()
-export class QuizProgress extends Document {
+export class QuizProgress extends mongoose.Document {
   @Field(() => String)
   _id: string;
 

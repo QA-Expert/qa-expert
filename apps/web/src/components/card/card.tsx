@@ -2,16 +2,20 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
-import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import { Course, Quiz } from 'graphql-schema-gen/schema.gen';
+import {
+  Course,
+  Quiz,
+  ProgressPercentage,
+} from 'graphql-schema-gen/schema.gen';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Box } from '../box/box';
+import { ProgressBar } from '../progress-bar/progress-bar';
 
 interface Props extends Pick<Course | Quiz, '_id' | 'title' | 'description'> {
   type: 'course' | 'quiz';
-  progress: number;
+  progress: ProgressPercentage;
 }
 
 export const CardComponent = ({
@@ -19,7 +23,7 @@ export const CardComponent = ({
   title,
   description,
   type,
-  progress = 25,
+  progress,
 }: Props) => {
   return (
     <Link href={`/${type}/${_id}`}>
@@ -60,17 +64,7 @@ export const CardComponent = ({
             </CardContent>
           </Card>
 
-          <Box sx={{ flexDirection: 'row', width: '100%', gap: '0.5rem' }}>
-            <LinearProgress
-              color="success"
-              sx={{ width: '100%', height: '1rem', borderRadius: '0.25rem' }}
-              variant="determinate"
-              value={progress}
-            />
-            <Typography
-              sx={{ position: 'absolute' }}
-            >{`${progress}%`}</Typography>
-          </Box>
+          <ProgressBar {...progress} />
         </Box>
       </a>
     </Link>

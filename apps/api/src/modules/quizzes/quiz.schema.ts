@@ -3,8 +3,8 @@ import { QuizPage } from '../quiz-pages/quiz-page.schema';
 import { Course } from '../courses/course.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { Document } from 'mongoose';
 import { User } from '../users/user.schema';
+import { ProgressPercentage } from '../common/common';
 
 export enum QuizType {
   QUESTIONER = 'questioner',
@@ -21,7 +21,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 // TODO: add description to all props
 @Schema({ timestamps: true })
 @ObjectType()
-export class Quiz extends Document {
+export class Quiz extends mongoose.Document {
   @Field(() => String)
   _id: string;
 
@@ -53,8 +53,8 @@ export class Quiz extends Document {
   @Field()
   expectedResult: string;
 
-  @Field(() => Number, { nullable: true })
-  progress?: number;
+  @Field(() => ProgressPercentage)
+  progress: ProgressPercentage;
 
   @Prop({
     type: ObjectId,

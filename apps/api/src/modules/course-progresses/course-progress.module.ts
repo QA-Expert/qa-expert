@@ -14,6 +14,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     UserModule,
   ],
   providers: [CourseProgressService, CourseProgressResolver, JwtService],
-  exports: [],
+  exports: [CourseProgressService],
 })
 export class CourseProgressModule {}

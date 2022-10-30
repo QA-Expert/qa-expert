@@ -36,7 +36,14 @@ interface Props {
 export const TextEditor = ({ initialContent, coursePageId }: Props) => {
   const user = useUser();
   const isAdmin = user?.roles.includes('admin');
-  const initContent = JSON.parse(initialContent);
+  let initContent: string | DeltaStatic;
+
+  try {
+    initContent = JSON.parse(initialContent);
+  } catch (error) {
+    initContent = initialContent;
+  }
+
   const [content, setContent] = useState<string | DeltaStatic>(initContent);
   const [deltaStatic, setDeltaStatic] = useState<DeltaStatic | null>(null);
   const [updateCoursePageContent] = useMutation(UPDATE_COURSE_PAGE_CONTENT);

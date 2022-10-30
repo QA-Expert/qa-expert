@@ -10,8 +10,7 @@
 
 export enum QuizPageProgressState {
     FAIL = "FAIL",
-    PASS = "PASS",
-    VISITED = "VISITED"
+    PASS = "PASS"
 }
 
 export enum QuizType {
@@ -23,10 +22,15 @@ export class CoursePageContentInput {
     content: string;
 }
 
+export class CoursePageInput {
+    content: string;
+    description: string;
+    title: string;
+}
+
 export class CourseProgressInput {
     course: string;
     coursePage: string;
-    user: string;
 }
 
 export class QuizProgressInput {
@@ -65,6 +69,7 @@ export class Course {
     coursePages: CoursePage[];
     description: string;
     icon: string;
+    progress: ProgressPercentage;
     quizzes: Quiz[];
     title: string;
 }
@@ -73,6 +78,7 @@ export class CoursePage {
     _id: string;
     content: string;
     description: string;
+    progress?: Nullable<CourseProgress>;
     title: string;
 }
 
@@ -84,6 +90,10 @@ export class CourseProgress {
 }
 
 export abstract class IMutation {
+    abstract addCoursePage(_id: string, pageId: string): Course | Promise<Course>;
+
+    abstract createCoursePage(data: CoursePageInput): CoursePage | Promise<CoursePage>;
+
     abstract createCourseProgress(data: CourseProgressInput): CourseProgress | Promise<CourseProgress>;
 
     abstract createQuizProgress(data: QuizProgressInput): QuizProgress | Promise<QuizProgress>;
@@ -95,6 +105,11 @@ export abstract class IMutation {
     abstract register(data: UserInputCreate): UserOutputLogin | Promise<UserOutputLogin>;
 
     abstract updateCoursePageContent(_id: string, data: CoursePageContentInput): CoursePage | Promise<CoursePage>;
+}
+
+export class ProgressPercentage {
+    fail: number;
+    pass: number;
 }
 
 export abstract class IQuery {
@@ -124,7 +139,7 @@ export class Quiz {
     description: string;
     expectedResult: string;
     icon: string;
-    progress?: Nullable<number>;
+    progress: ProgressPercentage;
     quizPages: QuizPage[];
     title: string;
     type: QuizType;

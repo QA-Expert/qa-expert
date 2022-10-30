@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import { User } from '../users/user.schema';
 import { QuizProgressInput } from './create-quiz-progress.input';
 import { QuizProgress } from './quiz-progress.schema';
 
@@ -30,7 +29,7 @@ export class QuizProgressService {
     return result;
   }
 
-  async findQuizProgress(quizId: string, userId: string) {
+  async findAll(quizId: string, userId: string) {
     const result = await this.quizProgressModel
       .find({
         user: {

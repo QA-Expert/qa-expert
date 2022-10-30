@@ -1,17 +1,16 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
 import { User } from '../users/user.schema';
 import * as mongoose from 'mongoose';
+import { CourseProgress } from '../course-progresses/course-progress.schema';
 
-export type CoursePageDocument = CoursePage & Document;
 // @typescript-eslint/no-unused-vars
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // TODO: add description to all props
 @Schema({ timestamps: true })
 @ObjectType()
-export class CoursePage extends Document {
+export class CoursePage extends mongoose.Document {
   @Field(() => String)
   _id: string;
 
@@ -26,6 +25,9 @@ export class CoursePage extends Document {
   @Field()
   @Prop()
   content: string;
+
+  @Field(() => CourseProgress, { nullable: true })
+  progress?: CourseProgress;
 
   @Prop({
     type: ObjectId,

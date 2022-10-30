@@ -12,7 +12,10 @@ import { useMutation } from '@apollo/client';
 import { CREATE_QUIZ_PROGRESS } from '../../graphql/mutations/mutations';
 import { useRouter } from 'next/router';
 import { difference } from 'lodash';
-import { GET_QUIZ } from '../../graphql/queries/queries';
+import {
+  GET_ALL_COURSES_AND_QUIZZES,
+  GET_QUIZ,
+} from '../../graphql/queries/queries';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
@@ -28,6 +31,9 @@ export default function QuizPage(props: Props) {
       {
         query: GET_QUIZ,
         variables: { quizId: slug },
+      },
+      {
+        query: GET_ALL_COURSES_AND_QUIZZES,
       },
     ],
   });

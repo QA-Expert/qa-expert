@@ -1,6 +1,5 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 
 export enum Roles {
@@ -17,7 +16,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 @Schema({ timestamps: true })
 @ObjectType()
-export class User extends Document {
+export class User extends mongoose.Document {
   @Field(() => String)
   _id: string;
 

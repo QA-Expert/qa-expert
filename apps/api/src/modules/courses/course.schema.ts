@@ -3,8 +3,8 @@ import { CoursePage } from '../course-pages/course-page.schema';
 import { Quiz } from 'src/modules/quizzes/quiz.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { Document } from 'mongoose';
 import { User } from '../users/user.schema';
+import { ProgressPercentage } from '../common/common';
 
 // @typescript-eslint/no-unused-vars
 const ObjectId = mongoose.Schema.Types.ObjectId;
@@ -12,7 +12,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 // TODO: add description to all props
 @Schema({ timestamps: true })
 @ObjectType()
-export class Course extends Document {
+export class Course extends mongoose.Document {
   @Field(() => String)
   _id: string;
 
@@ -35,6 +35,9 @@ export class Course extends Document {
   @Prop({ type: [{ type: ObjectId, ref: Quiz.name }] })
   @Field(() => [Quiz])
   quizzes: Quiz[];
+
+  @Field(() => ProgressPercentage)
+  progress: ProgressPercentage;
 
   @Prop({
     type: ObjectId,

@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { QuizResolver } from './quiz.resolver';
 import { Quiz, QuizSchema } from './quiz.schema';
@@ -10,8 +10,8 @@ import { QuizProgressModule } from '../quiz-progresses/quiz-progress.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Quiz.name, schema: QuizSchema }]),
-    UserModule,
     QuizProgressModule,
+    UserModule,
   ],
   providers: [QuizService, QuizResolver, JwtService],
   exports: [],

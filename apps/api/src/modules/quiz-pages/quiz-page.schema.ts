@@ -3,7 +3,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Question } from '../questions/question.schema';
 import { QuizProgress } from '../quiz-progresses/quiz-progress.schema';
-import { Document } from 'mongoose';
 import { User } from '../users/user.schema';
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
@@ -11,7 +10,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 // TODO: add description to all props
 @Schema({ timestamps: true })
 @ObjectType()
-export class QuizPage extends Document {
+export class QuizPage extends mongoose.Document {
   @Field(() => String)
   _id: string;
 

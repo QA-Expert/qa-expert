@@ -53,6 +53,7 @@ const HomePage = () => {
               type="course"
               title={course.title}
               description={course.description}
+              progress={course.progress}
             />
           ))}
         </Box>
@@ -75,6 +76,7 @@ const HomePage = () => {
               type="quiz"
               title={quiz.title}
               description={quiz.description}
+              progress={quiz.progress}
             />
           ))}
         </Box>

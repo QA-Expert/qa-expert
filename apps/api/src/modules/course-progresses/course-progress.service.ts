@@ -22,13 +22,34 @@ export class CourseProgressService {
     });
   }
 
+  async findOne(courseId: string, coursePageId: string, userId: string) {
+    const result = await this.courseProgressModel
+      .findOne({
+        user: {
+          _id: userId,
+        },
+        course: {
+          _id: courseId,
+        },
+        coursePage: {
+          _id: coursePageId,
+        },
+      })
+      .exec();
+
+    return result;
+  }
+
   async create(data: CourseProgressInput, userId: string) {
-    const newCourseProgress = {
-      ...data,
-      user: new mongoose.Schema.Types.ObjectId(userId),
+    const newCourseProgress: Partial<CourseProgress> = {
+      course: new mongoose.Types.ObjectId(data.course),
+      coursePage: new mongoose.Types.ObjectId(data.coursePage),
+      user: new mongoose.Types.ObjectId(userId),
+      createdBy: new mongoose.Types.ObjectId(userId),
+      updatedBy: new mongoose.Types.ObjectId(userId),
     };
 
-    const model = new CourseProgress(newCourseProgress);
+    const model = new this.courseProgressModel(newCourseProgress);
 
     if (!model) {
       throw new Error('Failed to create new course progress');

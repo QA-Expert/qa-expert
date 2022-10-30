@@ -57,6 +57,14 @@ export const CREATE_QUIZ_PROGRESS = gql`
   }
 `;
 
+export const CREATE_COURSE_PROGRESS = gql`
+  mutation CreateCourseProgress($course: String!, $coursePage: String!) {
+    createCourseProgress(data: { course: $course, coursePage: $coursePage }) {
+      _id
+    }
+  }
+`;
+
 export const UPDATE_COURSE_PAGE_CONTENT = gql`
   mutation UpdateCoursePageContent($coursePageId: String!, $content: String!) {
     updateCoursePageContent(_id: $coursePageId, data: { content: $content }) {

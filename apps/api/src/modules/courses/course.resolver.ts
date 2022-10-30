@@ -1,11 +1,20 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { Course } from './course.schema';
 import { CourseService } from './course.service';
-import { Roles as RolesEnum } from '../users/user.schema';
+import { Roles as RolesEnum, User } from '../users/user.schema';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
+import { CurrentUser } from '../users/user.decorator';
+import { ProgressPercentage } from '../common/common';
 
 @Resolver(() => Course)
 export class CourseResolver {
@@ -23,5 +32,26 @@ export class CourseResolver {
   @Query(() => [Course])
   public async courses(): Promise<Course[]> {
     return this.service.findAll();
+  }
+
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.USER)
+  @ResolveField('progress', () => ProgressPercentage)
+  public async quizProgresses(
+    @CurrentUser() user: User,
+    @Parent() course: Course,
+  ): Promise<ProgressPercentage> {
+    return await this.service.findProgress(course, user);
+  }
+
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.ADMIN)
+  @Mutation(() => Course)
+  public async addCoursePage(
+    @CurrentUser() user: User,
+    @Args('_id') _id: string,
+    @Args('pageId') pageId: string,
+  ): Promise<Course | null> {
+    return this.service.addPage(_id, pageId, user._id);
   }
 }

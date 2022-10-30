@@ -11,11 +11,18 @@ export const GET_ALL_COURSES_AND_QUIZZES = gql`
   query GetAllCoursesAndQuizzes {
     courses {
       _id
+      progress {
+        pass
+      }
       ...CourseHeadingFragment
     }
     quizzes {
       _id
       type
+      progress {
+        pass
+        fail
+      }
       ...QuizHeadingFragment
     }
   }
@@ -53,6 +60,9 @@ export const GET_COURSE = gql`
         title
         description
         content
+        progress(courseId: $courseId) {
+          _id
+        }
       }
     }
   }
