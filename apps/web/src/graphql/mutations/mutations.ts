@@ -34,40 +34,33 @@ export const REGISTER = gql`
   }
 `;
 
-export const CREATE_QUIZ_PROGRESS = gql`
-  mutation CreateQuizProgress(
-    $state: QuizPageProgressState!
-    $quiz: String!
-    $quizPage: String!
-    $answers: [String!]
+export const CREATE_QUIZ_PAGE_PROGRESS = gql`
+  mutation CreateQuizPageProgress(
+    $state: PageProgressState!
+    $page: String!
+    $answers: [String!]!
   ) {
-    createQuizProgress(
-      data: {
-        state: $state
-        quiz: $quiz
-        quizPage: $quizPage
-        answers: $answers
-      }
+    createQuizPageProgress(
+      data: { state: $state, page: $page, answers: $answers }
     ) {
       state
-      quiz
-      quizPage
+      page
       answers
     }
   }
 `;
 
-export const CREATE_COURSE_PROGRESS = gql`
-  mutation CreateCourseProgress($course: String!, $coursePage: String!) {
-    createCourseProgress(data: { course: $course, coursePage: $coursePage }) {
+export const CREATE_COURSE_PAGE_PROGRESS = gql`
+  mutation CreateCoursePageProgress($page: String!) {
+    createCoursePageProgress(data: { page: $page }) {
       _id
     }
   }
 `;
 
 export const UPDATE_COURSE_PAGE_CONTENT = gql`
-  mutation UpdateCoursePageContent($coursePageId: String!, $content: String!) {
-    updateCoursePageContent(_id: $coursePageId, data: { content: $content }) {
+  mutation updateCoursePageContent($_id: String!, $content: String!) {
+    updateCoursePageContent(_id: $_id, data: { content: $content }) {
       content
     }
   }

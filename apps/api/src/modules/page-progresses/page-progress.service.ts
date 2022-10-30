@@ -15,8 +15,8 @@ export class PageProgressService {
 
   async findAll(pages: string[], userId: string) {
     return await this.pageProgressModel.find({
-      page: { _id: { $in: pages } },
-      user: { _id: userId },
+      page: { $in: pages },
+      user: userId,
     });
   }
 

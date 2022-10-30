@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class NewCoursePageInput {
+export class CoursePageInput {
   @Field()
   title: string;
 

@@ -39,6 +39,10 @@ export class Course extends mongoose.Document {
   @Prop()
   description: string;
 
+  @Prop({ type: String, enum: CourseType, required: true })
+  @Field(() => CourseType)
+  type: CourseType;
+
   @Field()
   @Prop()
   icon: string;
@@ -47,7 +51,7 @@ export class Course extends mongoose.Document {
   @Field(() => [Page])
   pages: Page[];
 
-  @Field(() => ProgressPercentage)
+  @Field(() => ProgressPercentage, { defaultValue: { fail: 0, pass: 0 } })
   progress: ProgressPercentage;
 
   @Prop({

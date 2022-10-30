@@ -3,30 +3,15 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import {
-  Course,
-  Quiz,
-  ProgressPercentage,
-} from 'graphql-schema-gen/schema.gen';
+import { Course as Props } from 'graphql-schema-gen/schema.gen';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Box } from '../box/box';
 import { ProgressBar } from '../progress-bar/progress-bar';
 
-interface Props extends Pick<Course | Quiz, '_id' | 'title' | 'description'> {
-  type: 'course' | 'quiz';
-  progress: ProgressPercentage;
-}
-
-export const CardComponent = ({
-  _id,
-  title,
-  description,
-  type,
-  progress,
-}: Props) => {
+export const CardComponent = ({ _id, title, description, progress }: Props) => {
   return (
-    <Link href={`/${type}/${_id}`}>
+    <Link href={`/course/${_id}`}>
       <a>
         <Box
           sx={{
@@ -50,10 +35,10 @@ export const CardComponent = ({
             <CardHeader title={title} />
             <CardMedia>
               <Image
-                alt={`${type} ${title}`}
+                alt={`${title}`}
                 width={'100%'}
                 height={'100%'}
-                src={`/images/${type}-default-card.svg`}
+                src={`/images/course-default-card.svg`}
                 objectFit="cover"
               />
             </CardMedia>

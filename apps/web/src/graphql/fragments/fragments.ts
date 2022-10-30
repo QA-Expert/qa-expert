@@ -18,26 +18,26 @@ export const COURSE_HEADING_FRAGMENT = gql`
   fragment CourseHeadingFragment on Course {
     _id
     title
+    type
     description
   }
 `;
 
-export const QUIZ_HEADING_FRAGMENT = gql`
-  fragment QuizHeadingFragment on Quiz {
-    _id
-    title
-    description
-  }
-`;
-
-export const QUIZ_PAGE_FRAGMENT = gql`
+export const PAGE_FRAGMENT = gql`
   ${QUESTION_FRAGMENT}
-  fragment QuizPageFragment on QuizPage {
+  fragment PageFragment on Page {
     _id
     title
+    type
     description
+    content
     question {
       ...QuestionFragment
+    }
+    progress {
+      _id
+      state
+      answers
     }
   }
 `;

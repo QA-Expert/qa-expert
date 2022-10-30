@@ -1,6 +1,6 @@
 import Layout from '../src/components/layout/layout';
-import { Course, Quiz } from 'graphql-schema-gen/schema.gen';
-import { GET_ALL_COURSES_AND_QUIZZES } from '../src/graphql/queries/queries';
+import { Course } from 'graphql-schema-gen/schema.gen';
+import { GET_ALL_COURSES } from '../src/graphql/queries/queries';
 import { useQuery } from '@apollo/client';
 import Typography from '@mui/material/Typography';
 import { CardComponent } from '../src/components/card/card';
@@ -8,11 +8,10 @@ import { Box } from '../src/components/box/box';
 
 interface Props {
   courses: Course[];
-  quizzes: Quiz[];
 }
 
 const HomePage = () => {
-  const { data, loading, error } = useQuery<Props>(GET_ALL_COURSES_AND_QUIZZES);
+  const { data, loading, error } = useQuery<Props>(GET_ALL_COURSES);
 
   /* TODO: Add TOASTS */
   if (error) {
@@ -47,37 +46,7 @@ const HomePage = () => {
           }}
         >
           {data?.courses.map((course: Course) => (
-            <CardComponent
-              key={course._id}
-              _id={course._id}
-              type="course"
-              title={course.title}
-              description={course.description}
-              progress={course.progress}
-            />
-          ))}
-        </Box>
-
-        <Typography variant="h2" sx={{ fontSize: '3rem' }}>
-          Quizzes
-        </Typography>
-
-        <Box
-          sx={{
-            flexDirection: 'row',
-            gap: '2rem',
-            flexWrap: 'wrap',
-          }}
-        >
-          {data?.quizzes.map((quiz: Quiz) => (
-            <CardComponent
-              key={quiz._id}
-              _id={quiz._id}
-              type="quiz"
-              title={quiz.title}
-              description={quiz.description}
-              progress={quiz.progress}
-            />
+            <CardComponent key={course._id} {...course} />
           ))}
         </Box>
       </Box>

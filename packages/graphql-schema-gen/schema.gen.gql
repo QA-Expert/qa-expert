@@ -14,6 +14,17 @@ type Course {
   pages: [Page!]!
   progress: ProgressPercentage!
   title: String!
+  type: CourseType!
+}
+
+input CoursePageContentInput {
+  content: String!
+}
+
+input CoursePageInput {
+  content: String!
+  description: String!
+  title: String!
 }
 
 input CoursePageProgressInput {
@@ -28,19 +39,14 @@ enum CourseType {
 
 type Mutation {
   addPage(_id: String!, pageId: String!): Course!
-  createCoursePage(data: NewCoursePageInput!): Page!
+  createCoursePage(data: CoursePageInput!): Page!
   createCoursePageProgress(data: CoursePageProgressInput!): PageProgress!
   createQuizPage(data: QuizPageInput!): Page!
   createQuizPageProgress(data: QuizPageProgressInput!): PageProgress!
   login(data: UserInputLogin!): UserOutputLogin!
   logout: Boolean!
   register(data: UserInputCreate!): UserOutputLogin!
-}
-
-input NewCoursePageInput {
-  content: String!
-  description: String!
-  title: String!
+  updateCoursePageContent(_id: String!, data: CoursePageContentInput!): Page!
 }
 
 type Page {

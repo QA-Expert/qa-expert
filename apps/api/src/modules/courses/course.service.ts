@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
+import { Answer } from '../answers/answer.schema';
 import { PageProgressState } from '../page-progresses/page-progress.schema';
 import { PageProgressService } from '../page-progresses/page-progress.service';
 import { Page } from '../pages/page.schema';
+import { Question } from '../questions/question.schema';
 import { User } from '../users/user.schema';
 import { Course } from './course.schema';
 
@@ -21,6 +23,14 @@ export class CourseService {
       .populate({
         path: 'pages',
         model: Page.name,
+        populate: {
+          path: 'question',
+          model: Question.name,
+          populate: {
+            path: 'options answers',
+            model: Answer.name,
+          },
+        },
       })
       .exec();
   }

@@ -1,7 +1,7 @@
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
-import { QuizPage as Props } from 'graphql-schema-gen/schema.gen';
+import { Page as Props } from 'graphql-schema-gen/schema.gen';
 import { Box } from '../box/box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -9,48 +9,50 @@ import Radio from '@mui/material/Radio';
 import { ChangeEvent, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
-import { CREATE_QUIZ_PROGRESS } from '../../graphql/mutations/mutations';
 import { useRouter } from 'next/router';
 import { difference } from 'lodash';
-import {
-  GET_ALL_COURSES_AND_QUIZZES,
-  GET_QUIZ,
-} from '../../graphql/queries/queries';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { CREATE_QUIZ_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
+import { GET_ALL_COURSES, GET_COURSE } from '../../graphql/queries/queries';
 
-export default function QuizPage(props: Props) {
+export default function QuizPage({
+  question,
+  title,
+  description,
+  progress,
+  _id,
+}: Props) {
   const router = useRouter();
   const slug = router.query.slug ? router.query.slug[0] : null;
-  const [answers, setAnswers] = useState<string[]>(
-    props.progress?.answers ?? [],
-  );
-  const isSingleAnswerQuestion = props.question.answers.length === 1;
-  const [createQuizProgress] = useMutation(CREATE_QUIZ_PROGRESS, {
+  const [answers, setAnswers] = useState<string[]>(progress?.answers ?? []);
+  const isSingleAnswerQuestion = question?.answers.length === 1;
+  const [createProgress] = useMutation(CREATE_QUIZ_PAGE_PROGRESS, {
     refetchQueries: [
       {
-        query: GET_QUIZ,
-        variables: { quizId: slug },
+        query: GET_COURSE,
+        variables: { _id: slug },
       },
       {
-        query: GET_ALL_COURSES_AND_QUIZZES,
+        query: GET_ALL_COURSES,
       },
     ],
   });
 
-  const handleSubmit = async () => {
-    const expectedAnswerIds = props.question.answers.map(
-      (answer) => answer._id,
-    );
+  if (!question) {
+    return null;
+  }
 
-    await createQuizProgress({
+  const handleSubmit = async () => {
+    const expectedAnswerIds = question?.answers.map((answer) => answer._id);
+
+    await createProgress({
       variables: {
         // TODO: could not import enum "QuizPageProgressState" Module parse failed: Unexpected token
         state: isAnsweredCorrectly(expectedAnswerIds, answers)
           ? 'PASS'
           : 'FAIL',
-        quiz: slug,
-        quizPage: props._id,
+        page: _id,
         answers: answers,
       },
     });
@@ -101,42 +103,42 @@ export default function QuizPage(props: Props) {
       }}
     >
       <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
-        {props.title}
+        {title}
       </Typography>
 
-      <Typography>{props.description}</Typography>
+      <Typography>{description}</Typography>
 
       <Box sx={{ flex: 1, gap: '2rem' }}>
         <Box sx={{ flexDirection: 'row', gap: '1rem' }}>
-          {props.progress?.state === 'PASS' && (
+          {progress?.state === 'PASS' && (
             <CheckCircleIcon sx={{ color: 'success.main', fontSize: '3rem' }} />
           )}
-          {props.progress?.state === 'FAIL' && (
+          {progress?.state === 'FAIL' && (
             <CancelIcon sx={{ color: 'error.main', fontSize: '3rem' }} />
           )}
           <Typography variant="h4" sx={{ fontSize: '1.5rem' }}>
-            {props.question.content}
+            {question.content}
           </Typography>
         </Box>
 
         <Box>
           {isSingleAnswerQuestion ? (
             <RadioGroup sx={{ gap: '0.5rem' }}>
-              {props.question.options.map((option, i) => (
+              {question.options.map((option, i) => (
                 <FormControlLabel
                   sx={{
                     ...getStylesForOptionsWhenAnswered(
-                      props.progress?.answers,
-                      props.question.answers.map((a) => a._id),
+                      progress?.answers,
+                      question.answers.map((a) => a._id),
                       option._id,
                     ),
                   }}
                   key={i}
                   value={option._id}
-                  disabled={Boolean(props.progress?.answers)}
+                  disabled={Boolean(progress?.answers)}
                   control={
                     <Radio
-                      checked={props.progress?.answers?.includes(option._id)}
+                      checked={progress?.answers?.includes(option._id)}
                       onChange={handleChange}
                     />
                   }
@@ -146,21 +148,21 @@ export default function QuizPage(props: Props) {
             </RadioGroup>
           ) : (
             <FormGroup sx={{ gap: '0.5rem' }}>
-              {props.question.options.map((option, i) => (
+              {question.options.map((option, i) => (
                 <FormControlLabel
                   sx={{
                     ...getStylesForOptionsWhenAnswered(
-                      props.progress?.answers,
-                      props.question.answers.map((a) => a._id),
+                      progress?.answers,
+                      question.answers.map((a) => a._id) ?? [],
                       option._id,
                     ),
                   }}
                   key={i}
                   value={option._id}
-                  disabled={Boolean(props.progress?.answers)}
+                  disabled={Boolean(progress?.answers)}
                   control={
                     <Checkbox
-                      checked={props.progress?.answers?.includes(option._id)}
+                      checked={progress?.answers?.includes(option._id)}
                       onChange={handleChange}
                     />
                   }
@@ -173,7 +175,7 @@ export default function QuizPage(props: Props) {
 
         <Button
           variant="contained"
-          disabled={Boolean(props.progress?.answers)}
+          disabled={Boolean(progress?.answers)}
           onClick={handleSubmit}
         >
           Submit

@@ -18,14 +18,18 @@ export enum PageProgressState {
     PASS = "PASS"
 }
 
-export class CoursePageProgressInput {
-    page: string;
+export class CoursePageContentInput {
+    content: string;
 }
 
-export class NewCoursePageInput {
+export class CoursePageInput {
     content: string;
     description: string;
     title: string;
+}
+
+export class CoursePageProgressInput {
+    page: string;
 }
 
 export class QuizPageInput {
@@ -71,12 +75,13 @@ export class Course {
     pages: Page[];
     progress: ProgressPercentage;
     title: string;
+    type: CourseType;
 }
 
 export abstract class IMutation {
     abstract addPage(_id: string, pageId: string): Course | Promise<Course>;
 
-    abstract createCoursePage(data: NewCoursePageInput): Page | Promise<Page>;
+    abstract createCoursePage(data: CoursePageInput): Page | Promise<Page>;
 
     abstract createCoursePageProgress(data: CoursePageProgressInput): PageProgress | Promise<PageProgress>;
 
@@ -89,6 +94,8 @@ export abstract class IMutation {
     abstract logout(): boolean | Promise<boolean>;
 
     abstract register(data: UserInputCreate): UserOutputLogin | Promise<UserOutputLogin>;
+
+    abstract updateCoursePageContent(_id: string, data: CoursePageContentInput): Page | Promise<Page>;
 }
 
 export class Page {

@@ -3,9 +3,9 @@ import Typography from '@mui/material/Typography';
 import { Course as CourseType } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
 import { Box } from '../../src/components/box/box';
-import CoursePage from '../../src/components/course-page/course-page';
 import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
+import Page from '../../src/components/page/page';
 import Sidebar from '../../src/components/sidebar/sidebar';
 import { GET_COURSE } from '../../src/graphql/queries/queries';
 
@@ -16,7 +16,7 @@ const Course = () => {
   const { loading, data, error } = useQuery<{
     course: CourseType;
   }>(GET_COURSE, {
-    variables: { courseId: slug },
+    variables: { _id: slug },
     skip: !slug,
   });
 
@@ -65,8 +65,8 @@ const Course = () => {
           }}
         >
           <PageCarousel>
-            {data.course.coursePages.map((page, i) => (
-              <CoursePage key={i} {...page} />
+            {data.course.pages.map((page, i) => (
+              <Page key={i} {...page} />
             ))}
           </PageCarousel>
         </Box>

@@ -1,25 +1,30 @@
 [{
     "title": "Course #1 Title",
     "description": "Course #1 description",
-    "icon": ""
+    "icon": "",
+    "type": "course"
 },
 {
     "title": "Course #2 Title",
     "description": "Course #2 description",
-    "icon": ""
+    "icon": "",
+    "type": "course"
 },
 {
     "title": "Course #3 Title",
     "description": "Course #3 description",
-    "icon": ""
+    "icon": "",
+    "type": "course"
 },
 {
     "title": "Course #4 Title",
     "description": "Course #4 description",
-    "icon": ""
+    "icon": "",
+    "type": "course"
 },
 {
     "title": "Course #5 Title",
     "description": "Course #5 description",
-    "icon": ""
+    "icon": "",
+    "type": "course"
 }]

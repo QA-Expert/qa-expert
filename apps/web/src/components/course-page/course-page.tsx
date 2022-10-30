@@ -1,47 +1,49 @@
 import Typography from '@mui/material/Typography';
-import { CoursePage as Props } from 'graphql-schema-gen/schema.gen';
+import { Page as Props } from 'graphql-schema-gen/schema.gen';
 import { Box } from '../box/box';
 import { TextEditor } from '../text-editor/text-editor';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useEffect } from 'react';
-import { CREATE_COURSE_PROGRESS } from '../../graphql/mutations/mutations';
-import {
-  GET_ALL_COURSES_AND_QUIZZES,
-  GET_COURSE,
-} from '../../graphql/queries/queries';
+import { GET_ALL_COURSES, GET_COURSE } from '../../graphql/queries/queries';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
+import { CREATE_COURSE_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
 
 const TIME_TO_REVIEW_COURSE_PAGE = 60000; // 1 minute
 
-export default function CoursePage(props: Props) {
+export default function CoursePage({
+  _id,
+  title,
+  description,
+  content,
+  progress,
+}: Props) {
   const router = useRouter();
   const slug = router.query.slug ? router.query.slug[0] : null;
-  const [createCourseProgress] = useMutation(CREATE_COURSE_PROGRESS, {
+  const [createProgress] = useMutation(CREATE_COURSE_PAGE_PROGRESS, {
     refetchQueries: [
       {
         query: GET_COURSE,
-        variables: { courseId: slug },
+        variables: { _id: slug },
       },
       {
-        query: GET_ALL_COURSES_AND_QUIZZES,
+        query: GET_ALL_COURSES,
       },
     ],
   });
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      if (!props.progress) {
-        await createCourseProgress({
+      if (!progress) {
+        await createProgress({
           variables: {
-            course: slug,
-            coursePage: props._id,
+            page: _id,
           },
         });
       }
     }, TIME_TO_REVIEW_COURSE_PAGE);
     return () => clearTimeout(timer);
-  }, [createCourseProgress, props._id, props.progress, slug]);
+  }, [createProgress, _id, progress, slug]);
 
   return (
     <Box
@@ -54,18 +56,18 @@ export default function CoursePage(props: Props) {
       }}
     >
       <Box sx={{ flexDirection: 'row', gap: '1rem' }}>
-        {props.progress && (
+        {progress && (
           <CheckCircleIcon sx={{ color: 'success.main', fontSize: '3rem' }} />
         )}
 
         <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
-          {props.title}
+          {title}
         </Typography>
       </Box>
 
-      <Typography>{props.description}</Typography>
+      <Typography>{description}</Typography>
 
-      <TextEditor initialContent={props.content} coursePageId={props._id} />
+      {content && <TextEditor initialContent={content} pageId={_id} />}
     </Box>
   );
 }

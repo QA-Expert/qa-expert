@@ -12,11 +12,12 @@ import { CurrentUser } from '../users/user.decorator';
 import { Page } from './page.schema';
 import { Roles as RolesEnum, User } from '../users/user.schema';
 import { PageService } from './page.service';
-import { NewCoursePageInput } from './create-course-page.input';
+import { CoursePageInput } from './create-course-page.input';
 import { Roles } from '../auth/roles.decorator';
 import { QuizPageInput } from './create-quiz-page.input';
 import { PageProgress } from '../page-progresses/page-progress.schema';
 import { PageProgressService } from '../page-progresses/page-progress.service';
+import { CoursePageContentInput } from './update-course-page-content.input';
 
 @Resolver(() => Page)
 export class PageResolver {
@@ -30,7 +31,7 @@ export class PageResolver {
   @Mutation(() => Page)
   async createCoursePage(
     @CurrentUser() user: User,
-    @Args('data') data: NewCoursePageInput,
+    @Args('data') data: CoursePageInput,
   ): Promise<Page | null> {
     return await this.service.createCoursePage(data, user._id);
   }
@@ -48,10 +49,21 @@ export class PageResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
   @ResolveField('progress', () => PageProgress, { nullable: true })
-  public async quizProgresses(
+  public async progress(
     @CurrentUser() user: User,
     @Parent() page: Page,
   ): Promise<PageProgress | null> {
     return await this.servicePageProgress.findOne(page._id, user._id);
+  }
+
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.ADMIN)
+  @Mutation(() => Page)
+  async updateCoursePageContent(
+    @CurrentUser() user: User,
+    @Args('_id') _id: string,
+    @Args('data') data: CoursePageContentInput,
+  ): Promise<Page | null> {
+    return await this.service.update(_id, data, user._id);
   }
 }

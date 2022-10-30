@@ -30,6 +30,7 @@ export class Page extends mongoose.Document {
   @Field(() => String, { nullable: true })
   @Prop({
     required: function () {
+      // TODO: make it type safe
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       return this.type === CourseType.COURSE;
@@ -41,6 +42,7 @@ export class Page extends mongoose.Document {
     type: ObjectId,
     ref: Question.name,
     required: function () {
+      // TODO: make it type safe
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       return this.type === CourseType.QUIZ;

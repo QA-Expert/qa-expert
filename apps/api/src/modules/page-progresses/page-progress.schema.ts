@@ -44,6 +44,7 @@ export class PageProgress extends mongoose.Document {
         type: ObjectId,
         ref: Answer.name,
         required: function () {
+          // TODO: make it type safe
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           return this.type === CourseType.QUIZ;

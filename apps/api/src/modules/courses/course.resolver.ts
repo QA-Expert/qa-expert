@@ -36,7 +36,7 @@ export class CourseResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
   @ResolveField('progress', () => ProgressPercentage)
-  public async quizProgresses(
+  public async progress(
     @CurrentUser() user: User,
     @Parent() course: Course,
   ): Promise<ProgressPercentage> {

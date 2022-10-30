@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { CourseType } from '../courses/course.schema';
-import { NewCoursePageInput } from './create-course-page.input';
+import { CoursePageInput } from './create-course-page.input';
 import { QuizPageInput } from './create-quiz-page.input';
 import { Page } from './page.schema';
 import { CoursePageContentInput } from './update-course-page-content.input';
@@ -32,7 +32,7 @@ export class PageService {
     return model.save();
   }
 
-  async createCoursePage(data: NewCoursePageInput, userId: string) {
+  async createCoursePage(data: CoursePageInput, userId: string) {
     const newPage: Partial<Page> = {
       ...data,
       type: CourseType.COURSE,

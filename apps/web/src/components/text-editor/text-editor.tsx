@@ -9,6 +9,8 @@ import { UPDATE_COURSE_PAGE_CONTENT } from '../../graphql/mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useUser } from '../../context/user';
 import styled from '@emotion/styled';
+import { GET_COURSE } from '../../graphql/queries/queries';
+import { useRouter } from 'next/router';
 
 const ReactQuill = dynamic(
   () => {
@@ -30,11 +32,13 @@ const fullToolBar = [
 ];
 interface Props {
   initialContent: string;
-  coursePageId: string;
+  pageId: string;
 }
 
-export const TextEditor = ({ initialContent, coursePageId }: Props) => {
+export const TextEditor = ({ initialContent, pageId }: Props) => {
   const user = useUser();
+  const router = useRouter();
+  const slug = router.query.slug ? router.query.slug[0] : null;
   const isAdmin = user?.roles.includes('admin');
   let initContent: string | DeltaStatic;
 
@@ -46,14 +50,21 @@ export const TextEditor = ({ initialContent, coursePageId }: Props) => {
 
   const [content, setContent] = useState<string | DeltaStatic>(initContent);
   const [deltaStatic, setDeltaStatic] = useState<DeltaStatic | null>(null);
-  const [updateCoursePageContent] = useMutation(UPDATE_COURSE_PAGE_CONTENT);
+  const [updateCoursePageContent] = useMutation(UPDATE_COURSE_PAGE_CONTENT, {
+    refetchQueries: [
+      {
+        query: GET_COURSE,
+        variables: { _id: slug },
+      },
+    ],
+  });
 
   const handleClick = async () => {
     const stringified = JSON.stringify(deltaStatic);
 
     await updateCoursePageContent({
       variables: {
-        coursePageId,
+        _id: pageId,
         content: stringified,
       },
     });
