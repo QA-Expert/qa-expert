@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 
 export function ProgressBar(props: Props) {
   const hasNoProgress = !props.pass && !props.fail;
-  console.log(props.pass);
+
   return (
     <Box
       role={hasNoProgress ? 'progressbar' : undefined}

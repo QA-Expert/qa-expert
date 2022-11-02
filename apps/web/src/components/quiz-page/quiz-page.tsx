@@ -11,18 +11,10 @@ import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { difference } from 'lodash';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { CREATE_QUIZ_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
 import { GET_ALL_COURSES, GET_COURSE } from '../../graphql/queries/queries';
 
-export default function QuizPage({
-  question,
-  title,
-  description,
-  progress,
-  _id,
-}: Props) {
+export default function QuizPage({ question, progress, _id }: Props) {
   const router = useRouter();
   const slug = router.query.slug ? router.query.slug[0] : null;
   const [answers, setAnswers] = useState<string[]>(progress?.answers ?? []);
@@ -95,92 +87,72 @@ export default function QuizPage({
   return (
     <Box
       sx={{
-        width: '100%',
-        justifyContent: 'start',
-        height: '100%',
-        padding: '1rem',
         gap: '2rem',
+        flex: '1',
       }}
     >
-      <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
-        {title}
+      <Typography variant="h4" sx={{ fontSize: '1.5rem' }}>
+        {question.content}
       </Typography>
-
-      <Typography>{description}</Typography>
-
-      <Box sx={{ flex: 1, gap: '2rem' }}>
-        <Box sx={{ flexDirection: 'row', gap: '1rem' }}>
-          {progress?.state === 'PASS' && (
-            <CheckCircleIcon sx={{ color: 'success.main', fontSize: '3rem' }} />
-          )}
-          {progress?.state === 'FAIL' && (
-            <CancelIcon sx={{ color: 'error.main', fontSize: '3rem' }} />
-          )}
-          <Typography variant="h4" sx={{ fontSize: '1.5rem' }}>
-            {question.content}
-          </Typography>
-        </Box>
-
-        <Box>
-          {isSingleAnswerQuestion ? (
-            <RadioGroup sx={{ gap: '0.5rem' }}>
-              {question.options.map((option, i) => (
-                <FormControlLabel
-                  sx={{
-                    ...getStylesForOptionsWhenAnswered(
-                      progress?.answers,
-                      question.answers.map((a) => a._id),
-                      option._id,
-                    ),
-                  }}
-                  key={i}
-                  value={option._id}
-                  disabled={Boolean(progress?.answers)}
-                  control={
-                    <Radio
-                      checked={progress?.answers?.includes(option._id)}
-                      onChange={handleChange}
-                    />
-                  }
-                  label={option.content}
-                />
-              ))}
-            </RadioGroup>
-          ) : (
-            <FormGroup sx={{ gap: '0.5rem' }}>
-              {question.options.map((option, i) => (
-                <FormControlLabel
-                  sx={{
-                    ...getStylesForOptionsWhenAnswered(
-                      progress?.answers,
-                      question.answers.map((a) => a._id) ?? [],
-                      option._id,
-                    ),
-                  }}
-                  key={i}
-                  value={option._id}
-                  disabled={Boolean(progress?.answers)}
-                  control={
-                    <Checkbox
-                      checked={progress?.answers?.includes(option._id)}
-                      onChange={handleChange}
-                    />
-                  }
-                  label={option.content}
-                />
-              ))}
-            </FormGroup>
-          )}
-        </Box>
-
-        <Button
-          variant="contained"
-          disabled={Boolean(progress?.answers)}
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
+      <Box>
+        {isSingleAnswerQuestion ? (
+          <RadioGroup sx={{ gap: '0.5rem' }}>
+            {question.options.map((option, i) => (
+              <FormControlLabel
+                sx={{
+                  ...getStylesForOptionsWhenAnswered(
+                    progress?.answers,
+                    question.answers.map((a) => a._id),
+                    option._id,
+                  ),
+                }}
+                key={i}
+                value={option._id}
+                disabled={Boolean(progress?.answers)}
+                control={
+                  <Radio
+                    checked={progress?.answers?.includes(option._id)}
+                    onChange={handleChange}
+                  />
+                }
+                label={option.content}
+              />
+            ))}
+          </RadioGroup>
+        ) : (
+          <FormGroup sx={{ gap: '0.5rem' }}>
+            {question.options.map((option, i) => (
+              <FormControlLabel
+                sx={{
+                  ...getStylesForOptionsWhenAnswered(
+                    progress?.answers,
+                    question.answers.map((a) => a._id) ?? [],
+                    option._id,
+                  ),
+                }}
+                key={i}
+                value={option._id}
+                disabled={Boolean(progress?.answers)}
+                control={
+                  <Checkbox
+                    checked={progress?.answers?.includes(option._id)}
+                    onChange={handleChange}
+                  />
+                }
+                label={option.content}
+              />
+            ))}
+          </FormGroup>
+        )}
       </Box>
+
+      <Button
+        variant="contained"
+        disabled={Boolean(progress?.answers)}
+        onClick={handleSubmit}
+      >
+        Submit
+      </Button>
     </Box>
   );
 }

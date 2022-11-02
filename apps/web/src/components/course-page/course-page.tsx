@@ -1,8 +1,6 @@
-import Typography from '@mui/material/Typography';
 import { Page as Props } from 'graphql-schema-gen/schema.gen';
 import { Box } from '../box/box';
 import { TextEditor } from '../text-editor/text-editor';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useEffect } from 'react';
 import { GET_ALL_COURSES, GET_COURSE } from '../../graphql/queries/queries';
 import { useRouter } from 'next/router';
@@ -11,13 +9,7 @@ import { CREATE_COURSE_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
 
 const TIME_TO_REVIEW_COURSE_PAGE = 60000; // 1 minute
 
-export default function CoursePage({
-  _id,
-  title,
-  description,
-  content,
-  progress,
-}: Props) {
+export default function CoursePage({ _id, content, progress }: Props) {
   const router = useRouter();
   const slug = router.query.slug ? router.query.slug[0] : null;
   const [createProgress] = useMutation(CREATE_COURSE_PAGE_PROGRESS, {
@@ -48,25 +40,9 @@ export default function CoursePage({
   return (
     <Box
       sx={{
-        width: '100%',
-        justifyContent: 'start',
-        height: '100%',
-        padding: '1rem',
-        gap: '1rem',
+        flex: '1',
       }}
     >
-      <Box sx={{ flexDirection: 'row', gap: '1rem' }}>
-        {progress && (
-          <CheckCircleIcon sx={{ color: 'success.main', fontSize: '3rem' }} />
-        )}
-
-        <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
-          {title}
-        </Typography>
-      </Box>
-
-      <Typography>{description}</Typography>
-
       {content && <TextEditor initialContent={content} pageId={_id} />}
     </Box>
   );
