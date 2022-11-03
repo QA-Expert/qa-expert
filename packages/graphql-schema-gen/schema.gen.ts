@@ -44,6 +44,11 @@ export class QuizPageProgressInput {
     state: PageProgressState;
 }
 
+export class ResetPasswordInput {
+    password: string;
+    token: string;
+}
+
 export class UserInputCreate {
     email: string;
     firstName?: Nullable<string>;
@@ -95,6 +100,8 @@ export abstract class IMutation {
 
     abstract register(data: UserInputCreate): UserOutputLogin | Promise<UserOutputLogin>;
 
+    abstract resetPassword(data: ResetPasswordInput): User | Promise<User>;
+
     abstract updateCoursePageContent(_id: string, data: CoursePageContentInput): Page | Promise<Page>;
 }
 
@@ -126,6 +133,8 @@ export abstract class IQuery {
     abstract course(_id: string): Course | Promise<Course>;
 
     abstract courses(): Course[] | Promise<Course[]>;
+
+    abstract forgotPassword(email: string): boolean | Promise<boolean>;
 
     abstract user(): User | Promise<User>;
 }

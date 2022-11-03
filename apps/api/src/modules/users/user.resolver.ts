@@ -13,6 +13,7 @@ import { Roles as RolesEnum } from '../users/user.schema';
 import { User } from './user.schema';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
+import { ResetPasswordInput } from './reset-password.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -61,5 +62,15 @@ export class UserResolver {
     removeTokenCookie(context.res);
 
     return true;
+  }
+
+  @Query(() => Boolean)
+  async forgotPassword(@Args('email') email: string): Promise<boolean> {
+    return await this.userService.forgotPassword(email);
+  }
+
+  @Mutation(() => User)
+  async resetPassword(@Args('data') data: ResetPasswordInput): Promise<User> {
+    return await this.userService.resetPassword(data);
   }
 }
