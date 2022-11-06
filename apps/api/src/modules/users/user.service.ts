@@ -118,6 +118,8 @@ export class UserService {
       throw new Error('Failed to create forgot password token');
     }
 
+    await forgotPassword.save();
+
     return true;
   }
 
@@ -140,7 +142,7 @@ export class UserService {
 
     const hashedPassword = await bcrypt.hash(
       data.password,
-      process.env.AUTH_SALT ?? 10,
+      Number(process.env.AUTH_SALT) ?? 10,
     );
 
     user.hashedPassword = hashedPassword;
@@ -150,6 +152,8 @@ export class UserService {
     if (!updatedUser) {
       throw new Error('Failed to reset password');
     }
+
+    await storedToken.remove();
 
     return updatedUser;
   }

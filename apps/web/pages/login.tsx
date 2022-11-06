@@ -108,7 +108,7 @@ function Login() {
                   type="password"
                   name="password"
                   id="password"
-                  placeholder="Password your email ..."
+                  placeholder="Enter your password ..."
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}

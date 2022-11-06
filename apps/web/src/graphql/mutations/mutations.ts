@@ -65,3 +65,11 @@ export const UPDATE_COURSE_PAGE_CONTENT = gql`
     }
   }
 `;
+
+export const RESET_PASSWORD = gql`
+  mutation ResetPassword($data: ResetPasswordInput!) {
+    resetPassword(data: $data) {
+      _id
+    }
+  }
+`;

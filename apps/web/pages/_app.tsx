@@ -16,12 +16,13 @@ interface Props {
   initialApolloState: InitialState;
 }
 
-const PUBLIC_ROUTES = ['/login', '/register'];
+const PUBLIC_ROUTES = ['/login', '/register', '/reset-password/[token]'];
 
 export default function MyApp({ Component, pageProps }: AppProps<Props>) {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const apolloClient = useApollo(pageProps.initialApolloState);
+  console.log(router.pathname);
   const shouldAuth = !PUBLIC_ROUTES.includes(router.pathname);
 
   useEffect(() => {
