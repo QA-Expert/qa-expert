@@ -94,6 +94,8 @@ export abstract class IMutation {
 
     abstract createQuizPageProgress(data: QuizPageProgressInput): PageProgress | Promise<PageProgress>;
 
+    abstract forgotPassword(email: string): boolean | Promise<boolean>;
+
     abstract login(data: UserInputLogin): UserOutputLogin | Promise<UserOutputLogin>;
 
     abstract logout(): boolean | Promise<boolean>;
@@ -133,8 +135,6 @@ export abstract class IQuery {
     abstract course(_id: string): Course | Promise<Course>;
 
     abstract courses(): Course[] | Promise<Course[]>;
-
-    abstract forgotPassword(email: string): boolean | Promise<boolean>;
 
     abstract user(): User | Promise<User>;
 }

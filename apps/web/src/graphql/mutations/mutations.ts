@@ -73,3 +73,9 @@ export const RESET_PASSWORD = gql`
     }
   }
 `;
+
+export const FORGOT_PASSWORD = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email)
+  }
+`;

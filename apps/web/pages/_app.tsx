@@ -16,7 +16,12 @@ interface Props {
   initialApolloState: InitialState;
 }
 
-const PUBLIC_ROUTES = ['/login', '/register', '/reset-password/[token]'];
+const PUBLIC_ROUTES = [
+  '/login',
+  '/register',
+  '/reset-password/[token]',
+  '/forgot-password',
+];
 
 export default function MyApp({ Component, pageProps }: AppProps<Props>) {
   const router = useRouter();

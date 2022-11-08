@@ -130,6 +130,10 @@ function Login() {
                 .
               </Typography>
 
+              <Link href="/forgot-password">
+                <MuiLink>Need help?</MuiLink>
+              </Link>
+
               <Button
                 disabled={
                   isSubmitting ||

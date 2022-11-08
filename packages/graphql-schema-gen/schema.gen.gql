@@ -43,6 +43,7 @@ type Mutation {
   createCoursePageProgress(data: CoursePageProgressInput!): PageProgress!
   createQuizPage(data: QuizPageInput!): Page!
   createQuizPageProgress(data: QuizPageProgressInput!): PageProgress!
+  forgotPassword(email: String!): Boolean!
   login(data: UserInputLogin!): UserOutputLogin!
   logout: Boolean!
   register(data: UserInputCreate!): UserOutputLogin!
@@ -83,7 +84,6 @@ type ProgressPercentage {
 type Query {
   course(_id: String!): Course!
   courses: [Course!]!
-  forgotPassword(email: String!): Boolean!
   user: User!
 }
 

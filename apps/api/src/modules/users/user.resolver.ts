@@ -64,7 +64,7 @@ export class UserResolver {
     return true;
   }
 
-  @Query(() => Boolean)
+  @Mutation(() => Boolean)
   async forgotPassword(@Args('email') email: string): Promise<boolean> {
     return await this.userService.forgotPassword(email);
   }
