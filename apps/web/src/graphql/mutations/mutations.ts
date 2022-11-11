@@ -79,3 +79,18 @@ export const FORGOT_PASSWORD = gql`
     forgotPassword(email: $email)
   }
 `;
+
+export const UPDATE_USER = gql`
+  mutation UpdateUser(
+    $password: String
+    $firstName: String
+    $lastName: String
+  ) {
+    updateUser(
+      data: { password: $password, firstName: $firstName, lastName: $lastName }
+    ) {
+      firstName
+      lastName
+    }
+  }
+`;

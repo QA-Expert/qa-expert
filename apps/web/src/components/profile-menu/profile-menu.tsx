@@ -1,6 +1,5 @@
 import { useApolloClient, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { useUser } from '../../context/user';
 import { LOGOUT } from '../../graphql/mutations/mutations';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
@@ -11,13 +10,15 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Box } from '../box/box';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../store';
 
 export const ProfileMenu = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const client = useApolloClient();
   const [logout] = useMutation(LOGOUT);
-  const user = useUser();
+  const [user] = useAtom(userAtom);
   const menuItems = [
     {
       name: 'Profile',

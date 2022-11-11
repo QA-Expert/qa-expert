@@ -27,7 +27,7 @@ function Register() {
       .required('Password is a required field')
       .min(2, 'Password must be at least 2 characters'),
     firstName: Yup.string().nullable().max(100, 'First Name is too long'),
-    lastName: Yup.string().nullable().max(100, 'First Name is too long'),
+    lastName: Yup.string().nullable().max(100, 'Last Name is too long'),
   });
   const initialValues: UserInputCreate = {
     email: '',

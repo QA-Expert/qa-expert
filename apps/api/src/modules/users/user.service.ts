@@ -9,6 +9,7 @@ import { randomBytes } from 'crypto';
 import { readFile } from 'fs/promises';
 import { ForgotPassword } from './forgot-password.schema';
 import { ResetPasswordInput } from './reset-password.input';
+import { UserInputUpdate } from './update-user.input';
 
 @Injectable()
 export class UserService {
@@ -97,7 +98,7 @@ export class UserService {
     const mailOptions: SendMailOptions = {
       from: process.env.EMAIL_USERNAME,
       to: email,
-      subject: `[no-reply] QA School - ${process.env.APP_NAME}`,
+      subject: `[no-reply] Forgot Password - ${process.env.APP_NAME}`,
       html: template,
     };
 
@@ -132,7 +133,13 @@ export class UserService {
       throw new NotFoundException('Failed to find forgot password token');
     }
 
-    // TODO check that token is expired or not
+    const tokenCreatedAt = storedToken.createdAt;
+    const nowDate = new Date();
+    const hours = Math.abs(nowDate.valueOf() - tokenCreatedAt.valueOf()) / 36e5;
+
+    if (hours > Number(process.env.AUTH_FORGOT_PASSWORD_TOKEN_EXPIRES_IN)) {
+      throw new Error('Forgot password token expired');
+    }
 
     const user = await this.findById(storedToken.user._id);
 
@@ -156,5 +163,33 @@ export class UserService {
     await storedToken.remove();
 
     return updatedUser;
+  }
+
+  async update(
+    data: UserInputUpdate,
+    userId: string | mongoose.Types.ObjectId,
+  ): Promise<User> {
+    const user = await this.findById(userId);
+
+    if (data.password) {
+      const match = await bcrypt.compare(data.password, user.hashedPassword);
+
+      if (!match) {
+        user.hashedPassword = await bcrypt.hash(
+          data.password,
+          Number(process.env.AUTH_SALT) ?? 10,
+        );
+      }
+    }
+
+    if (data.firstName) {
+      user.firstName = data.firstName;
+    }
+
+    if (data.lastName) {
+      user.lastName = data.lastName;
+    }
+
+    return await user.save();
   }
 }

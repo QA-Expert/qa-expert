@@ -3,14 +3,15 @@ import HeadComponent from '../src/components/head/head';
 import '../src/styles/globals.css';
 import { InitialState, useApollo } from '../appolo/client';
 import { ApolloProvider } from '@apollo/client';
-import { UserProvider } from '../src/context/user';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/';
 import theme from '../src/theme';
 import { useRouter } from 'next/router';
 import { GET_USER } from '../src/graphql/queries/queries';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { User } from 'graphql-schema-gen/schema.gen';
+import { useAtom } from 'jotai';
+import { userAtom } from '../src/store';
 
 interface Props {
   initialApolloState: InitialState;
@@ -25,9 +26,10 @@ const PUBLIC_ROUTES = [
 
 export default function MyApp({ Component, pageProps }: AppProps<Props>) {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_user, setUser] = useAtom(userAtom);
   const apolloClient = useApollo(pageProps.initialApolloState);
-  console.log(router.pathname);
+
   const shouldAuth = !PUBLIC_ROUTES.includes(router.pathname);
 
   useEffect(() => {
@@ -39,17 +41,15 @@ export default function MyApp({ Component, pageProps }: AppProps<Props>) {
         })
         .catch(() => router.push('/login'));
     }
-  }, [apolloClient, router, shouldAuth]);
+  }, [apolloClient, router, setUser, shouldAuth]);
 
   return (
     <ApolloProvider client={apolloClient}>
-      <UserProvider user={user}>
-        <HeadComponent />
-        <CssBaseline />
-        <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </UserProvider>
+      <HeadComponent />
+      <CssBaseline />
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
     </ApolloProvider>
   );
 }

@@ -35,6 +35,12 @@ export class ForgotPassword extends mongoose.Document {
     ref: User.name,
   })
   updatedBy: User | mongoose.Types.ObjectId;
+
+  @Prop()
+  createdAt: Date;
+
+  @Prop()
+  updatedAt: Date;
 }
 
 export const ForgotPasswordSchema =

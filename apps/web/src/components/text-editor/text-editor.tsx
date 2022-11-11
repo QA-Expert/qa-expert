@@ -7,10 +7,11 @@ import { DeltaStatic, Sources } from 'quill';
 import { UnprivilegedEditor } from 'react-quill';
 import { UPDATE_COURSE_PAGE_CONTENT } from '../../graphql/mutations/mutations';
 import { useMutation } from '@apollo/client';
-import { useUser } from '../../context/user';
 import styled from '@emotion/styled';
 import { GET_COURSE } from '../../graphql/queries/queries';
 import { useRouter } from 'next/router';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../store';
 
 const ReactQuill = dynamic(
   () => {
@@ -36,7 +37,7 @@ interface Props {
 }
 
 export const TextEditor = ({ initialContent, pageId }: Props) => {
-  const user = useUser();
+  const [user] = useAtom(userAtom);
   const router = useRouter();
   const slug = router.query.slug ? router.query.slug[0] : null;
   const isAdmin = user?.roles.includes('admin');

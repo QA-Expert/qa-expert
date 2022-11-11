@@ -61,6 +61,12 @@ export class UserInputLogin {
     password: string;
 }
 
+export class UserInputUpdate {
+    firstName?: Nullable<string>;
+    lastName?: Nullable<string>;
+    password?: Nullable<string>;
+}
+
 export interface UserBaseModel {
     _id: string;
     email: string;
@@ -105,6 +111,8 @@ export abstract class IMutation {
     abstract resetPassword(data: ResetPasswordInput): User | Promise<User>;
 
     abstract updateCoursePageContent(_id: string, data: CoursePageContentInput): Page | Promise<Page>;
+
+    abstract updateUser(data: UserInputUpdate): User | Promise<User>;
 }
 
 export class Page {
