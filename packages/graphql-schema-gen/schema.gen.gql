@@ -49,7 +49,8 @@ type Mutation {
   register(data: UserInputCreate!): UserOutputLogin!
   resetPassword(data: ResetPasswordInput!): User!
   updateCoursePageContent(_id: String!, data: CoursePageContentInput!): Page!
-  updateUser(data: UserInputUpdate!): User!
+  updateUserNames(data: UserInputUpdateNames!): User!
+  updateUserPassword(data: UserInputUpdatePassword!): User!
 }
 
 type Page {
@@ -139,10 +140,14 @@ input UserInputLogin {
   password: String!
 }
 
-input UserInputUpdate {
+input UserInputUpdateNames {
   firstName: String
   lastName: String
-  password: String
+}
+
+input UserInputUpdatePassword {
+  newPassword: String!
+  oldPassword: String!
 }
 
 type UserOutputLogin implements UserBaseModel {

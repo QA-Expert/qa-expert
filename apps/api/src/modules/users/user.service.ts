@@ -9,7 +9,8 @@ import { randomBytes } from 'crypto';
 import { readFile } from 'fs/promises';
 import { ForgotPassword } from './forgot-password.schema';
 import { ResetPasswordInput } from './reset-password.input';
-import { UserInputUpdate } from './update-user.input';
+import { UserInputUpdateNames } from './update-user-names.input';
+import { UserInputUpdatePassword } from './update-user-password.input';
 
 @Injectable()
 export class UserService {
@@ -165,22 +166,11 @@ export class UserService {
     return updatedUser;
   }
 
-  async update(
-    data: UserInputUpdate,
+  async updateNames(
+    data: UserInputUpdateNames,
     userId: string | mongoose.Types.ObjectId,
   ): Promise<User> {
     const user = await this.findById(userId);
-
-    if (data.password) {
-      const match = await bcrypt.compare(data.password, user.hashedPassword);
-
-      if (!match) {
-        user.hashedPassword = await bcrypt.hash(
-          data.password,
-          Number(process.env.AUTH_SALT) ?? 10,
-        );
-      }
-    }
 
     if (data.firstName) {
       user.firstName = data.firstName;
@@ -189,6 +179,42 @@ export class UserService {
     if (data.lastName) {
       user.lastName = data.lastName;
     }
+
+    user.updatedBy = new mongoose.Types.ObjectId(userId);
+
+    return await user.save();
+  }
+
+  async updatePassword(
+    data: UserInputUpdatePassword,
+    userId: string | mongoose.Types.ObjectId,
+  ): Promise<User> {
+    const user = await this.findById(userId);
+
+    const matchNewPassword = await bcrypt.compare(
+      data.newPassword,
+      user.hashedPassword,
+    );
+
+    if (matchNewPassword) {
+      throw new Error('Failed to change password');
+    }
+
+    const matchOldPassword = await bcrypt.compare(
+      data.oldPassword,
+      user.hashedPassword,
+    );
+
+    if (matchOldPassword) {
+      user.hashedPassword = await bcrypt.hash(
+        data.newPassword,
+        Number(process.env.AUTH_SALT) ?? 10,
+      );
+    } else {
+      throw new Error('Failed to change password');
+    }
+
+    user.updatedBy = new mongoose.Types.ObjectId(userId);
 
     return await user.save();
   }

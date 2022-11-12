@@ -14,7 +14,8 @@ import { User } from './user.schema';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { ResetPasswordInput } from './reset-password.input';
-import { UserInputUpdate } from './update-user.input';
+import { UserInputUpdateNames } from './update-user-names.input';
+import { UserInputUpdatePassword } from './update-user-password.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -78,10 +79,20 @@ export class UserResolver {
   @UseGuards(GqlAuthGuard)
   @Roles(RolesEnum.USER)
   @Mutation(() => User)
-  async updateUser(
-    @Args('data') data: UserInputUpdate,
+  async updateUserNames(
+    @Args('data') data: UserInputUpdateNames,
     @CurrentUser() user: User,
   ): Promise<User> {
-    return await this.userService.update(data, user._id);
+    return await this.userService.updateNames(data, user._id);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Roles(RolesEnum.USER)
+  @Mutation(() => User)
+  async updateUserPassword(
+    @Args('data') data: UserInputUpdatePassword,
+    @CurrentUser() user: User,
+  ): Promise<User> {
+    return await this.userService.updatePassword(data, user._id);
   }
 }

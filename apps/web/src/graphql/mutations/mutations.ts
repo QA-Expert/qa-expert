@@ -80,17 +80,21 @@ export const FORGOT_PASSWORD = gql`
   }
 `;
 
-export const UPDATE_USER = gql`
-  mutation UpdateUser(
-    $password: String
-    $firstName: String
-    $lastName: String
-  ) {
-    updateUser(
-      data: { password: $password, firstName: $firstName, lastName: $lastName }
-    ) {
+export const UPDATE_USER_NAMES = gql`
+  mutation UpdateUserNames($firstName: String, $lastName: String) {
+    updateUserNames(data: { firstName: $firstName, lastName: $lastName }) {
       firstName
       lastName
+    }
+  }
+`;
+
+export const UPDATE_USER_PASSWORD = gql`
+  mutation UpdateUserPassword($oldPassword: String!, $newPassword: String!) {
+    updateUserPassword(
+      data: { oldPassword: $oldPassword, newPassword: $newPassword }
+    ) {
+      _id
     }
   }
 `;
