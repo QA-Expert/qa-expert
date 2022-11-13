@@ -7,6 +7,16 @@ type Answer {
   content: String!
 }
 
+type Badge {
+  _id: String!
+  course: Course
+  description: String!
+  icon: String!
+  link: String!
+  title: String!
+  user: String!
+}
+
 type Course {
   _id: String!
   description: String!
@@ -84,6 +94,7 @@ type ProgressPercentage {
 }
 
 type Query {
+  badges: [Badge!]!
   course(_id: String!): Course!
   courses: [Course!]!
   user: User!

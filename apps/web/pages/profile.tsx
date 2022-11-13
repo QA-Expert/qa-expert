@@ -11,9 +11,35 @@ import { userAtom } from '../src/store';
 import { ChangeNamesModal } from '../src/components/change-names-modal/change-names-modal';
 import Button from '@mui/material/Button';
 import { ChangePasswordModal } from '../src/components/change-password-modal/change-password-modal';
+import { GET_ALL_COURSES, GET_BADGES } from '../src/graphql/queries/queries';
+import { useQuery } from '@apollo/client';
+import { Badge, Course } from 'graphql-schema-gen/schema.gen';
+import { BadgeComponent } from '../src/components/badge/badge';
 
 function Account() {
   const [user] = useAtom(userAtom);
+  const { data: courses } = useQuery<{ courses: Course[] }>(GET_ALL_COURSES);
+  const { data: badges } = useQuery<{ badges: Badge[] }>(GET_BADGES);
+  const badgesToRender = courses?.courses?.map<Badge>((course) => {
+    const badge = badges?.badges?.find(
+      (badge) => badge.course?._id === course._id,
+    );
+
+    if (badge) {
+      return badge;
+    } else {
+      return {
+        _id: '',
+        title: course.title,
+        course,
+        description: '',
+        icon: '',
+        link: '',
+        user: '',
+      };
+    }
+  });
+
   const [changeUserNamesModalOpen, setChangeUserNamesModalOpen] =
     useState(false);
   const [changePasswordModalOpen, setChangePasswordsModalOpen] =
@@ -89,11 +115,29 @@ function Account() {
             height: '100%',
             flex: 3.5,
             padding: '2rem',
+            gap: '1rem',
           }}
         >
           <Typography variant="h2" sx={{ fontSize: '2rem' }}>
             Details
           </Typography>
+          <Box
+            sx={{
+              flexDirection: 'row',
+              justifyContent: 'start',
+              gap: '1rem',
+            }}
+          >
+            {badgesToRender?.map((badge, i) =>
+              badge._id ? (
+                <BadgeComponent key={i} {...badge} />
+              ) : (
+                <Box key={i} sx={{ pointerEvents: 'none', opacity: 0.6 }}>
+                  <BadgeComponent {...badge} />
+                </Box>
+              ),
+            )}
+          </Box>
         </Paper>
       </Box>
 

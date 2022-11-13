@@ -1,3 +1,4 @@
+
 /*
  * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
@@ -8,184 +9,183 @@
 /* eslint-disable */
 
 export enum CourseType {
-  COURSE = 'COURSE',
-  QUIZ = 'QUIZ',
+    COURSE = "COURSE",
+    QUIZ = "QUIZ"
 }
 
 export enum PageProgressState {
-  FAIL = 'FAIL',
-  PASS = 'PASS',
+    FAIL = "FAIL",
+    PASS = "PASS"
 }
 
 export class CoursePageContentInput {
-  content: string;
+    content: string;
 }
 
 export class CoursePageInput {
-  content: string;
-  description: string;
-  title: string;
+    content: string;
+    description: string;
+    title: string;
 }
 
 export class CoursePageProgressInput {
-  page: string;
+    page: string;
 }
 
 export class QuizPageInput {
-  description: string;
-  question: string;
-  title: string;
+    description: string;
+    question: string;
+    title: string;
 }
 
 export class QuizPageProgressInput {
-  answers: string[];
-  page: string;
-  state: PageProgressState;
+    answers: string[];
+    page: string;
+    state: PageProgressState;
 }
 
 export class ResetPasswordInput {
-  password: string;
-  token: string;
+    password: string;
+    token: string;
 }
 
 export class UserInputCreate {
-  email: string;
-  firstName?: Nullable<string>;
-  lastName?: Nullable<string>;
-  password: string;
+    email: string;
+    firstName?: Nullable<string>;
+    lastName?: Nullable<string>;
+    password: string;
 }
 
 export class UserInputLogin {
-  email: string;
-  password: string;
+    email: string;
+    password: string;
 }
 
 export class UserInputUpdateNames {
-  firstName?: Nullable<string>;
-  lastName?: Nullable<string>;
+    firstName?: Nullable<string>;
+    lastName?: Nullable<string>;
 }
 
 export class UserInputUpdatePassword {
-  newPassword: string;
-  oldPassword: string;
+    newPassword: string;
+    oldPassword: string;
 }
 
 export interface UserBaseModel {
-  _id: string;
-  email: string;
-  firstName?: Nullable<string>;
-  lastName?: Nullable<string>;
+    _id: string;
+    email: string;
+    firstName?: Nullable<string>;
+    lastName?: Nullable<string>;
 }
 
 export class Answer {
-  _id: string;
-  content: string;
+    _id: string;
+    content: string;
+}
+
+export class Badge {
+    _id: string;
+    course?: Nullable<Course>;
+    description: string;
+    icon: string;
+    link: string;
+    title: string;
+    user: string;
 }
 
 export class Course {
-  _id: string;
-  description: string;
-  icon: string;
-  pages: Page[];
-  progress: ProgressPercentage;
-  title: string;
-  type: CourseType;
+    _id: string;
+    description: string;
+    icon: string;
+    pages: Page[];
+    progress: ProgressPercentage;
+    title: string;
+    type: CourseType;
 }
 
 export abstract class IMutation {
-  abstract addPage(_id: string, pageId: string): Course | Promise<Course>;
+    abstract addPage(_id: string, pageId: string): Course | Promise<Course>;
 
-  abstract createCoursePage(data: CoursePageInput): Page | Promise<Page>;
+    abstract createCoursePage(data: CoursePageInput): Page | Promise<Page>;
 
-  abstract createCoursePageProgress(
-    data: CoursePageProgressInput,
-  ): PageProgress | Promise<PageProgress>;
+    abstract createCoursePageProgress(data: CoursePageProgressInput): PageProgress | Promise<PageProgress>;
 
-  abstract createQuizPage(data: QuizPageInput): Page | Promise<Page>;
+    abstract createQuizPage(data: QuizPageInput): Page | Promise<Page>;
 
-  abstract createQuizPageProgress(
-    data: QuizPageProgressInput,
-  ): PageProgress | Promise<PageProgress>;
+    abstract createQuizPageProgress(data: QuizPageProgressInput): PageProgress | Promise<PageProgress>;
 
-  abstract forgotPassword(email: string): boolean | Promise<boolean>;
+    abstract forgotPassword(email: string): boolean | Promise<boolean>;
 
-  abstract login(
-    data: UserInputLogin,
-  ): UserOutputLogin | Promise<UserOutputLogin>;
+    abstract login(data: UserInputLogin): UserOutputLogin | Promise<UserOutputLogin>;
 
-  abstract logout(): boolean | Promise<boolean>;
+    abstract logout(): boolean | Promise<boolean>;
 
-  abstract register(
-    data: UserInputCreate,
-  ): UserOutputLogin | Promise<UserOutputLogin>;
+    abstract register(data: UserInputCreate): UserOutputLogin | Promise<UserOutputLogin>;
 
-  abstract resetPassword(data: ResetPasswordInput): User | Promise<User>;
+    abstract resetPassword(data: ResetPasswordInput): User | Promise<User>;
 
-  abstract updateCoursePageContent(
-    _id: string,
-    data: CoursePageContentInput,
-  ): Page | Promise<Page>;
+    abstract updateCoursePageContent(_id: string, data: CoursePageContentInput): Page | Promise<Page>;
 
-  abstract updateUserNames(data: UserInputUpdateNames): User | Promise<User>;
+    abstract updateUserNames(data: UserInputUpdateNames): User | Promise<User>;
 
-  abstract updateUserPassword(
-    data: UserInputUpdatePassword,
-  ): User | Promise<User>;
+    abstract updateUserPassword(data: UserInputUpdatePassword): User | Promise<User>;
 }
 
 export class Page {
-  _id: string;
-  content?: Nullable<string>;
-  description: string;
-  progress?: Nullable<PageProgress>;
-  question?: Nullable<Question>;
-  title: string;
-  type: CourseType;
+    _id: string;
+    content?: Nullable<string>;
+    description: string;
+    progress?: Nullable<PageProgress>;
+    question?: Nullable<Question>;
+    title: string;
+    type: CourseType;
 }
 
 export class PageProgress {
-  _id: string;
-  answers?: Nullable<string[]>;
-  page: string;
-  state: PageProgressState;
-  type: CourseType;
-  user: string;
+    _id: string;
+    answers?: Nullable<string[]>;
+    page: string;
+    state: PageProgressState;
+    type: CourseType;
+    user: string;
 }
 
 export class ProgressPercentage {
-  fail: number;
-  pass: number;
+    fail: number;
+    pass: number;
 }
 
 export abstract class IQuery {
-  abstract course(_id: string): Course | Promise<Course>;
+    abstract badges(): Badge[] | Promise<Badge[]>;
 
-  abstract courses(): Course[] | Promise<Course[]>;
+    abstract course(_id: string): Course | Promise<Course>;
 
-  abstract user(): User | Promise<User>;
+    abstract courses(): Course[] | Promise<Course[]>;
+
+    abstract user(): User | Promise<User>;
 }
 
 export class Question {
-  _id: string;
-  answers: Answer[];
-  content: string;
-  options: Answer[];
+    _id: string;
+    answers: Answer[];
+    content: string;
+    options: Answer[];
 }
 
 export class User {
-  _id: string;
-  email: string;
-  firstName?: Nullable<string>;
-  lastName?: Nullable<string>;
-  roles: string[];
+    _id: string;
+    email: string;
+    firstName?: Nullable<string>;
+    lastName?: Nullable<string>;
+    roles: string[];
 }
 
 export class UserOutputLogin implements UserBaseModel {
-  _id: string;
-  access_token: string;
-  email: string;
-  firstName?: Nullable<string>;
-  lastName?: Nullable<string>;
+    _id: string;
+    access_token: string;
+    email: string;
+    firstName?: Nullable<string>;
+    lastName?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;

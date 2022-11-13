@@ -38,3 +38,19 @@ export const GET_USER = gql`
     }
   }
 `;
+
+export const GET_BADGES = gql`
+  query GetBadges {
+    badges {
+      _id
+      title
+      description
+      icon
+      link
+      course {
+        _id
+        title
+      }
+    }
+  }
+`;
