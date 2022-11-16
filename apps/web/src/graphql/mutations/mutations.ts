@@ -98,3 +98,11 @@ export const UPDATE_USER_PASSWORD = gql`
     }
   }
 `;
+
+export const CLAIM_BADGE = gql`
+  mutation ClaimBadge($badgeId: String!) {
+    claimBadge(badgeId: $badgeId) {
+      badges
+    }
+  }
+`;

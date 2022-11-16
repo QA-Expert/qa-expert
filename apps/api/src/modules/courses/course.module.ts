@@ -6,12 +6,14 @@ import { UserModule } from '../users/user.module';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PageProgressModule } from '../page-progresses/page-progress.module';
+import { BadgeModule } from '../badge/badge.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Course.name, schema: CourseSchema }]),
     UserModule,
     PageProgressModule,
+    BadgeModule,
   ],
   providers: [CourseService, CourseResolver, JwtService],
   exports: [],

@@ -1,6 +1,7 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { Badge } from '../badge/badge.schema';
 
 export enum Roles {
   USER = 'user',
@@ -38,6 +39,10 @@ export class User extends mongoose.Document {
   @Prop({ type: [{ type: String, enum: Roles, default: Roles.USER }] })
   @Field(() => [String])
   roles: Roles[];
+
+  @Prop({ type: [{ type: ObjectId, ref: Badge.name }] })
+  @Field(() => [String], { nullable: true })
+  badges: Badge[] | mongoose.Types.ObjectId[];
 
   @Prop({
     type: ObjectId,

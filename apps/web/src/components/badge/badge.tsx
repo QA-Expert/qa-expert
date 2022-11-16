@@ -7,12 +7,24 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
 
-export const BadgeComponent = ({ title, description, course }: Badge) => {
+interface Props extends Badge {
+  isEarned: boolean;
+}
+
+export const BadgeComponent = ({
+  title,
+  description,
+  course,
+  isEarned,
+}: Props) => {
   return (
     <Card
       variant="outlined"
       sx={{
-        minWidth: '3rem',
+        pointerEvents: isEarned ? 'auto' : 'none',
+        opacity: isEarned ? 1 : 0.6,
+        width: '200px',
+        height: '200px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -32,11 +44,13 @@ export const BadgeComponent = ({ title, description, course }: Badge) => {
           {description}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button href={`/course/${course?._id}`} size="small">
-          Go to Course
-        </Button>
-      </CardActions>
+      {course && (
+        <CardActions>
+          <Button href={`/course/${course?._id}`} size="small">
+            Go to Course
+          </Button>
+        </CardActions>
+      )}
     </Card>
   );
 };

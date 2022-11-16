@@ -14,11 +14,11 @@ type Badge {
   icon: String!
   link: String!
   title: String!
-  user: String!
 }
 
 type Course {
   _id: String!
+  badge: Badge
   description: String!
   icon: String!
   pages: [Page!]!
@@ -49,6 +49,7 @@ enum CourseType {
 
 type Mutation {
   addPage(_id: String!, pageId: String!): Course!
+  claimBadge(badgeId: String!): User!
   createCoursePage(data: CoursePageInput!): Page!
   createCoursePageProgress(data: CoursePageProgressInput!): PageProgress!
   createQuizPage(data: QuizPageInput!): Page!
@@ -126,6 +127,7 @@ input ResetPasswordInput {
 
 type User {
   _id: String!
+  badges: [String!]
   email: String!
   firstName: String
   lastName: String

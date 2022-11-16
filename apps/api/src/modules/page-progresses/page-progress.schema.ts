@@ -42,7 +42,7 @@ export class PageProgress extends mongoose.Document {
     type: [
       {
         type: ObjectId,
-        ref: Answer.name,
+        ref: 'Answer',
         required: function () {
           // TODO: make it type safe
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -55,19 +55,19 @@ export class PageProgress extends mongoose.Document {
   @Field(() => [String], { nullable: true })
   answers: Answer[] | mongoose.Types.ObjectId[];
 
-  @Prop({ type: ObjectId, ref: User.name, required: true })
+  @Prop({ type: ObjectId, ref: 'User', required: true })
   @Field(() => String)
   user: User | mongoose.Types.ObjectId;
 
   @Prop({
     type: ObjectId,
-    ref: User.name,
+    ref: 'User',
   })
   createdBy: User | mongoose.Types.ObjectId;
 
   @Prop({
     type: ObjectId,
-    ref: User.name,
+    ref: 'User',
   })
   updatedBy: User | mongoose.Types.ObjectId;
 }

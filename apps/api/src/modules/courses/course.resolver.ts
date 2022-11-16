@@ -14,6 +14,7 @@ import { Roles as RolesEnum, User } from '../users/user.schema';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { CurrentUser } from '../users/user.decorator';
+import { Badge } from '../badge/badge.schema';
 
 @Resolver(() => Course)
 export class CourseResolver {
@@ -41,6 +42,13 @@ export class CourseResolver {
     @Parent() course: Course,
   ): Promise<ProgressPercentage> {
     return await this.service.findProgress(course, user);
+  }
+
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.USER)
+  @ResolveField('badge', () => Badge)
+  public async badge(@Parent() course: Course): Promise<Badge | null> {
+    return await this.service.findBadge(course);
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)

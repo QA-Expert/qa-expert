@@ -33,19 +33,15 @@ export class Badge extends mongoose.Document {
   @Field(() => Course, { nullable: true })
   course?: Course | mongoose.Types.ObjectId;
 
-  @Prop({ type: ObjectId, ref: User.name, required: true })
-  @Field(() => String)
-  user: User | mongoose.Types.ObjectId;
-
   @Prop({
     type: ObjectId,
-    ref: User.name,
+    ref: 'User',
   })
   createdBy: User | mongoose.Types.ObjectId;
 
   @Prop({
     type: ObjectId,
-    ref: User.name,
+    ref: 'User',
   })
   updatedBy: User | mongoose.Types.ObjectId;
 }

@@ -90,11 +90,11 @@ export class Badge {
     icon: string;
     link: string;
     title: string;
-    user: string;
 }
 
 export class Course {
     _id: string;
+    badge?: Nullable<Badge>;
     description: string;
     icon: string;
     pages: Page[];
@@ -105,6 +105,8 @@ export class Course {
 
 export abstract class IMutation {
     abstract addPage(_id: string, pageId: string): Course | Promise<Course>;
+
+    abstract claimBadge(badgeId: string): User | Promise<User>;
 
     abstract createCoursePage(data: CoursePageInput): Page | Promise<Page>;
 
@@ -174,6 +176,7 @@ export class Question {
 
 export class User {
     _id: string;
+    badges?: Nullable<string[]>;
     email: string;
     firstName?: Nullable<string>;
     lastName?: Nullable<string>;

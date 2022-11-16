@@ -16,7 +16,7 @@ export function ProgressBar(props: Props) {
         justifyContent: hasNoProgress ? 'center' : 'start',
         width: '100%',
         flexDirection: 'row',
-        height: '1.25rem',
+        height: '1.5rem',
         borderRadius: '0.25rem',
         backgroundColor: 'grey.400',
       }}
@@ -36,8 +36,8 @@ export function ProgressBar(props: Props) {
             width: `${props.pass}%`,
             height: 'inherit',
             borderRadius: 'inherit',
-            borderStartEndRadius: 0,
-            borderEndEndRadius: 0,
+            borderStartEndRadius: props.fail ? 0 : 'inherit',
+            borderEndEndRadius: props.fail ? 0 : 'inherit',
             backgroundColor: 'success.main',
           }}
         >
@@ -55,8 +55,8 @@ export function ProgressBar(props: Props) {
             width: `${props.fail}%`,
             height: 'inherit',
             borderRadius: 'inherit',
-            borderStartStartRadius: 0,
-            borderEndStartRadius: 0,
+            borderStartStartRadius: props.pass ? 0 : 'inherit',
+            borderEndStartRadius: props.pass ? 0 : 'inherit',
             backgroundColor: 'error.main',
           }}
         >

@@ -33,7 +33,7 @@ export class UserService {
 
   async findByEmail(email: string) {
     const user = await this.userModel.findOne({ email });
-
+    console.log(user);
     if (!user) {
       throw new NotFoundException();
     }
@@ -217,5 +217,20 @@ export class UserService {
     user.updatedBy = new mongoose.Types.ObjectId(userId);
 
     return await user.save();
+  }
+
+  async addBadge(badgeId: string, userId: string) {
+    return await this.userModel
+      .findByIdAndUpdate(
+        userId,
+        {
+          $push: {
+            badges: new mongoose.Types.ObjectId(badgeId),
+          },
+          updatedBy: new mongoose.Types.ObjectId(userId),
+        },
+        { new: true },
+      )
+      .exec();
   }
 }

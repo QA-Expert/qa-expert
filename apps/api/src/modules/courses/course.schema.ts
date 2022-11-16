@@ -3,6 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { User } from '../users/user.schema';
 import { Page } from '../pages/page.schema';
+import { Badge } from '../badge/badge.schema';
 @ObjectType()
 export class ProgressPercentage {
   @Field({ defaultValue: 0 })
@@ -54,15 +55,18 @@ export class Course extends mongoose.Document {
   @Field(() => ProgressPercentage, { defaultValue: { fail: 0, pass: 0 } })
   progress: ProgressPercentage;
 
+  @Field(() => Badge, { nullable: true })
+  badge: Badge;
+
   @Prop({
     type: ObjectId,
-    ref: User.name,
+    ref: 'User',
   })
   createdBy: User | mongoose.Types.ObjectId;
 
   @Prop({
     type: ObjectId,
-    ref: User.name,
+    ref: 'User',
   })
   updatedBy: User | mongoose.Types.ObjectId;
 }

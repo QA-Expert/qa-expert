@@ -54,8 +54,13 @@ export function ChangeNamesModal({ open, onClose }: Props) {
             const { data, errors } = await updateUserNames({
               variables: values,
             });
-
-            setUser(data.updateUserNames);
+            setUser(
+              (prev) =>
+                prev && {
+                  ...prev,
+                  ...data.updateUserNames,
+                },
+            );
             actions.setSubmitting(false);
 
             if (errors) {

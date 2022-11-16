@@ -10,6 +10,9 @@ export const GET_ALL_COURSES = gql`
         pass
         fail
       }
+      badge {
+        _id
+      }
     }
   }
 `;
@@ -35,6 +38,7 @@ export const GET_USER = gql`
       firstName
       lastName
       roles
+      badges
     }
   }
 `;

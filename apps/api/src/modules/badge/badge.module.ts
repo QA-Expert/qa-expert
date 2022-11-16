@@ -12,6 +12,6 @@ import { BadgeResolver } from './badge.resolver';
     UserModule,
   ],
   providers: [BadgeService, BadgeResolver, JwtService],
-  exports: [],
+  exports: [BadgeService],
 })
 export class BadgeModule {}

@@ -1,20 +1,49 @@
+import { useMutation } from '@apollo/client';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Course as Props } from 'graphql-schema-gen/schema.gen';
+import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
+import { CLAIM_BADGE } from '../../graphql/mutations/mutations';
+import { GET_USER } from '../../graphql/queries/queries';
+import { userAtom } from '../../store';
 import { Box } from '../box/box';
 import { ProgressBar } from '../progress-bar/progress-bar';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
-export const CardComponent = ({ _id, title, description, progress }: Props) => {
+export const CardComponent = ({
+  _id,
+  title,
+  description,
+  progress,
+  badge,
+}: Props) => {
+  const [user, setUser] = useAtom(userAtom);
+  const [claimBadge] = useMutation(CLAIM_BADGE, {
+    refetchQueries: [
+      {
+        query: GET_USER,
+      },
+    ],
+  });
+  const isPassedCourse = progress.pass === 100 && progress.fail === 0;
+  const isBadgeClaimed = badge?._id
+    ? user?.badges?.includes(badge?._id)
+    : false;
+  if (title === 'Course #1 Title') {
+    console.log(title, user);
+  }
   return (
     <Link href={`/course/${_id}`}>
       <a>
         <Box
           sx={{
+            position: 'relative',
             gap: '0.75rem',
             transition: 'transform .4s',
             '&:hover': {
@@ -22,9 +51,46 @@ export const CardComponent = ({ _id, title, description, progress }: Props) => {
             },
           }}
         >
+          {isBadgeClaimed && (
+            <VerifiedIcon
+              fontSize="large"
+              sx={{
+                position: 'absolute',
+                top: '-15px',
+                right: '-15px',
+                zIndex: 'mobileStepper',
+              }}
+            />
+          )}
+          {isPassedCourse && !isBadgeClaimed && (
+            <Button
+              variant="contained"
+              color="success"
+              sx={{
+                position: 'absolute',
+                zIndex: 'mobileStepper',
+              }}
+              onClick={async (e) => {
+                e.preventDefault();
+                const { data } = await claimBadge({
+                  variables: { badgeId: badge?._id },
+                });
+                setUser(
+                  (prev) =>
+                    prev && {
+                      ...prev,
+                      ...data.claimBadge,
+                    },
+                );
+              }}
+            >
+              Claim Reward
+            </Button>
+          )}
           <Card
             sx={{
-              minWidth: '15rem',
+              width: '220px',
+              height: '220px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
@@ -48,7 +114,6 @@ export const CardComponent = ({ _id, title, description, progress }: Props) => {
               </Typography>
             </CardContent>
           </Card>
-
           <ProgressBar {...progress} />
         </Box>
       </a>

@@ -18,23 +18,23 @@ export class Question extends mongoose.Document {
   @Field()
   content: string;
 
-  @Prop({ type: [{ type: ObjectId, ref: Answer.name }] })
+  @Prop({ type: [{ type: ObjectId, ref: 'Answer' }] })
   @Field(() => [Answer])
   answers: Answer[];
 
-  @Prop({ type: [{ type: ObjectId, ref: Answer.name }] })
+  @Prop({ type: [{ type: ObjectId, ref: 'Answer' }] })
   @Field(() => [Answer])
   options: Answer[];
 
   @Prop({
     type: ObjectId,
-    ref: User.name,
+    ref: 'User',
   })
   createdBy: User | mongoose.Types.ObjectId;
 
   @Prop({
     type: ObjectId,
-    ref: User.name,
+    ref: 'User',
   })
   updatedBy: User | mongoose.Types.ObjectId;
 }

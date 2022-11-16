@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Answer } from '../answers/answer.schema';
+import { BadgeService } from '../badge/badge.service';
 import { PageProgressState } from '../page-progresses/page-progress.schema';
 import { PageProgressService } from '../page-progresses/page-progress.service';
 import { Page } from '../pages/page.schema';
@@ -15,6 +16,7 @@ export class CourseService {
     @InjectModel(Course.name)
     private courseModel: Model<Course>,
     private readonly servicePageProgress: PageProgressService,
+    private readonly serviceBadge: BadgeService,
   ) {}
 
   async findById(id: string) {
@@ -84,5 +86,9 @@ export class CourseService {
       pass,
       fail,
     };
+  }
+
+  async findBadge(course: Course) {
+    return await this.serviceBadge.findOnByCourseId(course._id);
   }
 }

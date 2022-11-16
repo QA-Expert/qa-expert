@@ -56,13 +56,13 @@ export class Page extends mongoose.Document {
 
   @Prop({
     type: ObjectId,
-    ref: User.name,
+    ref: 'User',
   })
   createdBy: User | mongoose.Types.ObjectId;
 
   @Prop({
     type: ObjectId,
-    ref: User.name,
+    ref: 'User',
   })
   updatedBy: User | mongoose.Types.ObjectId;
 }

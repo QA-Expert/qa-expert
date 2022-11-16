@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function PageCarousel({ children }: Props) {
-  const [currentPageIndex, setCurrentPageIndex] = useState<number>(0);
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
   if (!children?.length) {
     return null;
