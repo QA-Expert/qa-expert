@@ -25,6 +25,7 @@ export const CardComponent = ({
 }: Props) => {
   const [user, setUser] = useAtom(userAtom);
   const [claimBadge] = useMutation(CLAIM_BADGE, {
+    // TODO: figure out why we have to refetch user and setUser atom does not work and update user
     refetchQueries: [
       {
         query: GET_USER,
@@ -32,12 +33,12 @@ export const CardComponent = ({
     ],
   });
   const isPassedCourse = progress.pass === 100 && progress.fail === 0;
+  const isFailedCourse =
+    progress.fail > 0 && progress.pass + progress.fail >= 100;
   const isBadgeClaimed = badge?._id
     ? user?.badges?.includes(badge?._id)
     : false;
-  if (title === 'Course #1 Title') {
-    console.log(title, user);
-  }
+
   return (
     <Link href={`/course/${_id}`}>
       <a>
@@ -87,6 +88,23 @@ export const CardComponent = ({
               Claim Reward
             </Button>
           )}
+
+          {isFailedCourse && (
+            <Button
+              variant="contained"
+              color="success"
+              sx={{
+                position: 'absolute',
+                zIndex: 'mobileStepper',
+              }}
+              onClick={async (e) => {
+                e.preventDefault();
+                console.log('Retake quiz');
+              }}
+            >
+              Retake quiz
+            </Button>
+          )}
           <Card
             sx={{
               width: '220px',
@@ -95,6 +113,8 @@ export const CardComponent = ({
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
+              pointerEvents: isFailedCourse ? 'none' : 'auto',
+              opacity: isFailedCourse ? 0.6 : 1,
             }}
             raised
           >
