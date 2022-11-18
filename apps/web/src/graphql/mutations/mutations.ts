@@ -38,10 +38,11 @@ export const CREATE_QUIZ_PAGE_PROGRESS = gql`
   mutation CreateQuizPageProgress(
     $state: PageProgressState!
     $page: String!
+    $course: String!
     $answers: [String!]!
   ) {
     createQuizPageProgress(
-      data: { state: $state, page: $page, answers: $answers }
+      data: { state: $state, page: $page, course: $course, answers: $answers }
     ) {
       state
       page
@@ -51,8 +52,8 @@ export const CREATE_QUIZ_PAGE_PROGRESS = gql`
 `;
 
 export const CREATE_COURSE_PAGE_PROGRESS = gql`
-  mutation CreateCoursePageProgress($page: String!) {
-    createCoursePageProgress(data: { page: $page }) {
+  mutation CreateCoursePageProgress($page: String!, $course: String!) {
+    createCoursePageProgress(data: { page: $page, course: $course }) {
       _id
     }
   }

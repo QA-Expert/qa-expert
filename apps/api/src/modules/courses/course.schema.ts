@@ -4,23 +4,44 @@ import * as mongoose from 'mongoose';
 import { User } from '../users/user.schema';
 import { Page } from '../pages/page.schema';
 import { Badge } from '../badge/badge.schema';
-@ObjectType()
-export class ProgressPercentage {
-  @Field({ defaultValue: 0 })
-  fail: number;
-  @Field({ defaultValue: 0 })
-  pass: number;
-}
 
 export enum CourseType {
   COURSE = 'course',
   QUIZ = 'quiz',
 }
 
+export enum CourseProgressState {
+  PASS = 'pass',
+  FAIL = 'fail',
+  IN_PROGRESS = 'in_progress',
+}
+
 registerEnumType(CourseType, {
   name: 'CourseType',
   description: 'Defines the type of the course',
 });
+
+registerEnumType(CourseProgressState, {
+  name: 'CourseProgressState',
+  description: 'Defines the state of course progress',
+});
+
+@ObjectType()
+export class CourseProgress {
+  @Field({ defaultValue: 0 })
+  fail: number;
+
+  @Field({ defaultValue: 0 })
+  pass: number;
+
+  @Field(() => CourseProgressState, {
+    defaultValue: CourseProgressState.IN_PROGRESS,
+  })
+  state: CourseProgressState;
+
+  @Field(() => Date, { defaultValue: new Date() })
+  submittedAt: Date;
+}
 
 // @typescript-eslint/no-unused-vars
 const ObjectId = mongoose.Schema.Types.ObjectId;
@@ -52,8 +73,15 @@ export class Course extends mongoose.Document {
   @Field(() => [Page])
   pages: Page[];
 
-  @Field(() => ProgressPercentage, { defaultValue: { fail: 0, pass: 0 } })
-  progress: ProgressPercentage;
+  @Field(() => CourseProgress, {
+    defaultValue: {
+      fail: 0,
+      pass: 0,
+      state: CourseProgressState.IN_PROGRESS,
+      submitted: new Date(),
+    },
+  })
+  progress: CourseProgress;
 
   @Field(() => Badge, { nullable: true })
   badge: Badge;

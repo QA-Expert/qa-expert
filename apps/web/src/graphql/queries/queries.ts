@@ -9,6 +9,8 @@ export const GET_ALL_COURSES = gql`
       progress {
         pass
         fail
+        state
+        submittedAt
       }
       badge {
         _id

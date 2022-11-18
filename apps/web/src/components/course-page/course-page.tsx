@@ -30,6 +30,7 @@ export default function CoursePage({ _id, content, progress }: Props) {
         await createProgress({
           variables: {
             page: _id,
+            course: slug,
           },
         });
       }

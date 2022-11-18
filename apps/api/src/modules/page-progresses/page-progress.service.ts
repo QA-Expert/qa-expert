@@ -13,11 +13,13 @@ export class PageProgressService {
     private pageProgressModel: Model<PageProgress>,
   ) {}
 
-  async findAll(pages: string[], userId: string) {
-    return await this.pageProgressModel.find({
-      page: { $in: pages },
-      user: userId,
-    });
+  async findAllByCourseId(courseId: string, userId: string) {
+    return await this.pageProgressModel
+      .find({
+        course: { _id: courseId },
+        user: userId,
+      })
+      .sort({ createdAt: 'asc' });
   }
 
   async findOne(pageId: string, userId: string) {
@@ -43,6 +45,7 @@ export class PageProgressService {
       type: CourseType.COURSE,
       state: PageProgressState.PASS,
       page: new mongoose.Types.ObjectId(data.page),
+      course: new mongoose.Types.ObjectId(data.course),
       user: new mongoose.Types.ObjectId(userId),
       createdBy: new mongoose.Types.ObjectId(userId),
       updatedBy: new mongoose.Types.ObjectId(userId),
@@ -65,6 +68,7 @@ export class PageProgressService {
       ),
       type: CourseType.QUIZ,
       page: new mongoose.Types.ObjectId(data.page),
+      course: new mongoose.Types.ObjectId(data.course),
       user: new mongoose.Types.ObjectId(userId),
       createdBy: new mongoose.Types.ObjectId(userId),
       updatedBy: new mongoose.Types.ObjectId(userId),
@@ -77,5 +81,18 @@ export class PageProgressService {
     }
 
     return model.save();
+  }
+
+  async removeMany(pageIds: string[], userId: string) {
+    const result = await this.pageProgressModel.deleteMany({
+      page: { $in: pageIds },
+      user: userId,
+    });
+
+    if (result.deletedCount !== pageIds.length) {
+      throw new Error('Failed to delete all pages progresses');
+    }
+
+    return true;
   }
 }

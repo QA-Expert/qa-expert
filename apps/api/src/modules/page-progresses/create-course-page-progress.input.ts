@@ -4,4 +4,7 @@ import { Field, InputType } from '@nestjs/graphql';
 export class CoursePageProgressInput {
   @Field(() => String)
   page: string;
+
+  @Field(() => String)
+  course: string;
 }

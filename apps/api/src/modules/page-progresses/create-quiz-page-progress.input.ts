@@ -6,6 +6,9 @@ export class QuizPageProgressInput {
   @Field(() => String)
   page: string;
 
+  @Field(() => String)
+  course: string;
+
   @Field(() => [String])
   answers: string[];
 

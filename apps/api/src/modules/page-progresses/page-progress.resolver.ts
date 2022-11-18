@@ -16,6 +16,16 @@ export class PageProgressResolver {
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
+  @Mutation(() => Boolean)
+  public async deletePagesProgresses(
+    @CurrentUser() user: User,
+    @Args('pages', { type: () => [String] }) pages: string[],
+  ): Promise<boolean> {
+    return await this.service.removeMany(pages, user._id);
+  }
+
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.USER)
   @Mutation(() => PageProgress)
   public async createCoursePageProgress(
     @CurrentUser() user: User,

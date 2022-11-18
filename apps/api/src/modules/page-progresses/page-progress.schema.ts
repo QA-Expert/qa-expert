@@ -2,7 +2,7 @@ import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Answer } from '../answers/answer.schema';
-import { CourseType } from '../courses/course.schema';
+import { Course, CourseType } from '../courses/course.schema';
 import { Page } from '../pages/page.schema';
 import { User } from '../users/user.schema';
 
@@ -38,6 +38,10 @@ export class PageProgress extends mongoose.Document {
   @Field(() => String)
   page: Page | mongoose.Types.ObjectId;
 
+  @Prop({ type: ObjectId, ref: 'Course', required: true })
+  @Field(() => String)
+  course: Course | mongoose.Types.ObjectId;
+
   @Prop({
     type: [
       {
@@ -70,6 +74,12 @@ export class PageProgress extends mongoose.Document {
     ref: 'User',
   })
   updatedBy: User | mongoose.Types.ObjectId;
+
+  @Prop()
+  createdAt: Date;
+
+  @Prop()
+  updatedAt: Date;
 }
 
 export const PageProgressSchema = SchemaFactory.createForClass(PageProgress);

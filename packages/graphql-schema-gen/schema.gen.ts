@@ -8,6 +8,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export enum CourseProgressState {
+    FAIL = "FAIL",
+    IN_PROGRESS = "IN_PROGRESS",
+    PASS = "PASS"
+}
+
 export enum CourseType {
     COURSE = "COURSE",
     QUIZ = "QUIZ"
@@ -29,6 +35,7 @@ export class CoursePageInput {
 }
 
 export class CoursePageProgressInput {
+    course: string;
     page: string;
 }
 
@@ -40,6 +47,7 @@ export class QuizPageInput {
 
 export class QuizPageProgressInput {
     answers: string[];
+    course: string;
     page: string;
     state: PageProgressState;
 }
@@ -98,9 +106,16 @@ export class Course {
     description: string;
     icon: string;
     pages: Page[];
-    progress: ProgressPercentage;
+    progress: CourseProgress;
     title: string;
     type: CourseType;
+}
+
+export class CourseProgress {
+    fail: number;
+    pass: number;
+    state: CourseProgressState;
+    submittedAt: DateTime;
 }
 
 export abstract class IMutation {
@@ -115,6 +130,8 @@ export abstract class IMutation {
     abstract createQuizPage(data: QuizPageInput): Page | Promise<Page>;
 
     abstract createQuizPageProgress(data: QuizPageProgressInput): PageProgress | Promise<PageProgress>;
+
+    abstract deletePagesProgresses(pages: string[]): boolean | Promise<boolean>;
 
     abstract forgotPassword(email: string): boolean | Promise<boolean>;
 
@@ -146,15 +163,11 @@ export class Page {
 export class PageProgress {
     _id: string;
     answers?: Nullable<string[]>;
+    course: string;
     page: string;
     state: PageProgressState;
     type: CourseType;
     user: string;
-}
-
-export class ProgressPercentage {
-    fail: number;
-    pass: number;
 }
 
 export abstract class IQuery {
@@ -191,4 +204,5 @@ export class UserOutputLogin implements UserBaseModel {
     lastName?: Nullable<string>;
 }
 
+export type DateTime = any;
 type Nullable<T> = T | null;

@@ -45,6 +45,7 @@ export default function QuizPage({ question, progress, _id }: Props) {
           ? 'PASS'
           : 'FAIL',
         page: _id,
+        course: slug,
         answers: answers,
       },
     });

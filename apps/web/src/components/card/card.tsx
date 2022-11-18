@@ -32,9 +32,8 @@ export const CardComponent = ({
       },
     ],
   });
-  const isPassedCourse = progress.pass === 100 && progress.fail === 0;
-  const isFailedCourse =
-    progress.fail > 0 && progress.pass + progress.fail >= 100;
+  const isPassedCourse = progress.state === 'PASS';
+  const isFailedCourse = progress.state === 'FAIL';
   const isBadgeClaimed = badge?._id
     ? user?.badges?.includes(badge?._id)
     : false;
@@ -63,6 +62,7 @@ export const CardComponent = ({
               }}
             />
           )}
+
           {isPassedCourse && !isBadgeClaimed && (
             <Button
               variant="contained"
@@ -92,7 +92,6 @@ export const CardComponent = ({
           {isFailedCourse && (
             <Button
               variant="contained"
-              color="success"
               sx={{
                 position: 'absolute',
                 zIndex: 'mobileStepper',

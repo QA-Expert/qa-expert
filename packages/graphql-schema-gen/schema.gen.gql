@@ -22,7 +22,7 @@ type Course {
   description: String!
   icon: String!
   pages: [Page!]!
-  progress: ProgressPercentage!
+  progress: CourseProgress!
   title: String!
   type: CourseType!
 }
@@ -38,7 +38,22 @@ input CoursePageInput {
 }
 
 input CoursePageProgressInput {
+  course: String!
   page: String!
+}
+
+type CourseProgress {
+  fail: Float!
+  pass: Float!
+  state: CourseProgressState!
+  submittedAt: DateTime!
+}
+
+"""Defines the state of course progress"""
+enum CourseProgressState {
+  FAIL
+  IN_PROGRESS
+  PASS
 }
 
 """Defines the type of the course"""
@@ -47,6 +62,11 @@ enum CourseType {
   QUIZ
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Mutation {
   addPage(_id: String!, pageId: String!): Course!
   claimBadge(badgeId: String!): User!
@@ -54,6 +74,7 @@ type Mutation {
   createCoursePageProgress(data: CoursePageProgressInput!): PageProgress!
   createQuizPage(data: QuizPageInput!): Page!
   createQuizPageProgress(data: QuizPageProgressInput!): PageProgress!
+  deletePagesProgresses(pages: [String!]!): Boolean!
   forgotPassword(email: String!): Boolean!
   login(data: UserInputLogin!): UserOutputLogin!
   logout: Boolean!
@@ -77,6 +98,7 @@ type Page {
 type PageProgress {
   _id: String!
   answers: [String!]
+  course: String!
   page: String!
   state: PageProgressState!
   type: CourseType!
@@ -87,11 +109,6 @@ type PageProgress {
 enum PageProgressState {
   FAIL
   PASS
-}
-
-type ProgressPercentage {
-  fail: Float!
-  pass: Float!
 }
 
 type Query {
@@ -116,6 +133,7 @@ input QuizPageInput {
 
 input QuizPageProgressInput {
   answers: [String!]!
+  course: String!
   page: String!
   state: PageProgressState!
 }

@@ -8,7 +8,7 @@ import { PageProgressService } from '../page-progresses/page-progress.service';
 import { Page } from '../pages/page.schema';
 import { Question } from '../questions/question.schema';
 import { User } from '../users/user.schema';
-import { Course } from './course.schema';
+import { Course, CourseProgressState } from './course.schema';
 
 @Injectable()
 export class CourseService {
@@ -56,14 +56,16 @@ export class CourseService {
     const initValue = {
       pass: 0,
       fail: 0,
+      state: CourseProgressState.IN_PROGRESS,
+      submittedAt: new Date(),
     };
 
     if (!course?.pages.length) {
       return initValue;
     }
 
-    const progresses = await this.servicePageProgress.findAll(
-      course?.pages.map((page) => page._id),
+    const progresses = await this.servicePageProgress.findAllByCourseId(
+      course._id,
       user._id,
     );
 
@@ -71,7 +73,8 @@ export class CourseService {
       return initValue;
     }
 
-    const total = course?.pages.length ?? 0;
+    const submittedAt = progresses[0].createdAt; // The very last submitted page progress
+    const total = course.pages.length ?? 0;
     const numberOfFailed = progresses?.filter(
       (process) => process.state === PageProgressState.FAIL,
     ).length;
@@ -81,10 +84,18 @@ export class CourseService {
 
     const fail = Number(((numberOfFailed * 100) / total).toFixed());
     const pass = Number(((numberOfPassed * 100) / total).toFixed());
+    const state =
+      pass >= 100
+        ? CourseProgressState.PASS
+        : pass + fail >= 100
+        ? CourseProgressState.FAIL
+        : CourseProgressState.IN_PROGRESS;
 
     return {
       pass,
       fail,
+      state,
+      submittedAt,
     };
   }
 
