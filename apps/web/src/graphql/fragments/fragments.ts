@@ -1,30 +1,6 @@
-import { gql } from '@apollo/client';
+import { gql } from '../../__generated__/gql';
 
-export const QUESTION_FRAGMENT = gql`
-  fragment QuestionFragment on Question {
-    content
-    answers {
-      _id
-      content
-    }
-    options {
-      _id
-      content
-    }
-  }
-`;
-
-export const COURSE_HEADING_FRAGMENT = gql`
-  fragment CourseHeadingFragment on Course {
-    _id
-    title
-    type
-    description
-  }
-`;
-
-export const PAGE_FRAGMENT = gql`
-  ${QUESTION_FRAGMENT}
+export const PAGE_FRAGMENT = gql(/* GraphQL */ `
   fragment PageFragment on Page {
     _id
     title
@@ -32,7 +8,15 @@ export const PAGE_FRAGMENT = gql`
     description
     content
     question {
-      ...QuestionFragment
+      content
+      answers {
+        _id
+        content
+      }
+      options {
+        _id
+        content
+      }
     }
     progress {
       _id
@@ -40,4 +24,4 @@ export const PAGE_FRAGMENT = gql`
       answers
     }
   }
-`;
+`);

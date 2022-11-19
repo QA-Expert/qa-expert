@@ -2,11 +2,12 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Badge } from 'graphql-schema-gen/schema.gen';
+import { GetBadgesQuery } from '../../__generated__/graphql';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
 
+type Badge = GetBadgesQuery['badges'][number];
 interface Props extends Badge {
   isEarned: boolean;
 }

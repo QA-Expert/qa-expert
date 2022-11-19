@@ -8,7 +8,7 @@ import Modal from '@mui/material/Modal';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
-import { UserInputUpdatePassword } from 'graphql-schema-gen/schema.gen';
+import { UserInputUpdatePassword } from '../../__generated__/graphql';
 import { object, string } from 'yup';
 import { UPDATE_USER_PASSWORD } from '../../graphql/mutations/mutations';
 import { Box } from '../box/box';

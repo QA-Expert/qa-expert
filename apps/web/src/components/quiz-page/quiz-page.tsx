@@ -1,7 +1,10 @@
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
-import { Page as Props } from 'graphql-schema-gen/schema.gen';
+import {
+  PageFragmentFragment as Props,
+  PageProgressState,
+} from '../../__generated__/graphql';
 import { Box } from '../box/box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -16,7 +19,7 @@ import { GET_ALL_COURSES, GET_COURSE } from '../../graphql/queries/queries';
 
 export default function QuizPage({ question, progress, _id }: Props) {
   const router = useRouter();
-  const slug = router.query.slug ? router.query.slug[0] : null;
+  const slug = router.query.slug ? router.query.slug[0] : '';
   const [answers, setAnswers] = useState<string[]>(progress?.answers ?? []);
   const isSingleAnswerQuestion = question?.answers.length === 1;
   const [createProgress] = useMutation(CREATE_QUIZ_PAGE_PROGRESS, {
@@ -40,10 +43,9 @@ export default function QuizPage({ question, progress, _id }: Props) {
 
     await createProgress({
       variables: {
-        // TODO: could not import enum "QuizPageProgressState" Module parse failed: Unexpected token
         state: isAnsweredCorrectly(expectedAnswerIds, answers)
-          ? 'PASS'
-          : 'FAIL',
+          ? PageProgressState.Pass
+          : PageProgressState.Fail,
         page: _id,
         course: slug,
         answers: answers,
@@ -149,7 +151,7 @@ export default function QuizPage({ question, progress, _id }: Props) {
 
       <Button
         variant="contained"
-        disabled={Boolean(progress?.answers)}
+        disabled={Boolean(progress?.answers) || !slug}
         onClick={handleSubmit}
       >
         Submit

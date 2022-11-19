@@ -1,12 +1,20 @@
 import Typography from '@mui/material/Typography';
-import { Page as Props } from 'graphql-schema-gen/schema.gen';
+import { PageFragmentFragmentDoc } from '../../__generated__/graphql';
 import { Box } from '../box/box';
 import CoursePage from '../course-page/course-page';
 import QuizPage from '../quiz-page/quiz-page';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import {
+  FragmentType,
+  useFragment,
+} from '../../__generated__/fragment-masking';
 
-export default function Page(props: Props) {
+export default function Page(
+  props: FragmentType<typeof PageFragmentFragmentDoc>,
+) {
+  const page = useFragment(PageFragmentFragmentDoc, props);
+
   return (
     <Box
       sx={{
@@ -18,24 +26,24 @@ export default function Page(props: Props) {
       }}
     >
       <Box sx={{ flexDirection: 'row', gap: '1rem' }}>
-        {props.progress?.state === 'PASS' && (
+        {page.progress?.state === 'PASS' && (
           <CheckCircleIcon sx={{ color: 'success.main', fontSize: '3rem' }} />
         )}
-        {props.progress?.state === 'FAIL' && (
+        {page.progress?.state === 'FAIL' && (
           <CancelIcon sx={{ color: 'error.main', fontSize: '3rem' }} />
         )}
 
         <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
-          {props.title}
+          {page.title}
         </Typography>
       </Box>
 
-      <Typography>{props.description}</Typography>
+      <Typography>{page.description}</Typography>
 
-      {props.type === 'COURSE' ? (
-        <CoursePage {...props} />
+      {page.type === 'COURSE' ? (
+        <CoursePage {...page} />
       ) : (
-        <QuizPage {...props} />
+        <QuizPage {...page} />
       )}
     </Box>
   );

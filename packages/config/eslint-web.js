@@ -6,7 +6,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   plugins: ['prettier', '@typescript-eslint'],
-  ignorePatterns: ['node_modules', 'build', 'dist', 'public', "graphql-schema-gen", "packages"],
+  ignorePatterns: ['node_modules', 'build', 'dist', 'public', "**/__generated__/*", "packages"],
   parserOptions: {
     ecmaVersion: 6,
     sourceType: 'module',

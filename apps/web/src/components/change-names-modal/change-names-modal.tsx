@@ -8,12 +8,13 @@ import Modal from '@mui/material/Modal';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
-import { UserInputUpdateNames } from 'graphql-schema-gen/schema.gen';
+import { UserInputUpdateNames } from '../../__generated__/graphql';
 import { useAtom } from 'jotai';
 import { object, string } from 'yup';
 import { UPDATE_USER_NAMES } from '../../graphql/mutations/mutations';
 import { userAtom } from '../../store';
 import { Box } from '../box/box';
+import { GET_USER } from '../../graphql/queries/queries';
 
 interface Props {
   open: boolean;
@@ -22,7 +23,9 @@ interface Props {
 
 export function ChangeNamesModal({ open, onClose }: Props) {
   const [user, setUser] = useAtom(userAtom);
-  const [updateUserNames] = useMutation(UPDATE_USER_NAMES);
+  const [updateUserNames] = useMutation(UPDATE_USER_NAMES, {
+    refetchQueries: [{ query: GET_USER }],
+  });
 
   const initialValues: UserInputUpdateNames = {
     firstName: user?.firstName ?? '',
@@ -58,7 +61,7 @@ export function ChangeNamesModal({ open, onClose }: Props) {
               (prev) =>
                 prev && {
                   ...prev,
-                  ...data.updateUserNames,
+                  ...data?.updateUserNames,
                 },
             );
             actions.setSubmitting(false);

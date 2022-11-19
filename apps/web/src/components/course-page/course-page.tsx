@@ -1,4 +1,4 @@
-import { Page as Props } from 'graphql-schema-gen/schema.gen';
+import { PageFragmentFragment as Props } from '../../__generated__/graphql';
 import { Box } from '../box/box';
 import { TextEditor } from '../text-editor/text-editor';
 import { useEffect } from 'react';
@@ -11,7 +11,7 @@ const TIME_TO_REVIEW_COURSE_PAGE = 60000; // 1 minute
 
 export default function CoursePage({ _id, content, progress }: Props) {
   const router = useRouter();
-  const slug = router.query.slug ? router.query.slug[0] : null;
+  const slug = router.query.slug ? router.query.slug[0] : '';
   const [createProgress] = useMutation(CREATE_COURSE_PAGE_PROGRESS, {
     refetchQueries: [
       {
@@ -26,7 +26,7 @@ export default function CoursePage({ _id, content, progress }: Props) {
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      if (!progress) {
+      if (!progress && slug) {
         await createProgress({
           variables: {
             page: _id,

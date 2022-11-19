@@ -1,6 +1,6 @@
 import Main from '../src/components/main/main';
 import { Formik, FormikProps, FormikHelpers } from 'formik';
-import { UserInputCreate } from 'graphql-schema-gen/schema.gen';
+import { UserInputCreate } from '../src/__generated__/graphql';
 import * as Yup from 'yup';
 import { REGISTER } from '../src/graphql/mutations/mutations';
 import { useApolloClient, useMutation } from '@apollo/client';

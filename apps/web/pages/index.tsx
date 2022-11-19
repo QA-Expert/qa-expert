@@ -1,17 +1,12 @@
 import Layout from '../src/components/layout/layout';
-import { Course } from 'graphql-schema-gen/schema.gen';
 import { GET_ALL_COURSES } from '../src/graphql/queries/queries';
 import { useQuery } from '@apollo/client';
 import Typography from '@mui/material/Typography';
 import { CardComponent } from '../src/components/card/card';
 import { Box } from '../src/components/box/box';
 
-interface Props {
-  courses: Course[];
-}
-
 const HomePage = () => {
-  const { data, loading, error } = useQuery<Props>(GET_ALL_COURSES);
+  const { data, loading, error } = useQuery(GET_ALL_COURSES);
 
   /* TODO: Add TOASTS */
   if (error) {
@@ -45,7 +40,7 @@ const HomePage = () => {
             flexWrap: 'wrap',
           }}
         >
-          {data?.courses.map((course: Course) => (
+          {data?.courses.map((course) => (
             <CardComponent key={course._id} {...course} />
           ))}
         </Box>

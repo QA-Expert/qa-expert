@@ -1,5 +1,5 @@
 import { Box } from '../box/box';
-import { ProgressPercentage as Props } from 'graphql-schema-gen/schema.gen';
+import { CourseProgress as Props } from '../../__generated__/graphql';
 import Typography from '@mui/material/Typography';
 
 export function ProgressBar(props: Props) {

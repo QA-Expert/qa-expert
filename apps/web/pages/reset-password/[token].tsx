@@ -1,5 +1,5 @@
 import { Formik, FormikProps, FormikHelpers } from 'formik';
-import { ResetPasswordInput } from 'graphql-schema-gen/schema.gen';
+import { ResetPasswordInput } from '../../src/__generated__/graphql';
 import * as Yup from 'yup';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
@@ -60,7 +60,7 @@ function ResetPassword() {
             const { errors } = await resetPassword({
               variables: {
                 data: {
-                  token: router.query.token,
+                  token: router.query.token as string,
                   ...values,
                 },
               },

@@ -13,12 +13,11 @@ import Button from '@mui/material/Button';
 import { ChangePasswordModal } from '../src/components/change-password-modal/change-password-modal';
 import { GET_BADGES } from '../src/graphql/queries/queries';
 import { useQuery } from '@apollo/client';
-import { Badge } from 'graphql-schema-gen/schema.gen';
 import { BadgeComponent } from '../src/components/badge/badge';
 
 function Account() {
   const [user] = useAtom(userAtom);
-  const { data: badges } = useQuery<{ badges: Badge[] }>(GET_BADGES);
+  const { data: badges } = useQuery(GET_BADGES);
 
   const [changeUserNamesModalOpen, setChangeUserNamesModalOpen] =
     useState(false);

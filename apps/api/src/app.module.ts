@@ -5,7 +5,6 @@ import { CourseModule } from './modules/courses/course.module';
 import { UserModule } from './modules/users/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { join } from 'path';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AnswerModule } from './modules/answers/answer.module';
 import { QuestionModule } from './modules/questions/question.module';
@@ -27,21 +26,7 @@ import { BadgeModule } from './modules/badge/badge.module';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: Boolean(process.env.SHOULD_GENERATE_GQL_SCHEMA)
-        ? join(
-            process.cwd(),
-            '../../packages/graphql-schema-gen/schema.gen.gql',
-          )
-        : undefined,
-      definitions: {
-        path: Boolean(process.env.SHOULD_GENERATE_GQL_SCHEMA)
-          ? join(
-              process.cwd(),
-              '../../packages/graphql-schema-gen/schema.gen.ts',
-            )
-          : undefined,
-        outputAs: 'class',
-      },
+      autoSchemaFile: true,
       context: ({ req, res }) => ({ req, res }),
       sortSchema: true,
       cors: {

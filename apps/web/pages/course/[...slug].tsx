@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
 import Typography from '@mui/material/Typography';
-import { Course as CourseType } from 'graphql-schema-gen/schema.gen';
 import { useRouter } from 'next/router';
 import { Box } from '../../src/components/box/box';
 import Layout from '../../src/components/layout/layout';
@@ -11,11 +10,9 @@ import { GET_COURSE } from '../../src/graphql/queries/queries';
 
 const Course = () => {
   const route = useRouter();
-  const slug = route.query.slug ? route.query.slug[0] : null;
+  const slug = route.query.slug ? route.query.slug[0] : '';
 
-  const { loading, data, error } = useQuery<{
-    course: CourseType;
-  }>(GET_COURSE, {
+  const { loading, data, error } = useQuery(GET_COURSE, {
     variables: { _id: slug },
     skip: !slug,
   });

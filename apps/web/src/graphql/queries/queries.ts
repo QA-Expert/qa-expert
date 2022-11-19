@@ -1,11 +1,12 @@
-import { gql } from '@apollo/client';
-import { COURSE_HEADING_FRAGMENT, PAGE_FRAGMENT } from '../fragments/fragments';
+import { gql } from '../../__generated__/gql';
 
-export const GET_ALL_COURSES = gql`
-  ${COURSE_HEADING_FRAGMENT}
+export const GET_ALL_COURSES = gql(/* GraphQL */ `
   query GetAllCourses {
     courses {
-      ...CourseHeadingFragment
+      _id
+      title
+      type
+      description
       progress {
         pass
         fail
@@ -17,22 +18,23 @@ export const GET_ALL_COURSES = gql`
       }
     }
   }
-`;
+`);
 
-export const GET_COURSE = gql`
-  ${COURSE_HEADING_FRAGMENT}
-  ${PAGE_FRAGMENT}
+export const GET_COURSE = gql(/* GraphQL */ `
   query GetCourse($_id: String!) {
     course(_id: $_id) {
-      ...CourseHeadingFragment
+      _id
+      title
+      type
+      description
       pages {
         ...PageFragment
       }
     }
   }
-`;
+`);
 
-export const GET_USER = gql`
+export const GET_USER = gql(/* GraphQL */ `
   query GetUser {
     user {
       _id
@@ -43,9 +45,9 @@ export const GET_USER = gql`
       badges
     }
   }
-`;
+`);
 
-export const GET_BADGES = gql`
+export const GET_BADGES = gql(/* GraphQL */ `
   query GetBadges {
     badges {
       _id
@@ -59,4 +61,4 @@ export const GET_BADGES = gql`
       }
     }
   }
-`;
+`);

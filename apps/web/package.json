@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "compile": "graphql-codegen",
+    "watch": "graphql-codegen -w"
   },
   "dependencies": {
     "@apollo/client": "^3.7.0",
@@ -21,7 +23,6 @@
     "class-validator": "^0.13.2",
     "formik": "^2.2.9",
     "graphql": "^16.6.0",
-    "graphql-schema-gen": "*",
     "jotai": "^1.8.6",
     "next": "12.3.0",
     "react": "18.2.0",
@@ -30,6 +31,8 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.13.12",
+    "@graphql-codegen/client-preset": "^1.1.4",
     "@types/node": "18.7.18",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
@@ -39,6 +42,6 @@
     "husky": "^8.0.1",
     "postcss": "^8.1.0",
     "tsconfig": "*",
-    "typescript": "4.8.3"
+    "typescript": "^4.9.3"
   }
 }
