@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev && yarn run watch",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -21,6 +21,7 @@
     "@types/lodash": "^4.14.186",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "date-fns": "^2.29.3",
     "formik": "^2.2.9",
     "graphql": "^16.6.0",
     "jotai": "^1.8.6",

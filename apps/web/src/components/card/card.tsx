@@ -5,7 +5,6 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Course as Props } from 'graphql-schema-gen/schema.gen';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,6 +14,14 @@ import { userAtom } from '../../store';
 import { Box } from '../box/box';
 import { ProgressBar } from '../progress-bar/progress-bar';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import {
+  CourseProgressState,
+  GetAllCoursesQuery,
+} from '../../__generated__/graphql';
+import { addDays, intervalToDuration } from 'date-fns';
+import { useEffect, useState } from 'react';
+
+type Props = GetAllCoursesQuery['courses'][number];
 
 export const CardComponent = ({
   _id,
@@ -32,11 +39,36 @@ export const CardComponent = ({
       },
     ],
   });
-  const isPassedCourse = progress.state === 'PASS';
-  const isFailedCourse = progress.state === 'FAIL';
+  const isPassedCourse = progress.state === CourseProgressState.Pass;
+  const isFailedCourse = progress.state === CourseProgressState.Fail;
+  const lastSubmittedDate = new Date(progress.submittedAt);
+  const canRetakeDate = addDays(
+    lastSubmittedDate,
+    Number(process.env.NEXT_PUBLIC_COURSE_COOLDOWN ?? 7),
+  );
+  const durationLeftToRetake = intervalToDuration({
+    start: new Date(),
+    end: canRetakeDate,
+  });
+  const [timeLeftToRetake, setTimeLeftToRetake] =
+    useState<Duration>(durationLeftToRetake);
   const isBadgeClaimed = badge?._id
     ? user?.badges?.includes(badge?._id)
     : false;
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const durationLeftToRetake = intervalToDuration({
+        start: new Date(),
+        end: canRetakeDate,
+      });
+      setTimeLeftToRetake(durationLeftToRetake);
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  });
 
   return (
     <Link href={`/course/${_id}`}>
@@ -63,7 +95,7 @@ export const CardComponent = ({
             />
           )}
 
-          {isPassedCourse && !isBadgeClaimed && (
+          {badge?._id && isPassedCourse && !isBadgeClaimed && (
             <Button
               variant="contained"
               color="success"
@@ -80,7 +112,7 @@ export const CardComponent = ({
                   (prev) =>
                     prev && {
                       ...prev,
-                      ...data.claimBadge,
+                      ...data?.claimBadge,
                     },
                 );
               }}
@@ -101,7 +133,8 @@ export const CardComponent = ({
                 console.log('Retake quiz');
               }}
             >
-              Retake quiz
+              Retake quiz {timeLeftToRetake.days}:{timeLeftToRetake.hours}:
+              {timeLeftToRetake.minutes}:{timeLeftToRetake.seconds}
             </Button>
           )}
           <Card

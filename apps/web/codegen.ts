@@ -1,5 +1,5 @@
 import { CodegenConfig } from '@graphql-codegen/cli';
-
+import { GraphQLDate, GraphQLDateTime } from 'graphql-iso-date';
 const config: CodegenConfig = {
   schema: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/graphql',
   documents: ['./src/graphql/**/*'],
@@ -9,6 +9,11 @@ const config: CodegenConfig = {
       plugins: [],
       presetConfig: {
         gqlTagName: 'gql',
+      },
+      config: {
+        scalars: {
+          DateTime: typeof Date.toString(),
+        },
       },
     },
   },
