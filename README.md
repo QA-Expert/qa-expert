@@ -5,10 +5,12 @@ This turborepo uses [npm](https://www.npmjs.com/) as a package manager. It inclu
 ## Apps and Packages
 
 `apps:`
+
 - `web`: Web Project based on [Next.js](https://nextjs.org)
 - `api`: API Project based on Nest
 
 `packages:`
+
 - `config` - shared eslint configs for apps
 - `tsconfig` - these are base shared `tsconfig.json`s from which all other `tsconfig.json`'s inherit from.
 
@@ -22,28 +24,29 @@ This turborepo has some additional tools already setup for you:
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 
-
 # Installation
 
 Install [Nodejs](https://nodejs.org/en/download/)
 
 Install yarn
+
 ```
 npm install --global yarn
 ```
 
 Install all projects dependencies
+
 ```
 yarn install
 ```
 
 Install [husky](https://typicode.github.io/husky/#/?id=usage)
+
 ```
 npx husky install
 ```
 
 install [MongoDB](https://www.mongodb.com/docs/manual/administration/install-community/)
-
 
 # Build
 

@@ -1,4 +1,3 @@
-
 ## Description
 
 API for QA School project.
@@ -10,7 +9,6 @@ Powered by following technologies:
 - [Nest Graphql](https://docs.nestjs.com/graphql/quick-start)
 - [Mongoose](https://docs.nestjs.com/recipes/mongodb#mongodb-mongoose). The most popular MongoDB object modeling tool.
 - [JWT and Basic Auth Strategies](https://docs.nestjs.com/security/authentication#implementing-passport-jwt)
-
 
 ## Installation
 
@@ -43,4 +41,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
