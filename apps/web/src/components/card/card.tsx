@@ -20,8 +20,18 @@ import {
 } from '../../__generated__/graphql';
 import { addDays, intervalToDuration } from 'date-fns';
 import { useEffect, useState } from 'react';
+import { padStart } from 'lodash';
 
 type Props = GetAllCoursesQuery['courses'][number];
+
+const getRetakeQuizTime = (duration: Duration) => {
+  const d = duration.days;
+  const h = padStart(duration.hours?.toString(), 2, '0');
+  const m = padStart(duration.minutes?.toString(), 2, '0');
+  const s = padStart(duration.seconds?.toString(), 2, '0');
+
+  return `${d} days ${h}:${m}:${s}`;
+};
 
 export const CardComponent = ({
   _id,
@@ -30,6 +40,7 @@ export const CardComponent = ({
   progress,
   badge,
 }: Props) => {
+  // TODO: Create custom react hook to put all that logic in it
   const [user, setUser] = useAtom(userAtom);
   const [claimBadge] = useMutation(CLAIM_BADGE, {
     // TODO: figure out why we have to refetch user and setUser atom does not work and update user
@@ -44,25 +55,28 @@ export const CardComponent = ({
   const lastSubmittedDate = new Date(progress.submittedAt);
   const canRetakeDate = addDays(
     lastSubmittedDate,
-    Number(process.env.NEXT_PUBLIC_COURSE_COOLDOWN ?? 7),
+    Number(process.env.NEXT_PUBLIC_COURSE_COOLDOWN),
   );
-  const durationLeftToRetake = intervalToDuration({
-    start: new Date(),
+  const nowDate = new Date();
+  const duration = intervalToDuration({
+    start: nowDate,
     end: canRetakeDate,
   });
-  const [timeLeftToRetake, setTimeLeftToRetake] =
-    useState<Duration>(durationLeftToRetake);
+  const [timeLeftToRetake, setTimeLeftToRetake] = useState<string>(
+    getRetakeQuizTime(duration),
+  );
   const isBadgeClaimed = badge?._id
     ? user?.badges?.includes(badge?._id)
     : false;
+  const canRetakeQuiz = nowDate >= canRetakeDate;
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const durationLeftToRetake = intervalToDuration({
+      const duration = intervalToDuration({
         start: new Date(),
         end: canRetakeDate,
       });
-      setTimeLeftToRetake(durationLeftToRetake);
+      setTimeLeftToRetake(getRetakeQuizTime(duration));
     }, 1000);
 
     return () => {
@@ -122,20 +136,34 @@ export const CardComponent = ({
           )}
 
           {isFailedCourse && (
-            <Button
-              variant="contained"
+            <Box
               sx={{
                 position: 'absolute',
                 zIndex: 'mobileStepper',
-              }}
-              onClick={async (e) => {
-                e.preventDefault();
-                console.log('Retake quiz');
+                gap: '2rem',
               }}
             >
-              Retake quiz {timeLeftToRetake.days}:{timeLeftToRetake.hours}:
-              {timeLeftToRetake.minutes}:{timeLeftToRetake.seconds}
-            </Button>
+              <Typography
+                sx={{
+                  fontSize: '1.5rem',
+                  fontWeight: 'fontWeightBold',
+                  color: 'primary.main',
+                }}
+              >
+                {timeLeftToRetake}
+              </Typography>
+
+              <Button
+                variant="contained"
+                disabled={!canRetakeQuiz}
+                onClick={async (e) => {
+                  e.preventDefault();
+                  console.log('Retake quiz');
+                }}
+              >
+                Retake quiz
+              </Button>
+            </Box>
           )}
           <Card
             sx={{
@@ -145,8 +173,7 @@ export const CardComponent = ({
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              pointerEvents: isFailedCourse ? 'none' : 'auto',
-              opacity: isFailedCourse ? 0.6 : 1,
+              opacity: isFailedCourse ? 0.5 : 1,
             }}
             raised
           >
