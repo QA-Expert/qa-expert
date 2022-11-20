@@ -1,6 +1,7 @@
 import { Box } from '../box/box';
 import { CourseProgress as Props } from '../../__generated__/graphql';
 import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
 
 export function ProgressBar(props: Props) {
   const hasNoProgress = !props.pass && !props.fail;
@@ -26,6 +27,7 @@ export function ProgressBar(props: Props) {
       )}
 
       {props?.pass ? (
+        //TODO: turn into styled  component
         <Box
           role="progressbar"
           aria-valuemin={0}
@@ -41,10 +43,24 @@ export function ProgressBar(props: Props) {
             backgroundColor: 'success.main',
           }}
         >
-          <Typography sx={{ position: 'absolute' }}>{props.pass}%</Typography>
+          {/* TODO: turn into styled  component */}
+          <Tooltip title={`${props.pass}%`} arrow disableFocusListener>
+            <Typography
+              sx={{
+                position: 'absolute',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+              }}
+            >
+              {props.pass}%
+            </Typography>
+          </Tooltip>
         </Box>
       ) : null}
+
       {props?.fail ? (
+        //TODO: turn into styled  component
         <Box
           role="progressbar"
           aria-valuemin={0}
@@ -60,7 +76,19 @@ export function ProgressBar(props: Props) {
             backgroundColor: 'error.main',
           }}
         >
-          <Typography sx={{ position: 'absolute' }}>{props.fail}%</Typography>
+          {/* TODO: turn into styled  component */}
+          <Tooltip title={`${props.fail}%`} arrow disableFocusListener>
+            <Typography
+              sx={{
+                position: 'absolute',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+              }}
+            >
+              {props.fail}%
+            </Typography>
+          </Tooltip>
         </Box>
       ) : null}
     </Box>

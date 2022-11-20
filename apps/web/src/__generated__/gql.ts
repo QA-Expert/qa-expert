@@ -26,7 +26,9 @@ const documents = {
     types.UpdateUserPasswordDocument,
   '\n  mutation ClaimBadge($badgeId: String!) {\n    claimBadge(badgeId: $badgeId) {\n      badges\n    }\n  }\n':
     types.ClaimBadgeDocument,
-  '\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      description\n      progress {\n        pass\n        fail\n        state\n        submittedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n':
+  '\n  mutation DeletePagesProgresses($pages: [String!]!) {\n    deletePagesProgresses(pages: $pages)\n  }\n':
+    types.DeletePagesProgressesDocument,
+  '\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      description\n      pages {\n        _id\n        type\n      }\n      progress {\n        pass\n        fail\n        state\n        submittedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n':
     types.GetAllCoursesDocument,
   '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      description\n      pages {\n        ...PageFragment\n      }\n    }\n  }\n':
     types.GetCourseDocument,
@@ -73,8 +75,11 @@ export function gql(
   source: '\n  mutation ClaimBadge($badgeId: String!) {\n    claimBadge(badgeId: $badgeId) {\n      badges\n    }\n  }\n',
 ): typeof documents['\n  mutation ClaimBadge($badgeId: String!) {\n    claimBadge(badgeId: $badgeId) {\n      badges\n    }\n  }\n'];
 export function gql(
-  source: '\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      description\n      progress {\n        pass\n        fail\n        state\n        submittedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n',
-): typeof documents['\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      description\n      progress {\n        pass\n        fail\n        state\n        submittedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n'];
+  source: '\n  mutation DeletePagesProgresses($pages: [String!]!) {\n    deletePagesProgresses(pages: $pages)\n  }\n',
+): typeof documents['\n  mutation DeletePagesProgresses($pages: [String!]!) {\n    deletePagesProgresses(pages: $pages)\n  }\n'];
+export function gql(
+  source: '\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      description\n      pages {\n        _id\n        type\n      }\n      progress {\n        pass\n        fail\n        state\n        submittedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n',
+): typeof documents['\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      description\n      pages {\n        _id\n        type\n      }\n      progress {\n        pass\n        fail\n        state\n        submittedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n'];
 export function gql(
   source: '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      description\n      pages {\n        ...PageFragment\n      }\n    }\n  }\n',
 ): typeof documents['\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      description\n      pages {\n        ...PageFragment\n      }\n    }\n  }\n'];

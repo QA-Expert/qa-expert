@@ -4,7 +4,6 @@ import * as mongoose from 'mongoose';
 import { Answer } from '../answers/answer.schema';
 import { User } from '../users/user.schema';
 
-// @typescript-eslint/no-unused-vars
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // TODO: add description to all props

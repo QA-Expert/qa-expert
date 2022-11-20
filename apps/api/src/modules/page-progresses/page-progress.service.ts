@@ -13,7 +13,7 @@ export class PageProgressService {
     private pageProgressModel: Model<PageProgress>,
   ) {}
 
-  async findAllByCourseId(courseId: string, userId: string) {
+  async findAllByCourseIdAsc(courseId: string, userId: string) {
     return await this.pageProgressModel
       .find({
         course: { _id: courseId },

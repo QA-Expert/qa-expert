@@ -38,7 +38,13 @@ export class CourseService {
   }
 
   async findAll() {
-    return await this.courseModel.find().exec();
+    return await this.courseModel
+      .find()
+      .populate({
+        path: 'pages',
+        model: Page.name,
+      })
+      .exec();
   }
 
   async addPage(courseId: string, pageId: string, userId: string) {
@@ -64,7 +70,7 @@ export class CourseService {
       return initValue;
     }
 
-    const progresses = await this.servicePageProgress.findAllByCourseId(
+    const progresses = await this.servicePageProgress.findAllByCourseIdAsc(
       course._id,
       user._id,
     );

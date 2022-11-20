@@ -8,8 +8,15 @@ import Typography from '@mui/material/Typography';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CLAIM_BADGE } from '../../graphql/mutations/mutations';
-import { GET_USER } from '../../graphql/queries/queries';
+import {
+  CLAIM_BADGE,
+  DELETE_PAGES_PROGRESSES,
+} from '../../graphql/mutations/mutations';
+import {
+  GET_ALL_COURSES,
+  GET_COURSE,
+  GET_USER,
+} from '../../graphql/queries/queries';
 import { userAtom } from '../../store';
 import { Box } from '../box/box';
 import { ProgressBar } from '../progress-bar/progress-bar';
@@ -17,18 +24,13 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import TimerIcon from '@mui/icons-material/Timer';
 import {
   CourseProgressState,
+  CourseType,
   GetAllCoursesQuery,
 } from '../../__generated__/graphql';
-import { addDays, formatDuration, intervalToDuration } from 'date-fns';
-import { useEffect, useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
+import { useDurationToRetakeQuiz } from './card.hook';
 
 type Props = GetAllCoursesQuery['courses'][number];
-
-const getRetakeQuizTime = (duration: Duration) =>
-  formatDuration(duration, {
-    delimiter: ', ',
-  });
 
 export const CardComponent = ({
   _id,
@@ -36,8 +38,8 @@ export const CardComponent = ({
   description,
   progress,
   badge,
+  pages,
 }: Props) => {
-  // TODO: Create custom react hook to put all that logic in it
   const [user, setUser] = useAtom(userAtom);
   const [claimBadge] = useMutation(CLAIM_BADGE, {
     // TODO: figure out why we have to refetch user and setUser atom does not work and update user
@@ -47,39 +49,26 @@ export const CardComponent = ({
       },
     ],
   });
+  const [deletePagesProgresses] = useMutation(DELETE_PAGES_PROGRESSES, {
+    refetchQueries: [
+      {
+        query: GET_COURSE,
+        variables: { _id },
+      },
+      {
+        query: GET_ALL_COURSES,
+      },
+    ],
+  });
   const isPassedCourse = progress.state === CourseProgressState.Pass;
   const isFailedCourse = progress.state === CourseProgressState.Fail;
-  const lastSubmittedDate = new Date(progress.submittedAt);
-  const canRetakeDate = addDays(
-    lastSubmittedDate,
-    Number(process.env.NEXT_PUBLIC_COURSE_COOLDOWN),
-  );
-  const nowDate = new Date();
-  const duration = intervalToDuration({
-    start: nowDate,
-    end: canRetakeDate,
-  });
-  const [timeLeftToRetake, setTimeLeftToRetake] = useState<string>(
-    getRetakeQuizTime(duration),
-  );
   const isBadgeClaimed = badge?._id
     ? user?.badges?.includes(badge?._id)
     : false;
-  const canRetakeQuiz = nowDate >= canRetakeDate;
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      const duration = intervalToDuration({
-        start: new Date(),
-        end: canRetakeDate,
-      });
-      setTimeLeftToRetake(getRetakeQuizTime(duration));
-    }, 1000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  });
+  const { canRetakeQuiz, timeLeftToRetake } = useDurationToRetakeQuiz(
+    progress.submittedAt,
+  );
 
   return (
     <Link href={`/course/${_id}`}>
@@ -169,7 +158,14 @@ export const CardComponent = ({
                 disabled={!canRetakeQuiz}
                 onClick={async (e) => {
                   e.preventDefault();
-                  console.log('Retake quiz');
+
+                  const pagesProgressesToRemove = pages
+                    .filter((page) => page.type === CourseType.Quiz)
+                    .map((page) => page._id);
+
+                  await deletePagesProgresses({
+                    variables: { pages: pagesProgressesToRemove },
+                  });
                 }}
               >
                 Retake quiz

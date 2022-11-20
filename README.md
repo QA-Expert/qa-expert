@@ -1,22 +1,20 @@
-# Turborepo starter
-
-This is an official npm starter turborepo.
-
-## What's inside?
+# What's inside?
 
 This turborepo uses [npm](https://www.npmjs.com/) as a package manager. It includes the following packages/apps:
 
-### Apps and Packages
+## Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+`apps:`
+- `web`: Web Project based on [Next.js](https://nextjs.org)
+- `api`: API Project based on Nest
+
+`packages:`
+- `config` - shared eslint configs for apps
+- `tsconfig` - these are base shared `tsconfig.json`s from which all other `tsconfig.json`'s inherit from.
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-### Utilities
+## Utilities
 
 This turborepo has some additional tools already setup for you:
 
@@ -24,23 +22,62 @@ This turborepo has some additional tools already setup for you:
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 
-### Build
+
+# Installation
+
+Install [Nodejs](https://nodejs.org/en/download/)
+
+Install yarn
+```
+npm install --global yarn
+```
+
+Install all projects dependencies
+```
+yarn install
+```
+
+Install [husky](https://typicode.github.io/husky/#/?id=usage)
+```
+npx husky install
+```
+
+install [MongoDB](https://www.mongodb.com/docs/manual/administration/install-community/)
+
+
+# Build
 
 To build all apps and packages, run the following command:
 
 ```
-cd my-turborepo
-npm run build
+cd <current repo>
+yarn build
 ```
 
-### Develop
+# Develop
 
 To develop all apps and packages, run the following command:
 
 ```
-cd my-turborepo
-npm run dev
+cd <current repo>
+yarn dev
 ```
+
+To be able to run/build/test apps separately use `--filter=<app name>`
+
+```
+cd <current repo>
+yarn dev --filter=api
+```
+
+API will be run on `localhost:3001/graphql`
+
+```
+cd <current repo>
+yarn dev --filter=web
+```
+
+Web will be run on `localhost:3000`
 
 ### Remote Caching
 
@@ -49,7 +86,7 @@ Turborepo can use a technique known as [Remote Caching](https://turborepo.org/do
 By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
 ```
-cd my-turborepo
+cd <current repo>
 npx turbo login
 ```
 

@@ -78,7 +78,7 @@ export class Course extends mongoose.Document {
       fail: 0,
       pass: 0,
       state: CourseProgressState.IN_PROGRESS,
-      submitted: new Date(),
+      submittedAt: new Date(),
     },
   })
   progress: CourseProgress;

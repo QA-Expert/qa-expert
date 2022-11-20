@@ -7,6 +7,10 @@ export const GET_ALL_COURSES = gql(/* GraphQL */ `
       title
       type
       description
+      pages {
+        _id
+        type
+      }
       progress {
         pass
         fail

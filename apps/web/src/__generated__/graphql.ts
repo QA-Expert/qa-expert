@@ -412,6 +412,15 @@ export type ClaimBadgeMutation = {
   claimBadge: { __typename?: 'User'; badges?: Array<string> | null };
 };
 
+export type DeletePagesProgressesMutationVariables = Exact<{
+  pages: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+export type DeletePagesProgressesMutation = {
+  __typename?: 'Mutation';
+  deletePagesProgresses: boolean;
+};
+
 export type GetAllCoursesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllCoursesQuery = {
@@ -422,6 +431,7 @@ export type GetAllCoursesQuery = {
     title: string;
     type: CourseType;
     description: string;
+    pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
     progress: {
       __typename?: 'CourseProgress';
       pass: number;
@@ -1381,6 +1391,60 @@ export const ClaimBadgeDocument = {
     },
   ],
 } as unknown as DocumentNode<ClaimBadgeMutation, ClaimBadgeMutationVariables>;
+export const DeletePagesProgressesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'DeletePagesProgresses' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'pages' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'ListType',
+              type: {
+                kind: 'NonNullType',
+                type: {
+                  kind: 'NamedType',
+                  name: { kind: 'Name', value: 'String' },
+                },
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'deletePagesProgresses' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'pages' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'pages' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  DeletePagesProgressesMutation,
+  DeletePagesProgressesMutationVariables
+>;
 export const GetAllCoursesDocument = {
   kind: 'Document',
   definitions: [
@@ -1401,6 +1465,17 @@ export const GetAllCoursesDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pages' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                    ],
+                  },
+                },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'progress' },

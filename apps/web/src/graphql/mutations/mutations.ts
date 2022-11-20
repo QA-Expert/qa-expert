@@ -107,3 +107,9 @@ export const CLAIM_BADGE = gql(/* GraphQL */ `
     }
   }
 `);
+
+export const DELETE_PAGES_PROGRESSES = gql(/* GraphQL */ `
+  mutation DeletePagesProgresses($pages: [String!]!) {
+    deletePagesProgresses(pages: $pages)
+  }
+`);

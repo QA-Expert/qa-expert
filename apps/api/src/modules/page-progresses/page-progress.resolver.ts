@@ -16,16 +16,6 @@ export class PageProgressResolver {
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
-  @Mutation(() => Boolean)
-  public async deletePagesProgresses(
-    @CurrentUser() user: User,
-    @Args('pages', { type: () => [String] }) pages: string[],
-  ): Promise<boolean> {
-    return await this.service.removeMany(pages, user._id);
-  }
-
-  @UseGuards(GqlAuthGuard, RolesGuard)
-  @Roles(RolesEnum.USER)
   @Mutation(() => PageProgress)
   public async createCoursePageProgress(
     @CurrentUser() user: User,
@@ -42,5 +32,15 @@ export class PageProgressResolver {
     @Args('data') input: QuizPageProgressInput,
   ): Promise<PageProgress> {
     return await this.service.createQuizPageProgress(input, user._id);
+  }
+
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.USER)
+  @Mutation(() => Boolean)
+  public async deletePagesProgresses(
+    @CurrentUser() user: User,
+    @Args('pages', { type: () => [String] }) pages: string[],
+  ): Promise<boolean> {
+    return await this.service.removeMany(pages, user._id);
   }
 }
