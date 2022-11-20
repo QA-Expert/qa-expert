@@ -14,24 +14,21 @@ import { userAtom } from '../../store';
 import { Box } from '../box/box';
 import { ProgressBar } from '../progress-bar/progress-bar';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import TimerIcon from '@mui/icons-material/Timer';
 import {
   CourseProgressState,
   GetAllCoursesQuery,
 } from '../../__generated__/graphql';
-import { addDays, intervalToDuration } from 'date-fns';
+import { addDays, formatDuration, intervalToDuration } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { padStart } from 'lodash';
+import Tooltip from '@mui/material/Tooltip';
 
 type Props = GetAllCoursesQuery['courses'][number];
 
-const getRetakeQuizTime = (duration: Duration) => {
-  const d = duration.days;
-  const h = padStart(duration.hours?.toString(), 2, '0');
-  const m = padStart(duration.minutes?.toString(), 2, '0');
-  const s = padStart(duration.seconds?.toString(), 2, '0');
-
-  return `${d} days ${h}:${m}:${s}`;
-};
+const getRetakeQuizTime = (duration: Duration) =>
+  formatDuration(duration, {
+    delimiter: ', ',
+  });
 
 export const CardComponent = ({
   _id,
@@ -98,15 +95,39 @@ export const CardComponent = ({
           }}
         >
           {isBadgeClaimed && (
-            <VerifiedIcon
-              fontSize="large"
-              sx={{
-                position: 'absolute',
-                top: '-15px',
-                right: '-15px',
-                zIndex: 'mobileStepper',
-              }}
-            />
+            <Tooltip
+              title={`Badge has been claimed`}
+              arrow
+              disableFocusListener
+            >
+              <VerifiedIcon
+                fontSize="large"
+                sx={{
+                  position: 'absolute',
+                  top: '-15px',
+                  right: '-15px',
+                  zIndex: 'mobileStepper',
+                }}
+              />
+            </Tooltip>
+          )}
+
+          {isFailedCourse && !canRetakeQuiz && (
+            <Tooltip
+              title={`Quiz can be retaken in ${timeLeftToRetake}`}
+              arrow
+              disableFocusListener
+            >
+              <TimerIcon
+                fontSize="large"
+                sx={{
+                  position: 'absolute',
+                  top: '-15px',
+                  right: '-15px',
+                  zIndex: 'mobileStepper',
+                }}
+              />
+            </Tooltip>
           )}
 
           {badge?._id && isPassedCourse && !isBadgeClaimed && (
@@ -143,16 +164,6 @@ export const CardComponent = ({
                 gap: '2rem',
               }}
             >
-              <Typography
-                sx={{
-                  fontSize: '1.5rem',
-                  fontWeight: 'fontWeightBold',
-                  color: 'primary.main',
-                }}
-              >
-                {timeLeftToRetake}
-              </Typography>
-
               <Button
                 variant="contained"
                 disabled={!canRetakeQuiz}
@@ -165,6 +176,7 @@ export const CardComponent = ({
               </Button>
             </Box>
           )}
+
           <Card
             sx={{
               width: '220px',
@@ -173,7 +185,6 @@ export const CardComponent = ({
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              opacity: isFailedCourse ? 0.5 : 1,
             }}
             raised
           >
@@ -193,6 +204,7 @@ export const CardComponent = ({
               </Typography>
             </CardContent>
           </Card>
+
           <ProgressBar {...progress} />
         </Box>
       </a>
