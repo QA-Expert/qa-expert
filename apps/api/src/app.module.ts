@@ -34,7 +34,7 @@ import { BadgeModule } from './modules/badge/badge.module';
         credentials: true,
       },
     }),
-    MongooseModule.forRoot('mongodb://localhost:27017/qa-school'),
+    MongooseModule.forRoot('mongodb://localhost:27017/qa-expert'),
     AnswerModule,
     QuestionModule,
     UserModule,

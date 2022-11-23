@@ -31,7 +31,7 @@ const httpLink = new HttpLink({
 
 export function createApolloClient() {
   return new ApolloClient({
-    name: 'qa-school-web-client',
+    name: 'qa-expert-web-client',
     ssrMode: typeof window === 'undefined',
     link: from([errorLink, httpLink]),
     cache: new InMemoryCache(),

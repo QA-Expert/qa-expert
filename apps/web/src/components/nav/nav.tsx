@@ -22,7 +22,7 @@ export default function Nav() {
                 textDecoration: 'none',
               }}
             >
-              QA SCHOOL
+              QA EXPERT
             </Typography>
           </Link>
           <Box

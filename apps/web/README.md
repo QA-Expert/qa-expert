@@ -1,6 +1,6 @@
 ## Description
 
-API for QA School project.
+API for QA Expert project.
 
 Powered by following technologies:
 

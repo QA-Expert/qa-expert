@@ -5,7 +5,7 @@ import { InitialState, useApollo } from '../appolo/client';
 import { ApolloProvider } from '@apollo/client';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/';
-import theme from '../src/theme';
+import theme from '../src/theme/theme';
 import { useRouter } from 'next/router';
 import { GET_USER } from '../src/graphql/queries/queries';
 import { useEffect } from 'react';
