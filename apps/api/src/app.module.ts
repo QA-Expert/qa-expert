@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { CourseModule } from './modules/courses/course.module';
 import { UserModule } from './modules/users/user.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AnswerModule } from './modules/answers/answer.module';
@@ -14,11 +14,15 @@ import { BadgeModule } from './modules/badge/badge.module';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: process.env.AUTH_SECRET,
-      signOptions: {
-        expiresIn: process.env.AUTH_TOKEN_EXPIRES_IN,
-      },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('AUTH_SECRET'),
+        signOptions: {
+          expiresIn: configService.get<string>('AUTH_TOKEN_EXPIRES_IN'),
+        },
+      }),
+      inject: [ConfigService],
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -34,7 +38,19 @@ import { BadgeModule } from './modules/badge/badge.module';
         credentials: true,
       },
     }),
-    MongooseModule.forRoot('mongodb://localhost:27017/qa-expert'),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => {
+        const host = configService.get<string>(`DATABASE_HOST`);
+        const port = configService.get<number>(`DATABASE_PORT`);
+        const dbName = configService.get<string>(`DATABASE_NAME`);
+
+        return {
+          uri: `mongodb://${host}:${port}/${dbName}`,
+        };
+      },
+      inject: [ConfigService],
+    }),
     AnswerModule,
     QuestionModule,
     UserModule,
