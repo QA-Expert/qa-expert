@@ -9,9 +9,9 @@ import theme from '../src/theme/theme';
 import { useRouter } from 'next/router';
 import { GET_USER } from '../src/graphql/queries/queries';
 import { useEffect } from 'react';
-import { User } from 'graphql-schema-gen/schema.gen';
 import { useAtom } from 'jotai';
 import { userAtom } from '../src/store';
+import { User } from '../src/__generated__/graphql';
 
 interface Props {
   initialApolloState: InitialState;
