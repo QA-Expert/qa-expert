@@ -15,7 +15,7 @@ export class PageProgressService {
 
   async findAllByCourseIdAsc(courseId: string, userId: string) {
     return await this.pageProgressModel
-      .find<PageProgress>({
+      .find({
         course: { _id: courseId },
         user: userId,
       })
