@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Course } from '../courses/course.schema';
+import { SubmittedProgressInput } from './create-submitted-progress.input';
 import { SubmittedProgress } from './submitted-progress.schema';
 
 @Injectable()
@@ -19,10 +20,10 @@ export class SubmittedProgressService {
     });
   }
 
-  async create(course: Course, userId: string) {
+  async create(data: SubmittedProgressInput, userId: string) {
     const newProgress: Partial<SubmittedProgress> = {
-      progress: course.progress.pass,
-      course: new mongoose.Types.ObjectId(course._id),
+      ...data,
+      course: new mongoose.Types.ObjectId(data.course),
       user: new mongoose.Types.ObjectId(userId),
       createdBy: new mongoose.Types.ObjectId(userId),
       updatedBy: new mongoose.Types.ObjectId(userId),

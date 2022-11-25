@@ -11,6 +11,7 @@ import { QuestionModule } from './modules/questions/question.module';
 import { PageModule } from './modules/pages/page.module';
 import { PageProgressModule } from './modules/page-progresses/page-progress.module';
 import { BadgeModule } from './modules/badges/badge.module';
+import { SubmittedProgressModule } from './modules/submitted-progresses/submitted-progress.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { BadgeModule } from './modules/badges/badge.module';
     PageModule,
     PageProgressModule,
     BadgeModule,
+    SubmittedProgressModule,
   ],
   providers: [],
 })

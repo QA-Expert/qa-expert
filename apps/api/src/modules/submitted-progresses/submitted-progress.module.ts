@@ -7,6 +7,7 @@ import {
   SubmittedProgressSchema,
 } from './submitted-progress.schema';
 import { SubmittedProgressService } from './submitted-progress.service';
+import { SubmittedProgressResolver } from './submitted-progress.resolver';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { SubmittedProgressService } from './submitted-progress.service';
     ]),
     UserModule,
   ],
-  providers: [SubmittedProgressService, JwtService],
+  providers: [SubmittedProgressService, SubmittedProgressResolver, JwtService],
   exports: [],
 })
-export class CourseModule {}
+export class SubmittedProgressModule {}

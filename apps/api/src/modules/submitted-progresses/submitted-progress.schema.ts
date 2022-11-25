@@ -17,7 +17,7 @@ export class SubmittedProgress {
   @Field()
   progress: number;
 
-  @Prop({ type: ObjectId, ref: Course.name, required: true })
+  @Prop({ type: ObjectId, ref: 'Course', required: true })
   @Field(() => String)
   course: Course | mongoose.Types.ObjectId;
 
