@@ -8,7 +8,12 @@ import { PageProgressService } from '../page-progresses/page-progress.service';
 import { Page } from '../pages/page.schema';
 import { Question } from '../questions/question.schema';
 import { User } from '../users/user.schema';
-import { Course, CourseProgressState } from './course.schema';
+import {
+  Course,
+  CourseProgress,
+  CourseProgressState,
+  CourseType,
+} from './course.schema';
 
 @Injectable()
 export class CourseService {
@@ -58,7 +63,12 @@ export class CourseService {
       .exec();
   }
 
-  async findProgress(course: Course, user: User) {
+  // TODO: should we have db entity for course progress instead of calculating it on fly?
+  async findProgress(
+    course: Course,
+    user: User,
+    type?: CourseType,
+  ): Promise<CourseProgress> {
     const initValue = {
       pass: 0,
       fail: 0,
@@ -70,15 +80,18 @@ export class CourseService {
       return initValue;
     }
 
-    const progresses = await this.servicePageProgress.findAllByCourseIdAsc(
+    const progressesDb = await this.servicePageProgress.findAllByCourseIdAsc(
       course._id,
       user._id,
     );
 
-    if (!progresses?.length) {
+    if (!progressesDb?.length) {
       return initValue;
     }
 
+    const progresses = progressesDb.filter((progress) =>
+      type ? progress.type === type : true,
+    );
     const submittedAt = progresses[0].createdAt; // The very last submitted page progress
     const total = course.pages.length ?? 0;
     const numberOfFailed = progresses?.filter(

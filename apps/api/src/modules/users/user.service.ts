@@ -93,7 +93,7 @@ export class UserService {
       .replace(/{{host}}/g, process.env.HOST ?? '')
       .replace(
         /{{action_url}}/g,
-        `${process.env.HOST}/reset-password/${token}`,
+        `${process.env.HOST}:${process.env.PORT ?? 80}/reset-password/${token}`,
       );
 
     const mailOptions: SendMailOptions = {
