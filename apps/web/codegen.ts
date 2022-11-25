@@ -1,7 +1,9 @@
 import { CodegenConfig } from '@graphql-codegen/cli';
+
 const config: CodegenConfig = {
-  // TODO: figure out why NEXT_PUBLIC_API_URL is undefined: I think it is because it is in root level
-  schema: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/graphql',
+  // NOTE: codegen.ts supports dotenv variables but they should live in .evn file
+  // https://the-guild.dev/graphql/codegen/docs/config-reference/require-field#dotenv-integration
+  schema: process.env.NEXT_PUBLIC_API_URL,
   documents: ['./src/graphql/**/*'],
   generates: {
     './src/__generated__/': {
@@ -12,7 +14,8 @@ const config: CodegenConfig = {
       },
       config: {
         scalars: {
-          //TODO: hack to be able to type Date type
+          // NOTE: hack to be able to type Date type. Graphql returns string for Date in request.
+          // So to be able to type it as string i have to do this hack
           DateTime: typeof '',
         },
       },

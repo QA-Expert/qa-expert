@@ -7,8 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "compile": "graphql-codegen",
-    "watch": "graphql-codegen -w"
+    "compile": "graphql-codegen -r dotenv/config",
+    "compile-dev": "graphql-codegen dotenv_config_path=.env.development.local -r dotenv/config ",
+    "watch": "graphql-codegen-r dotenv/config -w",
+    "watch-dev": "graphql-codegen dotenv_config_path=.env.development.local -r dotenv/config -w "
   },
   "dependencies": {
     "@apollo/client": "^3.7.0",
