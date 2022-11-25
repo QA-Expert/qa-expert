@@ -94,6 +94,7 @@ export type Mutation = {
   createCoursePageProgress: PageProgress;
   createQuizPage: Page;
   createQuizPageProgress: PageProgress;
+  createSubmittedProgress: SubmittedProgress;
   deletePagesProgresses: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserOutputLogin;
@@ -128,6 +129,10 @@ export type MutationCreateQuizPageArgs = {
 
 export type MutationCreateQuizPageProgressArgs = {
   data: QuizPageProgressInput;
+};
+
+export type MutationCreateSubmittedProgressArgs = {
+  data: SubmittedProgressInput;
 };
 
 export type MutationDeletePagesProgressesArgs = {
@@ -196,6 +201,7 @@ export type Query = {
   badges: Array<Badge>;
   course: Course;
   courses: Array<Course>;
+  submittedProgresses: Array<SubmittedProgress>;
   user: User;
 };
 
@@ -227,6 +233,20 @@ export type QuizPageProgressInput = {
 export type ResetPasswordInput = {
   password: Scalars['String'];
   token: Scalars['String'];
+};
+
+export type SubmittedProgress = {
+  __typename?: 'SubmittedProgress';
+  _id: Scalars['String'];
+  course: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  progress: Scalars['Float'];
+  user: Scalars['String'];
+};
+
+export type SubmittedProgressInput = {
+  course: Scalars['String'];
+  progress: Scalars['Float'];
 };
 
 export type User = {
