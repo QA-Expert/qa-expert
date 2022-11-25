@@ -1,7 +1,7 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { Badge } from '../badge/badge.schema';
+import { Badge } from '../badges/badge.schema';
 
 export enum Roles {
   USER = 'user',

@@ -10,7 +10,7 @@ import { AnswerModule } from './modules/answers/answer.module';
 import { QuestionModule } from './modules/questions/question.module';
 import { PageModule } from './modules/pages/page.module';
 import { PageProgressModule } from './modules/page-progresses/page-progress.module';
-import { BadgeModule } from './modules/badge/badge.module';
+import { BadgeModule } from './modules/badges/badge.module';
 
 @Module({
   imports: [

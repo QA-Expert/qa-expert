@@ -6,7 +6,7 @@ import { UserModule } from '../users/user.module';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PageProgressModule } from '../page-progresses/page-progress.module';
-import { BadgeModule } from '../badge/badge.module';
+import { BadgeModule } from '../badges/badge.module';
 
 @Module({
   imports: [

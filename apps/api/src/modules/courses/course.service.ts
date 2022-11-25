@@ -2,12 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Answer } from '../answers/answer.schema';
-import { BadgeService } from '../badge/badge.service';
+import { BadgeService } from '../badges/badge.service';
 import { PageProgressState } from '../page-progresses/page-progress.schema';
 import { PageProgressService } from '../page-progresses/page-progress.service';
 import { Page } from '../pages/page.schema';
 import { Question } from '../questions/question.schema';
-import { User } from '../users/user.schema';
 import {
   Course,
   CourseProgress,
@@ -66,7 +65,7 @@ export class CourseService {
   // TODO: should we have db entity for course progress instead of calculating it on fly?
   async findProgress(
     course: Course,
-    user: User,
+    userId: string,
     type?: CourseType,
   ): Promise<CourseProgress> {
     const initValue = {
@@ -82,7 +81,7 @@ export class CourseService {
 
     const progressesDb = await this.servicePageProgress.findAllByCourseIdAsc(
       course._id,
-      user._id,
+      userId,
     );
 
     if (!progressesDb?.length) {

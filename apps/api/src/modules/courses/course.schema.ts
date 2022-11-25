@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { User } from '../users/user.schema';
 import { Page } from '../pages/page.schema';
-import { Badge } from '../badge/badge.schema';
+import { Badge } from '../badges/badge.schema';
 
 export enum CourseType {
   COURSE = 'course',
@@ -43,7 +43,6 @@ export class CourseProgress {
   submittedAt: Date;
 }
 
-// @typescript-eslint/no-unused-vars
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // TODO: add description to all props
