@@ -14,6 +14,6 @@ import { PageService } from './page.service';
     PageProgressModule,
   ],
   providers: [PageService, PageResolver, JwtService],
-  exports: [],
+  exports: [PageService],
 })
 export class PageModule {}

@@ -7,8 +7,6 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 import { CREATE_COURSE_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
 
-const TIME_TO_REVIEW_COURSE_PAGE = 60000; // 1 minute
-
 export default function CoursePage({ _id, content, progress }: Props) {
   const router = useRouter();
   const slug = router.query.slug ? router.query.slug[0] : '';
@@ -34,7 +32,7 @@ export default function CoursePage({ _id, content, progress }: Props) {
           },
         });
       }
-    }, TIME_TO_REVIEW_COURSE_PAGE);
+    }, Number(process.env.NEXT_PUBLIC_TIME_TO_REVIEW_COURSE_PAGE));
     return () => clearTimeout(timer);
   }, [createProgress, _id, progress, slug]);
 

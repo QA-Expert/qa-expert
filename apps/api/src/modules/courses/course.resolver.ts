@@ -8,17 +8,22 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
-import { Course, CourseProgress } from './course.schema';
+import { Course, CourseType } from './course.schema';
 import { CourseService } from './course.service';
 import { Roles as RolesEnum, User } from '../users/user.schema';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { CurrentUser } from '../users/user.decorator';
 import { Badge } from '../badges/badge.schema';
+import { CourseProgressService } from '../course-progresses/course-progress.service';
+import { TotalCourseProgress } from '../course-progresses/course-progress.schema';
 
 @Resolver(() => Course)
 export class CourseResolver {
-  constructor(private readonly service: CourseService) {}
+  constructor(
+    private readonly service: CourseService,
+    private readonly serviceCourseProgress: CourseProgressService,
+  ) {}
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
@@ -36,12 +41,15 @@ export class CourseResolver {
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
-  @ResolveField('progress', () => CourseProgress)
+  @ResolveField('progress', () => TotalCourseProgress)
   public async progress(
     @CurrentUser() user: User,
     @Parent() course: Course,
-  ): Promise<CourseProgress> {
-    return await this.service.findProgress(course, user._id);
+  ): Promise<TotalCourseProgress> {
+    return await this.serviceCourseProgress.findTotalProgressByCourseId(
+      course._id,
+      user._id,
+    );
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)

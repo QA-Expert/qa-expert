@@ -29,7 +29,7 @@ export class PageService {
       throw new Error('Failed to create new quiz page');
     }
 
-    return model.save();
+    return await model.save();
   }
 
   async createCoursePage(data: CoursePageInput, userId: string) {
@@ -46,7 +46,7 @@ export class PageService {
       throw new Error('Failed to create new course page');
     }
 
-    return model.save();
+    return await model.save();
   }
 
   async update(_id: string, data: CoursePageContentInput, userId: string) {
@@ -66,5 +66,9 @@ export class PageService {
     }
 
     return model;
+  }
+
+  async countByCourseIdAndType(courseId: string, type: CourseType) {
+    return await this.pageModel.count({ course: { _id: courseId }, type });
   }
 }

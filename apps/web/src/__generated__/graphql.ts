@@ -94,7 +94,7 @@ export type Mutation = {
   createCoursePageProgress: PageProgress;
   createQuizPage: Page;
   createQuizPageProgress: PageProgress;
-  createSubmittedProgress: SubmittedProgress;
+  createSubmittedProgress?: Maybe<SubmittedProgress>;
   deletePagesProgresses: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserOutputLogin;
@@ -132,7 +132,7 @@ export type MutationCreateQuizPageProgressArgs = {
 };
 
 export type MutationCreateSubmittedProgressArgs = {
-  data: SubmittedProgressInput;
+  courseId: Scalars['String'];
 };
 
 export type MutationDeletePagesProgressesArgs = {
@@ -238,15 +238,10 @@ export type ResetPasswordInput = {
 export type SubmittedProgress = {
   __typename?: 'SubmittedProgress';
   _id: Scalars['String'];
-  course: Scalars['String'];
+  course: Course;
   createdAt: Scalars['DateTime'];
   progress: Scalars['Float'];
   user: Scalars['String'];
-};
-
-export type SubmittedProgressInput = {
-  course: Scalars['String'];
-  progress: Scalars['Float'];
 };
 
 export type User = {
@@ -441,6 +436,18 @@ export type DeletePagesProgressesMutation = {
   deletePagesProgresses: boolean;
 };
 
+export type CreateSubmittedProgressMutationVariables = Exact<{
+  courseId: Scalars['String'];
+}>;
+
+export type CreateSubmittedProgressMutation = {
+  __typename?: 'Mutation';
+  createSubmittedProgress?: {
+    __typename?: 'SubmittedProgress';
+    _id: string;
+  } | null;
+};
+
 export type GetAllCoursesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllCoursesQuery = {
@@ -510,6 +517,21 @@ export type GetBadgesQuery = {
     icon: string;
     link: string;
     course?: { __typename?: 'Course'; _id: string; title: string } | null;
+  }>;
+};
+
+export type GetSubmittedProgressesQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetSubmittedProgressesQuery = {
+  __typename?: 'Query';
+  submittedProgresses: Array<{
+    __typename?: 'SubmittedProgress';
+    _id: string;
+    progress: number;
+    createdAt: string;
+    course: { __typename?: 'Course'; _id: string; title: string };
   }>;
 };
 
@@ -1465,6 +1487,60 @@ export const DeletePagesProgressesDocument = {
   DeletePagesProgressesMutation,
   DeletePagesProgressesMutationVariables
 >;
+export const CreateSubmittedProgressDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createSubmittedProgress' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'courseId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createSubmittedProgress' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'courseId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'courseId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateSubmittedProgressMutation,
+  CreateSubmittedProgressMutationVariables
+>;
 export const GetAllCoursesDocument = {
   kind: 'Document',
   definitions: [
@@ -1665,3 +1741,44 @@ export const GetBadgesDocument = {
     },
   ],
 } as unknown as DocumentNode<GetBadgesQuery, GetBadgesQueryVariables>;
+export const GetSubmittedProgressesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetSubmittedProgresses' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'submittedProgresses' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'progress' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'course' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetSubmittedProgressesQuery,
+  GetSubmittedProgressesQueryVariables
+>;

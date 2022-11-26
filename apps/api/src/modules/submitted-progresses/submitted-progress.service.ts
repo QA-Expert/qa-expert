@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import { Course } from '../courses/course.schema';
-import { SubmittedProgressInput } from './create-submitted-progress.input';
+import { CourseProgressService } from '../course-progresses/course-progress.service';
 import { SubmittedProgress } from './submitted-progress.schema';
 
 @Injectable()
@@ -10,20 +9,30 @@ export class SubmittedProgressService {
   constructor(
     @InjectModel(SubmittedProgress.name)
     private submittedProgressModel: Model<SubmittedProgress>,
+    private readonly serviceCourseProgress: CourseProgressService,
   ) {}
 
   async findAll(userId: string) {
-    return this.submittedProgressModel.find({
-      user: {
-        _id: userId,
-      },
-    });
+    return this.submittedProgressModel
+      .find({
+        user: {
+          _id: userId,
+        },
+      })
+      .populate('course.title')
+      .exec();
   }
 
-  async create(data: SubmittedProgressInput, userId: string) {
+  async create(courseId: string, userId: string) {
+    const totalCourseProgress =
+      await this.serviceCourseProgress.findTotalProgressByCourseId(
+        courseId,
+        userId,
+      );
+
     const newProgress: Partial<SubmittedProgress> = {
-      ...data,
-      course: new mongoose.Types.ObjectId(data.course),
+      progress: totalCourseProgress.pass,
+      course: new mongoose.Types.ObjectId(courseId),
       user: new mongoose.Types.ObjectId(userId),
       createdBy: new mongoose.Types.ObjectId(userId),
       updatedBy: new mongoose.Types.ObjectId(userId),
@@ -35,6 +44,6 @@ export class SubmittedProgressService {
       throw new Error('Failed to create new submitted progress');
     }
 
-    return model.save();
+    return await model.save();
   }
 }

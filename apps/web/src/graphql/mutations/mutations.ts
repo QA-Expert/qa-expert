@@ -113,3 +113,11 @@ export const DELETE_PAGES_PROGRESSES = gql(/* GraphQL */ `
     deletePagesProgresses(pages: $pages)
   }
 `);
+
+export const CREATE_SUBMITTED_PROGRESS = gql(/* GraphQL */ `
+  mutation createSubmittedProgress($courseId: String!) {
+    createSubmittedProgress(courseId: $courseId) {
+      _id
+    }
+  }
+`);

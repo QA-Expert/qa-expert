@@ -66,3 +66,17 @@ export const GET_BADGES = gql(/* GraphQL */ `
     }
   }
 `);
+
+export const GET_SUBMITTED_PROGRESSES = gql(/* GraphQL */ `
+  query GetSubmittedProgresses {
+    submittedProgresses {
+      _id
+      progress
+      createdAt
+      course {
+        _id
+        title
+      }
+    }
+  }
+`);

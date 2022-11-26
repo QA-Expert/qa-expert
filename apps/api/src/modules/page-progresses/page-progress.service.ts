@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
+import { CourseProgressService } from '../course-progresses/course-progress.service';
 import { CourseType } from '../courses/course.schema';
 import { CoursePageProgressInput } from './create-course-page-progress.input';
 import { QuizPageProgressInput } from './create-quiz-page-progress.input';
@@ -11,13 +12,20 @@ export class PageProgressService {
   constructor(
     @InjectModel(PageProgress.name)
     private pageProgressModel: Model<PageProgress>,
+    @Inject(forwardRef(() => CourseProgressService))
+    private readonly serviceCourseProgress: CourseProgressService,
   ) {}
 
-  async findAllByCourseIdAsc(courseId: string, userId: string) {
+  async findAllByCourseIdAndTypeAsc(
+    courseId: string,
+    type: CourseType,
+    userId: string,
+  ) {
     return await this.pageProgressModel
       .find({
         course: { _id: courseId },
         user: userId,
+        type,
       })
       .sort({ createdAt: 'asc' });
   }
@@ -57,7 +65,14 @@ export class PageProgressService {
       throw new Error('Failed to create new course page progress');
     }
 
-    return model.save();
+    const createdPageProgress = await model.save();
+
+    await this.serviceCourseProgress.upsert(
+      { course: data.course, type: CourseType.COURSE },
+      userId,
+    );
+
+    return createdPageProgress;
   }
 
   async createQuizPageProgress(data: QuizPageProgressInput, userId: string) {
@@ -80,7 +95,14 @@ export class PageProgressService {
       throw new Error('Failed to create new course page progress');
     }
 
-    return model.save();
+    const createdPageProgress = await model.save();
+
+    await this.serviceCourseProgress.upsert(
+      { course: data.course, type: CourseType.QUIZ },
+      userId,
+    );
+
+    return createdPageProgress;
   }
 
   async removeMany(pageIds: string[], userId: string) {
