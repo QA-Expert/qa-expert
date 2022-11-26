@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CourseProgress, CourseProgressSchema } from './course-progress.schema';
 import { CourseProgressService } from './course-progress.service';
 import { PageProgressModule } from '../page-progresses/page-progress.module';
-import { PageModule } from '../pages/page.module';
+import { CourseModule } from '../courses/course.module';
 
 @Module({
   imports: [
@@ -11,7 +11,7 @@ import { PageModule } from '../pages/page.module';
       { name: CourseProgress.name, schema: CourseProgressSchema },
     ]),
     PageProgressModule,
-    PageModule,
+    forwardRef(() => CourseModule),
   ],
   providers: [CourseProgressService],
   exports: [CourseProgressService],

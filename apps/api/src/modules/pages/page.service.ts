@@ -67,8 +67,4 @@ export class PageService {
 
     return model;
   }
-
-  async countByCourseIdAndType(courseId: string, type: CourseType) {
-    return await this.pageModel.count({ course: { _id: courseId }, type });
-  }
 }

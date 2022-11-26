@@ -67,7 +67,7 @@ export const CardComponent = ({
     : false;
 
   const { canRetakeQuiz, timeLeftToRetake } = useDurationToRetakeQuiz(
-    progress.submittedAt,
+    new Date().toString(), // TODO: FIX
   );
 
   return (

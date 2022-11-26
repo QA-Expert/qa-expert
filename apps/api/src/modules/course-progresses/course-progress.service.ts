@@ -2,15 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { CourseType } from '../courses/course.schema';
+import { CourseService } from '../courses/course.service';
 import { PageProgressState } from '../page-progresses/page-progress.schema';
 import { PageProgressService } from '../page-progresses/page-progress.service';
-import { PageService } from '../pages/page.service';
 import {
   CourseProgress,
   CourseProgressState,
   TotalCourseProgress,
 } from './course-progress.schema';
 import { CourseProgressInput } from './create-course-progress.input';
+import { getPercent, getState } from './utils';
 
 @Injectable()
 export class CourseProgressService {
@@ -18,38 +19,31 @@ export class CourseProgressService {
     @InjectModel(CourseProgress.name)
     private courseProgressModel: Model<CourseProgress>,
     private readonly servicePageProgress: PageProgressService,
-    private readonly servicePage: PageService,
+    private readonly serviceCourse: CourseService,
   ) {}
 
   async upsert(
     data: CourseProgressInput,
     userId: string,
   ): Promise<CourseProgress> {
-    const progresses =
+    const pagesProgresses =
       await this.servicePageProgress.findAllByCourseIdAndTypeAsc(
         data.course,
         data.type,
         userId,
       );
-    const total = await this.servicePage.countByCourseIdAndType(
-      data.course,
-      data.type,
-    );
-    const numberOfFailed = progresses?.filter(
+    const courseDb = await this.serviceCourse.findById(data.course);
+    const total = courseDb?.pages.length ?? 0;
+    const numberOfFailed = pagesProgresses?.filter(
       (process) => process.state === PageProgressState.FAIL,
     ).length;
-    const numberOfPassed = progresses?.filter(
+    const numberOfPassed = pagesProgresses?.filter(
       (process) => process.state === PageProgressState.PASS,
     ).length;
 
-    const fail = Number(((numberOfFailed * 100) / total).toFixed());
-    const pass = Number(((numberOfPassed * 100) / total).toFixed());
-    const state =
-      pass >= 100
-        ? CourseProgressState.PASS
-        : pass + fail >= 100
-        ? CourseProgressState.FAIL
-        : CourseProgressState.IN_PROGRESS;
+    const fail = getPercent(total, numberOfFailed);
+    const pass = getPercent(total, numberOfPassed);
+    const state = getState(pass, fail);
 
     const newProgress: Partial<CourseProgress> = {
       type: data.type,
@@ -92,41 +86,31 @@ export class CourseProgressService {
       course: { _id: courseId },
       user: { _id: userId },
     });
-
     const quizProgress = progresses.find(
       (progress) => progress.type === CourseType.QUIZ,
     );
     const courseProgress = progresses.find(
       (progress) => progress.type === CourseType.COURSE,
     );
-    const quizPageCount = await this.servicePage.countByCourseIdAndType(
-      courseId,
-      CourseType.QUIZ,
-    );
-    const coursePageCount = await this.servicePage.countByCourseIdAndType(
-      courseId,
-      CourseType.COURSE,
-    );
-    const totalPageCount = quizPageCount + coursePageCount;
-    const quizPagePercent = Number(
-      ((quizPageCount * 100) / totalPageCount).toFixed(),
-    );
-    const coursePagePercent = Number(
-      ((coursePageCount * 100) / totalPageCount).toFixed(),
-    );
+    const courseDb = await this.serviceCourse.findById(courseId);
+    const quizPageCount =
+      courseDb?.pages.filter((page) => page.type === CourseType.QUIZ).length ??
+      0;
+    const coursePageCount =
+      courseDb?.pages.filter((page) => page.type === CourseType.COURSE)
+        .length ?? 0;
+
+    const total = quizPageCount + coursePageCount;
+    const quizPagePercent = getPercent(total, quizPageCount) / 100;
+    const coursePagePercent = getPercent(total, coursePageCount) / 100;
 
     const pass =
-      (quizProgress?.pass ?? 0 * quizPagePercent) +
-      (courseProgress?.pass ?? 0 * coursePagePercent);
+      (quizProgress?.pass ?? 0) * quizPagePercent +
+      (courseProgress?.pass ?? 0) * coursePagePercent;
     const fail =
-      (quizProgress?.fail ?? 0 * quizPagePercent) +
-      (courseProgress?.fail ?? 0 * coursePagePercent);
-    const state =
-      pass >= 100
-        ? CourseProgressState.PASS
-        : pass + fail >= 100
-        ? CourseProgressState.FAIL
-        : CourseProgressState.IN_PROGRESS;
+      (quizProgress?.fail ?? 0) * quizPagePercent +
+      (courseProgress?.fail ?? 0) * coursePagePercent;
+    const state = getState(pass, fail);
 
     return {
       pass,

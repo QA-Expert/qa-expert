@@ -45,7 +45,7 @@ export type Course = {
   description: Scalars['String'];
   icon: Scalars['String'];
   pages: Array<Page>;
-  progress: CourseProgress;
+  progress: TotalCourseProgress;
   title: Scalars['String'];
   type: CourseType;
 };
@@ -63,14 +63,6 @@ export type CoursePageInput = {
 export type CoursePageProgressInput = {
   course: Scalars['String'];
   page: Scalars['String'];
-};
-
-export type CourseProgress = {
-  __typename?: 'CourseProgress';
-  fail: Scalars['Float'];
-  pass: Scalars['Float'];
-  state: CourseProgressState;
-  submittedAt: Scalars['DateTime'];
 };
 
 /** Defines the state of course progress */
@@ -94,7 +86,6 @@ export type Mutation = {
   createCoursePageProgress: PageProgress;
   createQuizPage: Page;
   createQuizPageProgress: PageProgress;
-  createSubmittedProgress?: Maybe<SubmittedProgress>;
   deletePagesProgresses: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserOutputLogin;
@@ -129,10 +120,6 @@ export type MutationCreateQuizPageArgs = {
 
 export type MutationCreateQuizPageProgressArgs = {
   data: QuizPageProgressInput;
-};
-
-export type MutationCreateSubmittedProgressArgs = {
-  courseId: Scalars['String'];
 };
 
 export type MutationDeletePagesProgressesArgs = {
@@ -242,6 +229,13 @@ export type SubmittedProgress = {
   createdAt: Scalars['DateTime'];
   progress: Scalars['Float'];
   user: Scalars['String'];
+};
+
+export type TotalCourseProgress = {
+  __typename?: 'TotalCourseProgress';
+  fail: Scalars['Float'];
+  pass: Scalars['Float'];
+  state: CourseProgressState;
 };
 
 export type User = {
@@ -436,18 +430,6 @@ export type DeletePagesProgressesMutation = {
   deletePagesProgresses: boolean;
 };
 
-export type CreateSubmittedProgressMutationVariables = Exact<{
-  courseId: Scalars['String'];
-}>;
-
-export type CreateSubmittedProgressMutation = {
-  __typename?: 'Mutation';
-  createSubmittedProgress?: {
-    __typename?: 'SubmittedProgress';
-    _id: string;
-  } | null;
-};
-
 export type GetAllCoursesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllCoursesQuery = {
@@ -460,11 +442,10 @@ export type GetAllCoursesQuery = {
     description: string;
     pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
     progress: {
-      __typename?: 'CourseProgress';
+      __typename?: 'TotalCourseProgress';
       pass: number;
       fail: number;
       state: CourseProgressState;
-      submittedAt: string;
     };
     badge?: { __typename?: 'Badge'; _id: string } | null;
   }>;
@@ -1487,60 +1468,6 @@ export const DeletePagesProgressesDocument = {
   DeletePagesProgressesMutation,
   DeletePagesProgressesMutationVariables
 >;
-export const CreateSubmittedProgressDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'createSubmittedProgress' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'courseId' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'createSubmittedProgress' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'courseId' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'courseId' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  CreateSubmittedProgressMutation,
-  CreateSubmittedProgressMutationVariables
->;
 export const GetAllCoursesDocument = {
   kind: 'Document',
   definitions: [
@@ -1581,10 +1508,6 @@ export const GetAllCoursesDocument = {
                       { kind: 'Field', name: { kind: 'Name', value: 'pass' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'fail' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'state' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'submittedAt' },
-                      },
                     ],
                   },
                 },

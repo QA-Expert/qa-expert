@@ -23,7 +23,9 @@ export class TotalCourseProgress {
   @Field({ defaultValue: 0 })
   fail: number;
 
-  @Field({ defaultValue: CourseProgressState.IN_PROGRESS })
+  @Field(() => CourseProgressState, {
+    defaultValue: CourseProgressState.IN_PROGRESS,
+  })
   state: CourseProgressState;
 }
 
@@ -36,16 +38,19 @@ export class CourseProgress {
   @Field(() => String)
   _id: string;
 
-  @Prop({ type: String, enum: CourseType, required: true })
+  @Prop({ required: true })
   @Field(() => CourseType)
   type: CourseType;
 
+  @Prop({ required: true })
   @Field({ defaultValue: 0 })
   fail: number;
 
+  @Prop({ required: true })
   @Field({ defaultValue: 0 })
   pass: number;
 
+  @Prop({ type: String, enum: CourseProgressState, required: true })
   @Field(() => CourseProgressState, {
     defaultValue: CourseProgressState.IN_PROGRESS,
   })

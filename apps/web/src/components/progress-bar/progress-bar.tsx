@@ -1,5 +1,5 @@
 import { Box } from '../box/box';
-import { CourseProgress as Props } from '../../__generated__/graphql';
+import { TotalCourseProgress as Props } from '../../__generated__/graphql';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 

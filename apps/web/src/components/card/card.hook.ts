@@ -2,8 +2,8 @@ import { addDays, intervalToDuration } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { getRetakeQuizDuration } from './card.handlers';
 
-export const useDurationToRetakeQuiz = (submittedAt: string) => {
-  const lastSubmittedDate = new Date(submittedAt);
+export const useDurationToRetakeQuiz = (createdAt: string) => {
+  const lastSubmittedDate = new Date(createdAt);
   const canRetakeDate = addDays(
     lastSubmittedDate,
     Number(process.env.NEXT_PUBLIC_COURSE_COOLDOWN),
