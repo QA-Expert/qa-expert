@@ -15,7 +15,7 @@ export const GET_ALL_COURSES = gql(/* GraphQL */ `
         pass
         fail
         state
-        # createdAt
+        updatedAt
       }
       badge {
         _id

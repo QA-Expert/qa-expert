@@ -47,10 +47,12 @@ export function ProgressBar(props: Props) {
           <Tooltip title={`${props.pass}%`} arrow disableFocusListener>
             <Typography
               sx={{
+                padding: '0 0.25rem 0 0.25rem',
                 position: 'absolute',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
+                flex: 1,
               }}
             >
               {props.pass}%
@@ -80,10 +82,12 @@ export function ProgressBar(props: Props) {
           <Tooltip title={`${props.fail}%`} arrow disableFocusListener>
             <Typography
               sx={{
+                padding: '0 0.25rem 0 0.25rem',
                 position: 'absolute',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
+                flex: 1,
               }}
             >
               {props.fail}%

@@ -27,6 +27,9 @@ export class TotalCourseProgress {
     defaultValue: CourseProgressState.IN_PROGRESS,
   })
   state: CourseProgressState;
+
+  @Field(() => Date, { defaultValue: new Date() })
+  updatedAt: Date;
 }
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
@@ -78,7 +81,7 @@ export class CourseProgress {
 
   @Prop()
   @Field()
-  createdAt: Date;
+  updatedAt: Date;
 }
 
 export const CourseProgressSchema =

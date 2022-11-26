@@ -1,15 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { CourseType } from '../courses/course.schema';
 import { CourseService } from '../courses/course.service';
 import { PageProgressState } from '../page-progresses/page-progress.schema';
 import { PageProgressService } from '../page-progresses/page-progress.service';
-import {
-  CourseProgress,
-  CourseProgressState,
-  TotalCourseProgress,
-} from './course-progress.schema';
+import { CourseProgress, TotalCourseProgress } from './course-progress.schema';
 import { CourseProgressInput } from './create-course-progress.input';
 import { getPercent, getState } from './utils';
 
@@ -27,13 +23,20 @@ export class CourseProgressService {
     userId: string,
   ): Promise<CourseProgress> {
     const pagesProgresses =
-      await this.servicePageProgress.findAllByCourseIdAndTypeAsc(
+      await this.servicePageProgress.findAllByCourseIdAndType(
         data.course,
         data.type,
         userId,
       );
     const courseDb = await this.serviceCourse.findById(data.course);
-    const total = courseDb?.pages.length ?? 0;
+
+    if (!courseDb) {
+      throw new NotFoundException('Failed to find course');
+    }
+
+    const total = courseDb.pages.filter(
+      (page) => page.type === data.type,
+    ).length;
     const numberOfFailed = pagesProgresses?.filter(
       (process) => process.state === PageProgressState.FAIL,
     ).length;
@@ -60,6 +63,7 @@ export class CourseProgressService {
       {
         course: { _id: data.course },
         user: { _id: userId },
+        type: data.type,
       },
       newProgress,
       { upsert: true, new: true },
@@ -82,23 +86,34 @@ export class CourseProgressService {
     courseId: string,
     userId: string,
   ): Promise<TotalCourseProgress> {
-    const progresses = await this.courseProgressModel.find({
-      course: { _id: courseId },
-      user: { _id: userId },
-    });
+    const progresses = await this.courseProgressModel
+      .find({
+        course: { _id: courseId },
+        user: { _id: userId },
+      })
+      .sort({ updatedAt: 'asc' });
+
+    const updatedAt = progresses[0] ? progresses[0].updatedAt : new Date();
+
     const quizProgress = progresses.find(
       (progress) => progress.type === CourseType.QUIZ,
     );
     const courseProgress = progresses.find(
       (progress) => progress.type === CourseType.COURSE,
     );
+
     const courseDb = await this.serviceCourse.findById(courseId);
-    const quizPageCount =
-      courseDb?.pages.filter((page) => page.type === CourseType.QUIZ).length ??
-      0;
-    const coursePageCount =
-      courseDb?.pages.filter((page) => page.type === CourseType.COURSE)
-        .length ?? 0;
+
+    if (!courseDb) {
+      throw new NotFoundException('Failed to find course');
+    }
+
+    const quizPageCount = courseDb.pages.filter(
+      (page) => page.type === CourseType.QUIZ,
+    ).length;
+    const coursePageCount = courseDb.pages.filter(
+      (page) => page.type === CourseType.COURSE,
+    ).length;
 
     const total = quizPageCount + coursePageCount;
     const quizPagePercent = getPercent(total, quizPageCount) / 100;
@@ -116,6 +131,7 @@ export class CourseProgressService {
       pass,
       fail,
       state,
+      updatedAt,
     };
   }
 }

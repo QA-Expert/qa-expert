@@ -236,6 +236,7 @@ export type TotalCourseProgress = {
   fail: Scalars['Float'];
   pass: Scalars['Float'];
   state: CourseProgressState;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type User = {
@@ -446,6 +447,7 @@ export type GetAllCoursesQuery = {
       pass: number;
       fail: number;
       state: CourseProgressState;
+      updatedAt: string;
     };
     badge?: { __typename?: 'Badge'; _id: string } | null;
   }>;
@@ -1508,6 +1510,10 @@ export const GetAllCoursesDocument = {
                       { kind: 'Field', name: { kind: 'Name', value: 'pass' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'fail' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'updatedAt' },
+                      },
                     ],
                   },
                 },

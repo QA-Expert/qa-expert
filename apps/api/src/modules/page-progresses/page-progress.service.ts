@@ -16,18 +16,16 @@ export class PageProgressService {
     private readonly serviceCourseProgress: CourseProgressService,
   ) {}
 
-  async findAllByCourseIdAndTypeAsc(
+  async findAllByCourseIdAndType(
     courseId: string,
     type: CourseType,
     userId: string,
   ) {
-    return await this.pageProgressModel
-      .find({
-        course: { _id: courseId },
-        user: userId,
-        type,
-      })
-      .sort({ createdAt: 'asc' });
+    return await this.pageProgressModel.find({
+      course: { _id: courseId },
+      user: userId,
+      type,
+    });
   }
 
   async findOne(pageId: string, userId: string) {
