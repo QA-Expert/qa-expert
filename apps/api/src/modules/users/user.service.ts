@@ -97,7 +97,7 @@ export class UserService {
       );
 
     const mailOptions: SendMailOptions = {
-      from: process.env.EMAIL_USERNAME,
+      from: process.env.EMAIL_FROM,
       to: email,
       subject: `[no-reply] Forgot Password - ${process.env.APP_NAME}`,
       html: template,
