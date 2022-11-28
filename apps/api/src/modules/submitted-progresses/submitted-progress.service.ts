@@ -9,7 +9,6 @@ export class SubmittedProgressService {
   constructor(
     @InjectModel(SubmittedProgress.name)
     private submittedProgressModel: Model<SubmittedProgress>,
-    private readonly serviceCourseProgress: CourseProgressService,
   ) {}
 
   async findAll(userId: string) {
@@ -23,15 +22,9 @@ export class SubmittedProgressService {
       .exec();
   }
 
-  async create(courseId: string, userId: string) {
-    const totalCourseProgress =
-      await this.serviceCourseProgress.findTotalProgressByCourseId(
-        courseId,
-        userId,
-      );
-
+  async create(courseId: string, userId: string, pass: number) {
     const newProgress: Partial<SubmittedProgress> = {
-      progress: totalCourseProgress.pass,
+      progress: pass,
       course: new mongoose.Types.ObjectId(courseId),
       user: new mongoose.Types.ObjectId(userId),
       createdBy: new mongoose.Types.ObjectId(userId),

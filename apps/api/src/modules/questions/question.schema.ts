@@ -17,12 +17,12 @@ export class Question extends mongoose.Document {
   @Field()
   content: string;
 
-  @Prop({ type: [{ type: ObjectId, ref: 'Answer' }] })
-  @Field(() => [Answer])
+  @Prop({ type: [{ type: ObjectId, ref: 'Answer' }], default: [] })
+  @Field(() => [Answer], { defaultValue: [] })
   answers: Answer[];
 
-  @Prop({ type: [{ type: ObjectId, ref: 'Answer' }] })
-  @Field(() => [Answer])
+  @Prop({ type: [{ type: ObjectId, ref: 'Answer' }], default: [] })
+  @Field(() => [Answer], { defaultValue: [] })
   options: Answer[];
 
   @Prop({

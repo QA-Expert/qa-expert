@@ -169,7 +169,7 @@ export type Page = {
 export type PageProgress = {
   __typename?: 'PageProgress';
   _id: Scalars['String'];
-  answers?: Maybe<Array<Scalars['String']>>;
+  answers: Array<Scalars['String']>;
   course: Scalars['String'];
   page: Scalars['String'];
   state: PageProgressState;
@@ -234,6 +234,7 @@ export type SubmittedProgress = {
 export type TotalCourseProgress = {
   __typename?: 'TotalCourseProgress';
   fail: Scalars['Float'];
+  pagesLeftBeforeFinish?: Maybe<Scalars['Float']>;
   pass: Scalars['Float'];
   state: CourseProgressState;
   updatedAt: Scalars['DateTime'];
@@ -242,7 +243,7 @@ export type TotalCourseProgress = {
 export type User = {
   __typename?: 'User';
   _id: Scalars['String'];
-  badges?: Maybe<Array<Scalars['String']>>;
+  badges: Array<Scalars['String']>;
   email: Scalars['String'];
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
@@ -304,7 +305,7 @@ export type PageFragmentFragment = {
     __typename?: 'PageProgress';
     _id: string;
     state: PageProgressState;
-    answers?: Array<string> | null;
+    answers: Array<string>;
   } | null;
 } & { ' $fragmentName'?: 'PageFragmentFragment' };
 
@@ -347,7 +348,7 @@ export type CreateQuizPageProgressMutation = {
     __typename?: 'PageProgress';
     state: PageProgressState;
     page: string;
-    answers?: Array<string> | null;
+    answers: Array<string>;
   };
 };
 
@@ -419,7 +420,7 @@ export type ClaimBadgeMutationVariables = Exact<{
 
 export type ClaimBadgeMutation = {
   __typename?: 'Mutation';
-  claimBadge: { __typename?: 'User'; badges?: Array<string> | null };
+  claimBadge: { __typename?: 'User'; badges: Array<string> };
 };
 
 export type DeletePagesProgressesMutationVariables = Exact<{
@@ -465,6 +466,10 @@ export type GetCourseQuery = {
     title: string;
     type: CourseType;
     description: string;
+    progress: {
+      __typename?: 'TotalCourseProgress';
+      pagesLeftBeforeFinish?: number | null;
+    };
     pages: Array<
       { __typename?: 'Page' } & {
         ' $fragmentRefs'?: { PageFragmentFragment: PageFragmentFragment };
@@ -484,7 +489,7 @@ export type GetUserQuery = {
     firstName?: string | null;
     lastName?: string | null;
     roles: Array<string>;
-    badges?: Array<string> | null;
+    badges: Array<string>;
   };
 };
 
@@ -1578,6 +1583,19 @@ export const GetCourseDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'progress' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'pagesLeftBeforeFinish' },
+                      },
+                    ],
+                  },
+                },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'pages' },

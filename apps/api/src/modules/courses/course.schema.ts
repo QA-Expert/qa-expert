@@ -40,8 +40,8 @@ export class Course extends mongoose.Document {
   @Prop()
   icon: string;
 
-  @Prop({ type: [{ type: ObjectId, ref: Page.name }] })
-  @Field(() => [Page])
+  @Prop({ type: [{ type: ObjectId, ref: Page.name }], default: [] })
+  @Field(() => [Page], { defaultValue: [] })
   pages: Page[];
 
   @Field(() => TotalCourseProgress)

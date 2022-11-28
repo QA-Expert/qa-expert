@@ -56,7 +56,7 @@ export class PageProgress extends mongoose.Document {
       },
     ],
   })
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String], { defaultValue: [] })
   answers: Answer[] | mongoose.Types.ObjectId[];
 
   @Prop({ type: ObjectId, ref: 'User', required: true })

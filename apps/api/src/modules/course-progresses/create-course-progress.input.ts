@@ -8,4 +8,7 @@ export class CourseProgressInput {
 
   @Field(() => CourseType)
   type: CourseType;
+
+  @Field(() => String)
+  pageProgress: string;
 }
