@@ -11,13 +11,96 @@ import { userAtom } from '../src/store';
 import { ChangeNamesModal } from '../src/components/change-names-modal/change-names-modal';
 import Button from '@mui/material/Button';
 import { ChangePasswordModal } from '../src/components/change-password-modal/change-password-modal';
-import { GET_BADGES } from '../src/graphql/queries/queries';
+import {
+  GET_BADGES,
+  GET_SUBMITTED_PROGRESSES,
+} from '../src/graphql/queries/queries';
 import { useQuery } from '@apollo/client';
 import { BadgeComponent } from '../src/components/badge/badge';
+import Divider from '@mui/material/Divider';
+import { Line } from 'react-chartjs-2';
+import { ChartData, ChartOptions, Tooltip } from 'chart.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+} from 'chart.js';
+import { GetSubmittedProgressesQuery } from '../src/__generated__/graphql';
+import { groupBy } from 'lodash';
+import { format } from 'date-fns';
+import { useTheme } from '@mui/material/styles';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+);
+
+interface GroupedProgresses {
+  [courseId: string]: GetSubmittedProgressesQuery['submittedProgresses'];
+}
+
+const getChartData = (
+  groupedProgress: GroupedProgresses,
+  color: string,
+): {
+  data: ChartData<'line'>;
+  options: ChartOptions<'line'>;
+}[] => {
+  const courseIds = Object.keys(groupedProgress);
+
+  return courseIds.map((courseId) => {
+    const progresses = groupedProgress[courseId];
+    const data = progresses.map((progress) => progress.progress);
+    const labels = progresses.map((progress) =>
+      format(new Date(progress.createdAt), 'MM/dd/yyyy'),
+    );
+
+    return {
+      data: {
+        labels,
+        datasets: [
+          {
+            data,
+            borderColor: color,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: progresses[0].course.title,
+          },
+        },
+        scales: {
+          y: {
+            suggestedMin: 0,
+            suggestedMax: 100,
+          },
+        },
+      },
+    };
+  });
+};
 
 function Account() {
   const [user] = useAtom(userAtom);
   const { data: badges } = useQuery(GET_BADGES);
+  const { data: progresses } = useQuery(GET_SUBMITTED_PROGRESSES);
+  const theme = useTheme();
+  const groupedProgress: GroupedProgresses = groupBy(
+    progresses?.submittedProgresses,
+    (progress) => progress.course._id,
+  );
+  const chartsData = getChartData(groupedProgress, theme.palette.primary.main);
 
   const [changeUserNamesModalOpen, setChangeUserNamesModalOpen] =
     useState(false);
@@ -87,6 +170,7 @@ function Account() {
             Change Password
           </Button>
         </Paper>
+
         <Paper
           component={Box}
           sx={{
@@ -97,24 +181,38 @@ function Account() {
             gap: '1rem',
           }}
         >
-          <Typography variant="h2" sx={{ fontSize: '2rem' }}>
-            Details
-          </Typography>
-          <Box
-            sx={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              gap: '1rem',
-              flexWrap: 'wrap',
-            }}
-          >
-            {badges?.badges?.map((badge, i) => (
-              <BadgeComponent
-                key={i}
-                {...badge}
-                isEarned={Boolean(user?.badges?.includes(badge._id))}
-              />
+          <Box sx={{ gap: '1rem' }}>
+            <Typography variant="h2" sx={{ fontSize: '2rem' }}>
+              Progress
+            </Typography>
+
+            {chartsData.map((data, i) => (
+              <Line key={i} {...data} />
             ))}
+          </Box>
+
+          <Divider flexItem />
+
+          <Box sx={{ gap: '1rem' }}>
+            <Typography variant="h2" sx={{ fontSize: '2rem' }}>
+              Badges
+            </Typography>
+            <Box
+              sx={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                gap: '1rem',
+                flexWrap: 'wrap',
+              }}
+            >
+              {badges?.badges?.map((badge, i) => (
+                <BadgeComponent
+                  key={i}
+                  {...badge}
+                  isEarned={Boolean(user?.badges?.includes(badge._id))}
+                />
+              ))}
+            </Box>
           </Box>
         </Paper>
       </Box>

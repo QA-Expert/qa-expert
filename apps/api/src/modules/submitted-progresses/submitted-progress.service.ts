@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import { CourseProgressService } from '../course-progresses/course-progress.service';
 import { SubmittedProgress } from './submitted-progress.schema';
 
 @Injectable()
@@ -12,13 +11,13 @@ export class SubmittedProgressService {
   ) {}
 
   async findAll(userId: string) {
-    return this.submittedProgressModel
+    return await this.submittedProgressModel
       .find({
         user: {
           _id: userId,
         },
       })
-      .populate('course.title')
+      .populate({ path: 'course', select: 'title' })
       .exec();
   }
 
