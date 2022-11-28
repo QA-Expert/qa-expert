@@ -46,6 +46,7 @@ interface GroupedProgresses {
   [courseId: string]: GetSubmittedProgressesQuery['submittedProgresses'];
 }
 
+// TODO: Move to utils
 const getChartData = (
   groupedProgress: GroupedProgresses,
   color: string,
@@ -55,6 +56,7 @@ const getChartData = (
 }[] => {
   const courseIds = Object.keys(groupedProgress);
 
+  // TODO: Add logic for now showing charts if first attempt was 100%
   return courseIds.map((courseId) => {
     const progresses = groupedProgress[courseId];
     const data = progresses.map((progress) => progress.progress);
@@ -84,6 +86,18 @@ const getChartData = (
           y: {
             suggestedMin: 0,
             suggestedMax: 100,
+            display: true,
+            title: {
+              display: true,
+              text: 'Progress',
+            },
+          },
+          x: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Date when finished',
+            },
           },
         },
       },
@@ -181,14 +195,31 @@ function Account() {
             gap: '1rem',
           }}
         >
-          <Box sx={{ gap: '1rem' }}>
+          <Box
+            sx={{
+              gap: '1rem',
+              width: '100%',
+            }}
+          >
             <Typography variant="h2" sx={{ fontSize: '2rem' }}>
               Progress
             </Typography>
 
-            {chartsData.map((data, i) => (
-              <Line key={i} {...data} />
-            ))}
+            <Box
+              sx={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                width: '100%',
+                gap: '1rem',
+              }}
+            >
+              {/* TODO: Implement better styles to comply with material design theme*/}
+              {chartsData.map((data, i) => (
+                <Box key={i} sx={{ flex: 1, maxWidth: '50%' }}>
+                  <Line {...data} />
+                </Box>
+              ))}
+            </Box>
           </Box>
 
           <Divider flexItem />
