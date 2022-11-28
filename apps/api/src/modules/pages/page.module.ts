@@ -6,12 +6,14 @@ import { UserModule } from '../users/user.module';
 import { PageResolver } from './page.resolver';
 import { Page, PageSchema } from './page.schema';
 import { PageService } from './page.service';
+import { ApiConfigModule } from '../config/config.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Page.name, schema: PageSchema }]),
     UserModule,
     PageProgressModule,
+    ApiConfigModule,
   ],
   providers: [PageService, PageResolver, JwtService],
   exports: [PageService],

@@ -4,9 +4,10 @@ import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../users/user.module';
 import { AuthService } from './auth.service';
 import { RolesGuard } from './roles.guard';
+import { ApiConfigModule } from '../config/config.module';
 
 @Module({
-  imports: [forwardRef(() => UserModule), PassportModule],
+  imports: [forwardRef(() => UserModule), PassportModule, ApiConfigModule],
   providers: [AuthService, JwtService, RolesGuard],
   exports: [AuthService],
 })

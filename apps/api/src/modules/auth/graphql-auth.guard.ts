@@ -9,12 +9,14 @@ import { getTokenCookie } from 'src/utls/auth-cookie';
 import { User } from '../users/user.schema';
 import { UserService } from '../users/user.service';
 import { getRequest } from './helpers';
+import { ApiConfigService } from '../config/config.service';
 
 @Injectable()
 export class GqlAuthGuard extends AuthGuard('jwt') {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
+    private readonly apiConfigService: ApiConfigService,
   ) {
     super();
   }
@@ -24,7 +26,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
       const req = getRequest(context);
       const token = getTokenCookie(req);
       const { _id } = this.jwtService.verify(token, {
-        secret: process.env.AUTH_SECRET,
+        secret: this.apiConfigService.authSecret,
       });
 
       // hydrating user for req context

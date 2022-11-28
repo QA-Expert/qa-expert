@@ -8,12 +8,14 @@ import { UserInputLogin } from '../users/login-user.input';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserOutputLogin } from '../users/login-user.output';
+import { ApiConfigService } from '../config/config.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
+    private apiConfigService: ApiConfigService,
   ) {}
 
   async validateUserAndLogin(
@@ -47,7 +49,7 @@ export class AuthService {
       access_token: this.jwtService.sign(
         { ...user },
         {
-          secret: process.env.AUTH_SECRET,
+          secret: this.apiConfigService.authSecret,
         },
       ),
     };
