@@ -7,12 +7,14 @@ import { PageProgressService } from './page-progress.service';
 import { PageProgressResolver } from './page-progress.resolver';
 import { CourseProgressModule } from '../course-progresses/course-progress.module';
 import { SubmittedProgressModule } from '../submitted-progresses/submitted-progress.module';
+import { ConfigModule } from '../config/config.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: PageProgress.name, schema: PageProgressSchema },
     ]),
+    ConfigModule,
     UserModule,
     forwardRef(() => CourseProgressModule),
     SubmittedProgressModule,

@@ -8,12 +8,15 @@ import {
 } from './submitted-progress.schema';
 import { SubmittedProgressService } from './submitted-progress.service';
 import { SubmittedProgressResolver } from './submitted-progress.resolver';
+import { ConfigModule } from '../config/config.module';
+
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: SubmittedProgress.name, schema: SubmittedProgressSchema },
     ]),
     UserModule,
+    ConfigModule,
   ],
   providers: [SubmittedProgressService, SubmittedProgressResolver, JwtService],
   exports: [SubmittedProgressService],
