@@ -12,20 +12,20 @@ import { PageProgressModule } from './modules/page-progresses/page-progress.modu
 import { BadgeModule } from './modules/badges/badge.module';
 import { SubmittedProgressModule } from './modules/submitted-progresses/submitted-progress.module';
 import { CourseProgressModule } from './modules/course-progresses/course-progress.module';
-import { ApiConfigModule } from './modules/config/config.module';
-import { ApiConfigService } from './modules/config/config.service';
+import { ConfigModule } from './modules/config/config.module';
+import { ConfigService } from './modules/config/config.service';
 
 @Module({
   imports: [
     JwtModule.registerAsync({
-      imports: [ApiConfigModule],
-      useFactory: (apiConfigService: ApiConfigService) => ({
-        secret: apiConfigService.authSecret,
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.authSecret,
         signOptions: {
-          expiresIn: apiConfigService.authTokenExpiresIn,
+          expiresIn: configService.authTokenExpiresIn,
         },
       }),
-      inject: [ApiConfigService],
+      inject: [ConfigService],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -38,20 +38,19 @@ import { ApiConfigService } from './modules/config/config.service';
       },
     }),
     MongooseModule.forRootAsync({
-      imports: [ApiConfigModule],
-      useFactory: (apiConfigService: ApiConfigService) => {
-        const host = apiConfigService.dbHost;
-        const port = apiConfigService.dbPort;
-        const dbName = apiConfigService.dbName;
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => {
+        const host = configService.dbHost;
+        const port = configService.dbPort;
+        const dbName = configService.dbName;
 
-        console.log(`mongodb://${host}:${port}/${dbName}`);
         return {
           uri: `mongodb://${host}:${port}/${dbName}`,
         };
       },
-      inject: [ApiConfigService],
+      inject: [ConfigService],
     }),
-    ApiConfigModule,
+    ConfigModule,
     AnswerModule,
     QuestionModule,
     UserModule,

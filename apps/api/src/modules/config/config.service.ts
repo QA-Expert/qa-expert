@@ -1,30 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigService as NestConfigService } from '@nestjs/config';
+import { Config } from './config.schema';
 
 @Injectable()
-export class ApiConfigService {
-  constructor(
-    private configService: ConfigService<
-      {
-        PORT: number;
-        DATABASE_HOST: string;
-        DATABASE_PORT: number;
-        DATABASE_NAME: string;
-        AUTH_SECRET: string;
-        AUTH_TOKEN_EXPIRES_IN: string;
-        AUTH_SALT: number;
-        AUTH_FORGOT_PASSWORD_TOKEN_EXPIRES_IN: number;
-        EMAIL_SERVICE: string;
-        EMAIL_USERNAME: string;
-        EMAIL_PASSWORD: string;
-        EMAIL_FROM: string;
-      },
-      true
-    >,
-  ) {}
+export class ConfigService {
+  constructor(private configService: NestConfigService<Config, true>) {}
+
+  get appName(): string {
+    return this.configService.get<string>('APP_NAME');
+  }
 
   get port(): number {
     return this.configService.get<number>('PORT');
+  }
+
+  get host(): string {
+    return this.configService.get<string>('HOST');
   }
 
   get dbHost(): string {
@@ -33,6 +24,14 @@ export class ApiConfigService {
 
   get dbPort(): number {
     return this.configService.get<number>('DATABASE_PORT');
+  }
+
+  get dbUsername(): string {
+    return this.configService.get<string>('DATABASE_USERNAME');
+  }
+
+  get dbPassword(): string {
+    return this.configService.get<string>('DATABASE_PASSWORD');
   }
 
   get dbName(): string {

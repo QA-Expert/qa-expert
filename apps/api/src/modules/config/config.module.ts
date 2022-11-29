@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
-import { ApiConfigService } from './config.service';
+import { ConfigService } from './config.service';
+import { Config } from './config.schema';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
+    NestConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.development.local'],
-      validationSchema: Joi.object({
+      validationSchema: Joi.object<Config>({
         APP_NAME: Joi.string().default('QA Expert'),
         PORT: Joi.number().default(3001),
         HOST: Joi.string().default('localhost'),
@@ -28,7 +29,7 @@ import { ApiConfigService } from './config.service';
       }),
     }),
   ],
-  providers: [ApiConfigService],
-  exports: [ApiConfigService],
+  providers: [ConfigService],
+  exports: [ConfigService],
 })
-export class ApiConfigModule {}
+export class ConfigModule {}

@@ -6,7 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './user.schema';
 import { ForgotPassword, ForgotPasswordSchema } from './forgot-password.schema';
-import { ApiConfigModule } from '../config/config.module';
+import { ConfigModule } from '../config/config.module';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { ApiConfigModule } from '../config/config.module';
       { name: ForgotPassword.name, schema: ForgotPasswordSchema },
     ]),
     AuthModule,
-    ApiConfigModule,
+    ConfigModule,
   ],
   providers: [UserService, UserResolver, JwtService],
   exports: [UserService],

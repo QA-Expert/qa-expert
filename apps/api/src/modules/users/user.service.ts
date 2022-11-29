@@ -11,6 +11,7 @@ import { ForgotPassword } from './forgot-password.schema';
 import { ResetPasswordInput } from './reset-password.input';
 import { UserInputUpdateNames } from './update-user-names.input';
 import { UserInputUpdatePassword } from './update-user-password.input';
+import { ConfigService } from '../config/config.service';
 
 @Injectable()
 export class UserService {
@@ -19,6 +20,7 @@ export class UserService {
     private userModel: Model<User>,
     @InjectModel(ForgotPassword.name)
     private forgotPasswordModel: Model<ForgotPassword>,
+    private configService: ConfigService,
   ) {}
 
   async findById(id: string | mongoose.Types.ObjectId) {
@@ -50,7 +52,7 @@ export class UserService {
 
     const hashedPassword = await bcrypt.hash(
       data.password,
-      process.env.AUTH_SALT ?? 10,
+      this.configService.authSalt,
     );
     const newUser = {
       ...data,
@@ -75,11 +77,11 @@ export class UserService {
     const token = randomBytes(32).toString('hex');
 
     const transporter = createTransport({
-      host: process.env.EMAIL_SERVICE,
+      host: this.configService.emailServiceUrl,
       port: 587,
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
+        user: this.configService.emailServiceUsername,
+        pass: this.configService.emailServicePassword,
       },
     });
 
@@ -89,17 +91,17 @@ export class UserService {
     const template = buffer
       .toString()
       .replace(/{{name}}/g, user.firstName ?? user.email)
-      .replace(/{{product-name}}/g, process.env.APP_NAME ?? '')
-      .replace(/{{host}}/g, process.env.HOST ?? '')
+      .replace(/{{product-name}}/g, this.configService.appName)
+      .replace(/{{host}}/g, this.configService.host)
       .replace(
         /{{action_url}}/g,
-        `${process.env.HOST}:${process.env.PORT ?? 80}/reset-password/${token}`,
+        `${this.configService.host}:${this.configService.port}/reset-password/${token}`,
       );
 
     const mailOptions: SendMailOptions = {
-      from: process.env.EMAIL_FROM,
+      from: this.configService.emailFrom,
       to: email,
-      subject: `[no-reply] Forgot Password - ${process.env.APP_NAME}`,
+      subject: `[no-reply] Forgot Password - ${this.configService.appName}`,
       html: template,
     };
 
@@ -138,7 +140,7 @@ export class UserService {
     const nowDate = new Date();
     const hours = Math.abs(nowDate.valueOf() - tokenCreatedAt.valueOf()) / 36e5;
 
-    if (hours > Number(process.env.AUTH_FORGOT_PASSWORD_TOKEN_EXPIRES_IN)) {
+    if (hours > Number(this.configService.authForgotPasswordTokenExpiresIn)) {
       throw new Error('Forgot password token expired');
     }
 
@@ -150,7 +152,7 @@ export class UserService {
 
     const hashedPassword = await bcrypt.hash(
       data.password,
-      Number(process.env.AUTH_SALT) ?? 10,
+      this.configService.authSalt,
     );
 
     user.hashedPassword = hashedPassword;
@@ -208,7 +210,7 @@ export class UserService {
     if (matchOldPassword) {
       user.hashedPassword = await bcrypt.hash(
         data.newPassword,
-        Number(process.env.AUTH_SALT) ?? 10,
+        this.configService.authSalt,
       );
     } else {
       throw new Error('Failed to change password');
