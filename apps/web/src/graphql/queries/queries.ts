@@ -31,6 +31,9 @@ export const GET_COURSE = gql(/* GraphQL */ `
       title
       type
       description
+      progress {
+        pagesLeftBeforeFinish
+      }
       pages {
         ...PageFragment
       }

@@ -65,21 +65,14 @@ export class CourseProgressService {
         user: { _id: userId },
         type: data.type,
       },
-      newProgress,
+      {
+        ...newProgress,
+        $push: {
+          pageProgresses: new mongoose.Types.ObjectId(data.pageProgress),
+        },
+      },
       { upsert: true, new: true },
     );
-  }
-
-  async findByCourseIdAndType(
-    courseId: string,
-    type: CourseType,
-    userId: string,
-  ) {
-    return await this.courseProgressModel.findOne({
-      course: { _id: courseId },
-      user: { _id: userId },
-      type,
-    });
   }
 
   async findTotalProgressByCourseId(
@@ -119,6 +112,10 @@ export class CourseProgressService {
     const quizPagePercent = getPercent(total, quizPageCount) / 100;
     const coursePagePercent = getPercent(total, coursePageCount) / 100;
 
+    const pagesLeftBeforeFinish =
+      total -
+      ((quizProgress?.pageProgresses?.length ?? 0) +
+        (courseProgress?.pageProgresses?.length ?? 0));
     const pass =
       (quizProgress?.pass ?? 0) * quizPagePercent +
       (courseProgress?.pass ?? 0) * coursePagePercent;
@@ -128,6 +125,7 @@ export class CourseProgressService {
     const state = getState(pass, fail);
 
     return {
+      pagesLeftBeforeFinish,
       pass,
       fail,
       state,

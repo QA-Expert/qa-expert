@@ -11,7 +11,6 @@ import { ForgotPassword } from './forgot-password.schema';
 import { ResetPasswordInput } from './reset-password.input';
 import { UserInputUpdateNames } from './update-user-names.input';
 import { UserInputUpdatePassword } from './update-user-password.input';
-import { ApiConfigService } from '../config/config.service';
 
 @Injectable()
 export class UserService {
@@ -20,7 +19,6 @@ export class UserService {
     private userModel: Model<User>,
     @InjectModel(ForgotPassword.name)
     private forgotPasswordModel: Model<ForgotPassword>,
-    private apiConfigService: ApiConfigService,
   ) {}
 
   async findById(id: string | mongoose.Types.ObjectId) {
@@ -52,7 +50,7 @@ export class UserService {
 
     const hashedPassword = await bcrypt.hash(
       data.password,
-      this.apiConfigService.authSalt,
+      process.env.AUTH_SALT ?? 10,
     );
     const newUser = {
       ...data,
@@ -77,11 +75,11 @@ export class UserService {
     const token = randomBytes(32).toString('hex');
 
     const transporter = createTransport({
-      host: this.apiConfigService.emailServiceUrl,
+      host: process.env.EMAIL_SERVICE,
       port: 587,
       auth: {
-        user: this.apiConfigService.emailServiceUsername,
-        pass: this.apiConfigService.emailServicePassword,
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
@@ -99,7 +97,7 @@ export class UserService {
       );
 
     const mailOptions: SendMailOptions = {
-      from: this.apiConfigService.emailServiceUsername,
+      from: process.env.EMAIL_FROM,
       to: email,
       subject: `[no-reply] Forgot Password - ${process.env.APP_NAME}`,
       html: template,
@@ -140,7 +138,7 @@ export class UserService {
     const nowDate = new Date();
     const hours = Math.abs(nowDate.valueOf() - tokenCreatedAt.valueOf()) / 36e5;
 
-    if (hours > this.apiConfigService.authForgotPasswordTokenExpiresIn) {
+    if (hours > Number(process.env.AUTH_FORGOT_PASSWORD_TOKEN_EXPIRES_IN)) {
       throw new Error('Forgot password token expired');
     }
 
@@ -152,7 +150,7 @@ export class UserService {
 
     const hashedPassword = await bcrypt.hash(
       data.password,
-      this.apiConfigService.authSalt,
+      Number(process.env.AUTH_SALT) ?? 10,
     );
 
     user.hashedPassword = hashedPassword;
@@ -210,7 +208,7 @@ export class UserService {
     if (matchOldPassword) {
       user.hashedPassword = await bcrypt.hash(
         data.newPassword,
-        this.apiConfigService.authSalt,
+        Number(process.env.AUTH_SALT) ?? 10,
       );
     } else {
       throw new Error('Failed to change password');

@@ -25,6 +25,7 @@ const Course = () => {
   if (!data) {
     return null;
   }
+
   return (
     <Layout>
       <Sidebar>Test</Sidebar>

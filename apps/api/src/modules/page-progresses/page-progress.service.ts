@@ -1,8 +1,10 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
+import { CourseProgressState } from '../course-progresses/course-progress.schema';
 import { CourseProgressService } from '../course-progresses/course-progress.service';
 import { CourseType } from '../courses/course.schema';
+import { SubmittedProgressService } from '../submitted-progresses/submitted-progress.service';
 import { CoursePageProgressInput } from './create-course-page-progress.input';
 import { QuizPageProgressInput } from './create-quiz-page-progress.input';
 import { PageProgress, PageProgressState } from './page-progress.schema';
@@ -14,6 +16,7 @@ export class PageProgressService {
     private pageProgressModel: Model<PageProgress>,
     @Inject(forwardRef(() => CourseProgressService))
     private readonly serviceCourseProgress: CourseProgressService,
+    private readonly serviceSubmittedProgress: SubmittedProgressService,
   ) {}
 
   async findAllByCourseIdAndType(
@@ -66,9 +69,27 @@ export class PageProgressService {
     const createdPageProgress = await model.save();
 
     await this.serviceCourseProgress.upsert(
-      { course: data.course, type: CourseType.COURSE },
+      {
+        course: data.course,
+        type: CourseType.COURSE,
+        pageProgress: createdPageProgress._id,
+      },
       userId,
     );
+
+    const totalCourseProgress =
+      await this.serviceCourseProgress.findTotalProgressByCourseId(
+        data.course,
+        userId,
+      );
+
+    if (totalCourseProgress.state !== CourseProgressState.IN_PROGRESS) {
+      await this.serviceSubmittedProgress.create(
+        data.course,
+        userId,
+        totalCourseProgress.pass,
+      );
+    }
 
     return createdPageProgress;
   }
@@ -96,9 +117,27 @@ export class PageProgressService {
     const createdPageProgress = await model.save();
 
     await this.serviceCourseProgress.upsert(
-      { course: data.course, type: CourseType.QUIZ },
+      {
+        course: data.course,
+        type: CourseType.QUIZ,
+        pageProgress: createdPageProgress._id,
+      },
       userId,
     );
+
+    const totalCourseProgress =
+      await this.serviceCourseProgress.findTotalProgressByCourseId(
+        data.course,
+        userId,
+      );
+
+    if (totalCourseProgress.state !== CourseProgressState.IN_PROGRESS) {
+      await this.serviceSubmittedProgress.create(
+        data.course,
+        userId,
+        totalCourseProgress.pass,
+      );
+    }
 
     return createdPageProgress;
   }

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import { CourseProgressService } from '../course-progresses/course-progress.service';
 import { SubmittedProgress } from './submitted-progress.schema';
 
 @Injectable()
@@ -9,29 +8,22 @@ export class SubmittedProgressService {
   constructor(
     @InjectModel(SubmittedProgress.name)
     private submittedProgressModel: Model<SubmittedProgress>,
-    private readonly serviceCourseProgress: CourseProgressService,
   ) {}
 
   async findAll(userId: string) {
-    return this.submittedProgressModel
+    return await this.submittedProgressModel
       .find({
         user: {
           _id: userId,
         },
       })
-      .populate('course.title')
+      .populate({ path: 'course', select: 'title' })
       .exec();
   }
 
-  async create(courseId: string, userId: string) {
-    const totalCourseProgress =
-      await this.serviceCourseProgress.findTotalProgressByCourseId(
-        courseId,
-        userId,
-      );
-
+  async create(courseId: string, userId: string, pass: number) {
     const newProgress: Partial<SubmittedProgress> = {
-      progress: totalCourseProgress.pass,
+      progress: pass,
       course: new mongoose.Types.ObjectId(courseId),
       user: new mongoose.Types.ObjectId(userId),
       createdBy: new mongoose.Types.ObjectId(userId),

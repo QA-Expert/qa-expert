@@ -6,7 +6,7 @@ import { PageProgress, PageProgressSchema } from './page-progress.schema';
 import { PageProgressService } from './page-progress.service';
 import { PageProgressResolver } from './page-progress.resolver';
 import { CourseProgressModule } from '../course-progresses/course-progress.module';
-import { ApiConfigModule } from '../config/config.module';
+import { SubmittedProgressModule } from '../submitted-progresses/submitted-progress.module';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { ApiConfigModule } from '../config/config.module';
     ]),
     UserModule,
     forwardRef(() => CourseProgressModule),
-    ApiConfigModule,
+    SubmittedProgressModule,
   ],
   providers: [PageProgressService, PageProgressResolver, JwtService],
   exports: [PageProgressService],

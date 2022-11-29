@@ -36,12 +36,15 @@ export class User extends mongoose.Document {
   @Prop()
   hashedPassword: string;
 
-  @Prop({ type: [{ type: String, enum: Roles, default: Roles.USER }] })
-  @Field(() => [String])
+  @Prop({
+    type: [{ type: String, enum: Roles, default: Roles.USER }],
+    default: [],
+  })
+  @Field(() => [String], { defaultValue: [] })
   roles: Roles[];
 
-  @Prop({ type: [{ type: ObjectId, ref: Badge.name }] })
-  @Field(() => [String], { nullable: true })
+  @Prop({ type: [{ type: ObjectId, ref: Badge.name }], default: [] })
+  @Field(() => [String], { defaultValue: [] })
   badges: Badge[] | mongoose.Types.ObjectId[];
 
   @Prop({

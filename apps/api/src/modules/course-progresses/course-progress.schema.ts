@@ -3,6 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { User } from '../users/user.schema';
 import { Course, CourseType } from '../courses/course.schema';
+import { PageProgress } from '../page-progresses/page-progress.schema';
 
 export enum CourseProgressState {
   PASS = 'pass',
@@ -27,6 +28,9 @@ export class TotalCourseProgress {
     defaultValue: CourseProgressState.IN_PROGRESS,
   })
   state: CourseProgressState;
+
+  @Field({ nullable: true })
+  pagesLeftBeforeFinish: number;
 
   @Field(() => Date, { defaultValue: new Date() })
   updatedAt: Date;
@@ -66,6 +70,12 @@ export class CourseProgress {
   @Prop({ type: ObjectId, ref: 'User', required: true })
   @Field(() => String)
   user: User | mongoose.Types.ObjectId;
+
+  @Prop({
+    type: [{ type: ObjectId, ref: PageProgress.name, required: true }],
+  })
+  @Field(() => Course)
+  pageProgresses: PageProgress[] | mongoose.Types.ObjectId[];
 
   @Prop({
     type: ObjectId,

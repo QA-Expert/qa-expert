@@ -1,5 +1,9 @@
 import Typography from '@mui/material/Typography';
-import { PageFragmentFragmentDoc } from '../../__generated__/graphql';
+import {
+  CourseType,
+  PageFragmentFragmentDoc,
+  PageProgressState,
+} from '../../__generated__/graphql';
 import { Box } from '../box/box';
 import CoursePage from '../course-page/course-page';
 import QuizPage from '../quiz-page/quiz-page';
@@ -9,11 +13,16 @@ import {
   FragmentType,
   useFragment,
 } from '../../__generated__/fragment-masking';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useProgressTimer } from './page.hook';
 
 export default function Page(
   props: FragmentType<typeof PageFragmentFragmentDoc>,
 ) {
   const page = useFragment(PageFragmentFragmentDoc, props);
+  const countUpProgress = useProgressTimer(
+    Number(process.env.NEXT_PUBLIC_TIME_TO_REVIEW_COURSE_PAGE),
+  );
 
   return (
     <Box
@@ -26,10 +35,25 @@ export default function Page(
       }}
     >
       <Box sx={{ flexDirection: 'row', gap: '1rem' }}>
-        {page.progress?.state === 'PASS' && (
+        {/* Visual effect for course page - when it is going into pass state */}
+        {page.type === CourseType.Course &&
+          page.progress?.state !== PageProgressState.Pass && (
+            <Box sx={{ position: 'relative' }}>
+              <CircularProgress
+                variant="determinate"
+                value={countUpProgress}
+                sx={{ position: 'absolute' }}
+              />
+              <CheckCircleIcon
+                sx={{ color: 'success.main', fontSize: '3rem', opacity: 0.4 }}
+              />
+            </Box>
+          )}
+
+        {page.progress?.state === PageProgressState.Pass && (
           <CheckCircleIcon sx={{ color: 'success.main', fontSize: '3rem' }} />
         )}
-        {page.progress?.state === 'FAIL' && (
+        {page.progress?.state === PageProgressState.Fail && (
           <CancelIcon sx={{ color: 'error.main', fontSize: '3rem' }} />
         )}
 
@@ -39,8 +63,7 @@ export default function Page(
       </Box>
 
       <Typography>{page.description}</Typography>
-
-      {page.type === 'COURSE' ? (
+      {page.type === CourseType.Course ? (
         <CoursePage {...page} />
       ) : (
         <QuizPage {...page} />
