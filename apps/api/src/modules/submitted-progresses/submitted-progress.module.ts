@@ -9,6 +9,8 @@ import {
 import { SubmittedProgressService } from './submitted-progress.service';
 import { SubmittedProgressResolver } from './submitted-progress.resolver';
 import { CourseProgressModule } from '../course-progresses/course-progress.module';
+import { ConfigModule } from '../config/config.module';
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -16,6 +18,7 @@ import { CourseProgressModule } from '../course-progresses/course-progress.modul
     ]),
     UserModule,
     forwardRef(() => CourseProgressModule),
+    ConfigModule,
   ],
   providers: [SubmittedProgressService, SubmittedProgressResolver, JwtService],
   exports: [SubmittedProgressService],

@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { CourseModule } from './modules/courses/course.module';
 import { UserModule } from './modules/users/user.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AnswerModule } from './modules/answers/answer.module';
@@ -13,22 +12,20 @@ import { PageProgressModule } from './modules/page-progresses/page-progress.modu
 import { BadgeModule } from './modules/badges/badge.module';
 import { SubmittedProgressModule } from './modules/submitted-progresses/submitted-progress.module';
 import { CourseProgressModule } from './modules/course-progresses/course-progress.module';
+import { ConfigModule } from './modules/config/config.module';
+import { ConfigService } from './modules/config/config.service';
 
 @Module({
   imports: [
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('AUTH_SECRET'),
+        secret: configService.authSecret,
         signOptions: {
-          expiresIn: configService.get<string>('AUTH_TOKEN_EXPIRES_IN'),
+          expiresIn: configService.authTokenExpiresIn,
         },
       }),
       inject: [ConfigService],
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: ['.env.development.local'],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -43,9 +40,9 @@ import { CourseProgressModule } from './modules/course-progresses/course-progres
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        const host = configService.get<string>(`DATABASE_HOST`);
-        const port = configService.get<number>(`DATABASE_PORT`);
-        const dbName = configService.get<string>(`DATABASE_NAME`);
+        const host = configService.dbHost;
+        const port = configService.dbPort;
+        const dbName = configService.dbName;
 
         return {
           uri: `mongodb://${host}:${port}/${dbName}`,
@@ -53,6 +50,7 @@ import { CourseProgressModule } from './modules/course-progresses/course-progres
       },
       inject: [ConfigService],
     }),
+    ConfigModule,
     AnswerModule,
     QuestionModule,
     UserModule,
