@@ -15,7 +15,15 @@ export class SubmittedProgress {
 
   @Prop({ required: true })
   @Field()
-  progress: number;
+  totalProgress: number;
+
+  @Prop({ required: true })
+  @Field()
+  quizProgress: number;
+
+  @Prop({ required: true })
+  @Field()
+  courseProgress: number;
 
   @Prop({ type: ObjectId, ref: 'Course', required: true })
   @Field(() => Course)

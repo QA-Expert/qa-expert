@@ -75,6 +75,18 @@ export class CourseProgressService {
     );
   }
 
+  async findOneByCourseIdAndType(
+    courseId: string,
+    userId: string,
+    type: CourseType,
+  ) {
+    return await this.courseProgressModel.findOne({
+      course: { _id: courseId },
+      user: { _id: userId },
+      type,
+    });
+  }
+
   async findTotalProgressByCourseId(
     courseId: string,
     userId: string,

@@ -70,11 +70,13 @@ export const GET_BADGES = gql(/* GraphQL */ `
   }
 `);
 
-export const GET_SUBMITTED_PROGRESSES = gql(/* GraphQL */ `
-  query GetSubmittedProgresses {
+export const GET_ALL_SUBMITTED_PROGRESSES = gql(/* GraphQL */ `
+  query GetAllSubmittedProgresses {
     submittedProgresses {
       _id
-      progress
+      totalProgress
+      quizProgress
+      courseProgress
       createdAt
       course {
         _id

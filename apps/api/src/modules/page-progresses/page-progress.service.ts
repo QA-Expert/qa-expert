@@ -1,7 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import { CourseProgressState } from '../course-progresses/course-progress.schema';
 import { CourseProgressService } from '../course-progresses/course-progress.service';
 import { CourseType } from '../courses/course.schema';
 import { SubmittedProgressService } from '../submitted-progresses/submitted-progress.service';
@@ -77,19 +76,7 @@ export class PageProgressService {
       userId,
     );
 
-    const totalCourseProgress =
-      await this.serviceCourseProgress.findTotalProgressByCourseId(
-        data.course,
-        userId,
-      );
-
-    if (totalCourseProgress.state !== CourseProgressState.IN_PROGRESS) {
-      await this.serviceSubmittedProgress.create(
-        data.course,
-        userId,
-        totalCourseProgress.pass,
-      );
-    }
+    await this.serviceSubmittedProgress.create(data.course, userId);
 
     return createdPageProgress;
   }
@@ -125,19 +112,7 @@ export class PageProgressService {
       userId,
     );
 
-    const totalCourseProgress =
-      await this.serviceCourseProgress.findTotalProgressByCourseId(
-        data.course,
-        userId,
-      );
-
-    if (totalCourseProgress.state !== CourseProgressState.IN_PROGRESS) {
-      await this.serviceSubmittedProgress.create(
-        data.course,
-        userId,
-        totalCourseProgress.pass,
-      );
-    }
+    await this.serviceSubmittedProgress.create(data.course, userId);
 
     return createdPageProgress;
   }

@@ -1,6 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
+import { CourseProgressState } from '../course-progresses/course-progress.schema';
+import { CourseProgressService } from '../course-progresses/course-progress.service';
+import { CourseType } from '../courses/course.schema';
 import { SubmittedProgress } from './submitted-progress.schema';
 
 @Injectable()
@@ -8,6 +11,8 @@ export class SubmittedProgressService {
   constructor(
     @InjectModel(SubmittedProgress.name)
     private submittedProgressModel: Model<SubmittedProgress>,
+    @Inject(forwardRef(() => CourseProgressService))
+    private readonly serviceCourseProgress: CourseProgressService,
   ) {}
 
   async findAll(userId: string) {
@@ -21,9 +26,34 @@ export class SubmittedProgressService {
       .exec();
   }
 
-  async create(courseId: string, userId: string, pass: number) {
+  async create(courseId: string, userId: string) {
+    const totalCourseProgress =
+      await this.serviceCourseProgress.findTotalProgressByCourseId(
+        courseId,
+        userId,
+      );
+
+    if (totalCourseProgress.state === CourseProgressState.IN_PROGRESS) {
+      return null;
+    }
+
+    const quizProgress =
+      await this.serviceCourseProgress.findOneByCourseIdAndType(
+        courseId,
+        userId,
+        CourseType.QUIZ,
+      );
+    const courseProgress =
+      await this.serviceCourseProgress.findOneByCourseIdAndType(
+        courseId,
+        userId,
+        CourseType.COURSE,
+      );
+
     const newProgress: Partial<SubmittedProgress> = {
-      progress: pass,
+      totalProgress: totalCourseProgress.pass,
+      courseProgress: courseProgress?.pass ?? 0,
+      quizProgress: quizProgress?.pass ?? 0,
       course: new mongoose.Types.ObjectId(courseId),
       user: new mongoose.Types.ObjectId(userId),
       createdBy: new mongoose.Types.ObjectId(userId),

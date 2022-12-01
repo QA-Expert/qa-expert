@@ -226,8 +226,10 @@ export type SubmittedProgress = {
   __typename?: 'SubmittedProgress';
   _id: Scalars['String'];
   course: Course;
+  courseProgress: Scalars['Float'];
   createdAt: Scalars['DateTime'];
-  progress: Scalars['Float'];
+  quizProgress: Scalars['Float'];
+  totalProgress: Scalars['Float'];
   user: Scalars['String'];
 };
 
@@ -508,16 +510,18 @@ export type GetBadgesQuery = {
   }>;
 };
 
-export type GetSubmittedProgressesQueryVariables = Exact<{
+export type GetAllSubmittedProgressesQueryVariables = Exact<{
   [key: string]: never;
 }>;
 
-export type GetSubmittedProgressesQuery = {
+export type GetAllSubmittedProgressesQuery = {
   __typename?: 'Query';
   submittedProgresses: Array<{
     __typename?: 'SubmittedProgress';
     _id: string;
-    progress: number;
+    totalProgress: number;
+    quizProgress: number;
+    courseProgress: number;
     createdAt: string;
     course: { __typename?: 'Course'; _id: string; title: string };
   }>;
@@ -1688,13 +1692,13 @@ export const GetBadgesDocument = {
     },
   ],
 } as unknown as DocumentNode<GetBadgesQuery, GetBadgesQueryVariables>;
-export const GetSubmittedProgressesDocument = {
+export const GetAllSubmittedProgressesDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'GetSubmittedProgresses' },
+      name: { kind: 'Name', value: 'GetAllSubmittedProgresses' },
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
@@ -1705,7 +1709,18 @@ export const GetSubmittedProgressesDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'progress' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'totalProgress' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'quizProgress' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'courseProgress' },
+                },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 {
                   kind: 'Field',
@@ -1726,6 +1741,6 @@ export const GetSubmittedProgressesDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  GetSubmittedProgressesQuery,
-  GetSubmittedProgressesQueryVariables
+  GetAllSubmittedProgressesQuery,
+  GetAllSubmittedProgressesQueryVariables
 >;
