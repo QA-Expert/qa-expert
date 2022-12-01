@@ -36,8 +36,8 @@ const documents = {
     types.GetUserDocument,
   '\n  query GetBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n  }\n':
     types.GetBadgesDocument,
-  '\n  query GetSubmittedProgresses {\n    submittedProgresses {\n      _id\n      progress\n      createdAt\n      course {\n        _id\n        title\n      }\n    }\n  }\n':
-    types.GetSubmittedProgressesDocument,
+  '\n  query GetAllSubmittedProgresses {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n      }\n    }\n  }\n':
+    types.GetAllSubmittedProgressesDocument,
 };
 
 export function gql(
@@ -92,8 +92,8 @@ export function gql(
   source: '\n  query GetBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n  }\n',
 ): typeof documents['\n  query GetBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n  }\n'];
 export function gql(
-  source: '\n  query GetSubmittedProgresses {\n    submittedProgresses {\n      _id\n      progress\n      createdAt\n      course {\n        _id\n        title\n      }\n    }\n  }\n',
-): typeof documents['\n  query GetSubmittedProgresses {\n    submittedProgresses {\n      _id\n      progress\n      createdAt\n      course {\n        _id\n        title\n      }\n    }\n  }\n'];
+  source: '\n  query GetAllSubmittedProgresses {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n      }\n    }\n  }\n',
+): typeof documents['\n  query GetAllSubmittedProgresses {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n      }\n    }\n  }\n'];
 
 export function gql(source: string): unknown;
 export function gql(source: string) {

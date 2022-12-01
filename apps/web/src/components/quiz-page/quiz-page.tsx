@@ -56,21 +56,6 @@ export default function QuizPage({ question, progress, _id }: Props) {
   const isAnsweredCorrectly = (expected: string[], actual: string[]) =>
     !difference(expected, actual).length;
 
-  const getStylesForOptionsWhenAnswered = (
-    actualAnswers: string[] | null | undefined,
-    expectedAnswers: string[],
-    optionId: string,
-  ) =>
-    actualAnswers && {
-      margin: 0,
-      border: 'solid 0.125rem',
-      borderRadius: '0.25rem',
-      padding: '0.25rem',
-      borderColor: expectedAnswers.includes(optionId)
-        ? 'success.main'
-        : 'error.main',
-    };
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (isSingleAnswerQuestion) {
       setAnswers([e.target.value]);
@@ -102,19 +87,12 @@ export default function QuizPage({ question, progress, _id }: Props) {
           <RadioGroup sx={{ gap: '0.5rem' }}>
             {question.options.map((option, i) => (
               <FormControlLabel
-                sx={{
-                  ...getStylesForOptionsWhenAnswered(
-                    progress?.answers,
-                    question.answers.map((a) => a._id),
-                    option._id,
-                  ),
-                }}
                 key={i}
                 value={option._id}
-                disabled={Boolean(progress?.answers)}
+                disabled={Boolean(progress?.answers?.length)}
                 control={
                   <Radio
-                    checked={progress?.answers?.includes(option._id)}
+                    checked={Boolean(answers?.includes(option._id))}
                     onChange={handleChange}
                   />
                 }
@@ -126,19 +104,12 @@ export default function QuizPage({ question, progress, _id }: Props) {
           <FormGroup sx={{ gap: '0.5rem' }}>
             {question.options.map((option, i) => (
               <FormControlLabel
-                sx={{
-                  ...getStylesForOptionsWhenAnswered(
-                    progress?.answers,
-                    question.answers.map((a) => a._id) ?? [],
-                    option._id,
-                  ),
-                }}
                 key={i}
                 value={option._id}
-                disabled={Boolean(progress?.answers)}
+                disabled={Boolean(progress?.answers?.length)}
                 control={
                   <Checkbox
-                    checked={progress?.answers?.includes(option._id)}
+                    checked={Boolean(answers?.includes(option._id))}
                     onChange={handleChange}
                   />
                 }

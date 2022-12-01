@@ -13,13 +13,13 @@ import Button from '@mui/material/Button';
 import { ChangePasswordModal } from '../src/components/change-password-modal/change-password-modal';
 import {
   GET_BADGES,
-  GET_SUBMITTED_PROGRESSES,
+  GET_ALL_SUBMITTED_PROGRESSES,
 } from '../src/graphql/queries/queries';
 import { useQuery } from '@apollo/client';
 import { BadgeComponent } from '../src/components/badge/badge';
 import Divider from '@mui/material/Divider';
 import { Line } from 'react-chartjs-2';
-import { ChartData, ChartOptions, Tooltip } from 'chart.js';
+import { Tooltip } from 'chart.js';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -27,11 +27,10 @@ import {
   PointElement,
   LineElement,
   Title,
+  Legend,
 } from 'chart.js';
-import { GetSubmittedProgressesQuery } from '../src/__generated__/graphql';
-import { groupBy } from 'lodash';
-import { format } from 'date-fns';
 import { useTheme } from '@mui/material/styles';
+import { getChartData } from '../utils/profile';
 
 ChartJS.register(
   CategoryScale,
@@ -40,81 +39,19 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
+  Legend,
 );
-
-interface GroupedProgresses {
-  [courseId: string]: GetSubmittedProgressesQuery['submittedProgresses'];
-}
-
-// TODO: Move to utils
-const getChartData = (
-  groupedProgress: GroupedProgresses,
-  color: string,
-): {
-  data: ChartData<'line'>;
-  options: ChartOptions<'line'>;
-}[] => {
-  const courseIds = Object.keys(groupedProgress);
-
-  // TODO: Add logic for now showing charts if first attempt was 100%
-  return courseIds.map((courseId) => {
-    const progresses = groupedProgress[courseId];
-    const data = progresses.map((progress) => progress.progress);
-    const labels = progresses.map((progress) =>
-      format(new Date(progress.createdAt), 'MM/dd/yyyy'),
-    );
-
-    return {
-      data: {
-        labels,
-        datasets: [
-          {
-            data,
-            borderColor: color,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: progresses[0].course.title,
-          },
-        },
-        scales: {
-          y: {
-            suggestedMin: 0,
-            suggestedMax: 100,
-            display: true,
-            title: {
-              display: true,
-              text: 'Progress',
-            },
-          },
-          x: {
-            display: true,
-            title: {
-              display: true,
-              text: 'Date when finished',
-            },
-          },
-        },
-      },
-    };
-  });
-};
 
 function Account() {
   const [user] = useAtom(userAtom);
   const { data: badges } = useQuery(GET_BADGES);
-  const { data: progresses } = useQuery(GET_SUBMITTED_PROGRESSES);
+  const { data: progresses } = useQuery(GET_ALL_SUBMITTED_PROGRESSES);
   const theme = useTheme();
-  const groupedProgress: GroupedProgresses = groupBy(
+  const chartsData = getChartData(
     progresses?.submittedProgresses,
-    (progress) => progress.course._id,
+    theme.palette.warning,
+    theme.palette.info,
   );
-  const chartsData = getChartData(groupedProgress, theme.palette.primary.main);
 
   const [changeUserNamesModalOpen, setChangeUserNamesModalOpen] =
     useState(false);
@@ -215,7 +152,7 @@ function Account() {
             >
               {/* TODO: Implement better styles to comply with material design theme*/}
               {chartsData.map((data, i) => (
-                <Box key={i} sx={{ flex: 1, maxWidth: '50%' }}>
+                <Box key={i} sx={{ flex: '1' }}>
                   <Line {...data} />
                 </Box>
               ))}

@@ -8,7 +8,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
-import { Course, CourseType } from './course.schema';
+import { Course } from './course.schema';
 import { CourseService } from './course.service';
 import { Roles as RolesEnum, User } from '../users/user.schema';
 import { Roles } from '../auth/roles.decorator';
