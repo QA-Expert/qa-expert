@@ -12,9 +12,13 @@ import { useState } from 'react';
 import Main from '../src/components/main/main';
 import { Box } from '../src/components/box/box';
 import { FORGOT_PASSWORD } from '../src/graphql/mutations/mutations';
+import { useError } from '../utils/hooks';
 
 function ForgotPassword() {
-  const [forgotPassword] = useMutation(FORGOT_PASSWORD);
+  const [forgotPassword, { error }] = useMutation(FORGOT_PASSWORD);
+
+  useError(error?.message);
+
   const schema = Yup.object().shape({
     email: Yup.string()
       .required('Email is a required field')

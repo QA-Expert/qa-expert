@@ -15,6 +15,7 @@ import { UPDATE_USER_NAMES } from '../../graphql/mutations/mutations';
 import { userAtom } from '../../store';
 import { Box } from '../box/box';
 import { GET_USER } from '../../graphql/queries/queries';
+import { useError } from '../../../utils/hooks';
 
 interface Props {
   open: boolean;
@@ -23,9 +24,11 @@ interface Props {
 
 export function ChangeNamesModal({ open, onClose }: Props) {
   const [user, setUser] = useAtom(userAtom);
-  const [updateUserNames] = useMutation(UPDATE_USER_NAMES, {
+  const [updateUserNames, { error }] = useMutation(UPDATE_USER_NAMES, {
     refetchQueries: [{ query: GET_USER }],
   });
+
+  useError(error?.message);
 
   const initialValues: UserInputUpdateNames = {
     firstName: user?.firstName ?? '',

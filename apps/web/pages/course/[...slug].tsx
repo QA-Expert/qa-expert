@@ -7,6 +7,7 @@ import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
 import Page from '../../src/components/page/page';
 import Sidebar from '../../src/components/sidebar/sidebar';
 import { GET_COURSE } from '../../src/graphql/queries/queries';
+import { useError } from '../../utils/hooks';
 
 const Course = () => {
   const route = useRouter();
@@ -17,10 +18,7 @@ const Course = () => {
     skip: !slug,
   });
 
-  /* TODO: Add TOASTS */
-  if (error) {
-    return null;
-  }
+  useError(error?.message);
 
   if (!data) {
     return null;

@@ -29,6 +29,7 @@ import {
 } from '../../__generated__/graphql';
 import Tooltip from '@mui/material/Tooltip';
 import { useDurationToRetakeQuiz } from './card.hook';
+import { useError } from '../../../utils/hooks';
 
 type Props = GetAllCoursesQuery['courses'][number];
 
@@ -41,7 +42,7 @@ export const CardComponent = ({
   pages,
 }: Props) => {
   const [user, setUser] = useAtom(userAtom);
-  const [claimBadge] = useMutation(CLAIM_BADGE, {
+  const [claimBadge, { error: badgeError }] = useMutation(CLAIM_BADGE, {
     // TODO: figure out why we have to refetch user and setUser atom does not work and update user
     refetchQueries: [
       {
@@ -49,17 +50,24 @@ export const CardComponent = ({
       },
     ],
   });
-  const [deletePagesProgresses] = useMutation(DELETE_PAGES_PROGRESSES, {
-    refetchQueries: [
-      {
-        query: GET_COURSE,
-        variables: { _id },
-      },
-      {
-        query: GET_ALL_COURSES,
-      },
-    ],
-  });
+  const [deletePagesProgresses, { error: progressError }] = useMutation(
+    DELETE_PAGES_PROGRESSES,
+    {
+      refetchQueries: [
+        {
+          query: GET_COURSE,
+          variables: { _id },
+        },
+        {
+          query: GET_ALL_COURSES,
+        },
+      ],
+    },
+  );
+
+  useError(badgeError?.message);
+  useError(progressError?.message);
+
   const isPassedCourse = progress.state === CourseProgressState.Pass;
   const isFailedCourse = progress.state === CourseProgressState.Fail;
   const isBadgeClaimed = badge?._id

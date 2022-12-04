@@ -12,13 +12,17 @@ import { useState } from 'react';
 import { Box } from '../box/box';
 import { useAtom } from 'jotai';
 import { userAtom } from '../../store';
+import { useError } from '../../../utils/hooks';
 
 export const ProfileMenu = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const client = useApolloClient();
-  const [logout] = useMutation(LOGOUT);
+  const [logout, { error }] = useMutation(LOGOUT);
   const [user] = useAtom(userAtom);
+
+  useError(error?.message);
+
   const menuItems = [
     {
       name: 'Profile',

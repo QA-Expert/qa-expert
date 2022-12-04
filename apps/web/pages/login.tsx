@@ -15,10 +15,11 @@ import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Link from 'next/link';
 import { Box } from '../src/components/box/box';
+import { useError } from '../utils/hooks';
 
 function Login() {
   const client = useApolloClient();
-  const [login] = useMutation(LOGIN);
+  const [login, { error }] = useMutation(LOGIN);
   const schema = Yup.object().shape({
     email: Yup.string()
       .required('Email is a required field')
@@ -32,6 +33,8 @@ function Login() {
     password: '',
   };
   const router = useRouter();
+
+  useError(error?.message);
 
   return (
     <Main>
