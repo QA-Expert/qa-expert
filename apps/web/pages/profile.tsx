@@ -31,6 +31,7 @@ import {
 } from 'chart.js';
 import { useTheme } from '@mui/material/styles';
 import { getChartData } from '../utils/profile';
+import { useError } from '../utils/hooks';
 
 ChartJS.register(
   CategoryScale,
@@ -44,14 +45,19 @@ ChartJS.register(
 
 function Account() {
   const [user] = useAtom(userAtom);
-  const { data: badges } = useQuery(GET_BADGES);
-  const { data: progresses } = useQuery(GET_ALL_SUBMITTED_PROGRESSES);
+  const { data: badges, error: errorBadges } = useQuery(GET_BADGES);
+  const { data: progresses, error: errorProgresses } = useQuery(
+    GET_ALL_SUBMITTED_PROGRESSES,
+  );
   const theme = useTheme();
   const chartsData = getChartData(
     progresses?.submittedProgresses,
     theme.palette.warning,
     theme.palette.info,
   );
+
+  useError(errorBadges?.message);
+  useError(errorProgresses?.message);
 
   const [changeUserNamesModalOpen, setChangeUserNamesModalOpen] =
     useState(false);

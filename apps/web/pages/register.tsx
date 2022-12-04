@@ -15,10 +15,14 @@ import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Link from 'next/link';
 import { Box } from '../src/components/box/box';
+import { useError } from '../utils/hooks';
 
 function Register() {
   const client = useApolloClient();
-  const [register] = useMutation(REGISTER);
+  const [register, { error }] = useMutation(REGISTER);
+
+  useError(error?.message);
+
   const schema = Yup.object().shape({
     email: Yup.string()
       .required('Email is a required field')

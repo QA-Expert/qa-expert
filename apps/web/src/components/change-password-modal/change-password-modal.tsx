@@ -12,6 +12,7 @@ import { UserInputUpdatePassword } from '../../__generated__/graphql';
 import { object, string } from 'yup';
 import { UPDATE_USER_PASSWORD } from '../../graphql/mutations/mutations';
 import { Box } from '../box/box';
+import { useError } from '../../../utils/hooks';
 
 interface Props {
   open: boolean;
@@ -19,7 +20,9 @@ interface Props {
 }
 
 export function ChangePasswordModal({ open, onClose }: Props) {
-  const [updateUserPassword] = useMutation(UPDATE_USER_PASSWORD);
+  const [updateUserPassword, { error }] = useMutation(UPDATE_USER_PASSWORD);
+
+  useError(error?.message);
 
   const initialValues: UserInputUpdatePassword = {
     newPassword: '',

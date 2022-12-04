@@ -14,9 +14,13 @@ import Main from '../../src/components/main/main';
 import { RESET_PASSWORD } from '../../src/graphql/mutations/mutations';
 import { Box } from '../../src/components/box/box';
 import { useState } from 'react';
+import { useError } from '../../utils/hooks';
 
 function ResetPassword() {
-  const [resetPassword] = useMutation(RESET_PASSWORD);
+  const [resetPassword, { error }] = useMutation(RESET_PASSWORD);
+
+  useError(error?.message);
+
   const schema = Yup.object().shape({
     password: Yup.string()
       .required('New Password is a required field')

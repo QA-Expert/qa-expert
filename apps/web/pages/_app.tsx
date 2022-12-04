@@ -9,9 +9,10 @@ import theme from '../src/theme/theme';
 import { useRouter } from 'next/router';
 import { GET_USER } from '../src/graphql/queries/queries';
 import { useEffect } from 'react';
-import { useAtom } from 'jotai';
-import { userAtom } from '../src/store';
+import { toastMessageAtom, userAtom } from '../src/store';
 import { User } from '../src/__generated__/graphql';
+import { useUpdateAtom } from 'jotai/utils';
+import { Toast } from '../src/components/toast/toast';
 
 interface Props {
   initialApolloState: InitialState;
@@ -26,9 +27,9 @@ const PUBLIC_ROUTES = [
 
 export default function MyApp({ Component, pageProps }: AppProps<Props>) {
   const router = useRouter();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_user, setUser] = useAtom(userAtom);
+  const setUser = useUpdateAtom(userAtom);
   const apolloClient = useApollo(pageProps.initialApolloState);
+  const setMessage = useUpdateAtom(toastMessageAtom);
 
   const shouldAuth = !PUBLIC_ROUTES.includes(router.pathname);
 
@@ -39,15 +40,19 @@ export default function MyApp({ Component, pageProps }: AppProps<Props>) {
         .then(({ data }: { data: { user: User | null } }) => {
           setUser(data?.user);
         })
-        .catch(() => router.push('/login'));
+        .catch((error) => {
+          setMessage(error.message);
+          router.push('/login');
+        });
     }
-  }, [apolloClient, router, setUser, shouldAuth]);
+  }, [apolloClient, router, setMessage, setUser, shouldAuth]);
 
   return (
     <ApolloProvider client={apolloClient}>
       <HeadComponent />
       <CssBaseline />
       <ThemeProvider theme={theme}>
+        <Toast />
         <Component {...pageProps} />
       </ThemeProvider>
     </ApolloProvider>

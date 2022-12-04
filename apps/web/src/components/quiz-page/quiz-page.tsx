@@ -16,13 +16,14 @@ import { useRouter } from 'next/router';
 import { difference } from 'lodash';
 import { CREATE_QUIZ_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
 import { GET_ALL_COURSES, GET_COURSE } from '../../graphql/queries/queries';
+import { useError } from '../../../utils/hooks';
 
 export default function QuizPage({ question, progress, _id }: Props) {
   const router = useRouter();
   const slug = router.query.slug ? router.query.slug[0] : '';
   const [answers, setAnswers] = useState<string[]>(progress?.answers ?? []);
   const isSingleAnswerQuestion = question?.answers.length === 1;
-  const [createProgress] = useMutation(CREATE_QUIZ_PAGE_PROGRESS, {
+  const [createProgress, { error }] = useMutation(CREATE_QUIZ_PAGE_PROGRESS, {
     refetchQueries: [
       {
         query: GET_COURSE,
@@ -33,6 +34,8 @@ export default function QuizPage({ question, progress, _id }: Props) {
       },
     ],
   });
+
+  useError(error?.message);
 
   if (!question) {
     return null;

@@ -12,6 +12,7 @@ import { GET_COURSE } from '../../graphql/queries/queries';
 import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
 import { userAtom } from '../../store';
+import { useError } from '../../../utils/hooks';
 
 const ReactQuill = dynamic(
   () => {
@@ -51,14 +52,19 @@ export const TextEditor = ({ initialContent, pageId }: Props) => {
 
   const [content, setContent] = useState<string | DeltaStatic>(initContent);
   const [deltaStatic, setDeltaStatic] = useState<DeltaStatic | null>(null);
-  const [updateCoursePageContent] = useMutation(UPDATE_COURSE_PAGE_CONTENT, {
-    refetchQueries: [
-      {
-        query: GET_COURSE,
-        variables: { _id: slug },
-      },
-    ],
-  });
+  const [updateCoursePageContent, { error }] = useMutation(
+    UPDATE_COURSE_PAGE_CONTENT,
+    {
+      refetchQueries: [
+        {
+          query: GET_COURSE,
+          variables: { _id: slug },
+        },
+      ],
+    },
+  );
+
+  useError(error?.message);
 
   const handleClick = async () => {
     const stringified = JSON.stringify(deltaStatic);

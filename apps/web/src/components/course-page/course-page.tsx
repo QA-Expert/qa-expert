@@ -6,11 +6,12 @@ import { GET_ALL_COURSES, GET_COURSE } from '../../graphql/queries/queries';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 import { CREATE_COURSE_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
+import { useError } from '../../../utils/hooks';
 
 export default function CoursePage({ _id, content, progress }: Props) {
   const router = useRouter();
   const slug = router.query.slug ? router.query.slug[0] : '';
-  const [createProgress] = useMutation(CREATE_COURSE_PAGE_PROGRESS, {
+  const [createProgress, { error }] = useMutation(CREATE_COURSE_PAGE_PROGRESS, {
     refetchQueries: [
       {
         query: GET_COURSE,
@@ -21,6 +22,8 @@ export default function CoursePage({ _id, content, progress }: Props) {
       },
     ],
   });
+
+  useError(error?.message);
 
   useEffect(() => {
     const timer = setTimeout(async () => {

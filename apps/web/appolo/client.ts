@@ -35,7 +35,15 @@ export function createApolloClient() {
     ssrMode: typeof window === 'undefined',
     link: from([errorLink, httpLink]),
     cache: new InMemoryCache(),
-    connectToDevTools: true, // TODO: put under env
+    connectToDevTools: process.env.NODE_ENV === 'production' ? false : true,
+    defaultOptions: {
+      query: {
+        errorPolicy: 'all',
+      },
+      mutate: {
+        errorPolicy: 'all',
+      },
+    },
   });
 }
 

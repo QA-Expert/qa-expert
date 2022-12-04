@@ -4,14 +4,12 @@ import { useQuery } from '@apollo/client';
 import Typography from '@mui/material/Typography';
 import { CardComponent } from '../src/components/card/card';
 import { Box } from '../src/components/box/box';
+import { useError } from '../utils/hooks';
 
 const HomePage = () => {
   const { data, loading, error } = useQuery(GET_ALL_COURSES);
 
-  /* TODO: Add TOASTS */
-  if (error) {
-    return null;
-  }
+  useError(error?.message);
 
   if (!data) {
     return null;
