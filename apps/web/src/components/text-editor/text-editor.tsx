@@ -64,7 +64,7 @@ export const TextEditor = ({ initialContent, pageId }: Props) => {
     },
   );
 
-  useError(error?.message);
+  useError([error?.message]);
 
   const handleClick = async () => {
     const stringified = JSON.stringify(deltaStatic);

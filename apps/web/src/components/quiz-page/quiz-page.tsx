@@ -35,7 +35,7 @@ export default function QuizPage({ question, progress, _id }: Props) {
     ],
   });
 
-  useError(error?.message);
+  useError([error?.message]);
 
   if (!question) {
     return null;

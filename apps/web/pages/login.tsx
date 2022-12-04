@@ -34,7 +34,7 @@ function Login() {
   };
   const router = useRouter();
 
-  useError(error?.message);
+  useError([error?.message]);
 
   return (
     <Main>

@@ -19,7 +19,7 @@ import { useError } from '../../utils/hooks';
 function ResetPassword() {
   const [resetPassword, { error }] = useMutation(RESET_PASSWORD);
 
-  useError(error?.message);
+  useError([error?.message]);
 
   const schema = Yup.object().shape({
     password: Yup.string()

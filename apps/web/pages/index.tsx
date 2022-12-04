@@ -9,7 +9,7 @@ import { useError } from '../utils/hooks';
 const HomePage = () => {
   const { data, loading, error } = useQuery(GET_ALL_COURSES);
 
-  useError(error?.message);
+  useError([error?.message]);
 
   if (!data) {
     return null;
