@@ -21,7 +21,7 @@ function Register() {
   const client = useApolloClient();
   const [register, { error }] = useMutation(REGISTER);
 
-  useError(error?.message);
+  useError([error?.message]);
 
   const schema = Yup.object().shape({
     email: Yup.string()

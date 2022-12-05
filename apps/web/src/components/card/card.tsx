@@ -65,8 +65,7 @@ export const CardComponent = ({
     },
   );
 
-  useError(badgeError?.message);
-  useError(progressError?.message);
+  useError([badgeError?.message, progressError?.message]);
 
   const isPassedCourse = progress.state === CourseProgressState.Pass;
   const isFailedCourse = progress.state === CourseProgressState.Fail;

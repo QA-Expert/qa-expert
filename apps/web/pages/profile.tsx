@@ -56,8 +56,7 @@ function Account() {
     theme.palette.info,
   );
 
-  useError(errorBadges?.message);
-  useError(errorProgresses?.message);
+  useError([errorBadges?.message, errorProgresses?.message]);
 
   const [changeUserNamesModalOpen, setChangeUserNamesModalOpen] =
     useState(false);

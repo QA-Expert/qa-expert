@@ -1,17 +1,24 @@
 import { useUpdateAtom } from 'jotai/utils';
 import { useEffect } from 'react';
-import { toastMessageAtom } from '../src/store';
+import { Toast, toastsAtom } from '../src/store';
 
-export const useError = (message: string | undefined) => {
-  const setMessage = useUpdateAtom(toastMessageAtom);
+export const useError = (messages: (string | undefined)[]) => {
+  const setToasts = useUpdateAtom(toastsAtom);
 
   useEffect(() => {
-    if (message) {
-      setMessage(message);
+    if (messages?.length) {
+      const toasts = messages
+        .filter((message): message is string => Boolean(message))
+        .map<Toast>((message) => ({
+          message,
+          color: 'error',
+        }));
+
+      setToasts(toasts);
     }
 
     return () => {
-      setMessage(null);
+      setToasts([]);
     };
-  }, [message, setMessage]);
+  }, [messages, setToasts]);
 };

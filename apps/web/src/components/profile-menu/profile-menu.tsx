@@ -21,7 +21,7 @@ export const ProfileMenu = () => {
   const [logout, { error }] = useMutation(LOGOUT);
   const [user] = useAtom(userAtom);
 
-  useError(error?.message);
+  useError([error?.message]);
 
   const menuItems = [
     {

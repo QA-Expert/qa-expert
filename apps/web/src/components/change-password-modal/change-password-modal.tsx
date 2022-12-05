@@ -22,7 +22,7 @@ interface Props {
 export function ChangePasswordModal({ open, onClose }: Props) {
   const [updateUserPassword, { error }] = useMutation(UPDATE_USER_PASSWORD);
 
-  useError(error?.message);
+  useError([error?.message]);
 
   const initialValues: UserInputUpdatePassword = {
     newPassword: '',

@@ -17,7 +17,7 @@ import { useError } from '../utils/hooks';
 function ForgotPassword() {
   const [forgotPassword, { error }] = useMutation(FORGOT_PASSWORD);
 
-  useError(error?.message);
+  useError([error?.message]);
 
   const schema = Yup.object().shape({
     email: Yup.string()

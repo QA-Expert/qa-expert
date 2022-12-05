@@ -37,11 +37,12 @@ export function createApolloClient() {
     cache: new InMemoryCache(),
     connectToDevTools: process.env.NODE_ENV === 'production' ? false : true,
     defaultOptions: {
+      // NOTE: https://www.apollographql.com/docs/react/data/error-handling/#graphql-error-policies
       query: {
-        errorPolicy: 'all',
+        errorPolicy: 'none',
       },
       mutate: {
-        errorPolicy: 'all',
+        errorPolicy: 'none',
       },
     },
   });

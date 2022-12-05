@@ -23,7 +23,7 @@ export default function CoursePage({ _id, content, progress }: Props) {
     ],
   });
 
-  useError(error?.message);
+  useError([error?.message]);
 
   useEffect(() => {
     const timer = setTimeout(async () => {

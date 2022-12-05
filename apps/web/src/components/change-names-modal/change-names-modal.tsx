@@ -28,7 +28,7 @@ export function ChangeNamesModal({ open, onClose }: Props) {
     refetchQueries: [{ query: GET_USER }],
   });
 
-  useError(error?.message);
+  useError([error?.message]);
 
   const initialValues: UserInputUpdateNames = {
     firstName: user?.firstName ?? '',

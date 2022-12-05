@@ -18,7 +18,7 @@ const Course = () => {
     skip: !slug,
   });
 
-  useError(error?.message);
+  useError([error?.message]);
 
   if (!data) {
     return null;
