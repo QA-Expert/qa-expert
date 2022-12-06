@@ -96,9 +96,9 @@ export class CourseProgressService {
         course: { _id: courseId },
         user: { _id: userId },
       })
-      .sort({ updatedAt: 'asc' });
+      .sort({ updatedAt: 'desc' });
 
-    const updatedAt = progresses[0] ? progresses[0].updatedAt : new Date();
+    const updatedAt = progresses.length ? progresses[0].updatedAt : new Date();
 
     const quizProgress = progresses.find(
       (progress) => progress.type === CourseType.QUIZ,
@@ -143,5 +143,22 @@ export class CourseProgressService {
       state,
       updatedAt,
     };
+  }
+
+  async removeCourseProgress(_id: string, userId: string) {
+    const result = await this.courseProgressModel.findOneAndRemove({
+      course: { _id },
+      type: CourseType.QUIZ,
+      user: userId,
+    });
+
+    if (result === null) {
+      throw new Error('Failed to delete all pages progresses');
+    }
+
+    return await this.servicePageProgress.removePageProgressMany(
+      result.pageProgresses.map((pageProgress) => pageProgress._id.toString()),
+      userId,
+    );
   }
 }

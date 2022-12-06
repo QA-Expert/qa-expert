@@ -9,7 +9,6 @@ import {
 import { SubmittedProgressService } from './submitted-progress.service';
 import { SubmittedProgressResolver } from './submitted-progress.resolver';
 import { CourseProgressModule } from '../course-progresses/course-progress.module';
-import { ConfigModule } from '../config/config.module';
 
 @Module({
   imports: [
@@ -18,7 +17,6 @@ import { ConfigModule } from '../config/config.module';
     ]),
     UserModule,
     forwardRef(() => CourseProgressModule),
-    ConfigModule,
   ],
   providers: [SubmittedProgressService, SubmittedProgressResolver, JwtService],
   exports: [SubmittedProgressService],

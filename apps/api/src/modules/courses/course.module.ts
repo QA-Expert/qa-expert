@@ -7,7 +7,6 @@ import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BadgeModule } from '../badges/badge.module';
 import { CourseProgressModule } from '../course-progresses/course-progress.module';
-import { ConfigModule } from '../config/config.module';
 
 @Module({
   imports: [
@@ -15,7 +14,6 @@ import { ConfigModule } from '../config/config.module';
     UserModule,
     CourseProgressModule,
     BadgeModule,
-    ConfigModule,
   ],
   providers: [CourseService, CourseResolver, JwtService],
   exports: [CourseService],

@@ -42,10 +42,12 @@ export type Course = {
   __typename?: 'Course';
   _id: Scalars['String'];
   badge?: Maybe<Badge>;
+  /** Course description */
   description: Scalars['String'];
   icon: Scalars['String'];
   pages: Array<Page>;
   progress: TotalCourseProgress;
+  /** Course title */
   title: Scalars['String'];
   type: CourseType;
 };
@@ -86,6 +88,7 @@ export type Mutation = {
   createCoursePageProgress: PageProgress;
   createQuizPage: Page;
   createQuizPageProgress: PageProgress;
+  deleteCourseProgresses: Scalars['Boolean'];
   deletePagesProgresses: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserOutputLogin;
@@ -120,6 +123,10 @@ export type MutationCreateQuizPageArgs = {
 
 export type MutationCreateQuizPageProgressArgs = {
   data: QuizPageProgressInput;
+};
+
+export type MutationDeleteCourseProgressesArgs = {
+  _id: Scalars['String'];
 };
 
 export type MutationDeletePagesProgressesArgs = {
@@ -432,6 +439,15 @@ export type DeletePagesProgressesMutationVariables = Exact<{
 export type DeletePagesProgressesMutation = {
   __typename?: 'Mutation';
   deletePagesProgresses: boolean;
+};
+
+export type DeleteCourseProgressesMutationVariables = Exact<{
+  _id: Scalars['String'];
+}>;
+
+export type DeleteCourseProgressesMutation = {
+  __typename?: 'Mutation';
+  deleteCourseProgresses: boolean;
 };
 
 export type GetAllCoursesQueryVariables = Exact<{ [key: string]: never }>;
@@ -1478,6 +1494,51 @@ export const DeletePagesProgressesDocument = {
 } as unknown as DocumentNode<
   DeletePagesProgressesMutation,
   DeletePagesProgressesMutationVariables
+>;
+export const DeleteCourseProgressesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'DeleteCourseProgresses' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: '_id' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'deleteCourseProgresses' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: '_id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: '_id' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  DeleteCourseProgressesMutation,
+  DeleteCourseProgressesMutationVariables
 >;
 export const GetAllCoursesDocument = {
   kind: 'Document',

@@ -31,7 +31,7 @@ export class PageProgressService {
   }
 
   async findOne(pageId: string, userId: string) {
-    const result = await this.pageProgressModel
+    return await this.pageProgressModel
       .findOne({
         user: {
           _id: userId,
@@ -41,8 +41,6 @@ export class PageProgressService {
         },
       })
       .exec();
-
-    return result;
   }
 
   async createCoursePageProgress(
@@ -119,11 +117,24 @@ export class PageProgressService {
 
   async removeMany(pageIds: string[], userId: string) {
     const result = await this.pageProgressModel.deleteMany({
-      page: { $in: pageIds },
+      _id: { $in: pageIds },
       user: userId,
     });
 
     if (result.deletedCount !== pageIds.length) {
+      throw new Error('Failed to delete all pages progresses');
+    }
+
+    return true;
+  }
+
+  async removePageProgressMany(pageProgressIds: string[], userId: string) {
+    const result = await this.pageProgressModel.deleteMany({
+      _id: { $in: pageProgressIds },
+      user: userId,
+    });
+
+    if (result.deletedCount !== pageProgressIds.length) {
       throw new Error('Failed to delete all pages progresses');
     }
 

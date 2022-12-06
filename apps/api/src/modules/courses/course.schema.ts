@@ -24,11 +24,11 @@ export class Course extends mongoose.Document {
   @Field(() => String)
   _id: string;
 
-  @Field()
+  @Field({ description: 'Course title' })
   @Prop()
   title: string;
 
-  @Field()
+  @Field({ description: 'Course description' })
   @Prop()
   description: string;
 
