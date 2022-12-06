@@ -146,6 +146,13 @@ export class CourseProgressService {
   }
 
   async removeCourseProgress(_id: string, userId: string) {
+    const progress = await this.findTotalProgressByCourseId(_id, userId);
+    const expireTime = +progress.updatedAt.setDate(progress.updatedAt.getDate() + 7);
+    const now = +new Date();
+    if (expireTime > now) {
+      throw new Error('Can\'t remove course progress while time is not expire');
+    }
+
     const result = await this.courseProgressModel.findOneAndRemove({
       course: { _id },
       type: CourseType.QUIZ,
@@ -153,7 +160,7 @@ export class CourseProgressService {
     });
 
     if (result === null) {
-      throw new Error('Failed to delete all pages progresses');
+      throw new Error('Failed to delete course progress');
     }
 
     return await this.servicePageProgress.removePageProgressMany(

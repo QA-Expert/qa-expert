@@ -117,7 +117,7 @@ export class PageProgressService {
 
   async removeMany(pageIds: string[], userId: string) {
     const result = await this.pageProgressModel.deleteMany({
-      _id: { $in: pageIds },
+      page: { $in: pageIds },
       user: userId,
     });
 
