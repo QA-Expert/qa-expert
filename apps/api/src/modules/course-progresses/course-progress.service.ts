@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { CourseType } from '../courses/course.schema';
@@ -8,6 +12,8 @@ import { PageProgressService } from '../page-progresses/page-progress.service';
 import { CourseProgress, TotalCourseProgress } from './course-progress.schema';
 import { CourseProgressInput } from './create-course-progress.input';
 import { getPercent, getState } from './utils';
+import { isBefore, add } from 'date-fns';
+import { ConfigService } from '../config/config.service';
 
 @Injectable()
 export class CourseProgressService {
@@ -16,6 +22,7 @@ export class CourseProgressService {
     private courseProgressModel: Model<CourseProgress>,
     private readonly servicePageProgress: PageProgressService,
     private readonly serviceCourse: CourseService,
+    private readonly serviceConfig: ConfigService,
   ) {}
 
   async upsert(
@@ -96,9 +103,9 @@ export class CourseProgressService {
         course: { _id: courseId },
         user: { _id: userId },
       })
-      .sort({ updatedAt: 'asc' });
+      .sort({ updatedAt: 'desc' });
 
-    const updatedAt = progresses[0] ? progresses[0].updatedAt : new Date();
+    const updatedAt = progresses.length ? progresses[0].updatedAt : new Date();
 
     const quizProgress = progresses.find(
       (progress) => progress.type === CourseType.QUIZ,
@@ -143,5 +150,34 @@ export class CourseProgressService {
       state,
       updatedAt,
     };
+  }
+
+  async removeCourseProgress(_id: string, userId: string) {
+    const progress = await this.findTotalProgressByCourseId(_id, userId);
+
+    const days = this.serviceConfig.courseCooldownDays;
+    const canRemoveProgressDate = add(progress.updatedAt, { days });
+    const now = new Date();
+
+    if (isBefore(now, canRemoveProgressDate)) {
+      throw new BadRequestException(
+        "Can't remove course progress while time is not expire",
+      );
+    }
+
+    const result = await this.courseProgressModel.findOneAndRemove({
+      course: { _id },
+      type: CourseType.QUIZ,
+      user: userId,
+    });
+
+    if (result === null) {
+      throw new Error('Failed to delete course progress');
+    }
+
+    return await this.servicePageProgress.removeManyByIds(
+      result.pageProgresses.map((pageProgress) => pageProgress._id.toString()),
+      userId,
+    );
   }
 }

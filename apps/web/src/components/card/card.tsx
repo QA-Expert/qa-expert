@@ -10,7 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   CLAIM_BADGE,
-  DELETE_PAGES_PROGRESSES,
+  DELETE_COURSE_PROGRESS,
 } from '../../graphql/mutations/mutations';
 import {
   GET_ALL_COURSES,
@@ -24,7 +24,6 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import TimerIcon from '@mui/icons-material/Timer';
 import {
   CourseProgressState,
-  CourseType,
   GetAllCoursesQuery,
 } from '../../__generated__/graphql';
 import Tooltip from '@mui/material/Tooltip';
@@ -39,7 +38,6 @@ export const CardComponent = ({
   description,
   progress,
   badge,
-  pages,
 }: Props) => {
   const [user, setUser] = useAtom(userAtom);
   const [claimBadge, { error: badgeError }] = useMutation(CLAIM_BADGE, {
@@ -50,8 +48,8 @@ export const CardComponent = ({
       },
     ],
   });
-  const [deletePagesProgresses, { error: progressError }] = useMutation(
-    DELETE_PAGES_PROGRESSES,
+  const [deleteCourseProgresses, { error: progressError }] = useMutation(
+    DELETE_COURSE_PROGRESS,
     {
       refetchQueries: [
         {
@@ -166,12 +164,8 @@ export const CardComponent = ({
                 onClick={async (e) => {
                   e.preventDefault();
 
-                  const pagesProgressesToRemove = pages
-                    .filter((page) => page.type === CourseType.Quiz)
-                    .map((page) => page._id);
-
-                  await deletePagesProgresses({
-                    variables: { pages: pagesProgressesToRemove },
+                  await deleteCourseProgresses({
+                    variables: { _id },
                   });
                 }}
               >

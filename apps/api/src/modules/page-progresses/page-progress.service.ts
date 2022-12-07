@@ -1,4 +1,8 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { CourseProgressService } from '../course-progresses/course-progress.service';
@@ -31,7 +35,7 @@ export class PageProgressService {
   }
 
   async findOne(pageId: string, userId: string) {
-    const result = await this.pageProgressModel
+    return await this.pageProgressModel
       .findOne({
         user: {
           _id: userId,
@@ -41,8 +45,6 @@ export class PageProgressService {
         },
       })
       .exec();
-
-    return result;
   }
 
   async createCoursePageProgress(
@@ -117,13 +119,13 @@ export class PageProgressService {
     return createdPageProgress;
   }
 
-  async removeMany(pageIds: string[], userId: string) {
+  async removeManyByIds(pageProgressIds: string[], userId: string) {
     const result = await this.pageProgressModel.deleteMany({
-      page: { $in: pageIds },
+      _id: { $in: pageProgressIds },
       user: userId,
     });
 
-    if (result.deletedCount !== pageIds.length) {
+    if (result.deletedCount !== pageProgressIds.length) {
       throw new Error('Failed to delete all pages progresses');
     }
 

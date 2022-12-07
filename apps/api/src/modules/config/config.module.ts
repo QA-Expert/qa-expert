@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { ConfigService } from './config.service';
 import { Config } from './config.schema';
 
+@Global()
 @Module({
   imports: [
     NestConfigModule.forRoot({
@@ -26,6 +27,7 @@ import { Config } from './config.schema';
         EMAIL_USERNAME: Joi.string().required(),
         EMAIL_PASSWORD: Joi.string().required(),
         EMAIL_FROM: Joi.string().required(),
+        COURSE_COOLDOWN: Joi.number().required(),
       }),
     }),
   ],

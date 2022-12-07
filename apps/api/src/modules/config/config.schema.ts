@@ -15,4 +15,5 @@ export interface Config {
   EMAIL_USERNAME: string;
   EMAIL_PASSWORD: string;
   EMAIL_FROM: string;
+  COURSE_COOLDOWN: number;
 }

@@ -1,4 +1,4 @@
-import { gql } from '../../__generated__/gql';
+import { gql } from '../../__generated__';
 
 export const LOGIN = gql(/* GraphQL */ `
   mutation Login($email: String!, $password: String!) {
@@ -108,8 +108,8 @@ export const CLAIM_BADGE = gql(/* GraphQL */ `
   }
 `);
 
-export const DELETE_PAGES_PROGRESSES = gql(/* GraphQL */ `
-  mutation DeletePagesProgresses($pages: [String!]!) {
-    deletePagesProgresses(pages: $pages)
+export const DELETE_COURSE_PROGRESS = gql(/* GraphQL */ `
+  mutation DeleteCourseProgresses($_id: String!) {
+    deleteCourseProgresses(_id: $_id)
   }
 `);
