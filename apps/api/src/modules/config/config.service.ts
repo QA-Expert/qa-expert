@@ -73,6 +73,6 @@ export class ConfigService {
   }
 
   get courseCooldownDays(): number {
-    return this.configService.get<number>('NEXT_PUBLIC_COURSE_COOLDOWN');
+    return this.configService.get<number>('COURSE_COOLDOWN');
   }
 }
