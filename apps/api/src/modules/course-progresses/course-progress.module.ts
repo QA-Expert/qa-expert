@@ -7,6 +7,7 @@ import { CourseModule } from '../courses/course.module';
 import { CourseProgressResolver } from './course-progress.resolver';
 import { JwtService } from '@nestjs/jwt';
 import { UserModule } from '../users/user.module';
+import { ConfigModule } from '../config/config.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UserModule } from '../users/user.module';
     ]),
     UserModule,
     PageProgressModule,
+    ConfigModule,
     forwardRef(() => CourseModule),
   ],
   providers: [CourseProgressService, CourseProgressResolver, JwtService],

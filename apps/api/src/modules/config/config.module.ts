@@ -27,6 +27,7 @@ import { Config } from './config.schema';
         EMAIL_USERNAME: Joi.string().required(),
         EMAIL_PASSWORD: Joi.string().required(),
         EMAIL_FROM: Joi.string().required(),
+        NEXT_PUBLIC_COURSE_COOLDOWN: Joi.number().required(),
       }),
     }),
   ],

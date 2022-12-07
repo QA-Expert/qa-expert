@@ -89,7 +89,6 @@ export type Mutation = {
   createQuizPage: Page;
   createQuizPageProgress: PageProgress;
   deleteCourseProgresses: Scalars['Boolean'];
-  deletePagesProgresses: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserOutputLogin;
   logout: Scalars['Boolean'];
@@ -127,10 +126,6 @@ export type MutationCreateQuizPageProgressArgs = {
 
 export type MutationDeleteCourseProgressesArgs = {
   _id: Scalars['String'];
-};
-
-export type MutationDeletePagesProgressesArgs = {
-  pages: Array<Scalars['String']>;
 };
 
 export type MutationForgotPasswordArgs = {
@@ -430,15 +425,6 @@ export type ClaimBadgeMutationVariables = Exact<{
 export type ClaimBadgeMutation = {
   __typename?: 'Mutation';
   claimBadge: { __typename?: 'User'; badges: Array<string> };
-};
-
-export type DeletePagesProgressesMutationVariables = Exact<{
-  pages: Array<Scalars['String']> | Scalars['String'];
-}>;
-
-export type DeletePagesProgressesMutation = {
-  __typename?: 'Mutation';
-  deletePagesProgresses: boolean;
 };
 
 export type DeleteCourseProgressesMutationVariables = Exact<{
@@ -1441,60 +1427,6 @@ export const ClaimBadgeDocument = {
     },
   ],
 } as unknown as DocumentNode<ClaimBadgeMutation, ClaimBadgeMutationVariables>;
-export const DeletePagesProgressesDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'DeletePagesProgresses' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'pages' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'ListType',
-              type: {
-                kind: 'NonNullType',
-                type: {
-                  kind: 'NamedType',
-                  name: { kind: 'Name', value: 'String' },
-                },
-              },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'deletePagesProgresses' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'pages' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'pages' },
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  DeletePagesProgressesMutation,
-  DeletePagesProgressesMutationVariables
->;
 export const DeleteCourseProgressesDocument = {
   kind: 'Document',
   definitions: [

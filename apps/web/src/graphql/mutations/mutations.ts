@@ -108,13 +108,7 @@ export const CLAIM_BADGE = gql(/* GraphQL */ `
   }
 `);
 
-export const DELETE_PAGES_PROGRESSES = gql(/* GraphQL */ `
-  mutation DeletePagesProgresses($pages: [String!]!) {
-    deletePagesProgresses(pages: $pages)
-  }
-`);
-
-export const DELETE_COURSE_PROGRESSES = gql(/* GraphQL */ `
+export const DELETE_COURSE_PROGRESS = gql(/* GraphQL */ `
   mutation DeleteCourseProgresses($_id: String!) {
     deleteCourseProgresses(_id: $_id)
   }

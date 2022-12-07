@@ -10,7 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   CLAIM_BADGE,
-  DELETE_COURSE_PROGRESSES,
+  DELETE_COURSE_PROGRESS,
 } from '../../graphql/mutations/mutations';
 import {
   GET_ALL_COURSES,
@@ -49,7 +49,7 @@ export const CardComponent = ({
     ],
   });
   const [deleteCourseProgresses, { error: progressError }] = useMutation(
-    DELETE_COURSE_PROGRESSES,
+    DELETE_COURSE_PROGRESS,
     {
       refetchQueries: [
         {
