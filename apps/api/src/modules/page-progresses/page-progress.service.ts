@@ -2,7 +2,6 @@ import {
   forwardRef,
   Inject,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
@@ -127,7 +126,7 @@ export class PageProgressService {
     });
 
     if (result.deletedCount !== pageProgressIds.length) {
-      throw new NotFoundException('Failed to delete all pages progresses');
+      throw new Error('Failed to delete all pages progresses');
     }
 
     return true;

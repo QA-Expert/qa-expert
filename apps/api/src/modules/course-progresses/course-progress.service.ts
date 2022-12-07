@@ -172,7 +172,7 @@ export class CourseProgressService {
     });
 
     if (result === null) {
-      throw new NotFoundException('Failed to delete course progress');
+      throw new Error('Failed to delete course progress');
     }
 
     return await this.servicePageProgress.removeManyByIds(
