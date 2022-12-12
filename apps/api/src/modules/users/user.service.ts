@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserInputCreate } from './create-user.input';
 import * as bcrypt from 'bcrypt';
-import {Roles, User} from './user.schema';
+import { Roles, User } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { createTransport, SendMailOptions } from 'nodemailer';
@@ -144,10 +144,10 @@ export class UserService {
     if (!user) {
       throw new NotFoundException();
     }
-    
+
     user.hashedPassword = await bcrypt.hash(
-        data.password,
-        this.configService.authSalt,
+      data.password,
+      this.configService.authSalt,
     );
 
     const updatedUser = await user.save();

@@ -8,7 +8,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 @Schema({ timestamps: true })
 @ObjectType()
 export class ForgotPassword extends mongoose.Document {
-  @Field(() => String, )
+  @Field(() => String)
   _id: string;
 
   @Prop({

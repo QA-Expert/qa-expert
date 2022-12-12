@@ -56,7 +56,10 @@ export class PageProgress extends mongoose.Document {
       },
     ],
   })
-  @Field(() => [String], { defaultValue: [], description: 'Array answers used if page is quiz' })
+  @Field(() => [String], {
+    defaultValue: [],
+    description: 'Array answers used if page is quiz',
+  })
   answers: Answer[] | mongoose.Types.ObjectId[];
 
   @Prop({ type: ObjectId, ref: 'User', required: true })

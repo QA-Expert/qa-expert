@@ -29,7 +29,10 @@ export class TotalCourseProgress {
   })
   state: CourseProgressState;
 
-  @Field({ nullable: true, description: 'Course pages count before finish course' })
+  @Field({
+    nullable: true,
+    description: 'Course pages count before finish course',
+  })
   pagesLeftBeforeFinish: number;
 
   @Field(() => Date, { defaultValue: new Date() })
@@ -46,7 +49,7 @@ export class CourseProgress {
   _id: string;
 
   @Prop({ required: true })
-  @Field(() => CourseType, { description: 'Can be theory or quiz'})
+  @Field(() => CourseType, { description: 'Can be theory or quiz' })
   type: CourseType;
 
   @Prop({ required: true })
