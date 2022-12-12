@@ -48,10 +48,10 @@ export class Page extends mongoose.Document {
       return this.type === CourseType.QUIZ;
     },
   })
-  @Field(() => Question, { nullable: true })
+  @Field(() => Question, { nullable: true, description: 'Used in quiz pages' })
   question?: Question | mongoose.Types.ObjectId;
 
-  @Field(() => PageProgress, { nullable: true })
+  @Field(() => PageProgress, { nullable: true, description: 'Page progress' })
   progress?: PageProgress;
 
   @Prop({

@@ -21,11 +21,11 @@ export class Badge extends mongoose.Document {
   @Prop()
   description: string;
 
-  @Field()
+  @Field({ description: 'Icon url' })
   @Prop()
   icon: string;
 
-  @Field()
+  @Field({ description: 'Shared link' })
   @Prop()
   link: string;
 

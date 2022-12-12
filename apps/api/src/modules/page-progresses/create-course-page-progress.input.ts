@@ -2,9 +2,9 @@ import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CoursePageProgressInput {
-  @Field(() => String)
+  @Field(() => String, { description: 'Page id'})
   page: string;
 
-  @Field(() => String)
+  @Field(() => String, { description: 'Course id'})
   course: string;
 }

@@ -40,11 +40,11 @@ export class User extends mongoose.Document {
     type: [{ type: String, enum: Roles, default: Roles.USER }],
     default: [],
   })
-  @Field(() => [String], { defaultValue: [] })
+  @Field(() => [String], { defaultValue: [], description: 'User roles' })
   roles: Roles[];
 
   @Prop({ type: [{ type: ObjectId, ref: Badge.name }], default: [] })
-  @Field(() => [String], { defaultValue: [] })
+  @Field(() => [String], { defaultValue: [], description: 'User achievements' })
   badges: Badge[] | mongoose.Types.ObjectId[];
 
   @Prop({

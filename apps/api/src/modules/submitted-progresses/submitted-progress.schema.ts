@@ -14,15 +14,15 @@ export class SubmittedProgress {
   _id: string;
 
   @Prop({ required: true })
-  @Field()
+  @Field({ description: 'Calculated from course plus quiz progress' })
   totalProgress: number;
 
   @Prop({ required: true })
-  @Field()
+  @Field({ description: 'Calculated from submitted course quiz' })
   quizProgress: number;
 
   @Prop({ required: true })
-  @Field()
+  @Field({ description: 'Calculated from submitted course theory' })
   courseProgress: number;
 
   @Prop({ type: ObjectId, ref: 'Course', required: true })

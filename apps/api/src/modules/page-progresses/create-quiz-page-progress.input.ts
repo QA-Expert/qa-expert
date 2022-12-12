@@ -3,15 +3,15 @@ import { PageProgressState } from './page-progress.schema';
 
 @InputType()
 export class QuizPageProgressInput {
-  @Field(() => String)
+  @Field(() => String, { description: 'Page id'})
   page: string;
 
-  @Field(() => String)
+  @Field(() => String, { description: 'Course id'})
   course: string;
 
-  @Field(() => [String])
+  @Field(() => [String], { description: 'Array answer ids'})
   answers: string[];
 
-  @Field(() => PageProgressState)
+  @Field(() => PageProgressState, { description: 'Can be pass or fail'})
   state: PageProgressState;
 }

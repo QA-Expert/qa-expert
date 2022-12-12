@@ -8,7 +8,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 @Schema({ timestamps: true })
 @ObjectType()
 export class ForgotPassword extends mongoose.Document {
-  @Field(() => String)
+  @Field(() => String, )
   _id: string;
 
   @Prop({
@@ -17,10 +17,10 @@ export class ForgotPassword extends mongoose.Document {
     required: true,
     index: true,
   })
-  @Field(() => User)
+  @Field(() => User, { description: 'User whose password will be reset' })
   user: User | mongoose.Types.ObjectId;
 
-  @Field()
+  @Field({ description: 'Token verified user email' })
   @Prop({ required: true, unique: true, index: true })
   token: string;
 

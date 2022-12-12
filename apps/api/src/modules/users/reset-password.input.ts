@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class ResetPasswordInput {
-  @Field()
+  @Field({ description: 'Confirmed email token' })
   token: string;
 
   @Field()

@@ -12,7 +12,7 @@ export class Answer extends mongoose.Document {
   @Field(() => String)
   _id: string;
 
-  @Field()
+  @Field({ description: 'Correct answer content' })
   @Prop()
   content: string;
 

@@ -36,18 +36,18 @@ export class Course extends mongoose.Document {
   @Field(() => CourseType)
   type: CourseType;
 
-  @Field()
+  @Field({ description: 'Icon url' })
   @Prop()
   icon: string;
 
   @Prop({ type: [{ type: ObjectId, ref: Page.name }], default: [] })
-  @Field(() => [Page], { defaultValue: [] })
+  @Field(() => [Page], { defaultValue: [], description: 'Pages included in course' })
   pages: Page[];
 
-  @Field(() => TotalCourseProgress)
+  @Field(() => TotalCourseProgress, { description: 'Course progress'})
   progress: TotalCourseProgress;
 
-  @Field(() => Badge, { nullable: true })
+  @Field(() => Badge, { nullable: true, description: 'Achievement upon successful completion of course' })
   badge: Badge;
 
   @Prop({

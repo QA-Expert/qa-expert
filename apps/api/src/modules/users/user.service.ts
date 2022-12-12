@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserInputCreate } from './create-user.input';
 import * as bcrypt from 'bcrypt';
-import { User } from './user.schema';
+import {Roles, User} from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { createTransport, SendMailOptions } from 'nodemailer';
@@ -34,13 +34,7 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    const user = await this.userModel.findOne({ email });
-
-    if (!user) {
-      throw new NotFoundException();
-    }
-
-    return user;
+    return this.userModel.findOne({ email });
   }
 
   async create(data: UserInputCreate) {
@@ -56,6 +50,7 @@ export class UserService {
     );
     const newUser = {
       ...data,
+      roles: [Roles.USER],
       hashedPassword,
     };
     const createdUser = new this.userModel(newUser);
@@ -149,13 +144,11 @@ export class UserService {
     if (!user) {
       throw new NotFoundException();
     }
-
-    const hashedPassword = await bcrypt.hash(
-      data.password,
-      this.configService.authSalt,
+    
+    user.hashedPassword = await bcrypt.hash(
+        data.password,
+        this.configService.authSalt,
     );
-
-    user.hashedPassword = hashedPassword;
 
     const updatedUser = await user.save();
 
