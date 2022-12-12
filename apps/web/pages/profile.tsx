@@ -6,16 +6,11 @@ import Layout from '../src/components/layout/layout';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
-import { useAtom } from 'jotai';
-import { userAtom } from '../src/store';
 import { ChangeNamesModal } from '../src/components/change-names-modal/change-names-modal';
 import Button from '@mui/material/Button';
 import { ChangePasswordModal } from '../src/components/change-password-modal/change-password-modal';
-import {
-  GET_BADGES,
-  GET_ALL_SUBMITTED_PROGRESSES,
-} from '../src/graphql/queries/queries';
-import { useQuery } from '@apollo/client';
+import { GET_BADGES_SUBMITTED_PROGRESSES_USER } from '../src/graphql/queries/queries';
+import { ApolloError } from '@apollo/client';
 import { BadgeComponent } from '../src/components/badge/badge';
 import Divider from '@mui/material/Divider';
 import { Line } from 'react-chartjs-2';
@@ -32,6 +27,9 @@ import {
 import { useTheme } from '@mui/material/styles';
 import { getChartData } from '../utils/profile';
 import { useError } from '../utils/hooks';
+import { initializeApollo } from '../appolo/client';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { GetBadgesSubmittedProgressesUserQuery } from '../src/__generated__/graphql';
 
 ChartJS.register(
   CategoryScale,
@@ -43,20 +41,21 @@ ChartJS.register(
   Legend,
 );
 
-function Account() {
-  const [user] = useAtom(userAtom);
-  const { data: badges, error: errorBadges } = useQuery(GET_BADGES);
-  const { data: progresses, error: errorProgresses } = useQuery(
-    GET_ALL_SUBMITTED_PROGRESSES,
-  );
+function Account(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
+  const { data, error } = props;
+  const progresses = data?.submittedProgresses;
+  const badges = data?.badges;
+  const user = data?.user;
   const theme = useTheme();
   const chartsData = getChartData(
-    progresses?.submittedProgresses,
+    progresses,
     theme.palette.warning,
     theme.palette.info,
   );
 
-  useError([errorBadges?.message, errorProgresses?.message]);
+  useError([error?.message]);
 
   const [changeUserNamesModalOpen, setChangeUserNamesModalOpen] =
     useState(false);
@@ -178,7 +177,7 @@ function Account() {
                 flexWrap: 'wrap',
               }}
             >
-              {badges?.badges?.map((badge, i) => (
+              {badges?.map((badge, i) => (
                 <BadgeComponent
                   key={i}
                   {...badge}
@@ -202,5 +201,20 @@ function Account() {
     </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<{
+  data?: GetBadgesSubmittedProgressesUserQuery;
+  error?: ApolloError;
+}> = async (context) => {
+  const { data, error } = await await initializeApollo(null, context).query({
+    query: GET_BADGES_SUBMITTED_PROGRESSES_USER,
+  });
+
+  if (error) {
+    return { props: { error } };
+  } else {
+    return { props: { data } };
+  }
+};
 
 export default Account;

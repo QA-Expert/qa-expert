@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import {
   ApolloClient,
+  ApolloLink,
   from,
   HttpLink,
   InMemoryCache,
@@ -8,16 +9,32 @@ import {
 } from '@apollo/client';
 import merge from 'deepmerge';
 import { onError } from '@apollo/client/link/error';
+import { GetServerSidePropsContext } from 'next';
+import { IncomingHttpHeaders } from 'http';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
+const setAuthLink = (ctx?: GetServerSidePropsContext) =>
+  new ApolloLink((operation, forward) => {
+    // add the authorization cookie from Next Context to the headers
+    // for outgoing graphql requests
+    operation.setContext(({ headers }: { headers: IncomingHttpHeaders }) => ({
+      headers: {
+        ...headers,
+        Cookie: ctx?.req.headers.cookie,
+      },
+    }));
+
+    return forward(operation);
+  });
+
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
+    graphQLErrors.forEach(({ message, locations, path, extensions }) => {
       console.error(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ),
-    );
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}, Extension: ${extensions.code}`,
+      );
+    });
 
   if (networkError) {
     console.error(`[Network error]: ${networkError}`);
@@ -29,13 +46,13 @@ const httpLink = new HttpLink({
   credentials: 'include',
 });
 
-export function createApolloClient() {
+export function createApolloClient(ctx?: GetServerSidePropsContext) {
   return new ApolloClient({
     name: 'qa-expert-web-client',
     ssrMode: typeof window === 'undefined',
-    link: from([errorLink, httpLink]),
+    link: from([setAuthLink(ctx), errorLink, httpLink]),
     cache: new InMemoryCache(),
-    connectToDevTools: process.env.NODE_ENV === 'production' ? false : true,
+    connectToDevTools: process.env.NODE_ENV !== 'production',
     defaultOptions: {
       // NOTE: https://www.apollographql.com/docs/react/data/error-handling/#graphql-error-policies
       query: {
@@ -54,8 +71,11 @@ export type InitialState = NormalizedCacheObject | null;
  * Reference link to code
  * https://github.com/vercel/next.js/blob/canary/examples/api-routes-apollo-server-and-client-auth
  */
-export function initializeApollo(initialState: InitialState = null) {
-  const _apolloClient = apolloClient ?? createApolloClient();
+export function initializeApollo(
+  initialState: InitialState = null,
+  ctx?: GetServerSidePropsContext,
+) {
+  const _apolloClient = apolloClient ?? createApolloClient(ctx);
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
   // get hydrated here

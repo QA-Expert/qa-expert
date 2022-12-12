@@ -1,19 +1,20 @@
 import Layout from '../src/components/layout/layout';
 import { GET_ALL_COURSES } from '../src/graphql/queries/queries';
-import { useQuery } from '@apollo/client';
 import Typography from '@mui/material/Typography';
 import { CardComponent } from '../src/components/card/card';
 import { Box } from '../src/components/box/box';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { initializeApollo } from '../appolo/client';
+import { GetAllCoursesQuery } from '../src/__generated__/graphql';
 import { useError } from '../utils/hooks';
+import { ApolloError } from '@apollo/client';
 
-const HomePage = () => {
-  const { data, loading, error } = useQuery(GET_ALL_COURSES);
+const HomePage = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) => {
+  const { data, error } = props;
 
   useError([error?.message]);
-
-  if (!data) {
-    return null;
-  }
 
   return (
     <Layout>
@@ -27,9 +28,6 @@ const HomePage = () => {
         <Typography variant="h2" sx={{ fontSize: '3rem' }}>
           Courses
         </Typography>
-
-        {/* TODO: Add Loading indicator */}
-        {loading && <p>..... LOADING ......</p>}
 
         <Box
           sx={{
@@ -45,6 +43,21 @@ const HomePage = () => {
       </Box>
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps<{
+  data?: GetAllCoursesQuery;
+  error?: ApolloError;
+}> = async (context) => {
+  const { data, error } = await initializeApollo(null, context).query({
+    query: GET_ALL_COURSES,
+  });
+
+  if (error) {
+    return { props: { error } };
+  } else {
+    return { props: { data } };
+  }
 };
 
 export default HomePage;

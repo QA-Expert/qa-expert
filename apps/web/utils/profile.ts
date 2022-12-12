@@ -4,15 +4,19 @@ import { format } from 'date-fns';
 import { capitalize, groupBy } from 'lodash';
 import {
   CourseType,
-  GetAllSubmittedProgressesQuery,
+  GetBadgesSubmittedProgressesUserQuery,
 } from '../src/__generated__/graphql';
 
 export interface GroupedProgresses {
-  [courseId: string]: GetAllSubmittedProgressesQuery['submittedProgresses'];
+  [
+    courseId: string
+  ]: GetBadgesSubmittedProgressesUserQuery['submittedProgresses'];
 }
 
 export const getChartData = (
-  progresses: GetAllSubmittedProgressesQuery['submittedProgresses'] | undefined,
+  progresses:
+    | GetBadgesSubmittedProgressesUserQuery['submittedProgresses']
+    | undefined,
   quizColor: PaletteColor,
   totalColor: PaletteColor,
 ): {
