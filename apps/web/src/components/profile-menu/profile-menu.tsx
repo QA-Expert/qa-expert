@@ -1,4 +1,4 @@
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { LOGOUT } from '../../graphql/mutations/mutations';
 import Avatar from '@mui/material/Avatar';
@@ -10,18 +10,18 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Box } from '../box/box';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store';
 import { useError } from '../../../utils/hooks';
+import { GET_USER } from '../../graphql/queries/queries';
 
 export const ProfileMenu = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const client = useApolloClient();
   const [logout, { error }] = useMutation(LOGOUT);
-  const [user] = useAtom(userAtom);
+  const { data, error: userError } = useQuery(GET_USER);
+  const user = data?.user;
 
-  useError([error?.message]);
+  useError([error?.message, userError?.message]);
 
   const menuItems = [
     {

@@ -50,6 +50,7 @@ export class AuthService {
         { ...user },
         {
           secret: this.configService.authSecret,
+          expiresIn: this.configService.authTokenExpiresIn,
         },
       ),
     };
