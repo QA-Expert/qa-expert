@@ -9,7 +9,7 @@ export class QuizPageProgressInput {
   @Field(() => String, { description: 'Course id' })
   course: string;
 
-  @Field(() => [String], { description: 'Array answer ids' })
+  @Field(() => [String], { description: 'Array of answer ids' })
   answers: string[];
 
   @Field(() => PageProgressState, { description: 'Can be pass or fail' })
