@@ -54,8 +54,8 @@ export const GET_USER = gql(/* GraphQL */ `
   }
 `);
 
-export const GET_BADGES = gql(/* GraphQL */ `
-  query GetBadges {
+export const GET_BADGES_SUBMITTED_PROGRESSES_USER = gql(/* GraphQL */ `
+  query GetBadgesSubmittedProgressesUser {
     badges {
       _id
       title
@@ -67,11 +67,6 @@ export const GET_BADGES = gql(/* GraphQL */ `
         title
       }
     }
-  }
-`);
-
-export const GET_ALL_SUBMITTED_PROGRESSES = gql(/* GraphQL */ `
-  query GetAllSubmittedProgresses {
     submittedProgresses {
       _id
       totalProgress
@@ -82,6 +77,14 @@ export const GET_ALL_SUBMITTED_PROGRESSES = gql(/* GraphQL */ `
         _id
         title
       }
+    }
+    user {
+      _id
+      email
+      firstName
+      lastName
+      roles
+      badges
     }
   }
 `);
