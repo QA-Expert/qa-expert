@@ -9,8 +9,11 @@ import IconButton from '@mui/material/IconButton';
 import { ChangeNamesModal } from '../src/components/change-names-modal/change-names-modal';
 import Button from '@mui/material/Button';
 import { ChangePasswordModal } from '../src/components/change-password-modal/change-password-modal';
-import { GET_BADGES_SUBMITTED_PROGRESSES_USER } from '../src/graphql/queries/queries';
-import { ApolloError } from '@apollo/client';
+import {
+  GET_BADGES_SUBMITTED_PROGRESSES_USER,
+  GET_USER,
+} from '../src/graphql/queries/queries';
+import { ApolloError, useQuery } from '@apollo/client';
 import { BadgeComponent } from '../src/components/badge/badge';
 import Divider from '@mui/material/Divider';
 import { Line } from 'react-chartjs-2';
@@ -45,9 +48,12 @@ function Account(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const { data, error } = props;
+  // NOTE: we use query to refetch user from cache in case if user got changed dynamically
+  // But we don't refetch user from network first time we visit page as it is fetched already and put in cache
+  const { data: userData } = useQuery(GET_USER);
+  const user = userData?.user;
   const progresses = data?.submittedProgresses;
   const badges = data?.badges;
-  const user = data?.user;
   const theme = useTheme();
   const chartsData = getChartData(
     progresses,

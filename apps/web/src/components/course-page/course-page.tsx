@@ -2,7 +2,7 @@ import { PageFragmentFragment as Props } from '../../__generated__/graphql';
 import { Box } from '../box/box';
 import { TextEditor } from '../text-editor/text-editor';
 import { useEffect } from 'react';
-import { GET_ALL_COURSES, GET_COURSE } from '../../graphql/queries/queries';
+import { GET_COURSE } from '../../graphql/queries/queries';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 import { CREATE_COURSE_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
@@ -16,9 +16,6 @@ export default function CoursePage({ _id, content, progress }: Props) {
       {
         query: GET_COURSE,
         variables: { _id: courseId },
-      },
-      {
-        query: GET_ALL_COURSES,
       },
     ],
   });

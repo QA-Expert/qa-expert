@@ -15,7 +15,7 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { difference } from 'lodash';
 import { CREATE_QUIZ_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
-import { GET_ALL_COURSES, GET_COURSE } from '../../graphql/queries/queries';
+import { GET_COURSE } from '../../graphql/queries/queries';
 import { useError } from '../../../utils/hooks';
 
 export default function QuizPage({ question, progress, _id: pageId }: Props) {
@@ -28,9 +28,6 @@ export default function QuizPage({ question, progress, _id: pageId }: Props) {
       {
         query: GET_COURSE,
         variables: { _id: courseId },
-      },
-      {
-        query: GET_ALL_COURSES,
       },
     ],
   });

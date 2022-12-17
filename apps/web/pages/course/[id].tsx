@@ -1,6 +1,7 @@
-import { ApolloError } from '@apollo/client';
+import { ApolloError, useQuery } from '@apollo/client';
 import Typography from '@mui/material/Typography';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { useRouter } from 'next/router';
 import { APOLLO_STATE_PROP_NAME, initializeApollo } from '../../apollo/client';
 import { Box } from '../../src/components/box/box';
 import Layout from '../../src/components/layout/layout';
@@ -14,10 +15,16 @@ import { useError } from '../../utils/hooks';
 const Course = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
-  const { data, error } = props;
+  const { error } = props;
+  const router = useRouter();
+  // NOTE: we use query to refetch course from cache in case if course data got changed dynamically
+  // But we don't refetch course from network first time we visit page as it is fetched already and put in cache
+  const { data, error: queryError } = useQuery(GET_COURSE, {
+    variables: { _id: router.query.id as string },
+  });
 
-  useError([error?.message]);
-
+  useError([error?.message, queryError?.message]);
+  console.log(data);
   return (
     <Layout>
       <Sidebar>Test</Sidebar>
@@ -70,7 +77,7 @@ export const getServerSideProps: GetServerSideProps<{
 }> = async (context) => {
   const { id } = context.params as { id: string };
   const client = initializeApollo(null, context);
-  const { data, error } = await initializeApollo(null, context).query({
+  const { data, error } = await client.query({
     query: GET_COURSE,
     variables: { _id: id },
   });
