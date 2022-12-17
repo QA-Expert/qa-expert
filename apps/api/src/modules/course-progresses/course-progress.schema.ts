@@ -49,7 +49,7 @@ export class CourseProgress {
   _id: string;
 
   @Prop({ required: true })
-  @Field(() => CourseType, { description: 'Can be theory or quiz' })
+  @Field(() => CourseType, { description: 'Type of the course - theoretical course or quiz' })
   type: CourseType;
 
   @Prop({ required: true })

@@ -1,6 +1,5 @@
 import {
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from '../users/user.service';
@@ -22,10 +21,6 @@ export class AuthService {
     data: UserInputLogin,
   ): Promise<UserOutputLogin | null> {
     const result = await this.usersService.findByEmail(data.email);
-
-    if (!result) {
-      throw new NotFoundException(`User ${data.email} is not found`);
-    }
 
     const match = await bcrypt.compare(data.password, result.hashedPassword);
 

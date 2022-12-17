@@ -20,7 +20,7 @@ export class ForgotPassword extends mongoose.Document {
   @Field(() => User, { description: 'User whose password will be reset' })
   user: User | mongoose.Types.ObjectId;
 
-  @Field({ description: 'Token verified user email' })
+  @Field({ description: 'Token generated while user forgot password and used when resetting password.' })
   @Prop({ required: true, unique: true, index: true })
   token: string;
 

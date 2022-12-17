@@ -34,11 +34,17 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    return this.userModel.findOne({ email });
+    const user = await this.userModel.findOne({ email });
+
+    if (!user) {
+      throw new NotFoundException(`User ${email} is not found`);
+    }
+
+    return user;
   }
 
   async create(data: UserInputCreate) {
-    const user = await this.findByEmail(data.email);
+    const user = await this.userModel.findOne({ email: data.email });
 
     if (user) {
       throw new Error('User already exists');
@@ -64,10 +70,6 @@ export class UserService {
 
   async forgotPassword(email: string) {
     const user = await this.findByEmail(email);
-
-    if (!user) {
-      throw new Error('Failed to find user');
-    }
 
     const token = randomBytes(32).toString('hex');
 
