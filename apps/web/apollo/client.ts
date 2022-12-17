@@ -9,10 +9,17 @@ import {
 } from '@apollo/client';
 import merge from 'deepmerge';
 import { onError } from '@apollo/client/link/error';
-import { GetServerSidePropsContext } from 'next';
+import {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+  InferGetServerSidePropsType,
+} from 'next';
 import { IncomingHttpHeaders } from 'http';
+import type { AppProps } from 'next/app';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
+export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
 const setAuthLink = (ctx?: GetServerSidePropsContext) =>
   new ApolloLink((operation, forward) => {
@@ -67,6 +74,10 @@ export function createApolloClient(ctx?: GetServerSidePropsContext) {
 
 export type InitialState = NormalizedCacheObject | null;
 
+export interface ApolloStateProps {
+  [APOLLO_STATE_PROP_NAME]: InitialState;
+}
+
 /**
  * Reference link to code
  * https://github.com/vercel/next.js/blob/canary/examples/api-routes-apollo-server-and-client-auth
@@ -102,9 +113,9 @@ export function initializeApollo(
 
   return _apolloClient;
 }
-
-export function useApollo(initialState: InitialState) {
-  const store = useMemo(() => initializeApollo(initialState), [initialState]);
+export function useApollo(pageProps: ApolloStateProps) {
+  const state = pageProps[APOLLO_STATE_PROP_NAME];
+  const store = useMemo(() => initializeApollo(state), [state]);
 
   return store;
 }

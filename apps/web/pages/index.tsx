@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { CardComponent } from '../src/components/card/card';
 import { Box } from '../src/components/box/box';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { initializeApollo } from '../appolo/client';
+import { initializeApollo, APOLLO_STATE_PROP_NAME } from '../apollo/client';
 import { GetAllCoursesQuery } from '../src/__generated__/graphql';
 import { useError } from '../utils/hooks';
 import { ApolloError } from '@apollo/client';
@@ -49,14 +49,17 @@ export const getServerSideProps: GetServerSideProps<{
   data?: GetAllCoursesQuery;
   error?: ApolloError;
 }> = async (context) => {
-  const { data, error } = await initializeApollo(null, context).query({
+  const client = initializeApollo(null, context);
+  const { data, error } = await client.query({
     query: GET_ALL_COURSES,
   });
 
   if (error) {
     return { props: { error } };
   } else {
-    return { props: { data } };
+    return {
+      props: { data, [APOLLO_STATE_PROP_NAME]: client.cache.extract() },
+    };
   }
 };
 

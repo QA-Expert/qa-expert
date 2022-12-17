@@ -18,16 +18,16 @@ import { CREATE_QUIZ_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
 import { GET_ALL_COURSES, GET_COURSE } from '../../graphql/queries/queries';
 import { useError } from '../../../utils/hooks';
 
-export default function QuizPage({ question, progress, _id }: Props) {
+export default function QuizPage({ question, progress, _id: pageId }: Props) {
   const router = useRouter();
-  const slug = router.query.slug ? router.query.slug[0] : '';
+  const courseId = router.query.id as string;
   const [answers, setAnswers] = useState<string[]>(progress?.answers ?? []);
   const isSingleAnswerQuestion = question?.answers.length === 1;
   const [createProgress, { error }] = useMutation(CREATE_QUIZ_PAGE_PROGRESS, {
     refetchQueries: [
       {
         query: GET_COURSE,
-        variables: { _id: slug },
+        variables: { _id: courseId },
       },
       {
         query: GET_ALL_COURSES,
@@ -49,8 +49,8 @@ export default function QuizPage({ question, progress, _id }: Props) {
         state: isAnsweredCorrectly(expectedAnswerIds, answers)
           ? PageProgressState.Pass
           : PageProgressState.Fail,
-        page: _id,
-        course: slug,
+        page: pageId,
+        course: courseId,
         answers: answers,
       },
     });
@@ -125,7 +125,7 @@ export default function QuizPage({ question, progress, _id }: Props) {
 
       <Button
         variant="contained"
-        disabled={Boolean(progress?.answers) || !slug}
+        disabled={Boolean(progress?.answers) || !courseId}
         onClick={handleSubmit}
       >
         Submit

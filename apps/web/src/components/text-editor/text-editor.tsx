@@ -40,7 +40,8 @@ interface Props {
 export const TextEditor = ({ initialContent, pageId }: Props) => {
   const [user] = useAtom(userAtom);
   const router = useRouter();
-  const slug = router.query.slug ? router.query.slug[0] : null;
+  const courseId = router.query.id as string;
+  // TODO: make roles as string union on back end.
   const isAdmin = user?.roles.includes('admin');
   let initContent: string | DeltaStatic;
 
@@ -58,7 +59,7 @@ export const TextEditor = ({ initialContent, pageId }: Props) => {
       refetchQueries: [
         {
           query: GET_COURSE,
-          variables: { _id: slug },
+          variables: { _id: courseId },
         },
       ],
     },

@@ -27,7 +27,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import { getChartData } from '../utils/profile';
 import { useError } from '../utils/hooks';
-import { initializeApollo } from '../appolo/client';
+import { APOLLO_STATE_PROP_NAME, initializeApollo } from '../apollo/client';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { GetBadgesSubmittedProgressesUserQuery } from '../src/__generated__/graphql';
 
@@ -206,14 +206,17 @@ export const getServerSideProps: GetServerSideProps<{
   data?: GetBadgesSubmittedProgressesUserQuery;
   error?: ApolloError;
 }> = async (context) => {
-  const { data, error } = await await initializeApollo(null, context).query({
+  const client = initializeApollo(null, context);
+  const { data, error } = await await client.query({
     query: GET_BADGES_SUBMITTED_PROGRESSES_USER,
   });
 
   if (error) {
     return { props: { error } };
   } else {
-    return { props: { data } };
+    return {
+      props: { data, [APOLLO_STATE_PROP_NAME]: client.cache.extract() },
+    };
   }
 };
 

@@ -1,19 +1,18 @@
 import type { AppProps } from 'next/app';
 import HeadComponent from '../src/components/head/head';
 import '../src/styles/globals.css';
-import { InitialState, useApollo } from '../appolo/client';
 import { ApolloProvider } from '@apollo/client';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/';
 import theme from '../src/theme/theme';
 import { Toasts } from '../src/components/toasts/toast';
+import { ApolloStateProps, useApollo } from '../apollo/client';
 
-interface Props {
-  initialApolloState: InitialState;
-}
-
-export default function MyApp({ Component, pageProps }: AppProps<Props>) {
-  const apolloClient = useApollo(pageProps.initialApolloState);
+export default function MyApp({
+  Component,
+  pageProps,
+}: AppProps<ApolloStateProps>) {
+  const apolloClient = useApollo(pageProps);
 
   return (
     <ApolloProvider client={apolloClient}>

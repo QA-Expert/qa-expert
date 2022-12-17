@@ -1,7 +1,7 @@
 import { ApolloError } from '@apollo/client';
 import Typography from '@mui/material/Typography';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { initializeApollo } from '../../appolo/client';
+import { APOLLO_STATE_PROP_NAME, initializeApollo } from '../../apollo/client';
 import { Box } from '../../src/components/box/box';
 import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
@@ -69,7 +69,7 @@ export const getServerSideProps: GetServerSideProps<{
   error?: ApolloError;
 }> = async (context) => {
   const { id } = context.params as { id: string };
-
+  const client = initializeApollo(null, context);
   const { data, error } = await initializeApollo(null, context).query({
     query: GET_COURSE,
     variables: { _id: id },
@@ -78,7 +78,9 @@ export const getServerSideProps: GetServerSideProps<{
   if (error) {
     return { props: { error } };
   } else {
-    return { props: { data } };
+    return {
+      props: { data, [APOLLO_STATE_PROP_NAME]: client.cache.extract() },
+    };
   }
 };
 
