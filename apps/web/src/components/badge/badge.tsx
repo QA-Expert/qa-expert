@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
 
 type Badge = GetBadgesSubmittedProgressesUserQuery['badges'][number];
+
 interface Props extends Badge {
   isEarned: boolean;
 }

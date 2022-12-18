@@ -14,15 +14,15 @@ export class Question extends mongoose.Document {
   _id: string;
 
   @Prop()
-  @Field()
+  @Field({ description: 'Question content' })
   content: string;
 
   @Prop({ type: [{ type: ObjectId, ref: 'Answer' }], default: [] })
-  @Field(() => [Answer], { defaultValue: [] })
+  @Field(() => [Answer], { defaultValue: [], description: 'Current answer' })
   answers: Answer[];
 
   @Prop({ type: [{ type: ObjectId, ref: 'Answer' }], default: [] })
-  @Field(() => [Answer], { defaultValue: [] })
+  @Field(() => [Answer], { defaultValue: [], description: 'Answer options' })
   options: Answer[];
 
   @Prop({

@@ -31,7 +31,7 @@ export class PageProgress extends mongoose.Document {
   state: PageProgressState;
 
   @Prop({ type: String, enum: CourseType, required: true })
-  @Field(() => CourseType)
+  @Field(() => CourseType, { description: 'Type of the course - theoretical course or quiz' })
   type: CourseType;
 
   @Prop({ type: ObjectId, ref: 'Page', required: true })
@@ -56,7 +56,10 @@ export class PageProgress extends mongoose.Document {
       },
     ],
   })
-  @Field(() => [String], { defaultValue: [] })
+  @Field(() => [String], {
+    defaultValue: [],
+    description: 'Array of answers used if page is quiz',
+  })
   answers: Answer[] | mongoose.Types.ObjectId[];
 
   @Prop({ type: ObjectId, ref: 'User', required: true })

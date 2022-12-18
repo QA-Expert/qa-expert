@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserInputCreate } from './create-user.input';
 import * as bcrypt from 'bcrypt';
-import { User } from './user.schema';
+import { Roles, User } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { createTransport, SendMailOptions } from 'nodemailer';
@@ -37,14 +37,14 @@ export class UserService {
     const user = await this.userModel.findOne({ email });
 
     if (!user) {
-      throw new NotFoundException();
+      throw new NotFoundException(`User ${email} is not found`);
     }
 
     return user;
   }
 
   async create(data: UserInputCreate) {
-    const user = await this.findByEmail(data.email);
+    const user = await this.userModel.findOne({ email: data.email });
 
     if (user) {
       throw new Error('User already exists');
@@ -56,6 +56,7 @@ export class UserService {
     );
     const newUser = {
       ...data,
+      roles: [Roles.USER],
       hashedPassword,
     };
     const createdUser = new this.userModel(newUser);
@@ -69,10 +70,6 @@ export class UserService {
 
   async forgotPassword(email: string) {
     const user = await this.findByEmail(email);
-
-    if (!user) {
-      throw new Error('Failed to find user');
-    }
 
     const token = randomBytes(32).toString('hex');
 
@@ -150,12 +147,10 @@ export class UserService {
       throw new NotFoundException();
     }
 
-    const hashedPassword = await bcrypt.hash(
+    user.hashedPassword = await bcrypt.hash(
       data.password,
       this.configService.authSalt,
     );
-
-    user.hashedPassword = hashedPassword;
 
     const updatedUser = await user.save();
 

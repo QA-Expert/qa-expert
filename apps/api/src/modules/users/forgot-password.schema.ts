@@ -17,10 +17,10 @@ export class ForgotPassword extends mongoose.Document {
     required: true,
     index: true,
   })
-  @Field(() => User)
+  @Field(() => User, { description: 'User whose password will be reset' })
   user: User | mongoose.Types.ObjectId;
 
-  @Field()
+  @Field({ description: 'Token generated while user forgot password and used when resetting password.' })
   @Prop({ required: true, unique: true, index: true })
   token: string;
 
