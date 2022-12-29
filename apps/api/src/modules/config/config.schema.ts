@@ -4,11 +4,7 @@ export interface Config {
   APP_NAME: string;
   HOST: string;
   PORT: number;
-  DATABASE_HOST: string;
-  DATABASE_PORT: number;
-  DATABASE_NAME: string;
-  DATABASE_USERNAME: string;
-  DATABASE_PASSWORD: string;
+  DATABASE_URI: string;
   AUTH_SECRET: string;
   AUTH_TOKEN_EXPIRES_IN: string;
   AUTH_SALT: number;
@@ -24,11 +20,7 @@ export const validationSchema = Joi.object<Config>({
   APP_NAME: Joi.string().default('QA Expert'),
   PORT: Joi.number().default(3001),
   HOST: Joi.string().default('localhost'),
-  DATABASE_HOST: Joi.string().default('localhost'),
-  DATABASE_PORT: Joi.number().default(27017),
-  DATABASE_NAME: Joi.string().default('qa-expert'),
-  DATABASE_USERNAME: Joi.string().required(),
-  DATABASE_PASSWORD: Joi.string().required(),
+  DATABASE_URI: Joi.string().default('mongodb//localhost:27017/qaexpert'),
   AUTH_SECRET: Joi.string().required(),
   AUTH_TOKEN_EXPIRES_IN: Joi.string().default('1h'),
   AUTH_SALT: Joi.number().default(10),
