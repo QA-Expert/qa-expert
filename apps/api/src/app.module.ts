@@ -43,9 +43,11 @@ import { ConfigService } from './modules/config/config.service';
         const host = configService.dbHost;
         const port = configService.dbPort;
         const dbName = configService.dbName;
+        const password = configService.dbPassword;
+        const username = configService.dbUsername;
 
         return {
-          uri: `mongodb://${host}:${port}/${dbName}`,
+          uri: `mongodb+srv://${username}:${password}@${host}:${port}/${dbName}`,
         };
       },
       inject: [ConfigService],
