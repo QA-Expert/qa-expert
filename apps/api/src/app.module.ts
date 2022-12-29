@@ -39,17 +39,9 @@ import { ConfigService } from './modules/config/config.service';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        const host = configService.dbHost;
-        const port = configService.dbPort;
-        const dbName = configService.dbName;
-        const password = configService.dbPassword;
-        const username = configService.dbUsername;
-
-        return {
-          uri: `mongodb+srv://${username}:${password}@${host}:${port}/${dbName}`,
-        };
-      },
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.dbUri,
+      }),
       inject: [ConfigService],
     }),
     ConfigModule,
