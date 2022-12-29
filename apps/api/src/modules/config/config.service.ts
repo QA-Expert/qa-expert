@@ -18,24 +18,8 @@ export class ConfigService {
     return this.configService.get<string>('HOST');
   }
 
-  get dbHost(): string {
-    return this.configService.get<string>('DATABASE_HOST');
-  }
-
-  get dbPort(): number {
-    return this.configService.get<number>('DATABASE_PORT');
-  }
-
-  get dbUsername(): string {
-    return this.configService.get<string>('DATABASE_USERNAME');
-  }
-
-  get dbPassword(): string {
-    return this.configService.get<string>('DATABASE_PASSWORD');
-  }
-
-  get dbName(): string {
-    return this.configService.get<string>(`DATABASE_NAME`);
+  get dbUri(): string {
+    return this.configService.get<string>('DATABASE_URI');
   }
 
   get authSecret(): string {
