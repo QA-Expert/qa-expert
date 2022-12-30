@@ -28,6 +28,7 @@ export class AuthService {
         email: result.email,
         firstName: result.firstName,
         lastName: result.lastName,
+        roles: result.roles,
       };
 
       return await this.login(user);

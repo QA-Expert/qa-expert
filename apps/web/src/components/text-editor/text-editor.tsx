@@ -6,12 +6,10 @@ import { Box } from '../box/box';
 import { DeltaStatic, Sources } from 'quill';
 import { UnprivilegedEditor } from 'react-quill';
 import { UPDATE_COURSE_PAGE_CONTENT } from '../../graphql/mutations/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
-import { GET_COURSE } from '../../graphql/queries/queries';
+import { GET_COURSE, GET_USER } from '../../graphql/queries/queries';
 import { useRouter } from 'next/router';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store';
 import { useError } from '../../../utils/hooks';
 
 const ReactQuill = dynamic(
@@ -32,17 +30,20 @@ const fullToolBar = [
   ['link', 'image', 'video', 'formula'],
   ['clean'],
 ];
+
 interface Props {
   initialContent: string;
   pageId: string;
 }
 
 export const TextEditor = ({ initialContent, pageId }: Props) => {
-  const [user] = useAtom(userAtom);
+  const { data } = useQuery(GET_USER);
+  const user = data?.user;
   const router = useRouter();
   const courseId = router.query.id as string;
   // TODO: make roles as string union on back end.
   const isAdmin = user?.roles.includes('admin');
+
   let initContent: string | DeltaStatic;
 
   try {

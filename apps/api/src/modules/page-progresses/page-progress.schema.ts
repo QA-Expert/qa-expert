@@ -31,7 +31,9 @@ export class PageProgress extends mongoose.Document {
   state: PageProgressState;
 
   @Prop({ type: String, enum: CourseType, required: true })
-  @Field(() => CourseType, { description: 'Type of the course - theoretical course or quiz' })
+  @Field(() => CourseType, {
+    description: 'Type of the course - theoretical course or quiz',
+  })
   type: CourseType;
 
   @Prop({ type: ObjectId, ref: 'Page', required: true })

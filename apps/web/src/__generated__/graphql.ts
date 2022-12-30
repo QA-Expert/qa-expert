@@ -25,6 +25,7 @@ export type Scalars = {
 export type Answer = {
   __typename?: 'Answer';
   _id: Scalars['String'];
+  /** Answer's content text */
   content: Scalars['String'];
 };
 
@@ -33,7 +34,9 @@ export type Badge = {
   _id: Scalars['String'];
   course?: Maybe<Course>;
   description: Scalars['String'];
+  /** Icon url */
   icon: Scalars['String'];
+  /** Sharable link. Navigating via that link use should be able to see their Badge */
   link: Scalars['String'];
   title: Scalars['String'];
 };
@@ -41,11 +44,15 @@ export type Badge = {
 export type Course = {
   __typename?: 'Course';
   _id: Scalars['String'];
+  /** Achievement upon successful completion of course */
   badge?: Maybe<Badge>;
   /** Course description */
   description: Scalars['String'];
+  /** Icon url */
   icon: Scalars['String'];
+  /** Pages included in course */
   pages: Array<Page>;
+  /** Course progress */
   progress: TotalCourseProgress;
   /** Course title */
   title: Scalars['String'];
@@ -63,7 +70,9 @@ export type CoursePageInput = {
 };
 
 export type CoursePageProgressInput = {
+  /** Course id */
   course: Scalars['String'];
+  /** Page id */
   page: Scalars['String'];
 };
 
@@ -162,7 +171,9 @@ export type Page = {
   _id: Scalars['String'];
   content?: Maybe<Scalars['String']>;
   description: Scalars['String'];
+  /** Page progress */
   progress?: Maybe<PageProgress>;
+  /** Used in quiz pages */
   question?: Maybe<Question>;
   title: Scalars['String'];
   type: CourseType;
@@ -171,10 +182,12 @@ export type Page = {
 export type PageProgress = {
   __typename?: 'PageProgress';
   _id: Scalars['String'];
+  /** Array of answers used if page is quiz */
   answers: Array<Scalars['String']>;
   course: Scalars['String'];
   page: Scalars['String'];
   state: PageProgressState;
+  /** Type of the course - theoretical course or quiz */
   type: CourseType;
   user: Scalars['String'];
 };
@@ -201,8 +214,11 @@ export type QueryCourseArgs = {
 export type Question = {
   __typename?: 'Question';
   _id: Scalars['String'];
+  /** Current answer */
   answers: Array<Answer>;
+  /** Question content */
   content: Scalars['String'];
+  /** Answer options */
   options: Array<Answer>;
 };
 
@@ -213,14 +229,19 @@ export type QuizPageInput = {
 };
 
 export type QuizPageProgressInput = {
+  /** Array of answer ids */
   answers: Array<Scalars['String']>;
+  /** Course id */
   course: Scalars['String'];
+  /** Page id */
   page: Scalars['String'];
+  /** Can be pass or fail. The state comes from the client side after checking the answers. Set it in the database as a result of the answer to the quiz */
   state: PageProgressState;
 };
 
 export type ResetPasswordInput = {
   password: Scalars['String'];
+  /** Token generated while user forgot password */
   token: Scalars['String'];
 };
 
@@ -228,17 +249,23 @@ export type SubmittedProgress = {
   __typename?: 'SubmittedProgress';
   _id: Scalars['String'];
   course: Course;
+  /** Calculated from submitted course theory */
   courseProgress: Scalars['Float'];
   createdAt: Scalars['DateTime'];
+  /** Calculated from submitted course quiz */
   quizProgress: Scalars['Float'];
+  /** Calculated from course plus quiz progress */
   totalProgress: Scalars['Float'];
   user: Scalars['String'];
 };
 
 export type TotalCourseProgress = {
   __typename?: 'TotalCourseProgress';
+  /** Percentage of failed pages */
   fail: Scalars['Float'];
+  /** Course pages count before finishing course */
   pagesLeftBeforeFinish?: Maybe<Scalars['Float']>;
+  /** Percentage of passed pages */
   pass: Scalars['Float'];
   state: CourseProgressState;
   updatedAt: Scalars['DateTime'];
@@ -247,10 +274,12 @@ export type TotalCourseProgress = {
 export type User = {
   __typename?: 'User';
   _id: Scalars['String'];
+  /** User achievements. Upon successful completion of the course, the user receives an achievement that can be shared */
   badges: Array<Scalars['String']>;
   email: Scalars['String'];
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
+  /** User roles. User - simple platform user. Admin - user with access to course editing */
   roles: Array<Scalars['String']>;
 };
 
@@ -259,6 +288,7 @@ export type UserBaseModel = {
   email: Scalars['String'];
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
+  roles: Array<Scalars['String']>;
 };
 
 export type UserInputCreate = {
@@ -290,6 +320,7 @@ export type UserOutputLogin = UserBaseModel & {
   email: Scalars['String'];
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
+  roles: Array<Scalars['String']>;
 };
 
 export type PageFragmentFragment = {

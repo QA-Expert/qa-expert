@@ -25,7 +25,10 @@ export class Badge extends mongoose.Document {
   @Prop()
   icon: string;
 
-  @Field({ description: 'Sharable link. Navigating via that link use should be able to see their Badge' })
+  @Field({
+    description:
+      'Sharable link. Navigating via that link use should be able to see their Badge',
+  })
   @Prop()
   link: string;
 

@@ -15,4 +15,7 @@ export abstract class UserBaseModel {
 
   @Field({ nullable: true })
   lastName?: string;
+
+  @Field(() => [String])
+  roles: string[];
 }

@@ -54,6 +54,7 @@ export class UserResolver {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+      roles: user.roles,
     });
 
     setTokenCookie(context.res, result?.access_token ?? '');
