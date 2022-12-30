@@ -41,6 +41,13 @@ import { ConfigService } from './modules/config/config.service';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         uri: configService.dbUri,
+        connectionFactory: (connection: any) => {
+          connection.on('error', (error: any) => {
+            console.error('Failed to connect to Database ', error);
+          });
+
+          return connection;
+        },
       }),
       inject: [ConfigService],
     }),
