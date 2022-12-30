@@ -24,7 +24,7 @@ const Course = (
   });
 
   useError([error?.message, queryError?.message]);
-  console.log(data);
+
   return (
     <Layout>
       <Sidebar>Test</Sidebar>

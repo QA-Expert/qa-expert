@@ -49,7 +49,12 @@ export class UserResolver {
     @Context() context: { res: ServerResponse },
   ): Promise<UserOutputLogin> {
     const user = await this.userService.create(data);
-    const result = await this.authService.login(user);
+    const result = await this.authService.login({
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
 
     setTokenCookie(context.res, result?.access_token ?? '');
 

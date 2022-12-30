@@ -52,6 +52,7 @@ function Register() {
         ) => {
           actions.setSubmitting(true);
           await client.resetStore();
+
           const { data, errors } = await register({
             variables: values,
           });

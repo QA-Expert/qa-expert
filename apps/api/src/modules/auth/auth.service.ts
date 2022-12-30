@@ -1,13 +1,11 @@
-import {
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../users/user.service';
 import { UserInputLogin } from '../users/login-user.input';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserOutputLogin } from '../users/login-user.output';
 import { ConfigService } from '../config/config.service';
+import { UserBaseModel } from 'src/modules/users/user-base.model';
 
 @Injectable()
 export class AuthService {
@@ -38,7 +36,7 @@ export class AuthService {
     throw new UnauthorizedException('Incorrect credentials');
   }
 
-  async login(user: UserOutputLogin): Promise<UserOutputLogin> {
+  async login(user: UserBaseModel): Promise<UserOutputLogin> {
     return {
       ...user,
       access_token: this.jwtService.sign(

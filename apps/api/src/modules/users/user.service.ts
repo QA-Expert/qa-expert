@@ -59,13 +59,13 @@ export class UserService {
       roles: [Roles.USER],
       hashedPassword,
     };
-    const createdUser = new this.userModel(newUser);
+    const model = new this.userModel(newUser);
 
-    if (!createdUser) {
+    if (!model) {
       throw new Error('Failed to create new user');
     }
 
-    return await createdUser.save();
+    return await model.save();
   }
 
   async forgotPassword(email: string) {
@@ -142,10 +142,6 @@ export class UserService {
     }
 
     const user = await this.findById(storedToken.user._id);
-
-    if (!user) {
-      throw new NotFoundException();
-    }
 
     user.hashedPassword = await bcrypt.hash(
       data.password,
