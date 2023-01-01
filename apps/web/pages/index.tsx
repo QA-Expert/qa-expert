@@ -32,6 +32,7 @@ const HomePage = (
         <Box
           sx={{
             flexDirection: 'row',
+            alignItems: 'flex-start',
             gap: '2rem',
             flexWrap: 'wrap',
           }}

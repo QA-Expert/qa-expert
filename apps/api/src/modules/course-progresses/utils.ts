@@ -1,7 +1,7 @@
 import { CourseProgressState } from './course-progress.schema';
 
 export const getPercent = (total: number, part: number) =>
-  total === 0 ? 0 : Math.round(Number(((part * 100) / total).toFixed()));
+  total === 0 ? 0 : Math.round((part * 100) / total);
 
 export const getState = (pass: number, fail: number) =>
   pass >= 100

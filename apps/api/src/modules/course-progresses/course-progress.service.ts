@@ -128,8 +128,10 @@ export class CourseProgressService {
     ).length;
 
     const total = quizPageCount + coursePageCount;
-    const quizPagePercent = getPercent(total, quizPageCount) / 100;
-    const coursePagePercent = getPercent(total, coursePageCount) / 100;
+    const quizPagePercent = Math.round(getPercent(total, quizPageCount) / 100);
+    const coursePagePercent = Math.round(
+      getPercent(total, coursePageCount) / 100,
+    );
 
     const pagesLeftBeforeFinish =
       total -
