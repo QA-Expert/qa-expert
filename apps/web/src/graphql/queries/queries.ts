@@ -24,6 +24,21 @@ export const GET_ALL_COURSES = gql(/* GraphQL */ `
   }
 `);
 
+export const GET_ALL_COURSES_PUBLIC = gql(/* GraphQL */ `
+  query GetAllCoursesPublic {
+    coursesPublic {
+      _id
+      title
+      type
+      description
+      pages {
+        _id
+        type
+      }
+    }
+  }
+`);
+
 export const GET_COURSE = gql(/* GraphQL */ `
   query GetCourse($_id: String!) {
     course(_id: $_id) {

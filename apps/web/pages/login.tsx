@@ -59,7 +59,7 @@ function Login() {
           }
 
           if (data?.login?.access_token) {
-            await router.push('/');
+            await router.push('/courses');
           }
         }}
       >
