@@ -39,8 +39,11 @@ export class CourseResolver {
     return this.service.findAll();
   }
 
-  @UseGuards(GqlAuthGuard, RolesGuard)
-  @Roles(RolesEnum.USER)
+  @Query(() => [Course])
+  public async coursesPublic(): Promise<Course[]> {
+    return this.service.findAll();
+  }
+
   @ResolveField('progress', () => TotalCourseProgress)
   public async progress(
     @CurrentUser() user: User,

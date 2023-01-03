@@ -203,6 +203,7 @@ export type Query = {
   badges: Array<Badge>;
   course: Course;
   courses: Array<Course>;
+  coursesPublic: Array<Course>;
   submittedProgresses: Array<SubmittedProgress>;
   user: User;
 };
@@ -486,6 +487,20 @@ export type GetAllCoursesQuery = {
       updatedAt: string;
     };
     badge?: { __typename?: 'Badge'; _id: string } | null;
+  }>;
+};
+
+export type GetAllCoursesPublicQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllCoursesPublicQuery = {
+  __typename?: 'Query';
+  coursesPublic: Array<{
+    __typename?: 'Course';
+    _id: string;
+    title: string;
+    type: CourseType;
+    description: string;
+    pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
   }>;
 };
 
@@ -1571,6 +1586,48 @@ export const GetAllCoursesDocument = {
     },
   ],
 } as unknown as DocumentNode<GetAllCoursesQuery, GetAllCoursesQueryVariables>;
+export const GetAllCoursesPublicDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetAllCoursesPublic' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'coursesPublic' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pages' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAllCoursesPublicQuery,
+  GetAllCoursesPublicQueryVariables
+>;
 export const GetCourseDocument = {
   kind: 'Document',
   definitions: [

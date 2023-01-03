@@ -18,7 +18,9 @@ export const ProfileMenu = () => {
   const router = useRouter();
   const client = useApolloClient();
   const [logout, { error }] = useMutation(LOGOUT);
-  const { data, error: userError } = useQuery(GET_USER);
+  const { data, error: userError } = useQuery(GET_USER, {
+    fetchPolicy: 'cache-only',
+  });
   const user = data?.user;
 
   useError([error?.message, userError?.message]);
@@ -34,7 +36,7 @@ export const ProfileMenu = () => {
       name: 'Logout',
       handleClick: async () => {
         await logout();
-        await router.push('/login');
+        await router.push('/courses');
         await client.resetStore();
       },
     },

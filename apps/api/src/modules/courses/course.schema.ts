@@ -47,7 +47,9 @@ export class Course extends mongoose.Document {
   })
   pages: Page[];
 
-  @Field(() => TotalCourseProgress, { description: 'Course progress' })
+  @Field(() => TotalCourseProgress, {
+    description: 'Course progress',
+  })
   progress: TotalCourseProgress;
 
   @Field(() => Badge, {
