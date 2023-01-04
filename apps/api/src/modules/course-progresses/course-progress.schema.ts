@@ -18,10 +18,10 @@ registerEnumType(CourseProgressState, {
 
 @ObjectType()
 export class TotalCourseProgress {
-  @Field({ defaultValue: 0, description: 'Percentage of passed pages' })
+  @Field({ defaultValue: 0, description: 'Total Percentage of passed pages' })
   pass: number;
 
-  @Field({ defaultValue: 0, description: 'Percentage of failed pages' })
+  @Field({ defaultValue: 0, description: 'Total Percentage of failed pages' })
   fail: number;
 
   @Field(() => CourseProgressState, {

@@ -12,7 +12,7 @@ import { PageProgressService } from '../page-progresses/page-progress.service';
 import { CourseProgress, TotalCourseProgress } from './course-progress.schema';
 import { CourseProgressInput } from './create-course-progress.input';
 import { getPercent, getState } from './utils';
-import { isBefore, add } from 'date-fns';
+import { isBefore, addDays } from 'date-fns';
 import { ConfigService } from '../config/config.service';
 
 @Injectable()
@@ -128,21 +128,21 @@ export class CourseProgressService {
     ).length;
 
     const total = quizPageCount + coursePageCount;
-    const quizPagePercent = Math.round(getPercent(total, quizPageCount) / 100);
-    const coursePagePercent = Math.round(
-      getPercent(total, coursePageCount) / 100,
-    );
+    const quizPagePercent = getPercent(total, quizPageCount) / 100;
+    const coursePagePercent = getPercent(total, coursePageCount) / 100;
 
     const pagesLeftBeforeFinish =
       total -
       ((quizProgress?.pageProgresses?.length ?? 0) +
         (courseProgress?.pageProgresses?.length ?? 0));
-    const pass =
+    const pass = Math.round(
       (quizProgress?.pass ?? 0) * quizPagePercent +
-      (courseProgress?.pass ?? 0) * coursePagePercent;
-    const fail =
+        (courseProgress?.pass ?? 0) * coursePagePercent,
+    );
+    const fail = Math.round(
       (quizProgress?.fail ?? 0) * quizPagePercent +
-      (courseProgress?.fail ?? 0) * coursePagePercent;
+        (courseProgress?.fail ?? 0) * coursePagePercent,
+    );
     const state = getState(pass, fail);
 
     return {
@@ -158,7 +158,7 @@ export class CourseProgressService {
     const progress = await this.findTotalProgressByCourseId(_id, userId);
 
     const days = this.serviceConfig.courseCooldownDays;
-    const canRemoveProgressDate = add(progress.updatedAt, { days });
+    const canRemoveProgressDate = addDays(progress.updatedAt, days);
     const now = new Date();
 
     if (isBefore(now, canRemoveProgressDate)) {

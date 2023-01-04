@@ -15,34 +15,10 @@ import {
 } from '../src/graphql/queries/queries';
 import { ApolloError, useQuery } from '@apollo/client';
 import { BadgeComponent } from '../src/components/badge/badge';
-import Divider from '@mui/material/Divider';
-import { Line } from 'react-chartjs-2';
-import { Tooltip } from 'chart.js';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Legend,
-} from 'chart.js';
-import { useTheme } from '@mui/material/styles';
-import { getChartData } from '../utils/profile';
 import { useError } from '../utils/hooks';
 import { APOLLO_STATE_PROP_NAME, initializeApollo } from '../apollo/client';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { GetBadgesSubmittedProgressesUserQuery } from '../src/__generated__/graphql';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-);
 
 function Account(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -52,14 +28,7 @@ function Account(
   // But we don't refetch user from network first time we visit page as it is fetched already and put in cache
   const { data: userData } = useQuery(GET_USER);
   const user = userData?.user;
-  const progresses = data?.submittedProgresses;
   const badges = data?.badges;
-  const theme = useTheme();
-  const chartsData = getChartData(
-    progresses,
-    theme.palette.warning,
-    theme.palette.info,
-  );
 
   useError([error?.message]);
 
@@ -142,35 +111,6 @@ function Account(
             gap: '1rem',
           }}
         >
-          <Box
-            sx={{
-              gap: '1rem',
-              width: '100%',
-            }}
-          >
-            <Typography variant="h2" sx={{ fontSize: '2rem' }}>
-              Progress
-            </Typography>
-
-            <Box
-              sx={{
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                width: '100%',
-                gap: '1rem',
-              }}
-            >
-              {/* TODO: Implement better styles to comply with material design theme*/}
-              {chartsData.map((data, i) => (
-                <Box key={i} sx={{ flex: '1' }}>
-                  <Line {...data} />
-                </Box>
-              ))}
-            </Box>
-          </Box>
-
-          <Divider flexItem />
-
           <Box sx={{ gap: '1rem' }}>
             <Typography variant="h2" sx={{ fontSize: '2rem' }}>
               Badges
