@@ -15,7 +15,7 @@ import {
 import { useError } from '../utils/hooks';
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
 import { CardComponent } from '../src/components/card/card';
-import { isUserLoggedIn } from '../utils/auth';
+import { isAuthTokenValid } from '../utils/auth';
 
 const CoursesPage = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -71,7 +71,10 @@ export const getServerSideProps: GetServerSideProps<{
     | ApolloQueryResult<GetAllCoursesQuery>
     | ApolloQueryResult<GetAllCoursesPublicQuery>;
 
-  if (isUserLoggedIn(context)) {
+  if (
+    context.req.headers.cookie &&
+    isAuthTokenValid(context.req.headers.cookie)
+  ) {
     response = await client.query({
       query: GET_ALL_COURSES,
     });

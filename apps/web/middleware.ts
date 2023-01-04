@@ -1,27 +1,32 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { isTokenExpired } from './utils/auth';
-import { PUBLIC_ROUTES } from './src/constants/constants';
+import { isAuthTokenValid } from './utils/auth';
+import { ACCESS_TOKEN_KEY, PUBLIC_ROUTES } from './src/constants/constants';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const publicPathnames = PUBLIC_ROUTES.map((route) => route.split('/')[1]);
   const path = pathname.split('/')[1];
+  const accessToken = request.headers.get('cookie');
+  const authTokenInvalid = !accessToken || !isAuthTokenValid(accessToken);
+  const response = NextResponse.next();
+
+  if (authTokenInvalid) {
+    // TODO: for some reason Nextjs does not won't to delete cookies without calling set first
+    // https://github.com/vercel/next.js/issues/40146
+    response.cookies.set(ACCESS_TOKEN_KEY, '');
+    response.cookies.delete(ACCESS_TOKEN_KEY);
+  }
 
   if (!publicPathnames.includes(path)) {
-    const accessToken = request.headers.get('cookie');
-    const shouldRedirectToLoginPage = accessToken
-      ? isTokenExpired(accessToken)
-      : true;
-
-    if (shouldRedirectToLoginPage) {
+    if (authTokenInvalid) {
       console.error('JWT is missing in Next Server Side Headers or expired');
 
-      return NextResponse.redirect(new URL('/login', request.url));
+      return NextResponse.redirect(new URL('/courses', request.url));
     }
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

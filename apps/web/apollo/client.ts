@@ -12,18 +12,22 @@ import { onError } from '@apollo/client/link/error';
 import { GetServerSidePropsContext } from 'next';
 import { IncomingHttpHeaders } from 'http';
 import { isEqual } from 'lodash';
+import { isAuthTokenValid } from '../utils/auth';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
 const setAuthLink = (ctx?: GetServerSidePropsContext) =>
   new ApolloLink((operation, forward) => {
-    // add the authorization cookie from Next Context to the headers
+    // it auth token valid -> add the authorization cookie from Next Context to the headers
     // for outgoing graphql requests
     operation.setContext(({ headers }: { headers: IncomingHttpHeaders }) => ({
       headers: {
         ...headers,
-        Cookie: ctx?.req.headers.cookie,
+        Cookie:
+          ctx?.req.headers.cookie && isAuthTokenValid(ctx.req.headers.cookie)
+            ? ctx.req.headers.cookie
+            : undefined,
       },
     }));
 
@@ -31,8 +35,14 @@ const setAuthLink = (ctx?: GetServerSidePropsContext) =>
   });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
+  let isAuthError = false;
+
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path, extensions }) => {
+      if (extensions.code === 'UNAUTHENTICATED') {
+        isAuthError = true;
+      }
+
       console.error(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}, Extension: ${extensions.code}`,
       );
@@ -40,6 +50,10 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
   if (networkError) {
     console.error(`[Network error]: ${networkError}`);
+  }
+
+  if (isAuthError) {
+    console.log('TEST');
   }
 });
 
