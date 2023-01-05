@@ -14,7 +14,7 @@ export default function Nav() {
   });
 
   return (
-    <AppBar component="nav" position="static">
+    <AppBar component="nav" position="static" sx={{ zIndex: 'appBar' }}>
       <Toolbar
         component={Box}
         sx={{ flexDirection: 'row', gap: '2rem', padding: '0 2rem 0 2rem' }}
