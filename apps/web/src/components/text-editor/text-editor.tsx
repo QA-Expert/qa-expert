@@ -4,32 +4,17 @@ import { useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import { Box } from '../box/box';
 import { DeltaStatic, Sources } from 'quill';
-import { UnprivilegedEditor } from 'react-quill';
 import { UPDATE_COURSE_PAGE_CONTENT } from '../../graphql/mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
 import { GET_COURSE, GET_USER } from '../../graphql/queries/queries';
 import { useRouter } from 'next/router';
 import { useError } from '../../../utils/hooks';
+import { UnprivilegedEditor } from 'react-quill';
 
-const ReactQuill = dynamic(
-  () => {
-    return import('react-quill');
-  },
-  { ssr: false },
-);
-
-const fullToolBar = [
-  [{ font: [] }, { size: ['small', false, 'large', 'huge'] }], // custom dropdown
-  ['bold', 'italic', 'underline', 'strike'],
-  [{ color: [] }, { background: [] }],
-  [{ script: 'sub' }, { script: 'super' }],
-  [{ header: 1 }, { header: 2 }, 'blockquote', 'code-block'],
-  [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-  [{ direction: 'rtl' }, { align: [] }],
-  ['link', 'image', 'video', 'formula'],
-  ['clean'],
-];
+const ReactQuillWrapper = dynamic(() => import('react-quill'), {
+  ssr: false,
+});
 
 interface Props {
   initialContent: string;
@@ -89,6 +74,26 @@ export const TextEditor = ({ initialContent, pageId }: Props) => {
     setDeltaStatic(editor.getContents());
   };
 
+  const fullToolBar = {
+    container: [
+      [{ font: [] }, { size: ['small', false, 'large', 'huge'] }], // custom dropdown
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ color: [] }, { background: [] }],
+      [{ script: 'sub' }, { script: 'super' }],
+      [{ header: 1 }, { header: 2 }, 'blockquote', 'code-block'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      [{ direction: 'rtl' }, { align: [] }],
+      ['link', 'image', 'video', 'formula'],
+      ['clean'],
+    ],
+    handlers: {},
+  };
+
   return (
     <Box sx={{ width: '100%', gap: '1rem' }}>
       <Editor
@@ -111,9 +116,11 @@ export const TextEditor = ({ initialContent, pageId }: Props) => {
   );
 };
 
-const Editor = styled(ReactQuill)(({ isAdmin }: { isAdmin: boolean }) => ({
-  width: '100%',
-  '.ql-container': {
-    border: isAdmin ? '1px solid #ccc' : 'none',
-  },
-}));
+const Editor = styled(ReactQuillWrapper)(
+  ({ isAdmin }: { isAdmin: boolean }) => ({
+    width: '100%',
+    '.ql-container': {
+      border: isAdmin ? '1px solid #ccc' : 'none',
+    },
+  }),
+);
