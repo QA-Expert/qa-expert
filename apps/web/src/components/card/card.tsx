@@ -120,21 +120,19 @@ export function CardComponent({
           <Typography variant="body2" color="text.secondary">
             {description}
           </Typography>
-        </CardContent>
-        {recommendedCourses.length > 0 && (
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              Next recommended courses
-            </Typography>
+          {recommendedCourses.length > 0 && (
             <List>
+              <Typography variant="subtitle2" color="text.secondary">
+                Next recommended courses
+              </Typography>
               {recommendedCourses.map((course) => (
                 <ListItem key={course.title}>
                   <ListItemText primary={course.title} />
                 </ListItem>
               ))}
             </List>
-          </CardContent>
-        )}
+          )}
+        </CardContent>
       </Collapse>
     </Card>
   );
