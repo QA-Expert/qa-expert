@@ -13,13 +13,19 @@ import ShareIcon from '@mui/icons-material/Share';
 import Collapse from '@mui/material/Collapse';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { useState } from 'react';
+import { List, ListItem, ListItemText } from '@mui/material';
 
 type Props = Pick<
   GetAllCoursesQuery['courses'][number],
-  'title' | 'description' | 'pages'
+  'title' | 'description' | 'pages' | 'recommendedCourses'
 >;
 
-export function CardComponent({ title, description, pages }: Props) {
+export function CardComponent({
+  title,
+  description,
+  pages,
+  recommendedCourses,
+}: Props) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -115,6 +121,20 @@ export function CardComponent({ title, description, pages }: Props) {
             {description}
           </Typography>
         </CardContent>
+        {recommendedCourses.length > 0 && (
+          <CardContent>
+            <Typography variant="body2" color="text.secondary">
+              Next recommended courses
+            </Typography>
+            <List>
+              {recommendedCourses.map((course) => (
+                <ListItem key={course.title}>
+                  <ListItemText primary={course.title} />
+                </ListItem>
+              ))}
+            </List>
+          </CardContent>
+        )}
       </Collapse>
     </Card>
   );

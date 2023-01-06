@@ -11,6 +11,10 @@ export const GET_ALL_COURSES = gql(/* GraphQL */ `
         _id
         type
       }
+      recommendedCourses {
+        _id
+        title
+      }
       progress {
         pass
         fail
@@ -34,6 +38,10 @@ export const GET_ALL_COURSES_PUBLIC = gql(/* GraphQL */ `
       pages {
         _id
         type
+      }
+      recommendedCourses {
+        _id
+        title
       }
     }
   }

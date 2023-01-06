@@ -40,6 +40,10 @@ export class CourseService {
         path: 'pages',
         model: Page.name,
       })
+      .populate({
+        path: 'recommendedCourses',
+        model: Course.name,
+      })
       .exec();
   }
 

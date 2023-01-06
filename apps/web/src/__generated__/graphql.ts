@@ -54,6 +54,8 @@ export type Course = {
   pages: Array<Page>;
   /** Course progress */
   progress: TotalCourseProgress;
+  /** Next recommended courses */
+  recommendedCourses: Array<Course>;
   /** Course title */
   title: Scalars['String'];
   type: CourseType;
@@ -262,11 +264,11 @@ export type SubmittedProgress = {
 
 export type TotalCourseProgress = {
   __typename?: 'TotalCourseProgress';
-  /** Percentage of failed pages */
+  /** Total Percentage of failed pages */
   fail: Scalars['Float'];
   /** Course pages count before finishing course */
   pagesLeftBeforeFinish?: Maybe<Scalars['Float']>;
-  /** Percentage of passed pages */
+  /** Total Percentage of passed pages */
   pass: Scalars['Float'];
   state: CourseProgressState;
   updatedAt: Scalars['DateTime'];
@@ -479,6 +481,11 @@ export type GetAllCoursesQuery = {
     type: CourseType;
     description: string;
     pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
+    recommendedCourses: Array<{
+      __typename?: 'Course';
+      _id: string;
+      title: string;
+    }>;
     progress: {
       __typename?: 'TotalCourseProgress';
       pass: number;
@@ -501,6 +508,11 @@ export type GetAllCoursesPublicQuery = {
     type: CourseType;
     description: string;
     pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
+    recommendedCourses: Array<{
+      __typename?: 'Course';
+      _id: string;
+      title: string;
+    }>;
   }>;
 };
 
@@ -1554,6 +1566,17 @@ export const GetAllCoursesDocument = {
                 },
                 {
                   kind: 'Field',
+                  name: { kind: 'Name', value: 'recommendedCourses' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
                   name: { kind: 'Name', value: 'progress' },
                   selectionSet: {
                     kind: 'SelectionSet',
@@ -1614,6 +1637,17 @@ export const GetAllCoursesPublicDocument = {
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: '_id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'recommendedCourses' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                     ],
                   },
                 },

@@ -32,6 +32,7 @@ export const CardContainer = ({
   progress,
   badge,
   pages,
+  recommendedCourses,
 }: Props) => {
   const { data } = useQuery(GET_USER);
   const user = data?.user;
@@ -165,6 +166,7 @@ export const CardContainer = ({
             title={title}
             description={description}
             pages={pages}
+            recommendedCourses={recommendedCourses}
           />
 
           {progress && <ProgressBar {...progress} />}
