@@ -7,7 +7,7 @@ import Image from 'next/image';
 import {
   CourseProgressState,
   CourseType,
-  GetAllCoursesQuery,
+  GetAllCoursesPublicQuery,
 } from '../../__generated__/graphql';
 import IconButton from '@mui/material/IconButton';
 import CardActions from '@mui/material/CardActions';
@@ -27,7 +27,7 @@ import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import DoneAll from '@mui/icons-material/DoneAll';
 
 type CourseProps = Pick<
-  GetAllCoursesQuery['courses'][number],
+  GetAllCoursesPublicQuery['coursesPublic'][number],
   'title' | 'description' | 'pages' | 'recommendedCourses'
 >;
 
