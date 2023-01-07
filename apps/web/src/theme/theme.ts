@@ -16,6 +16,10 @@ export const dark: ThemeOptions = {
       dark: '$7A75CD',
       contrastText: '#fff',
     },
+    action: {
+      hover: '#232233',
+      hoverOpacity: 0.3,
+    },
   },
   components: {
     MuiCard: {
@@ -38,6 +42,7 @@ export const dark: ThemeOptions = {
         root: ({ theme }) => ({
           backgroundColor: theme.palette.secondary.main,
           color: theme.palette.text.primary,
+          borderRadius: '2rem',
         }),
       },
     },

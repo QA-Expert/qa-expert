@@ -1,4 +1,4 @@
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import { ReactNode, useState } from 'react';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
@@ -47,9 +47,12 @@ export function PageCarousel({ children }: Props) {
       }}
     >
       {children?.length > 1 && (
-        <Button onClick={handleBackwardClick} disabled={currentPageIndex === 0}>
+        <IconButton
+          onClick={handleBackwardClick}
+          disabled={currentPageIndex === 0}
+        >
           <ArrowBackIos />
-        </Button>
+        </IconButton>
       )}
 
       <Box sx={{ gap: '1rem', height: '100%', width: '100%', padding: '2rem' }}>
@@ -66,12 +69,12 @@ export function PageCarousel({ children }: Props) {
       </Box>
 
       {children?.length > 1 && (
-        <Button
+        <IconButton
           onClick={handleForwardClick}
           disabled={currentPageIndex === children.length - 1}
         >
           <ArrowForwardIos />
-        </Button>
+        </IconButton>
       )}
     </Paper>
   );

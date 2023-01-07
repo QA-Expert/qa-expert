@@ -1,6 +1,5 @@
 import { addDays, intervalToDuration } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { getRetakeQuizDuration } from './card.handlers';
 
 export const useDurationToRetakeQuiz = (createdAt: string) => {
   const lastSubmittedDate = new Date(createdAt);
@@ -13,9 +12,8 @@ export const useDurationToRetakeQuiz = (createdAt: string) => {
     start: nowDate,
     end: canRetakeDate,
   });
-  const [timeLeftToRetake, setTimeLeftToRetake] = useState<string>(
-    getRetakeQuizDuration(duration),
-  );
+
+  const [durationLeft, setDurationLeft] = useState<Duration>(duration);
   const canRetakeQuiz = nowDate >= canRetakeDate;
 
   useEffect(() => {
@@ -24,7 +22,7 @@ export const useDurationToRetakeQuiz = (createdAt: string) => {
         start: new Date(),
         end: canRetakeDate,
       });
-      setTimeLeftToRetake(getRetakeQuizDuration(duration));
+      setDurationLeft(duration);
     }, 1000);
 
     return () => {
@@ -33,7 +31,7 @@ export const useDurationToRetakeQuiz = (createdAt: string) => {
   }, [canRetakeDate]);
 
   return {
+    duration: durationLeft,
     canRetakeQuiz,
-    timeLeftToRetake,
   };
 };

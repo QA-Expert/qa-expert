@@ -42,7 +42,7 @@ export default function Page(
               <CircularProgress
                 variant="determinate"
                 value={countUpProgress}
-                sx={{ position: 'absolute' }}
+                sx={{ position: 'absolute', color: 'secondary.light' }}
               />
               <CheckCircleIcon
                 sx={{ color: 'success.main', fontSize: '3rem', opacity: 0.4 }}

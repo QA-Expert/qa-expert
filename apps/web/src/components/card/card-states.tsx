@@ -10,7 +10,6 @@ import {
   GET_USER,
 } from '../../graphql/queries/queries';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import TimerIcon from '@mui/icons-material/Timer';
 import {
   CourseProgressState,
   GetAllCoursesQuery,
@@ -19,6 +18,8 @@ import Tooltip from '@mui/material/Tooltip';
 import { useDurationToRetakeQuiz } from './card.hook';
 import { useError } from '../../../utils/hooks';
 import { Box } from '../box/box';
+import { Timer } from './timer';
+import Typography from '@mui/material/Typography';
 
 type Props = Pick<
   GetAllCoursesQuery['courses'][number],
@@ -60,13 +61,15 @@ export const CardStates = ({ _id, progress, badge }: Props) => {
   const isNonInitState =
     (isPassedCourse && !isBadgeClaimed) || isFailedCourse || isBadgeClaimed;
 
-  const { canRetakeQuiz, timeLeftToRetake } = useDurationToRetakeQuiz(
+  const { canRetakeQuiz, duration } = useDurationToRetakeQuiz(
     progress.updatedAt,
   );
 
   return (
     <Box
       sx={{
+        display: 'flex',
+        gap: '0.5rem',
         position: 'absolute',
         width: '100%',
         height: '100%',
@@ -80,13 +83,10 @@ export const CardStates = ({ _id, progress, badge }: Props) => {
       )}
 
       {isFailedCourse && !canRetakeQuiz && (
-        <Tooltip
-          title={`Quiz can be retaken in ${timeLeftToRetake}`}
-          arrow
-          disableFocusListener
-        >
-          <TimerIcon fontSize="large" />
-        </Tooltip>
+        <Box>
+          <Typography>Quiz can be retaken in:</Typography>
+          <Timer duration={duration} />{' '}
+        </Box>
       )}
 
       {badge?._id && isPassedCourse && !isBadgeClaimed && (
