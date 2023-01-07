@@ -485,6 +485,10 @@ export type GetAllCoursesQuery = {
       __typename?: 'Course';
       _id: string;
       title: string;
+      progress: {
+        __typename?: 'TotalCourseProgress';
+        state: CourseProgressState;
+      };
     }>;
     progress: {
       __typename?: 'TotalCourseProgress';
@@ -1572,6 +1576,19 @@ export const GetAllCoursesDocument = {
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: '_id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'progress' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'state' },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },

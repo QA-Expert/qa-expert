@@ -14,6 +14,9 @@ export const GET_ALL_COURSES = gql(/* GraphQL */ `
       recommendedCourses {
         _id
         title
+        progress {
+          state
+        }
       }
       progress {
         pass

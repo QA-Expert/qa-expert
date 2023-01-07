@@ -4,7 +4,11 @@ import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
-import { CourseType, GetAllCoursesQuery } from '../../__generated__/graphql';
+import {
+  CourseProgressState,
+  CourseType,
+  GetAllCoursesQuery,
+} from '../../__generated__/graphql';
 import IconButton from '@mui/material/IconButton';
 import CardActions from '@mui/material/CardActions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -14,13 +18,13 @@ import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import LayersIcon from '@mui/icons-material/Layers';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box } from '../box/box';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { ReactNode } from 'react';
-import { useTheme } from '@mui/material/styles';
-import { List, ListItem, ListItemText } from '@mui/material';
+import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import DoneAll from '@mui/icons-material/DoneAll';
 
 type CourseProps = Pick<
   GetAllCoursesQuery['courses'][number],
@@ -150,6 +154,11 @@ export function CardComponent({
               {recommendedCourses.map((course) => (
                 <ListItem key={course.title}>
                   <ListItemText primary={course.title} />
+                  {course.progress?.state === CourseProgressState.Pass && (
+                    <ListItemIcon>
+                      <DoneAll />
+                    </ListItemIcon>
+                  )}
                 </ListItem>
               ))}
             </List>

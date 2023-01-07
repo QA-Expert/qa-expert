@@ -158,7 +158,12 @@ export const CardContainer = ({
             </Box>
           )}
 
-          <CardComponent title={title} description={description} pages={pages} recommendedCourses={recommendedCourses}>
+          <CardComponent
+            title={title}
+            description={description}
+            pages={pages}
+            recommendedCourses={recommendedCourses}
+          >
             {progress && <ProgressBar {...progress} />}
           </CardComponent>
         </Box>
