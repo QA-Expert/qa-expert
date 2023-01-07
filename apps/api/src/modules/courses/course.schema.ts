@@ -10,6 +10,7 @@ export enum CourseType {
   COURSE = 'course',
   QUIZ = 'quiz',
 }
+
 registerEnumType(CourseType, {
   name: 'CourseType',
   description: 'Defines the type of the course',

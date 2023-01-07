@@ -183,18 +183,33 @@ export function CardContainer(props: Props & CourseProps) {
             >
               <Typography>Description</Typography>
             </AccordionSummary>
-            <AccordionDetails>
-              <Typography sx={{ fontSize: '0.875rem' }}>
+            <AccordionDetails sx={{ padding: 0 }}>
+              <Typography sx={{ fontSize: '0.875rem', padding: '1rem' }}>
                 {props.description}
               </Typography>
               {props.recommendedCourses.length > 0 && (
-                <List>
-                  <Typography variant="subtitle2" color="text.secondary">
+                <List
+                  sx={{
+                    backgroundColor: 'primary.dark',
+                    padding: '1rem',
+                  }}
+                >
+                  <Typography
+                    color="warning.main"
+                    sx={{
+                      fontSize: '0.875rem',
+                    }}
+                  >
                     Next recommended courses
                   </Typography>
                   {props.recommendedCourses.map((course) => (
-                    <ListItem key={course.title}>
-                      <ListItemText primary={course.title} />
+                    <ListItem key={course.title} sx={{ padding: 0 }}>
+                      <ListItemText
+                        primary={course.title}
+                        primaryTypographyProps={{
+                          fontSize: '0.875rem',
+                        }}
+                      />
                       {'progress' in course &&
                         course.progress?.state === CourseProgressState.Pass && (
                           <ListItemIcon>
