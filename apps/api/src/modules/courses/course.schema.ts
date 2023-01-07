@@ -49,10 +49,10 @@ export class Course extends mongoose.Document {
   @Field(() => CourseType)
   type: CourseType;
 
-  @Prop({ type: String, enum: CourseLevel })
+  @Prop({ type: String, enum: CourseLevel, required: true })
   @Field(() => CourseLevel, {
-    description: 'Course difficulty Level',
-    nullable: true,
+    description:
+      'Defines level of skill that user gains after finishing the course',
   })
   level: CourseLevel;
 

@@ -50,8 +50,8 @@ export type Course = {
   description: Scalars['String'];
   /** Icon url */
   icon: Scalars['String'];
-  /** Course difficulty Level */
-  level?: Maybe<CourseLevel>;
+  /** Defines level of skill that user gains after finishing the course */
+  level: CourseLevel;
   /** Pages included in course */
   pages: Array<Page>;
   /** Course progress */
@@ -489,7 +489,7 @@ export type GetAllCoursesQuery = {
     _id: string;
     title: string;
     type: CourseType;
-    level?: CourseLevel | null;
+    level: CourseLevel;
     description: string;
     pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
     recommendedCourses: Array<{
@@ -521,7 +521,7 @@ export type GetAllCoursesPublicQuery = {
     _id: string;
     title: string;
     type: CourseType;
-    level?: CourseLevel | null;
+    level: CourseLevel;
     description: string;
     pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
     recommendedCourses: Array<{
@@ -543,7 +543,7 @@ export type GetCourseQuery = {
     _id: string;
     title: string;
     type: CourseType;
-    level?: CourseLevel | null;
+    level: CourseLevel;
     description: string;
     progress: {
       __typename?: 'TotalCourseProgress';
