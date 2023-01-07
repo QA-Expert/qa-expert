@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import {
+  CourseProgressState,
   CourseType,
   GetAllCoursesPublicQuery,
   GetAllCoursesQuery,
@@ -23,15 +24,24 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { ReactNode } from 'react';
-import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import DoneAll from '@mui/icons-material/DoneAll';
 import { CardStates } from './card-states';
 import { ProgressBar } from '../progress-bar/progress-bar';
 import Link from 'next/link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
 type LoggedInUserCourses = Pick<
   GetAllCoursesQuery['courses'][number],
-  '_id' | 'title' | 'description' | 'pages' | 'progress' | 'badge' | 'recommendedCourses'
+  | '_id'
+  | 'title'
+  | 'description'
+  | 'pages'
+  | 'progress'
+  | 'badge'
+  | 'recommendedCourses'
 >;
 
 type PublicCourses = Pick<
@@ -175,27 +185,30 @@ export function CardContainer(props: Props & CourseProps) {
             </AccordionSummary>
             <AccordionDetails>
               <Typography sx={{ fontSize: '0.875rem' }}>
-                {props.description}</Typography>
-          {props.recommendedCourses.length > 0 && (
-            <List>
-              <Typography variant="subtitle2" color="text.secondary">
-                Next recommended courses
+                {props.description}
               </Typography>
-              {props.recommendedCourses.map((course) => (
-                <ListItem key={course.title}>
-                  <ListItemText primary={course.title} />
-                    {isUserLoggedInBasedOnProgress && { course.progress?.state === CourseProgressState.Pass && (
-                            <ListItemIcon>
-                                <DoneAll />
-                            </ListItemIcon>
-                        )}}
-                </ListItem>
-              ))}
-            </List>
-          )}
-        </AccordionDetails>
-      </Accordion>
-    </Card></a>
+              {props.recommendedCourses.length > 0 && (
+                <List>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    Next recommended courses
+                  </Typography>
+                  {props.recommendedCourses.map((course) => (
+                    <ListItem key={course.title}>
+                      <ListItemText primary={course.title} />
+                      {'progress' in course &&
+                        course.progress?.state === CourseProgressState.Pass && (
+                          <ListItemIcon>
+                            <DoneAll />
+                          </ListItemIcon>
+                        )}
+                    </ListItem>
+                  ))}
+                </List>
+              )}
+            </AccordionDetails>
+          </Accordion>
+        </Card>
+      </a>
     </Link>
   );
 }
