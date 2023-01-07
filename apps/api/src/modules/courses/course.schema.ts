@@ -10,6 +10,7 @@ export enum CourseType {
   COURSE = 'course',
   QUIZ = 'quiz',
 }
+
 registerEnumType(CourseType, {
   name: 'CourseType',
   description: 'Defines the type of the course',
@@ -51,6 +52,13 @@ export class Course extends mongoose.Document {
     description: 'Course progress',
   })
   progress: TotalCourseProgress;
+
+  @Prop({ type: [{ type: ObjectId, ref: Course.name }], default: [] })
+  @Field(() => [Course], {
+    defaultValue: [],
+    description: 'Next recommended courses',
+  })
+  recommendedCourses: Course[];
 
   @Field(() => Badge, {
     nullable: true,

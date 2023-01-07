@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import {
+  CourseProgressState,
   CourseType,
   GetAllCoursesPublicQuery,
   GetAllCoursesQuery,
@@ -18,24 +19,34 @@ import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import LayersIcon from '@mui/icons-material/Layers';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box } from '../box/box';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { ReactNode } from 'react';
-import { useTheme } from '@mui/material/styles';
+import DoneAll from '@mui/icons-material/DoneAll';
 import { CardStates } from './card-states';
 import { ProgressBar } from '../progress-bar/progress-bar';
 import Link from 'next/link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
 type LoggedInUserCourses = Pick<
   GetAllCoursesQuery['courses'][number],
-  '_id' | 'title' | 'description' | 'pages' | 'progress' | 'badge'
+  | '_id'
+  | 'title'
+  | 'description'
+  | 'pages'
+  | 'progress'
+  | 'badge'
+  | 'recommendedCourses'
 >;
 
 type PublicCourses = Pick<
   GetAllCoursesPublicQuery['coursesPublic'][number],
-  'title' | 'description' | 'pages'
+  'title' | 'description' | 'pages' | 'recommendedCourses'
 >;
 
 type CourseProps = LoggedInUserCourses | PublicCourses;
@@ -172,10 +183,43 @@ export function CardContainer(props: Props & CourseProps) {
             >
               <Typography>Description</Typography>
             </AccordionSummary>
-            <AccordionDetails>
-              <Typography sx={{ fontSize: '0.875rem' }}>
+            <AccordionDetails sx={{ padding: 0 }}>
+              <Typography sx={{ fontSize: '0.875rem', padding: '1rem' }}>
                 {props.description}
               </Typography>
+              {props.recommendedCourses.length > 0 && (
+                <List
+                  sx={{
+                    backgroundColor: 'primary.dark',
+                    padding: '1rem',
+                  }}
+                >
+                  <Typography
+                    color="warning.main"
+                    sx={{
+                      fontSize: '0.875rem',
+                    }}
+                  >
+                    Next recommended courses
+                  </Typography>
+                  {props.recommendedCourses.map((course) => (
+                    <ListItem key={course.title} sx={{ padding: 0 }}>
+                      <ListItemText
+                        primary={course.title}
+                        primaryTypographyProps={{
+                          fontSize: '0.875rem',
+                        }}
+                      />
+                      {'progress' in course &&
+                        course.progress?.state === CourseProgressState.Pass && (
+                          <ListItemIcon>
+                            <DoneAll />
+                          </ListItemIcon>
+                        )}
+                    </ListItem>
+                  ))}
+                </List>
+              )}
             </AccordionDetails>
           </Accordion>
         </Card>
