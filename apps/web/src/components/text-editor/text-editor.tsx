@@ -6,11 +6,13 @@ import { Box } from '../box/box';
 import { DeltaStatic, Sources } from 'quill';
 import { UPDATE_COURSE_PAGE_CONTENT } from '../../graphql/mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
-import { styled } from '@mui/material/styles';
 import { GET_COURSE, GET_USER } from '../../graphql/queries/queries';
 import { useRouter } from 'next/router';
 import { useError } from '../../../utils/hooks';
 import { UnprivilegedEditor } from 'react-quill';
+// NOTE: I have to user emotion directly - not mui/styled as mui has built in "theme" prop
+// that conflicts with "theme" on Quill component
+import styled from '@emotion/styled';
 
 const ReactQuillWrapper = dynamic(() => import('react-quill'), {
   ssr: false,
