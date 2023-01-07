@@ -16,6 +16,18 @@ registerEnumType(CourseType, {
   description: 'Defines the type of the course',
 });
 
+export enum CourseLevel {
+  BEGINNER = 'beginner',
+  INTERMEDIATE = 'intermediate',
+  ADVANCED = 'advanced',
+  EXPERT = 'expert',
+}
+
+registerEnumType(CourseLevel, {
+  name: 'CourseLevel',
+  description: 'Defines the level of the course',
+});
+
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // TODO: add description to all props
@@ -36,6 +48,13 @@ export class Course extends mongoose.Document {
   @Prop({ type: String, enum: CourseType, required: true })
   @Field(() => CourseType)
   type: CourseType;
+
+  @Prop({ type: String, enum: CourseLevel })
+  @Field(() => CourseLevel, {
+    description: 'Course difficulty Level',
+    nullable: true,
+  })
+  level: CourseLevel;
 
   @Field({ description: 'Icon url' })
   @Prop()

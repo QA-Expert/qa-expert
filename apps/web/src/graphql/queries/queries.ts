@@ -6,6 +6,7 @@ export const GET_ALL_COURSES = gql(/* GraphQL */ `
       _id
       title
       type
+      level
       description
       pages {
         _id
@@ -37,6 +38,7 @@ export const GET_ALL_COURSES_PUBLIC = gql(/* GraphQL */ `
       _id
       title
       type
+      level
       description
       pages {
         _id
@@ -56,6 +58,7 @@ export const GET_COURSE = gql(/* GraphQL */ `
       _id
       title
       type
+      level
       description
       progress {
         pagesLeftBeforeFinish

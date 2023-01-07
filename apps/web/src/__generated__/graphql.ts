@@ -50,6 +50,8 @@ export type Course = {
   description: Scalars['String'];
   /** Icon url */
   icon: Scalars['String'];
+  /** Course difficulty Level */
+  level?: Maybe<CourseLevel>;
   /** Pages included in course */
   pages: Array<Page>;
   /** Course progress */
@@ -60,6 +62,14 @@ export type Course = {
   title: Scalars['String'];
   type: CourseType;
 };
+
+/** Defines the level of the course */
+export enum CourseLevel {
+  Advanced = 'ADVANCED',
+  Beginner = 'BEGINNER',
+  Expert = 'EXPERT',
+  Intermediate = 'INTERMEDIATE',
+}
 
 export type CoursePageContentInput = {
   content: Scalars['String'];
@@ -479,6 +489,7 @@ export type GetAllCoursesQuery = {
     _id: string;
     title: string;
     type: CourseType;
+    level?: CourseLevel | null;
     description: string;
     pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
     recommendedCourses: Array<{
@@ -510,6 +521,7 @@ export type GetAllCoursesPublicQuery = {
     _id: string;
     title: string;
     type: CourseType;
+    level?: CourseLevel | null;
     description: string;
     pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
     recommendedCourses: Array<{
@@ -531,6 +543,7 @@ export type GetCourseQuery = {
     _id: string;
     title: string;
     type: CourseType;
+    level?: CourseLevel | null;
     description: string;
     progress: {
       __typename?: 'TotalCourseProgress';
@@ -1556,6 +1569,7 @@ export const GetAllCoursesDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'level' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 {
                   kind: 'Field',
@@ -1645,6 +1659,7 @@ export const GetAllCoursesPublicDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'level' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 {
                   kind: 'Field',
@@ -1721,6 +1736,7 @@ export const GetCourseDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'level' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 {
                   kind: 'Field',
