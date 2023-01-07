@@ -4,7 +4,6 @@ import {
   GET_ALL_COURSES_PUBLIC,
 } from '../src/graphql/queries/queries';
 import Typography from '@mui/material/Typography';
-import { CardContainer } from '../src/components/card';
 import { Box } from '../src/components/box/box';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { initializeApollo, APOLLO_STATE_PROP_NAME } from '../apollo/client';
@@ -14,7 +13,7 @@ import {
 } from '../src/__generated__/graphql';
 import { useError } from '../utils/hooks';
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
-import { CardComponent } from '../src/components/card/card';
+import { CardContainer } from '../src/components/card/card';
 import { isAuthTokenValid } from '../utils/auth';
 
 const CoursesPage = (
@@ -54,7 +53,7 @@ const CoursesPage = (
           {data &&
             'coursesPublic' in data &&
             data?.coursesPublic?.map((course) => (
-              <CardComponent key={course._id} {...course} />
+              <CardContainer key={course._id} {...course} />
             ))}
         </Box>
       </Box>
