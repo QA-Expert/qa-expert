@@ -77,10 +77,6 @@ export const CardContainer = ({
           sx={{
             position: 'relative',
             gap: '0.75rem',
-            transition: 'transform .4s',
-            '&:hover': {
-              transform: 'scale(1.05)',
-            },
           }}
         >
           {isBadgeClaimed && (
@@ -162,14 +158,9 @@ export const CardContainer = ({
             </Box>
           )}
 
-          <CardComponent
-            title={title}
-            description={description}
-            pages={pages}
-            recommendedCourses={recommendedCourses}
-          />
-
-          {progress && <ProgressBar {...progress} />}
+          <CardComponent title={title} description={description} pages={pages} recommendedCourses={recommendedCourses}>
+            {progress && <ProgressBar {...progress} />}
+          </CardComponent>
         </Box>
       </a>
     </Link>

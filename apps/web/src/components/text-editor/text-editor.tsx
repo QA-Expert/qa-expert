@@ -6,7 +6,7 @@ import { Box } from '../box/box';
 import { DeltaStatic, Sources } from 'quill';
 import { UPDATE_COURSE_PAGE_CONTENT } from '../../graphql/mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import { GET_COURSE, GET_USER } from '../../graphql/queries/queries';
 import { useRouter } from 'next/router';
 import { useError } from '../../../utils/hooks';
