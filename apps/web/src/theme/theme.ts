@@ -3,7 +3,7 @@ import { ThemeOptions } from '@mui/material/styles';
 // Create a theme instance.
 export const dark: ThemeOptions = {
   palette: {
-    text: { primary: '#fff', secondary: '#fff' },
+    text: { primary: '#fff', secondary: '#C1BFD4' },
     primary: {
       main: '#2E2D3F',
       light: '#2E2D3F',
@@ -22,6 +22,7 @@ export const dark: ThemeOptions = {
       styleOverrides: {
         root: ({ theme }) => ({
           backgroundColor: theme.palette.primary.main,
+          borderRadius: '0.75rem',
         }),
       },
     },
