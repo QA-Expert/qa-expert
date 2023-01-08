@@ -46,7 +46,7 @@ type LoggedInUserCourses = Pick<
 
 type PublicCourses = Pick<
   GetAllCoursesPublicQuery['coursesPublic'][number],
-  'title' | 'description' | 'pages' | 'recommendedCourses'
+  '_id' | 'title' | 'description' | 'pages' | 'recommendedCourses'
 >;
 
 type CourseProps = LoggedInUserCourses | PublicCourses;
@@ -63,6 +63,7 @@ export function CardContainer(props: Props & CourseProps) {
     <Link href={isUserLoggedInBasedOnProgress ? `/course/${props._id}` : ''}>
       <a>
         <Card
+          id={`course-${props._id}`}
           sx={{
             width: '420px',
             minHeight: '320px',
@@ -191,32 +192,45 @@ export function CardContainer(props: Props & CourseProps) {
                 <List
                   sx={{
                     backgroundColor: 'primary.dark',
-                    padding: '1rem',
                   }}
                 >
                   <Typography
                     color="warning.main"
                     sx={{
                       fontSize: '0.875rem',
+                      padding: '1rem',
                     }}
                   >
                     Next recommended courses
                   </Typography>
+
                   {props.recommendedCourses.map((course) => (
-                    <ListItem key={course.title} sx={{ padding: 0 }}>
-                      <ListItemText
-                        primary={course.title}
-                        primaryTypographyProps={{
-                          fontSize: '0.875rem',
+                    <Link key={course._id} href={`#course-${course._id}`}>
+                      <ListItem
+                        sx={{
+                          height: '2.5rem',
+                          padding: '0 1rem 0 1rem',
+                          '&:hover': {
+                            backgroundColor: 'primary.main',
+                          },
+                          width: '100%',
                         }}
-                      />
-                      {'progress' in course &&
-                        course.progress?.state === CourseProgressState.Pass && (
-                          <ListItemIcon>
-                            <DoneAll />
-                          </ListItemIcon>
-                        )}
-                    </ListItem>
+                      >
+                        <ListItemText
+                          primary={course.title}
+                          primaryTypographyProps={{
+                            fontSize: '0.875rem',
+                          }}
+                        />
+                        {'progress' in course &&
+                          course.progress?.state ===
+                            CourseProgressState.Pass && (
+                            <ListItemIcon>
+                              <DoneAll />
+                            </ListItemIcon>
+                          )}
+                      </ListItem>
+                    </Link>
                   ))}
                 </List>
               )}
