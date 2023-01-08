@@ -1,6 +1,7 @@
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 import formatISODuration from 'date-fns/formatISODuration';
+import { convertNumberToString } from '../../../utils/utils';
 
 type Props = {
   duration: Duration;
@@ -16,21 +17,25 @@ export function Timer({ duration }: Props) {
 
         <Unit
           color="secondary"
-          label={duration.hours ? duration.hours : '00'}
+          label={duration.hours ? convertNumberToString(duration.hours) : '00'}
         />
 
         <span>{':'}</span>
 
         <Unit
           color="secondary"
-          label={duration.minutes ? duration.minutes : '00'}
+          label={
+            duration.minutes ? convertNumberToString(duration.minutes) : '00'
+          }
         />
 
         <span>{':'}</span>
 
         <Unit
           color="secondary"
-          label={duration.seconds ? duration.seconds : '00'}
+          label={
+            duration.seconds ? convertNumberToString(duration.seconds) : '00'
+          }
         />
       </Time>
     </div>

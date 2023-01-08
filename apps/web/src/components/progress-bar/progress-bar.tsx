@@ -17,9 +17,10 @@ export function ProgressBar(props: Props) {
         sx={{
           justifyContent: hasNoProgress ? 'center' : 'start',
           width: '100%',
+          gap: '0',
           flexDirection: 'row',
           height: '0.25rem',
-          backgroundColor: 'primary.dark',
+          backgroundColor: 'background',
         }}
       >
         {hasNoProgress && (

@@ -18,7 +18,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { useDurationToRetakeQuiz } from './card.hook';
 import { useError } from '../../../utils/hooks';
 import { Box } from '../box/box';
-import { Timer } from './timer';
+import { Timer } from '../timer/timer';
 import Typography from '@mui/material/Typography';
 
 type Props = Pick<
@@ -26,7 +26,7 @@ type Props = Pick<
   '_id' | 'progress' | 'badge'
 >;
 
-export const CardStates = ({ _id, progress, badge }: Props) => {
+export const CourseStates = ({ _id, progress, badge }: Props) => {
   const { data } = useQuery(GET_USER);
   const user = data?.user;
   const [claimBadge, { error: badgeError }] = useMutation(CLAIM_BADGE, {
@@ -69,7 +69,6 @@ export const CardStates = ({ _id, progress, badge }: Props) => {
     <Box
       sx={{
         display: 'flex',
-        gap: '0.5rem',
         position: 'absolute',
         width: '100%',
         height: '100%',

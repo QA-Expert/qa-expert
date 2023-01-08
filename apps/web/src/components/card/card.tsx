@@ -1,37 +1,34 @@
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import {
   CourseProgressState,
-  CourseType,
   GetAllCoursesPublicQuery,
   GetAllCoursesQuery,
 } from '../../__generated__/graphql';
 import IconButton from '@mui/material/IconButton';
 import CardActions from '@mui/material/CardActions';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import ShareIcon from '@mui/icons-material/Share';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import LiveHelpIcon from '@mui/icons-material/LiveHelp';
-import LayersIcon from '@mui/icons-material/Layers';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box } from '../box/box';
-import { styled, useTheme } from '@mui/material/styles';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import { ReactNode } from 'react';
 import DoneAll from '@mui/icons-material/DoneAll';
-import { CardStates } from './card-states';
+import { CourseStates } from './course-states';
 import { ProgressBar } from '../progress-bar/progress-bar';
 import Link from 'next/link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import { Row } from '../row/row';
+import { CourseMetrics } from './course-metrics';
+import { useTheme } from '@mui/material/styles';
+import { LikeIcon } from '../icons/like';
+import { ShareIcon } from '../icons/share';
+import { ArrowIcon } from '../icons/arrow';
+import { CourseLevelLabel } from './course-level-label';
 
 type LoggedInUserCourses = Pick<
   GetAllCoursesQuery['courses'][number],
@@ -42,20 +39,17 @@ type LoggedInUserCourses = Pick<
   | 'progress'
   | 'badge'
   | 'recommendedCourses'
+  | 'level'
 >;
 
 type PublicCourses = Pick<
   GetAllCoursesPublicQuery['coursesPublic'][number],
-  '_id' | 'title' | 'description' | 'pages' | 'recommendedCourses'
+  '_id' | 'title' | 'description' | 'pages' | 'recommendedCourses' | 'level'
 >;
 
-type CourseProps = LoggedInUserCourses | PublicCourses;
+export type CourseProps = LoggedInUserCourses | PublicCourses;
 
-type Props = {
-  children?: ReactNode;
-};
-
-export function CardContainer(props: Props & CourseProps) {
+export function CardContainer(props: CourseProps) {
   const theme = useTheme();
   const isUserLoggedInBasedOnProgress = 'progress' in props;
 
@@ -65,6 +59,7 @@ export function CardContainer(props: Props & CourseProps) {
         <Card
           id={`course-${props._id}`}
           sx={{
+            position: 'relative',
             width: '420px',
             minHeight: '320px',
             display: 'flex',
@@ -80,12 +75,14 @@ export function CardContainer(props: Props & CourseProps) {
           }}
           raised
         >
+          <CourseLevelLabel level={props.level} />
+
           <CardHeader
             title={props.title}
             sx={{ textAlign: 'center', height: '6rem' }}
           />
 
-          <Row>
+          <Row sx={{ gap: '1rem' }}>
             <CardMedia
               sx={{
                 display: 'flex',
@@ -102,7 +99,7 @@ export function CardContainer(props: Props & CourseProps) {
               />
 
               {isUserLoggedInBasedOnProgress && (
-                <CardStates
+                <CourseStates
                   _id={props._id}
                   progress={props.progress}
                   badge={props.badge}
@@ -110,30 +107,7 @@ export function CardContainer(props: Props & CourseProps) {
               )}
             </CardMedia>
 
-            <CardContent sx={{ alignSelf: 'start' }}>
-              <Row>
-                <LayersIcon sx={{ color: 'text.secondary', width: '1rem' }} />
-                <Typography variant="body2" color="text.secondary">
-                  Slides:
-                  {
-                    props.pages.filter(
-                      (page) => page.type === CourseType.Course,
-                    ).length
-                  }
-                </Typography>
-              </Row>
-
-              <Row>
-                <LiveHelpIcon sx={{ color: 'text.secondary', width: '1rem' }} />
-                <Typography variant="body2" color="text.secondary">
-                  Questions:
-                  {
-                    props.pages.filter((page) => page.type === CourseType.Quiz)
-                      .length
-                  }
-                </Typography>
-              </Row>
-            </CardContent>
+            <CourseMetrics pages={props.pages} />
           </Row>
 
           <CardActions
@@ -155,7 +129,11 @@ export function CardContainer(props: Props & CourseProps) {
                   e.preventDefault();
                 }}
               >
-                <FavoriteBorderIcon />
+                <LikeIcon
+                  width="24"
+                  height="24"
+                  color={theme.palette.secondary.main}
+                />
               </IconButton>
 
               <IconButton
@@ -164,7 +142,11 @@ export function CardContainer(props: Props & CourseProps) {
                   e.preventDefault();
                 }}
               >
-                <ShareIcon />
+                <ShareIcon
+                  width="24"
+                  height="24"
+                  color={theme.palette.secondary.main}
+                />
               </IconButton>
             </ButtonGroup>
           </CardActions>
@@ -172,32 +154,43 @@ export function CardContainer(props: Props & CourseProps) {
           {isUserLoggedInBasedOnProgress && <ProgressBar {...props.progress} />}
 
           <Accordion
-            sx={{ width: '100%', color: 'text.secondary' }}
+            sx={{
+              width: '100%',
+              color: 'text.secondary',
+            }}
             onClick={(e) => {
               e.preventDefault();
             }}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={
+                <ArrowIcon
+                  width="24"
+                  height="24"
+                  color={theme.palette.secondary.main}
+                />
+              }
+              sx={{
+                flexGrow: 0,
+              }}
               aria-controls="show-description-accordion"
               id="show-description-accordion"
             >
               <Typography>Description</Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ padding: 0 }}>
-              <Typography sx={{ fontSize: '0.875rem', padding: '1rem' }}>
+              <Typography sx={{ padding: '1rem' }}>
                 {props.description}
               </Typography>
               {props.recommendedCourses.length > 0 && (
                 <List
                   sx={{
-                    backgroundColor: 'primary.dark',
+                    backgroundColor: 'background',
                   }}
                 >
                   <Typography
                     color="warning.main"
                     sx={{
-                      fontSize: '0.875rem',
                       padding: '1rem',
                     }}
                   >
@@ -216,12 +209,7 @@ export function CardContainer(props: Props & CourseProps) {
                           width: '100%',
                         }}
                       >
-                        <ListItemText
-                          primary={course.title}
-                          primaryTypographyProps={{
-                            fontSize: '0.875rem',
-                          }}
-                        />
+                        <ListItemText primary={course.title} />
                         {'progress' in course &&
                           course.progress?.state ===
                             CourseProgressState.Pass && (
@@ -241,10 +229,3 @@ export function CardContainer(props: Props & CourseProps) {
     </Link>
   );
 }
-
-const Row = styled(Box)(() => ({
-  justifyContent: 'start',
-  gap: '0.5rem',
-  flexDirection: 'row',
-  width: '100%',
-}));

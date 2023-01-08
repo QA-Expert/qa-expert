@@ -1,15 +1,15 @@
 import MuiBox from '@mui/material/Box';
 import { BoxProps } from '@mui/material';
 
-export function Box(props: BoxProps) {
+export function Row(props: BoxProps) {
   return (
     <MuiBox
       {...props}
       display="flex"
-      flexDirection="column"
-      gap={'0.5rem'}
-      justifyContent="center"
+      justifyContent="start"
       alignItems="center"
+      width="100%"
+      gap="0.5rem"
     />
   );
 }

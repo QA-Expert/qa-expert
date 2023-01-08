@@ -30,7 +30,7 @@ export default function Main({
       sx={{
         flexDirection: 'row',
         flex: 1,
-        backgroundColor: 'primary.dark',
+        backgroundColor: 'background',
       }}
       component="main"
       {...delegated}

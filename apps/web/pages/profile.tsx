@@ -19,6 +19,7 @@ import { useError } from '../utils/hooks';
 import { APOLLO_STATE_PROP_NAME, initializeApollo } from '../apollo/client';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { GetBadgesSubmittedProgressesUserQuery } from '../src/__generated__/graphql';
+import { Row } from '../src/components/row/row';
 
 function Account(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -80,7 +81,7 @@ function Account(
             alt="user profile image"
           />
 
-          <Box sx={{ flexDirection: 'row', gap: '0.5rem' }}>
+          <Row sx={{ justifyContent: 'center' }}>
             <Typography variant="h2" sx={{ fontSize: '2rem' }}>
               {user?.firstName
                 ? `${user?.firstName} ${user?.lastName}`
@@ -94,7 +95,7 @@ function Account(
                 <EditIcon color="primary" />
               </IconButton>
             )}
-          </Box>
+          </Row>
 
           <Button onClick={handleOpenChangePasswordModal} variant="contained">
             Change Password
