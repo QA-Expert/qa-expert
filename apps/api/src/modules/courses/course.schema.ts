@@ -17,10 +17,10 @@ registerEnumType(CourseType, {
 });
 
 export enum CourseLevel {
-  BEGINNER = 'beginner',
-  INTERMEDIATE = 'intermediate',
-  ADVANCED = 'advanced',
-  EXPERT = 'expert',
+  BEGINNER,
+  INTERMEDIATE,
+  ADVANCED,
+  EXPERT,
 }
 
 registerEnumType(CourseLevel, {
@@ -49,7 +49,7 @@ export class Course extends mongoose.Document {
   @Field(() => CourseType)
   type: CourseType;
 
-  @Prop({ type: String, enum: CourseLevel, required: true })
+  @Prop({ type: Number, enum: CourseLevel, required: true })
   @Field(() => CourseLevel, {
     description:
       'Defines level of skill that user gains after finishing the course',
