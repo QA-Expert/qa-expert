@@ -44,6 +44,7 @@ export class CourseService {
         path: 'recommendedCourses',
         model: Course.name,
       })
+      .sort([['level', 'asc']])
       .exec();
   }
 
