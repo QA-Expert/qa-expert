@@ -28,6 +28,15 @@ registerEnumType(CourseLevel, {
   description: 'Defines the level of the course',
 });
 
+export enum Tag {
+  AI = 'AI',
+}
+
+registerEnumType(Tag, {
+  name: 'Tag',
+  description: 'Defines the course tags',
+});
+
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // TODO: add description to all props
@@ -78,6 +87,14 @@ export class Course extends mongoose.Document {
     description: 'Next recommended courses',
   })
   recommendedCourses: Course[];
+
+  @Prop({ type: [{ type: String, enum: Tag }], default: [] })
+  @Field(() => [Tag], {
+    defaultValue: [],
+    description:
+      'Collection of strings that describe features of the course. Help to filter courses by specific tag/s',
+  })
+  tags: Tag[];
 
   @Field(() => Badge, {
     nullable: true,

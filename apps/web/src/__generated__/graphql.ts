@@ -58,6 +58,8 @@ export type Course = {
   progress: TotalCourseProgress;
   /** Next recommended courses */
   recommendedCourses: Array<Course>;
+  /** Collection of strings that describe features of the course. Help to filter courses by specific tag/s */
+  tags: Array<Tag>;
   /** Course title */
   title: Scalars['String'];
   type: CourseType;
@@ -271,6 +273,11 @@ export type SubmittedProgress = {
   totalProgress: Scalars['Float'];
   user: Scalars['String'];
 };
+
+/** Defines the course tags */
+export enum Tag {
+  Ai = 'AI',
+}
 
 export type TotalCourseProgress = {
   __typename?: 'TotalCourseProgress';
@@ -491,6 +498,7 @@ export type GetAllCoursesQuery = {
     type: CourseType;
     level: CourseLevel;
     description: string;
+    tags: Array<Tag>;
     pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
     recommendedCourses: Array<{
       __typename?: 'Course';
@@ -523,6 +531,7 @@ export type GetAllCoursesPublicQuery = {
     type: CourseType;
     level: CourseLevel;
     description: string;
+    tags: Array<Tag>;
     pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
     recommendedCourses: Array<{
       __typename?: 'Course';
@@ -1606,6 +1615,7 @@ export const GetAllCoursesDocument = {
                     ],
                   },
                 },
+                { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'progress' },
@@ -1672,6 +1682,7 @@ export const GetAllCoursesPublicDocument = {
                     ],
                   },
                 },
+                { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'recommendedCourses' },
