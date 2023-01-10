@@ -566,6 +566,26 @@ export type GetCourseQuery = {
   };
 };
 
+export type GetCourseProgressAndBadgeQueryVariables = Exact<{
+  _id: Scalars['String'];
+}>;
+
+export type GetCourseProgressAndBadgeQuery = {
+  __typename?: 'Query';
+  course: {
+    __typename?: 'Course';
+    _id: string;
+    progress: {
+      __typename?: 'TotalCourseProgress';
+      pass: number;
+      fail: number;
+      state: CourseProgressState;
+      updatedAt: string;
+    };
+    badge?: { __typename?: 'Badge'; _id: string } | null;
+  };
+};
+
 export type GetUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUserQuery = {
@@ -1784,6 +1804,83 @@ export const GetCourseDocument = {
     ...PageFragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<GetCourseQuery, GetCourseQueryVariables>;
+export const GetCourseProgressAndBadgeDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetCourseProgressAndBadge' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: '_id' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'course' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: '_id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: '_id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'progress' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'pass' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'fail' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'updatedAt' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'badge' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetCourseProgressAndBadgeQuery,
+  GetCourseProgressAndBadgeQueryVariables
+>;
 export const GetUserDocument = {
   kind: 'Document',
   definitions: [

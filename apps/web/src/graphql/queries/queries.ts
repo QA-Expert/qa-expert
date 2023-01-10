@@ -72,6 +72,23 @@ export const GET_COURSE = gql(/* GraphQL */ `
   }
 `);
 
+export const GET_COURSE_PROGRESS_AND_BADGE = gql(/* GraphQL */ `
+  query GetCourseProgressAndBadge($_id: String!) {
+    course(_id: $_id) {
+      _id
+      progress {
+        pass
+        fail
+        state
+        updatedAt
+      }
+      badge {
+        _id
+      }
+    }
+  }
+`);
+
 export const GET_USER = gql(/* GraphQL */ `
   query GetUser {
     user {

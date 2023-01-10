@@ -34,6 +34,8 @@ const documents = {
     types.GetAllCoursesPublicDocument,
   '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n      }\n      pages {\n        ...PageFragment\n      }\n    }\n  }\n':
     types.GetCourseDocument,
+  '\n  query GetCourseProgressAndBadge($_id: String!) {\n    course(_id: $_id) {\n      _id\n      progress {\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n':
+    types.GetCourseProgressAndBadgeDocument,
   '\n  query GetUser {\n    user {\n      _id\n      email\n      firstName\n      lastName\n      roles\n      badges\n    }\n  }\n':
     types.GetUserDocument,
   '\n  query GetBadgesSubmittedProgressesUser {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n      }\n    }\n    user {\n      _id\n      email\n      firstName\n      lastName\n      roles\n      badges\n    }\n  }\n':
@@ -88,6 +90,9 @@ export function gql(
 export function gql(
   source: '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n      }\n      pages {\n        ...PageFragment\n      }\n    }\n  }\n',
 ): typeof documents['\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n      }\n      pages {\n        ...PageFragment\n      }\n    }\n  }\n'];
+export function gql(
+  source: '\n  query GetCourseProgressAndBadge($_id: String!) {\n    course(_id: $_id) {\n      _id\n      progress {\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n',
+): typeof documents['\n  query GetCourseProgressAndBadge($_id: String!) {\n    course(_id: $_id) {\n      _id\n      progress {\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n'];
 export function gql(
   source: '\n  query GetUser {\n    user {\n      _id\n      email\n      firstName\n      lastName\n      roles\n      badges\n    }\n  }\n',
 ): typeof documents['\n  query GetUser {\n    user {\n      _id\n      email\n      firstName\n      lastName\n      roles\n      badges\n    }\n  }\n'];

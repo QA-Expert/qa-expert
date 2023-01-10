@@ -1,10 +1,20 @@
 import { Box } from '../box/box';
-import { TotalCourseProgress as Props } from '../../__generated__/graphql';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
+import { GET_COURSE_PROGRESS_AND_BADGE } from '../../graphql/queries/queries';
+import { useQuery } from '@apollo/client';
 
-export function ProgressBar(props: Props) {
-  const hasNoProgress = !props.pass && !props.fail;
+type Props = {
+  _id: string;
+};
+
+export function ProgressBar({ _id }: Props) {
+  const { data: courseData } = useQuery(GET_COURSE_PROGRESS_AND_BADGE, {
+    variables: { _id },
+  });
+  const course = courseData?.course;
+  const progress = course?.progress;
+  const hasNoProgress = !progress?.pass && !progress?.fail;
 
   return (
     <Box sx={{ width: '100%', height: '2rem', justifyContent: 'flex-end' }}>
@@ -29,23 +39,23 @@ export function ProgressBar(props: Props) {
           </Typography>
         )}
 
-        {props?.pass ? (
+        {progress?.pass ? (
           //TODO: turn into styled  component
           <Box
             role="progressbar"
             aria-valuemin={0}
             aria-valuemax={100}
             aria-label="Percentage of passed pages"
-            aria-valuenow={props.pass}
+            aria-valuenow={progress.pass}
             sx={{
-              width: `${props.pass}%`,
+              width: `${progress.pass}%`,
               height: 'inherit',
               backgroundColor: 'secondary.main',
               position: 'relative',
             }}
           >
             {/* TODO: turn into styled  component */}
-            <Tooltip title={`${props.pass}%`} arrow disableFocusListener>
+            <Tooltip title={`${progress.pass}%`} arrow disableFocusListener>
               <Typography
                 sx={{
                   padding: '0 0.25rem 0 0.25rem',
@@ -56,29 +66,29 @@ export function ProgressBar(props: Props) {
                   fontSize: '0.875rem',
                 }}
               >
-                {props.pass}%
+                {progress.pass}%
               </Typography>
             </Tooltip>
           </Box>
         ) : null}
 
-        {props?.fail ? (
+        {progress?.fail ? (
           //TODO: turn into styled  component
           <Box
             role="progressbar"
             aria-valuemin={0}
             aria-valuemax={100}
             aria-label="Percentage of failed pages"
-            aria-valuenow={props.fail}
+            aria-valuenow={progress.fail}
             sx={{
-              width: `${props.fail}%`,
+              width: `${progress.fail}%`,
               height: 'inherit',
               backgroundColor: 'warning.main',
               position: 'relative',
             }}
           >
             {/* TODO: turn into styled  component */}
-            <Tooltip title={`${props.fail}%`} arrow disableFocusListener>
+            <Tooltip title={`${progress.fail}%`} arrow disableFocusListener>
               <Typography
                 sx={{
                   padding: '0 0.25rem 0 0.25rem',
@@ -89,7 +99,7 @@ export function ProgressBar(props: Props) {
                   fontSize: '0.875rem',
                 }}
               >
-                {props.fail}%
+                {progress.fail}%
               </Typography>
             </Tooltip>
           </Box>

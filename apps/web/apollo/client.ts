@@ -35,14 +35,8 @@ const setAuthLink = (ctx?: GetServerSidePropsContext) =>
   });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-  let isAuthError = false;
-
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path, extensions }) => {
-      if (extensions.code === 'UNAUTHENTICATED') {
-        isAuthError = true;
-      }
-
       console.error(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}, Extension: ${extensions.code}`,
       );
@@ -50,10 +44,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
   if (networkError) {
     console.error(`[Network error]: ${networkError}`);
-  }
-
-  if (isAuthError) {
-    console.log('TEST');
   }
 });
 

@@ -116,13 +116,7 @@ export function CardContainer(props: CourseProps) {
             />
           </Box>
 
-          {isUserLoggedInBasedOnProgress && (
-            <CourseStates
-              _id={props._id}
-              progress={props.progress}
-              badge={props.badge}
-            />
-          )}
+          {isUserLoggedInBasedOnProgress && <CourseStates _id={props._id} />}
         </CardMedia>
 
         <CourseMetrics pages={props.pages} />
@@ -169,7 +163,7 @@ export function CardContainer(props: CourseProps) {
         </ButtonGroup>
       </CardActions>
 
-      {isUserLoggedInBasedOnProgress && <ProgressBar {...props.progress} />}
+      {isUserLoggedInBasedOnProgress && <ProgressBar _id={props._id} />}
 
       <Accordion
         sx={{

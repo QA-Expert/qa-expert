@@ -7,27 +7,28 @@ import {
 import {
   GET_ALL_COURSES,
   GET_COURSE,
+  GET_COURSE_PROGRESS_AND_BADGE,
   GET_USER,
 } from '../../graphql/queries/queries';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import {
-  CourseProgressState,
-  GetAllCoursesQuery,
-} from '../../__generated__/graphql';
 import Tooltip from '@mui/material/Tooltip';
 import { useDurationToRetakeQuiz } from './card.hook';
 import { useError } from '../../../utils/hooks';
 import { Box } from '../box/box';
 import { Timer } from '../timer/timer';
 import Typography from '@mui/material/Typography';
+import { CourseProgressState } from '../../__generated__/graphql';
 
-type Props = Pick<
-  GetAllCoursesQuery['courses'][number],
-  '_id' | 'progress' | 'badge'
->;
+type Props = {
+  _id: string;
+};
 
-export const CourseStates = ({ _id, progress, badge }: Props) => {
+export const CourseStates = ({ _id }: Props) => {
   const { data } = useQuery(GET_USER);
+  const { data: courseData } = useQuery(GET_COURSE_PROGRESS_AND_BADGE, {
+    variables: { _id },
+  });
+  const course = courseData?.course;
   const user = data?.user;
   const [claimBadge, { error: badgeError }] = useMutation(CLAIM_BADGE, {
     refetchQueries: [
@@ -53,17 +54,21 @@ export const CourseStates = ({ _id, progress, badge }: Props) => {
 
   useError([badgeError?.message, progressError?.message]);
 
-  const isPassedCourse = progress.state === CourseProgressState.Pass;
-  const isFailedCourse = progress.state === CourseProgressState.Fail;
-  const isBadgeClaimed = badge?._id
-    ? user?.badges?.includes(badge?._id)
+  const { canRetakeQuiz, duration } = useDurationToRetakeQuiz(
+    course?.progress.updatedAt ?? new Date().toUTCString(),
+  );
+
+  if (!course) {
+    return null;
+  }
+
+  const isPassedCourse = course.progress.state === CourseProgressState.Pass;
+  const isFailedCourse = course.progress.state === CourseProgressState.Fail;
+  const isBadgeClaimed = course.badge?._id
+    ? user?.badges?.includes(course.badge?._id)
     : false;
   const isNonInitState =
     (isPassedCourse && !isBadgeClaimed) || isFailedCourse || isBadgeClaimed;
-
-  const { canRetakeQuiz, duration } = useDurationToRetakeQuiz(
-    progress.updatedAt,
-  );
 
   return (
     <Box
@@ -88,15 +93,20 @@ export const CourseStates = ({ _id, progress, badge }: Props) => {
         </Box>
       )}
 
-      {badge?._id && isPassedCourse && !isBadgeClaimed && (
+      {course.badge?._id && isPassedCourse && !isBadgeClaimed && (
         <Button
           variant="contained"
           color="success"
           onClick={async (e) => {
             e.preventDefault();
-            await claimBadge({
-              variables: { badgeId: badge?._id },
-            });
+
+            if (course.badge?._id) {
+              await claimBadge({
+                variables: { badgeId: course.badge._id },
+              });
+            } else {
+              throw new Error('Sorry, There is no badge to claim');
+            }
           }}
         >
           Claim Reward
