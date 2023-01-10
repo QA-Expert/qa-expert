@@ -52,6 +52,8 @@ export type CourseProps = LoggedInUserCourses | PublicCourses;
 
 export function CardContainer(props: CourseProps) {
   const theme = useTheme();
+  // TODO: Better way to figure out if user is Logged in
+  // We need to look into cookie for access_token and validate it on UI as well
   const isUserLoggedInBasedOnProgress = 'progress' in props;
 
   return (

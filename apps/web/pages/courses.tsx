@@ -44,6 +44,8 @@ const CoursesPage = (
             flexWrap: 'wrap',
           }}
         >
+          {/* TODO: Try to pass only property that are required for rendering card for not logged in user only
+          and get the rest of the properties from Apollo cache if they exist */}
           {data &&
             'courses' in data &&
             data?.courses?.map((course) => (
