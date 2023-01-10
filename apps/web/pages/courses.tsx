@@ -13,7 +13,7 @@ import {
 } from '../src/__generated__/graphql';
 import { useError } from '../utils/hooks';
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
-import { CardContainer } from '../src/components/card/card';
+import { Card } from '../src/components/card/card';
 import { isAuthTokenValid } from '../utils/auth';
 
 const CoursesPage = (
@@ -47,13 +47,13 @@ const CoursesPage = (
           {data &&
             'courses' in data &&
             data?.courses?.map((course) => (
-              <CardContainer key={course._id} {...course} />
+              <Card key={course._id} {...course} />
             ))}
 
           {data &&
             'coursesPublic' in data &&
             data?.coursesPublic?.map((course) => (
-              <CardContainer key={course._id} {...course} />
+              <Card key={course._id} {...course} />
             ))}
         </Box>
       </Box>
