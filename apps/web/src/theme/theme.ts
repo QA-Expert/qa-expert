@@ -39,6 +39,15 @@ const base: ThemeOptions = {
         }),
       },
     },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          ':last-child': {
+            paddingBottom: 0,
+          },
+        },
+      },
+    },
   },
 };
 
