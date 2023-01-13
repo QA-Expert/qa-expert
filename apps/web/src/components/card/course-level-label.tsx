@@ -6,9 +6,10 @@ import { getBackgroundColorForLevelLabel } from './handlers';
 
 type Props = {
   level: CourseLevel;
+  isMinified?: boolean;
 };
 
-export function CourseLevelLabel({ level }: Props) {
+export function CourseLevelLabel({ level, isMinified }: Props) {
   const theme = useTheme();
 
   return (
@@ -16,15 +17,12 @@ export function CourseLevelLabel({ level }: Props) {
       sx={{
         backgroundColor: getBackgroundColorForLevelLabel(level, theme),
       }}
-      label={level.toUpperCase()}
+      label={isMinified ? level.toUpperCase()[0] : level.toUpperCase()}
     />
   );
 }
 
 const Label = styled(Chip)(({ theme }) => ({
-  position: 'absolute',
-  top: 0,
-  right: 0,
   fontSize: '0.75rem',
   borderRadius: '0 0.75rem 0',
   color: theme.palette.primary.main,

@@ -16,7 +16,18 @@ const base: ThemeOptions = {
         root: ({ theme }) => ({
           backgroundColor: theme.palette.primary.light,
           width: '100%',
+          textAlign: 'left',
+          padding: '1rem',
         }),
+      },
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          ':last-child': {
+            paddingBottom: 0,
+          },
+        },
       },
     },
     MuiPaper: {
@@ -46,12 +57,18 @@ const base: ThemeOptions = {
         }),
       },
     },
-    MuiCardContent: {
+    MuiListItemIcon: {
       styleOverrides: {
         root: {
-          ':last-child': {
-            paddingBottom: 0,
-          },
+          minWidth: 0,
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        label: {
+          minWidth: '2rem',
+          textAlign: 'center',
         },
       },
     },

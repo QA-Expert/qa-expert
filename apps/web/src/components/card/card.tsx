@@ -80,12 +80,13 @@ export function CardContainer(props: CourseProps) {
       }}
       raised
     >
-      <CourseLevelLabel level={props.level} />
+      <Row sx={{ backgroundColor: 'primary.light' }}>
+        <CardHeader title={props.title} sx={{ height: '5rem' }} />
 
-      <CardHeader
-        title={props.title}
-        sx={{ textAlign: 'center', height: '6rem' }}
-      />
+        <Box sx={{ alignSelf: 'flex-start' }}>
+          <CourseLevelLabel level={props.level} />
+        </Box>
+      </Row>
 
       <Row
         sx={{
@@ -132,6 +133,7 @@ export function CardContainer(props: CourseProps) {
           marginTop: 'auto',
           alignSelf: 'start',
           width: '100%',
+          paddingRight: 0,
         }}
       >
         <ButtonGroup
@@ -242,13 +244,17 @@ export function CardContainer(props: CourseProps) {
                       width: '100%',
                     }}
                   >
-                    <ListItemText primary={course.title} />
-                    {'progress' in course &&
-                      course.progress?.state === CourseProgressState.Pass && (
-                        <ListItemIcon>
-                          <DoneAll />
-                        </ListItemIcon>
-                      )}
+                    <Row sx={{ gap: '1rem' }}>
+                      <CourseLevelLabel isMinified level={course.level} />
+                      <ListItemText primary={course.title} sx={{ flex: 1 }} />
+
+                      {'progress' in course &&
+                        course.progress?.state === CourseProgressState.Pass && (
+                          <ListItemIcon>
+                            <DoneAll color="success" />
+                          </ListItemIcon>
+                        )}
+                    </Row>
                   </ListItem>
                 </Link>
               ))}
