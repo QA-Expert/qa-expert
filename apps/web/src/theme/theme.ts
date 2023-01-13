@@ -11,6 +11,14 @@ const base: ThemeOptions = {
         }),
       },
     },
+    MuiCardHeader: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.primary.light,
+          width: '100%',
+        }),
+      },
+    },
     MuiPaper: {
       styleOverrides: {
         root: ({ theme }) => ({
@@ -20,9 +28,8 @@ const base: ThemeOptions = {
     },
     MuiButton: {
       styleOverrides: {
-        root: ({ theme }) => ({
-          backgroundColor: theme.palette.secondary.main,
-          color: theme.palette.text.primary,
+        root: () => ({
+          fontWeight: 'bold',
           borderRadius: '2rem',
         }),
       },
@@ -58,7 +65,7 @@ export const dark: ThemeOptions = merge(base, {
     text: { primary: '#fff', secondary: '#C1BFD4' },
     primary: {
       main: '#2E2D3F',
-      light: '#2E2D3F',
+      light: '#3D3C52',
       dark: '#232233',
       contrastText: '#fff',
     },
