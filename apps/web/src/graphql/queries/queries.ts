@@ -15,6 +15,7 @@ export const GET_ALL_COURSES = gql(/* GraphQL */ `
       recommendedCourses {
         _id
         title
+        level
         progress {
           state
         }
@@ -49,6 +50,7 @@ export const GET_ALL_COURSES_PUBLIC = gql(/* GraphQL */ `
       recommendedCourses {
         _id
         title
+        level
       }
     }
   }
