@@ -95,8 +95,8 @@ export const CourseStates = ({ _id }: Props) => {
         <>
           {isBadgeClaimed ? (
             <>
-              <Box sx={{ position: 'absolute', top: 0, left: 0 }}>
-                <Flag text={'Completed'} />
+              <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
+                <Flag text={'Completed'} direction="left" />
               </Box>
 
               <Tooltip
