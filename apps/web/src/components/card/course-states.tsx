@@ -26,7 +26,7 @@ type Props = {
 
 export const CourseStates = ({ _id }: Props) => {
   const { data } = useQuery(GET_USER);
-  // NOTE Fetching course user specific data here in that component with useQuery
+  // NOTE: Fetching course user specific data here in that component with useQuery
   // and not using data that came from SSR because when we send mutation query and fetch mutated course there is no way UI knows about changes in Apollo Cache
   // Where useQuery is hook that listens to the cache changes and keeps UI in sync
   const { data: courseData } = useQuery(GET_COURSE_PROGRESS_AND_BADGE, {

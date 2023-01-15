@@ -32,8 +32,9 @@ const base: ThemeOptions = {
     },
     MuiPaper: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme, ownerState }) => ({
           backgroundColor: theme.palette.primary.main,
+          borderRadius: ownerState.square ? 0 : '0.75rem',
         }),
       },
     },
@@ -48,6 +49,16 @@ const base: ThemeOptions = {
     MuiSvgIcon: {
       defaultProps: {
         color: 'secondary',
+      },
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          ':last-of-type': {
+            borderBottomLeftRadius: ownerState.square ? 0 : '0.75rem',
+            borderBottomRightRadius: ownerState.square ? 0 : '0.75rem',
+          },
+        }),
       },
     },
     MuiAccordionSummary: {
