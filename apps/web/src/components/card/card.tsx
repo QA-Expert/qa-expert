@@ -1,13 +1,7 @@
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import Image from 'next/image';
-import {
-  CourseProgressState,
-  GetAllCoursesPublicQuery,
-  GetAllCoursesQuery,
-} from '../../__generated__/graphql';
+import { CourseProgressState } from '../../__generated__/graphql';
 import IconButton from '@mui/material/IconButton';
 import CardActions from '@mui/material/CardActions';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -31,25 +25,8 @@ import { ArrowIcon } from '../icons/arrow';
 import { CourseLevelLabel } from './course-level-label';
 import { Box } from '../box/box';
 import Button from '@mui/material/Button';
-
-type LoggedInUserCourses = Pick<
-  GetAllCoursesQuery['courses'][number],
-  | '_id'
-  | 'title'
-  | 'description'
-  | 'pages'
-  | 'progress'
-  | 'badge'
-  | 'recommendedCourses'
-  | 'level'
->;
-
-type PublicCourses = Pick<
-  GetAllCoursesPublicQuery['coursesPublic'][number],
-  '_id' | 'title' | 'description' | 'pages' | 'recommendedCourses' | 'level'
->;
-
-export type CourseProps = LoggedInUserCourses | PublicCourses;
+import { CourseProps } from '../../../pages/courses';
+import { CardImage } from './card-image';
 
 export function CardContainer(props: CourseProps) {
   const theme = useTheme();
@@ -96,32 +73,15 @@ export function CardContainer(props: CourseProps) {
           },
         }}
       >
-        <CardMedia
-          sx={{
-            display: 'flex',
-            justifyContent: 'start',
-            position: 'relative',
-          }}
+        <CardImage
+          alt={props.title}
+          src="/images/course-default-card.svg"
+          width={250}
+          breakPointWidth={350}
+          height={150}
         >
-          <Box
-            sx={{
-              width: '250px',
-              height: '150px',
-              [theme.breakpoints.down('md')]: {
-                width: '320px',
-              },
-            }}
-          >
-            <Image
-              alt={`${props.title}`}
-              layout="fill"
-              src={`/images/course-default-card.svg`}
-              objectFit="cover"
-            />
-          </Box>
-
           {isUserLoggedInBasedOnProgress && <CourseStates _id={props._id} />}
-        </CardMedia>
+        </CardImage>
 
         <CourseMetrics pages={props.pages} />
       </Row>
