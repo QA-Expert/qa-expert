@@ -5,6 +5,7 @@ import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import { Box } from '../box/box';
 import Pagination from '@mui/material/Pagination';
 import Paper from '@mui/material/Paper';
+import { Row } from '../row/row';
 
 interface Props {
   children: ReactNode[];
@@ -39,43 +40,47 @@ export function PageCarousel({ children }: Props) {
 
   return (
     <Paper
-      component={Box}
+      component={Row}
       sx={{
         height: '100%',
         width: '100%',
         flexDirection: 'row',
       }}
     >
-      {children?.length > 1 && (
-        <IconButton
-          onClick={handleBackwardClick}
-          disabled={currentPageIndex === 0}
-        >
-          <ArrowBackIos />
-        </IconButton>
-      )}
-
       <Box sx={{ gap: '1rem', height: '100%', width: '100%', padding: '2rem' }}>
+        {/* Current page itself */}
         {children[currentPageIndex]}
-        {children.length && (
-          <Pagination
-            shape="rounded"
-            // MUI pagination takes pages position not an index
-            page={currentPageIndex + 1}
-            onChange={handleChange}
-            count={children.length}
-          />
-        )}
-      </Box>
 
-      {children?.length > 1 && (
-        <IconButton
-          onClick={handleForwardClick}
-          disabled={currentPageIndex === children.length - 1}
-        >
-          <ArrowForwardIos />
-        </IconButton>
-      )}
+        <Row sx={{ justifyContent: 'center' }}>
+          {children?.length > 1 && (
+            <IconButton
+              onClick={handleBackwardClick}
+              disabled={currentPageIndex === 0}
+            >
+              <ArrowBackIos />
+            </IconButton>
+          )}
+
+          {children.length && (
+            <Pagination
+              shape="circular"
+              // MUI pagination takes pages position not an index
+              page={currentPageIndex + 1}
+              onChange={handleChange}
+              count={children.length}
+            />
+          )}
+
+          {children?.length > 1 && (
+            <IconButton
+              onClick={handleForwardClick}
+              disabled={currentPageIndex === children.length - 1}
+            >
+              <ArrowForwardIos />
+            </IconButton>
+          )}
+        </Row>
+      </Box>
     </Paper>
   );
 }

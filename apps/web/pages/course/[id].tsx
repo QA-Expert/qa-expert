@@ -7,6 +7,7 @@ import { Box } from '../../src/components/box/box';
 import Layout from '../../src/components/layout/layout';
 import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
 import Page from '../../src/components/page/page';
+import { Row } from '../../src/components/row/row';
 import Sidebar from '../../src/components/sidebar/sidebar';
 import { GET_COURSE } from '../../src/graphql/queries/queries';
 import { GetCourseQuery } from '../../src/__generated__/graphql';
@@ -27,9 +28,8 @@ const Course = (
 
   return (
     <Layout>
-      <Sidebar>Test</Sidebar>
       {data ? (
-        <Box
+        <Row
           sx={{
             width: '100%',
             height: '100%',
@@ -37,24 +37,24 @@ const Course = (
             padding: '1rem',
             gap: '1rem',
             borderRadius: 0,
+            position: 'relative',
           }}
         >
-          <Box
-            sx={{
-              width: '100%',
-              gap: '1rem',
-            }}
-          >
-            <Typography variant="h2" sx={{ fontSize: '1.5rem' }}>
-              {data.course.title}
-            </Typography>
-            <Typography variant="h3" sx={{ fontSize: '1rem' }}>
-              {data.course.description}
-            </Typography>
-          </Box>
+          <Sidebar>
+            {`Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry's standard dummy text
+            ever since the 1500s, when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book. It has survived not
+            only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s
+            with the release of Letraset sheets containing Lorem Ipsum passages,
+            and more recently with desktop publishing software like Aldus
+            PageMaker including versions of Lorem Ipsum`}
+          </Sidebar>
 
           <Box
             sx={{
+              height: '100%',
               width: '100%',
               flexGrow: 1,
             }}
@@ -65,7 +65,7 @@ const Course = (
               ))}
             </PageCarousel>
           </Box>
-        </Box>
+        </Row>
       ) : null}
     </Layout>
   );
