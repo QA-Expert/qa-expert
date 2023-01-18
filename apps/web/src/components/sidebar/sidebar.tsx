@@ -81,6 +81,7 @@ export default function Sidebar({ children }: Props) {
             overflow: 'hidden',
             height: '100%',
             justifyContent: 'start',
+            padding: isOpen ? '1rem' : 0,
           }}
         >
           {children}
