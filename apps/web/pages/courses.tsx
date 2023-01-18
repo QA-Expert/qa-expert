@@ -55,9 +55,8 @@ const CoursesPage = (
     <Layout>
       <Box
         sx={{
-          justifyContent: 'start',
           gap: '2rem',
-          paddingBottom: '2rem',
+          padding: '2rem',
         }}
       >
         {completedCourses?.length ? (

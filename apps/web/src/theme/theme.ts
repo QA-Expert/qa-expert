@@ -3,6 +3,11 @@ import { merge } from 'lodash';
 
 const base: ThemeOptions = {
   components: {
+    MuiLink: {
+      defaultProps: {
+        color: 'warning.main',
+      },
+    },
     MuiCard: {
       styleOverrides: {
         root: ({ theme }) => ({
@@ -39,6 +44,9 @@ const base: ThemeOptions = {
       },
     },
     MuiButton: {
+      defaultProps: {
+        color: 'secondary',
+      },
       styleOverrides: {
         root: () => ({
           fontWeight: 'bold',
