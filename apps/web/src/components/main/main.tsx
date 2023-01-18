@@ -31,7 +31,6 @@ export default function Main({
         flexDirection: 'row',
         flex: 1,
         backgroundColor: 'background',
-        padding: '2rem',
       }}
       component="main"
       {...delegated}

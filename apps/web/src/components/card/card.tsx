@@ -77,7 +77,7 @@ export function CardContainer(props: CourseProps) {
           alt={props.title}
           src="/images/course-default-card.svg"
           width={250}
-          breakPointWidth={350}
+          breakPointWidth={320}
           height={150}
         >
           {isUserLoggedInBasedOnProgress && <CourseStates _id={props._id} />}

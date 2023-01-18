@@ -181,6 +181,7 @@ function Register() {
               </Typography>
 
               <Button
+                variant="contained"
                 disabled={
                   isSubmitting ||
                   Boolean(errors.email) ||
