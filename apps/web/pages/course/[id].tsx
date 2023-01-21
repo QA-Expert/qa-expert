@@ -1,4 +1,5 @@
 import { ApolloError, useQuery } from '@apollo/client';
+import Typography from '@mui/material/Typography';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { APOLLO_STATE_PROP_NAME, initializeApollo } from '../../apollo/client';
