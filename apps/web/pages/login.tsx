@@ -138,6 +138,7 @@ function Login() {
               </Link>
 
               <Button
+                variant="contained"
                 disabled={
                   isSubmitting ||
                   Boolean(errors.email) ||

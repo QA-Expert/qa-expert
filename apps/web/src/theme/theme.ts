@@ -3,6 +3,11 @@ import { merge } from 'lodash';
 
 const base: ThemeOptions = {
   components: {
+    MuiLink: {
+      defaultProps: {
+        color: 'warning.main',
+      },
+    },
     MuiCard: {
       styleOverrides: {
         root: ({ theme }) => ({
@@ -11,31 +16,13 @@ const base: ThemeOptions = {
         }),
       },
     },
-    MuiPaper: {
+    MuiCardHeader: {
       styleOverrides: {
         root: ({ theme }) => ({
-          backgroundColor: theme.palette.primary.main,
-        }),
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          backgroundColor: theme.palette.secondary.main,
-          color: theme.palette.text.primary,
-          borderRadius: '2rem',
-        }),
-      },
-    },
-    MuiSvgIcon: {
-      defaultProps: {
-        color: 'secondary',
-      },
-    },
-    MuiAccordionSummary: {
-      styleOverrides: {
-        root: () => ({
-          gap: '0.5rem',
+          backgroundColor: theme.palette.primary.light,
+          width: '100%',
+          textAlign: 'left',
+          padding: '1rem',
         }),
       },
     },
@@ -45,6 +32,62 @@ const base: ThemeOptions = {
           ':last-child': {
             paddingBottom: 0,
           },
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: ({ theme, ownerState }) => ({
+          backgroundColor: theme.palette.primary.main,
+          borderRadius: ownerState.square ? 0 : '0.75rem',
+        }),
+      },
+    },
+    MuiButton: {
+      defaultProps: {
+        color: 'secondary',
+      },
+      styleOverrides: {
+        root: () => ({
+          fontWeight: 'bold',
+          borderRadius: '2rem',
+        }),
+      },
+    },
+    MuiSvgIcon: {
+      defaultProps: {
+        color: 'secondary',
+      },
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          ':last-of-type': {
+            borderBottomLeftRadius: ownerState.square ? 0 : '0.75rem',
+            borderBottomRightRadius: ownerState.square ? 0 : '0.75rem',
+          },
+        }),
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: () => ({
+          gap: '0.5rem',
+        }),
+      },
+    },
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          minWidth: 0,
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        label: {
+          minWidth: '2rem',
+          textAlign: 'center',
         },
       },
     },
@@ -58,7 +101,7 @@ export const dark: ThemeOptions = merge(base, {
     text: { primary: '#fff', secondary: '#C1BFD4' },
     primary: {
       main: '#2E2D3F',
-      light: '#2E2D3F',
+      light: '#3D3C52',
       dark: '#232233',
       contrastText: '#fff',
     },

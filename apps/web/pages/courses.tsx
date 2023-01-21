@@ -3,23 +3,51 @@ import {
   GET_ALL_COURSES,
   GET_ALL_COURSES_PUBLIC,
 } from '../src/graphql/queries/queries';
-import Typography from '@mui/material/Typography';
 import { Box } from '../src/components/box/box';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { initializeApollo, APOLLO_STATE_PROP_NAME } from '../apollo/client';
 import {
+  CourseProgressState,
   GetAllCoursesPublicQuery,
   GetAllCoursesQuery,
 } from '../src/__generated__/graphql';
 import { useError } from '../utils/hooks';
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
-import { Card } from '../src/components/card/card';
+import { CardContainer } from '../src/components/card/card';
 import { isAuthTokenValid } from '../utils/auth';
+import { CompletedCoursesSection } from '../src/components/completed-courses-section/completed-courses-section';
+import { Row } from '../src/components/row/row';
+
+export type LoggedInUserCourses = Pick<
+  GetAllCoursesQuery['courses'][number],
+  | '_id'
+  | 'title'
+  | 'description'
+  | 'pages'
+  | 'progress'
+  | 'recommendedCourses'
+  | 'level'
+>;
+
+export type PublicCourses = Pick<
+  GetAllCoursesPublicQuery['coursesPublic'][number],
+  '_id' | 'title' | 'description' | 'pages' | 'recommendedCourses' | 'level'
+>;
+
+export type CourseProps = LoggedInUserCourses | PublicCourses;
 
 const CoursesPage = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const { data, error } = props;
+  // TODO: Come up with better way of getting different data set where we don't have to specify type on variable
+  const courses: CourseProps[] | undefined =
+    data && 'coursesPublic' in data ? data?.coursesPublic : data?.courses;
+  const completedCourses = courses?.filter(
+    (course) =>
+      'progress' in course &&
+      course.progress.state === CourseProgressState.Pass,
+  );
 
   useError([error?.message]);
 
@@ -27,37 +55,26 @@ const CoursesPage = (
     <Layout>
       <Box
         sx={{
-          justifyContent: 'start',
           gap: '2rem',
-          paddingBottom: '2rem',
+          padding: '2rem',
         }}
       >
-        <Typography variant="h2" sx={{ fontSize: '3rem' }}>
-          Courses
-        </Typography>
+        {completedCourses?.length ? (
+          <CompletedCoursesSection courses={completedCourses} />
+        ) : null}
 
-        <Box
+        <Row
           sx={{
-            flexDirection: 'row',
+            justifyContent: 'center',
             alignItems: 'flex-start',
             gap: '2rem',
             flexWrap: 'wrap',
           }}
         >
-          {/* TODO: Try to pass only property that are required for rendering card for not logged in user only
-          and get the rest of the properties from Apollo cache if they exist */}
-          {data &&
-            'courses' in data &&
-            data?.courses?.map((course) => (
-              <Card key={course._id} {...course} />
-            ))}
-
-          {data &&
-            'coursesPublic' in data &&
-            data?.coursesPublic?.map((course) => (
-              <Card key={course._id} {...course} />
-            ))}
-        </Box>
+          {courses?.map((course) => (
+            <CardContainer key={course._id} {...course} />
+          ))}
+        </Row>
       </Box>
     </Layout>
   );

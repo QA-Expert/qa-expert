@@ -1,12 +1,12 @@
 import CardContent from '@mui/material/CardContent';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { CourseProps } from '../../../pages/courses';
 import { CourseType } from '../../__generated__/graphql';
 import { Box } from '../box/box';
 import { PagesIcon } from '../icons/pages';
 import { QuizIcon } from '../icons/quiz';
 import { Row } from '../row/row';
-import { CourseProps } from './card-container';
 
 type Props = Pick<CourseProps, 'pages'>;
 
@@ -21,8 +21,10 @@ export function CourseMetrics({ pages }: Props) {
         padding: 0,
         flex: 1,
         paddingRight: '1rem',
+        paddingTop: '1rem',
         [theme.breakpoints.down('md')]: {
           minWidth: '50%',
+          paddingTop: '0',
           paddingRight: '1rem',
           paddingLeft: '1rem',
         },
