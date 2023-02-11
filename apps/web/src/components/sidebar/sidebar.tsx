@@ -1,23 +1,42 @@
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
-import { MouseEvent as MouseEventReact, ReactNode, useState } from 'react';
+import { MouseEvent as MouseEventReact, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Box } from '../box/box';
 import { styled, useTheme } from '@mui/material/styles';
 import { Row } from '../row/row';
 import { debounce } from 'lodash';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton';
+import { GetCourseQuery } from '../../__generated__/graphql';
+
 type Props = {
-  children: ReactNode;
+  description: string;
+  courseInfo: GetCourseQuery['course'];
 };
 
-export default function Sidebar({ children }: Props) {
+type ToggleValue = 'description' | 'navigation';
+
+export default function Sidebar({ description }: Props) {
   const INIT_WIDTH = 320;
   const theme = useTheme();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
   const [width, setWidth] = useState(INIT_WIDTH);
+  const [toggleValue, setToggleValue] = useState<ToggleValue>('description');
 
-  const handler = (mouseDownEvent: MouseEventReact<HTMLButtonElement>) => {
+  const handleToggleChange = (
+    _event: MouseEventReact<HTMLElement, MouseEvent>,
+    toggleValue: ToggleValue,
+  ) => {
+    if (toggleValue !== null) {
+      setToggleValue(toggleValue);
+    }
+  };
+
+  const handlerResizer = (
+    mouseDownEvent: MouseEventReact<HTMLButtonElement>,
+  ) => {
     const startWidth = width;
     const startPosition = mouseDownEvent.pageX;
 
@@ -76,6 +95,7 @@ export default function Sidebar({ children }: Props) {
         }}
       >
         <Box
+          aria-label="side bar content"
           sx={{
             flex: '1',
             overflow: 'hidden',
@@ -84,10 +104,29 @@ export default function Sidebar({ children }: Props) {
             padding: isOpen ? '1rem' : 0,
           }}
         >
-          {children}
+          <Row sx={{ justifyContent: 'center' }}>
+            <ToggleButtonGroup
+              size="small"
+              exclusive
+              onChange={handleToggleChange}
+              aria-label="Navigation or Description toggle"
+              value={toggleValue}
+            >
+              <ToggleButton value="description">Description</ToggleButton>
+              <ToggleButton value="navigation">Navigation</ToggleButton>
+            </ToggleButtonGroup>
+          </Row>
+
+          {toggleValue === 'description' ? (
+            <Row>{description}</Row>
+          ) : (
+            'NAVIGATION'
+          )}
         </Box>
 
         <Row
+          aria-label="expand side bar button"
+          aria-expanded={isOpen}
           sx={{
             gap: 0,
             width: 'auto',
@@ -104,7 +143,7 @@ export default function Sidebar({ children }: Props) {
 
           <Resizer
             type="button"
-            onMouseDown={handler}
+            onMouseDown={handlerResizer}
             sx={{
               height: '100%',
             }}
