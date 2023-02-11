@@ -70,6 +70,14 @@ export const GET_COURSE = gql(/* GraphQL */ `
       pages {
         ...PageFragment
       }
+      recommendedCourses {
+        _id
+        title
+        level
+        progress {
+          state
+        }
+      }
     }
   }
 `);

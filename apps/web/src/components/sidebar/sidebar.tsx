@@ -10,6 +10,7 @@ import { debounce } from 'lodash';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
 import { GetCourseQuery } from '../../__generated__/graphql';
+import { NavigationCard } from './navigation-card';
 
 type Props = {
   description: string;
@@ -18,8 +19,9 @@ type Props = {
 
 type ToggleValue = 'description' | 'navigation';
 
-export default function Sidebar({ description }: Props) {
-  const INIT_WIDTH = 320;
+export const INIT_WIDTH = 320;
+
+export default function Sidebar({ description, courseInfo }: Props) {
   const theme = useTheme();
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [width, setWidth] = useState(INIT_WIDTH);
@@ -68,7 +70,7 @@ export default function Sidebar({ description }: Props) {
   return (
     <Paper
       sx={{
-        width: isOpen ? width : '2.75rem',
+        width: isOpen ? 'auto' : '2.75rem',
         marginRight: 'auto',
         height: '100%',
         transition: 'width 0.5s',
@@ -104,7 +106,7 @@ export default function Sidebar({ description }: Props) {
             padding: isOpen ? '1rem' : 0,
           }}
         >
-          <Row sx={{ justifyContent: 'center' }}>
+          <Row sx={{ justifyContent: 'center', width }}>
             <ToggleButtonGroup
               size="small"
               exclusive
@@ -120,7 +122,7 @@ export default function Sidebar({ description }: Props) {
           {toggleValue === 'description' ? (
             <Row>{description}</Row>
           ) : (
-            'NAVIGATION'
+            <NavigationCard {...courseInfo} />
           )}
         </Box>
 

@@ -19,6 +19,10 @@ export class CourseService {
     return await this.courseModel
       .findById(id)
       .populate({
+        path: 'recommendedCourses',
+        model: Course.name,
+      })
+      .populate({
         path: 'pages',
         model: Page.name,
         populate: {
