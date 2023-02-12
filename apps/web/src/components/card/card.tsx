@@ -11,9 +11,14 @@ import { CourseProps } from '../../../pages/courses';
 import { CardImage } from './card-image';
 import { CardAccordion } from './card-accordion';
 import { CardActions } from './card-actions';
+import { getSelectedStyles } from '../../../utils/utils';
+import { useRouter } from 'next/router';
 
 export function CardContainer(props: CourseProps) {
   const theme = useTheme();
+  const router = useRouter();
+  const isSelected = router.asPath.includes(props._id);
+  const selectedStyles = isSelected ? getSelectedStyles(theme) : undefined;
   // TODO: Better way to figure out if user is Logged in
   // We need to look into cookie for access_token and validate it on UI as well
   const isUserLoggedInBasedOnProgress = 'progress' in props;
@@ -31,13 +36,13 @@ export function CardContainer(props: CourseProps) {
         alignItems: 'center',
         outlineColor: 'transparent',
         '&:hover': {
-          outline: '0.125rem solid',
-          outlineColor: theme.palette.secondary.main,
+          ...getSelectedStyles(theme),
           transition: '.2s outline ease',
         },
         [theme.breakpoints.down('md')]: {
           width: '320px',
         },
+        ...selectedStyles,
       }}
       raised
     >

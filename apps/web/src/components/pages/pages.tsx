@@ -23,10 +23,6 @@ export function Pages({ pages, courseInfo }: Props) {
     pages[currentPageIndex],
   );
 
-  if (!pages?.length) {
-    return null;
-  }
-
   return (
     <Row
       sx={{
@@ -39,6 +35,8 @@ export function Pages({ pages, courseInfo }: Props) {
       <Sidebar
         description={currentPageFragment.description}
         courseInfo={courseInfo}
+        onPageChange={setCurrentPageIndex}
+        currentPageIndex={currentPageIndex}
       />
 
       <Paper

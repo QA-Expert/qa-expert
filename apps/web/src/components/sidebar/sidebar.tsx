@@ -11,21 +11,29 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
 import { GetCourseQuery } from '../../__generated__/graphql';
 import { NavigationCard } from './navigation-card';
+import { NavigationPagesList } from './navigation-pages-list';
 
 type Props = {
   description: string;
   courseInfo: GetCourseQuery['course'];
+  onPageChange: (currentPageIndex: number) => void;
+  currentPageIndex: number;
 };
 
 type ToggleValue = 'description' | 'navigation';
 
 export const INIT_WIDTH = 320;
 
-export default function Sidebar({ description, courseInfo }: Props) {
+export default function Sidebar({
+  description,
+  courseInfo,
+  currentPageIndex,
+  onPageChange,
+}: Props) {
   const theme = useTheme();
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [width, setWidth] = useState(INIT_WIDTH);
-  const [toggleValue, setToggleValue] = useState<ToggleValue>('description');
+  const [toggleValue, setToggleValue] = useState<ToggleValue>('navigation');
 
   const handleToggleChange = (
     _event: MouseEventReact<HTMLElement, MouseEvent>,
@@ -104,6 +112,7 @@ export default function Sidebar({ description, courseInfo }: Props) {
             height: '100%',
             justifyContent: 'start',
             padding: isOpen ? '1rem' : 0,
+            gap: '1rem',
           }}
         >
           <Row sx={{ justifyContent: 'center', width }}>
@@ -122,7 +131,15 @@ export default function Sidebar({ description, courseInfo }: Props) {
           {toggleValue === 'description' ? (
             <Row>{description}</Row>
           ) : (
-            <NavigationCard {...courseInfo} />
+            <>
+              <NavigationCard {...courseInfo} />
+
+              <NavigationPagesList
+                pages={courseInfo.pages}
+                onPageChange={onPageChange}
+                currentPageIndex={currentPageIndex}
+              />
+            </>
           )}
         </Box>
 

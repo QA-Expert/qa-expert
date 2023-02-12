@@ -54,7 +54,7 @@ export function CardAccordion({
           aria-controls="show-description-accordion"
           id="show-description-accordion"
         >
-          <Typography>Description</Typography>{' '}
+          <Typography>Description</Typography>
         </AccordionSummary>
 
         {showOpenCourseButton ? (
