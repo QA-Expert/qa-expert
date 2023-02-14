@@ -91,6 +91,36 @@ const base: ThemeOptions = {
         },
       },
     },
+    MuiToggleButtonGroup: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          borderRadius: '0.75rem',
+          backgroundColor: theme.palette.background.toString(),
+          padding: '0.5rem',
+        }),
+      },
+    },
+    MuiToggleButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.text.secondary,
+          borderRadius: '0.5rem',
+          border: 'none',
+          '&.Mui-selected': {
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.primary.main,
+          },
+          '&.Mui-selected:hover': {
+            backgroundColor: theme.palette.secondary.main,
+          },
+          '&:hover': {
+            textDecoration: 'none',
+            opacity: 0.3,
+            backgroundColor: 'inherit',
+          },
+        }),
+      },
+    },
   },
 };
 

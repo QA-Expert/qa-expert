@@ -4,10 +4,8 @@ import { useRouter } from 'next/router';
 import { APOLLO_STATE_PROP_NAME, initializeApollo } from '../../apollo/client';
 import { Box } from '../../src/components/box/box';
 import Layout from '../../src/components/layout/layout';
-import { PageCarousel } from '../../src/components/page-carousel/page-carousel';
-import Page from '../../src/components/page/page';
+import { Pages } from '../../src/components/pages/pages';
 import { Row } from '../../src/components/row/row';
-import Sidebar from '../../src/components/sidebar/sidebar';
 import { GET_COURSE } from '../../src/graphql/queries/queries';
 import { GetCourseQuery } from '../../src/__generated__/graphql';
 import { useError } from '../../utils/hooks';
@@ -39,18 +37,6 @@ const Course = (
             position: 'relative',
           }}
         >
-          <Sidebar>
-            {`Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum`}
-          </Sidebar>
-
           <Box
             sx={{
               height: '100%',
@@ -58,11 +44,7 @@ const Course = (
               flexGrow: 1,
             }}
           >
-            <PageCarousel>
-              {data.course.pages.map((page, i) => (
-                <Page key={i} {...page} />
-              ))}
-            </PageCarousel>
+            <Pages pages={data.course.pages} courseInfo={data.course} />
           </Box>
         </Row>
       ) : null}

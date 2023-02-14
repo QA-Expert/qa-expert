@@ -1,23 +1,52 @@
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
-import { MouseEvent as MouseEventReact, ReactNode, useState } from 'react';
+import { MouseEvent as MouseEventReact, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Box } from '../box/box';
 import { styled, useTheme } from '@mui/material/styles';
 import { Row } from '../row/row';
 import { debounce } from 'lodash';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton';
+import { GetCourseQuery } from '../../__generated__/graphql';
+import { NavigationCard } from './navigation-card';
+import { NavigationPagesList } from './navigation-pages-list';
+
 type Props = {
-  children: ReactNode;
+  description: string;
+  courseInfo: GetCourseQuery['course'];
+  onPageChange: (currentPageIndex: number) => void;
+  currentPageIndex: number;
 };
 
-export default function Sidebar({ children }: Props) {
-  const INIT_WIDTH = 320;
-  const theme = useTheme();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [width, setWidth] = useState(INIT_WIDTH);
+type ToggleValue = 'description' | 'navigation';
 
-  const handler = (mouseDownEvent: MouseEventReact<HTMLButtonElement>) => {
+export const INIT_WIDTH = 320;
+
+export default function Sidebar({
+  description,
+  courseInfo,
+  currentPageIndex,
+  onPageChange,
+}: Props) {
+  const theme = useTheme();
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [width, setWidth] = useState(INIT_WIDTH);
+  const [toggleValue, setToggleValue] = useState<ToggleValue>('navigation');
+
+  const handleToggleChange = (
+    _event: MouseEventReact<HTMLElement, MouseEvent>,
+    toggleValue: ToggleValue,
+  ) => {
+    if (toggleValue !== null) {
+      setToggleValue(toggleValue);
+    }
+  };
+
+  const handlerResizer = (
+    mouseDownEvent: MouseEventReact<HTMLButtonElement>,
+  ) => {
     const startWidth = width;
     const startPosition = mouseDownEvent.pageX;
 
@@ -49,7 +78,7 @@ export default function Sidebar({ children }: Props) {
   return (
     <Paper
       sx={{
-        width: isOpen ? width : '2.75rem',
+        width: isOpen ? 'auto' : '2.75rem',
         marginRight: 'auto',
         height: '100%',
         transition: 'width 0.5s',
@@ -76,18 +105,47 @@ export default function Sidebar({ children }: Props) {
         }}
       >
         <Box
+          aria-label="side bar content"
           sx={{
             flex: '1',
             overflow: 'hidden',
             height: '100%',
             justifyContent: 'start',
             padding: isOpen ? '1rem' : 0,
+            gap: '1rem',
           }}
         >
-          {children}
+          <Row sx={{ justifyContent: 'center', width }}>
+            <ToggleButtonGroup
+              size="small"
+              exclusive
+              onChange={handleToggleChange}
+              aria-label="Navigation or Description toggle"
+              value={toggleValue}
+            >
+              <ToggleButton value="description">Description</ToggleButton>
+              <ToggleButton value="navigation">Navigation</ToggleButton>
+            </ToggleButtonGroup>
+          </Row>
+
+          {toggleValue === 'description' ? (
+            <Row>{description}</Row>
+          ) : (
+            <>
+              <NavigationCard {...courseInfo} />
+
+              <NavigationPagesList
+                pages={courseInfo.pages}
+                onPageChange={onPageChange}
+                currentPageIndex={currentPageIndex}
+              />
+            </>
+          )}
         </Box>
 
         <Row
+          aria-label="expand side bar button"
+          aria-expanded={isOpen}
           sx={{
             gap: 0,
             width: 'auto',
@@ -104,7 +162,7 @@ export default function Sidebar({ children }: Props) {
 
           <Resizer
             type="button"
-            onMouseDown={handler}
+            onMouseDown={handlerResizer}
             sx={{
               height: '100%',
             }}

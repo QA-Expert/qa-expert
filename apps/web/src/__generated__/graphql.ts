@@ -565,6 +565,16 @@ export type GetCourseQuery = {
         ' $fragmentRefs'?: { PageFragmentFragment: PageFragmentFragment };
       }
     >;
+    recommendedCourses: Array<{
+      __typename?: 'Course';
+      _id: string;
+      title: string;
+      level: CourseLevel;
+      progress: {
+        __typename?: 'TotalCourseProgress';
+        state: CourseProgressState;
+      };
+    }>;
   };
 };
 
@@ -1795,6 +1805,31 @@ export const GetCourseDocument = {
                       {
                         kind: 'FragmentSpread',
                         name: { kind: 'Name', value: 'PageFragment' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'recommendedCourses' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'level' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'progress' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'state' },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
