@@ -19,11 +19,11 @@ const ReactQuillWrapper = dynamic(() => import('react-quill'), {
 });
 
 interface Props {
-  initialContent: string;
+  pageContent: string;
   pageId: string;
 }
 
-export const TextEditor = ({ initialContent, pageId }: Props) => {
+export const TextEditor = ({ pageContent, pageId }: Props) => {
   const { data } = useQuery(GET_USER);
   const user = data?.user;
   const router = useRouter();
@@ -31,15 +31,15 @@ export const TextEditor = ({ initialContent, pageId }: Props) => {
   // TODO: make roles as string union on back end.
   const isAdmin = user?.roles.includes('admin');
 
-  let initContent: string | DeltaStatic;
+  let content: string | DeltaStatic;
 
   try {
-    initContent = JSON.parse(initialContent);
+    content = JSON.parse(pageContent);
   } catch (error) {
-    initContent = initialContent;
+    // if failed to parse - it means it is a regular string not a JSON. So we set it to our local variable
+    content = pageContent;
   }
 
-  const [content, setContent] = useState<string | DeltaStatic>(initContent);
   const [deltaStatic, setDeltaStatic] = useState<DeltaStatic | null>(null);
   const [updateCoursePageContent, { error }] = useMutation(
     UPDATE_COURSE_PAGE_CONTENT,
@@ -67,12 +67,11 @@ export const TextEditor = ({ initialContent, pageId }: Props) => {
   };
 
   const handleChange = (
-    content: string,
+    _content: string,
     _delta: DeltaStatic,
     _source: Sources,
     editor: UnprivilegedEditor,
   ) => {
-    setContent(content);
     setDeltaStatic(editor.getContents());
   };
 
