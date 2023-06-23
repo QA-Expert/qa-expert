@@ -53,6 +53,7 @@ export default function Page(
         {page.progress?.state === PageProgressState.Pass && (
           <CheckCircleIcon sx={{ color: 'success.main', fontSize: '3rem' }} />
         )}
+
         {page.progress?.state === PageProgressState.Fail && (
           <CancelIcon sx={{ color: 'error.main', fontSize: '3rem' }} />
         )}
@@ -63,6 +64,7 @@ export default function Page(
       </Box>
 
       <Typography>{page.description}</Typography>
+
       {page.type === CourseType.Course ? (
         <CoursePage {...page} />
       ) : (

@@ -42,7 +42,7 @@ export default function CoursePage({ _id, content, progress }: Props) {
         flex: '1',
       }}
     >
-      {content && <TextEditor initialContent={content} pageId={_id} />}
+      {content ? <TextEditor pageContent={content} pageId={_id} /> : null}
     </Box>
   );
 }
