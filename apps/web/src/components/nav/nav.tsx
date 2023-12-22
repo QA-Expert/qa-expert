@@ -22,8 +22,6 @@ export default function Nav() {
       >
         <Link href={`/`}>
           <Typography
-            href="/"
-            component="a"
             variant="h1"
             noWrap
             sx={{
@@ -36,7 +34,7 @@ export default function Nav() {
         </Link>
 
         <Link href={`/courses`}>
-          <Typography href="/courses" component="a" variant="body1" noWrap>
+          <Typography variant="body1" noWrap>
             Courses
           </Typography>
         </Link>
