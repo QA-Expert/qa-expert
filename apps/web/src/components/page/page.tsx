@@ -2,13 +2,10 @@ import Typography from '@mui/material/Typography';
 import {
   CourseType,
   PageFragmentFragmentDoc,
-  PageProgressState,
 } from '../../__generated__/graphql';
 import { Box } from '../box/box';
 import CoursePage from '../course-page/course-page';
 import QuizPage from '../quiz-page/quiz-page';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
   FragmentType,
   useFragment,
@@ -20,7 +17,6 @@ export default function Page(
 ) {
   const page = useFragment(PageFragmentFragmentDoc, props);
 
-  console.log(page.progress?.state);
   return (
     <Box
       sx={{
