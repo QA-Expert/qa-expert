@@ -559,6 +559,10 @@ export type GetCourseQuery = {
     progress: {
       __typename?: 'TotalCourseProgress';
       pagesLeftBeforeFinish?: number | null;
+      pass: number;
+      fail: number;
+      state: CourseProgressState;
+      updatedAt: string;
     };
     pages: Array<
       { __typename?: 'Page' } & {
@@ -1792,6 +1796,13 @@ export const GetCourseDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'pagesLeftBeforeFinish' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'pass' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'fail' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'updatedAt' },
                       },
                     ],
                   },
