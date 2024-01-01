@@ -1,7 +1,7 @@
 import List from '@mui/material/List';
-import usePagination from '@mui/material/usePagination/usePagination';
 import { GetCourseQuery } from '../../__generated__/graphql';
 import { NavigationPageListItem } from './navigation-page-list-item';
+import usePagination from '@mui/material/usePagination';
 
 type Props = {
   pages: GetCourseQuery['course']['pages'];

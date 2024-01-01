@@ -26,7 +26,7 @@ This turborepo has some additional tools already setup for you:
 
 # Installation
 
-Install [Nodejs](https://nodejs.org/en/download/)
+Install [Nodejs 20.x](https://nodejs.org/en/download/)
 
 Install yarn
 
