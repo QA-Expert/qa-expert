@@ -130,15 +130,6 @@ const base: ThemeOptions = {
         }),
       },
     },
-    MuiRadio: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          '&.Mui-checked': {
-            color: theme.palette.warning.main,
-          },
-        }),
-      },
-    },
   },
 };
 
