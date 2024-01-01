@@ -6,20 +6,24 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { getColorForState } from '../../../utils/utils';
 import { useTheme } from '@mui/material/styles';
+import { SvgIconTypeMap } from '@mui/material';
 
 type Props = {
   state: PageProgressState | CourseProgressState | undefined;
-};
+} & SvgIconTypeMap['props'];
 
 export function StatusIndicator(
   //TODO: unified states into one string union
-  { state }: Props,
+  { state, ...props }: Props,
 ) {
   const theme = useTheme();
 
   return !state || state === CourseProgressState.InProgress ? (
-    <CheckCircleOutlineIcon />
+    <CheckCircleOutlineIcon {...props} />
   ) : (
-    <CheckCircleIcon sx={{ color: getColorForState(state, theme) }} />
+    <CheckCircleIcon
+      {...props}
+      sx={{ ...props.sx, color: getColorForState(state, theme) }}
+    />
   );
 }

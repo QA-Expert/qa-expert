@@ -66,6 +66,10 @@ export const GET_COURSE = gql(/* GraphQL */ `
       description
       progress {
         pagesLeftBeforeFinish
+        pass
+        fail
+        state
+        updatedAt
       }
       pages {
         ...PageFragment

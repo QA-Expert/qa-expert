@@ -19,10 +19,10 @@ export default function MyApp({
   const theme = createTheme(isDarkTheme ? dark : light);
 
   return (
-    <ApolloProvider client={apolloClient}>
-      <HeadComponent />
-      <CssBaseline />
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <ApolloProvider client={apolloClient}>
+        <CssBaseline />
+        <HeadComponent />
         <Toasts />
         <Button
           onClick={() => {
@@ -35,7 +35,7 @@ export default function MyApp({
           onThemeChange={() => setIsDarkTheme(!isDarkTheme)}
           {...pageProps}
         />
-      </ThemeProvider>
-    </ApolloProvider>
+      </ApolloProvider>
+    </ThemeProvider>
   );
 }

@@ -79,7 +79,11 @@ export default function QuizPage({ question, progress, _id: pageId }: Props) {
         flex: '1',
       }}
     >
-      <Typography variant="h4" sx={{ fontSize: '1.5rem' }}>
+      <Typography
+        variant="h4"
+        sx={{ fontSize: '1.5rem' }}
+        color={'warning.main'}
+      >
         {question.content}
       </Typography>
       <Box>
@@ -124,6 +128,7 @@ export default function QuizPage({ question, progress, _id: pageId }: Props) {
         variant="contained"
         disabled={Boolean(progress?.answers) || !courseId}
         onClick={handleSubmit}
+        color="success"
       >
         Submit
       </Button>

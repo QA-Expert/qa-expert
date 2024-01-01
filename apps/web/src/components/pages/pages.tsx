@@ -23,6 +23,10 @@ export function Pages({ pages, courseInfo }: Props) {
     pages[currentPageIndex],
   );
 
+  if (!currentPageFragment) {
+    return null;
+  }
+
   return (
     <Row
       sx={{
@@ -43,10 +47,15 @@ export function Pages({ pages, courseInfo }: Props) {
         component={Row}
         sx={{
           height: '100%',
+          alignItems: 'start',
         }}
       >
         <Box
-          sx={{ gap: '1rem', height: '100%', width: '100%', padding: '2rem' }}
+          sx={{
+            gap: '1rem',
+            width: '100%',
+            padding: '2rem',
+          }}
         >
           <Page {...pages[currentPageIndex]} />
 
