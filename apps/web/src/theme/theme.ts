@@ -121,6 +121,24 @@ const base: ThemeOptions = {
         }),
       },
     },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: ({ theme }) => ({
+          '&.Mui-disabled': {
+            color: theme.palette.text.secondary,
+          },
+        }),
+      },
+    },
+    MuiRadio: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          '&.Mui-checked': {
+            color: theme.palette.warning.main,
+          },
+        }),
+      },
+    },
   },
 };
 
@@ -157,6 +175,6 @@ export const dark: ThemeOptions = merge(base, {
   },
 });
 
-export const light: ThemeOptions = {
+export const light: ThemeOptions = merge(base, {
   palette: { mode: 'light' },
-};
+});

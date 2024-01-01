@@ -1,7 +1,7 @@
 import { Row } from '../row/row';
 import Pagination from '@mui/material/Pagination';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
+import ArrowBackIosNew from '@mui/icons-material/ArrowBackIosNew';
 import IconButton from '@mui/material/IconButton';
 
 type Props = {
@@ -42,7 +42,7 @@ export function PagePagination({
           onClick={handleBackwardClick}
           disabled={currentPageIndex === 0}
         >
-          <ArrowBackIos />
+          <ArrowBackIosNew />
         </IconButton>
       )}
 

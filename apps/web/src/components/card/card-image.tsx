@@ -38,9 +38,16 @@ export function CardImage({
           [theme.breakpoints.down('md')]: {
             width: width && !breakPointWidth ? width : breakPointWidth,
           },
+          position: 'relative',
         }}
       >
-        <Image alt={alt} layout="fill" src={src} objectFit="cover" />
+        <Image
+          alt={alt}
+          fill
+          src={src}
+          priority
+          style={{ objectFit: 'cover' }}
+        />
       </Box>
 
       {children}
