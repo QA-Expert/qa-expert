@@ -1,6 +1,10 @@
+'use client';
+
 import { Formik, FormikProps, FormikHelpers } from 'formik';
+import { ResetPasswordInput } from '../../../src/__generated__/graphql';
 import * as Yup from 'yup';
 import { useMutation } from '@apollo/client';
+import { useParams } from 'next/navigation';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -8,25 +12,26 @@ import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import Main from '../../../src/components/main/main';
+import { RESET_PASSWORD } from '../../../src/graphql/mutations/mutations';
+import { Box } from '../../../src/components/box/box';
 import { useState } from 'react';
-import Main from '../src/components/main/main';
-import { Box } from '../src/components/box/box';
-import { FORGOT_PASSWORD } from '../src/graphql/mutations/mutations';
-import { useError } from '../utils/hooks';
+import { useError } from '../../../utils/hooks';
 
-function ForgotPassword() {
-  const [forgotPassword, { error }] = useMutation(FORGOT_PASSWORD);
+function ResetPassword() {
+  const [resetPassword, { error }] = useMutation(RESET_PASSWORD);
 
   useError([error?.message]);
 
   const schema = Yup.object().shape({
-    email: Yup.string()
-      .required('Email is a required field')
-      .email('Invalid email format'),
+    password: Yup.string()
+      .required('New Password is a required field')
+      .min(2, 'New Password must be at least 2 characters'),
   });
-  const initialValues = {
-    email: '',
+  const initialValues: Pick<ResetPasswordInput, 'password'> = {
+    password: '',
   };
+  const router = useParams();
   const [isSuccessfullyReset, setIsSuccessfullyReset] = useState(false);
 
   return (
@@ -41,10 +46,12 @@ function ForgotPassword() {
           }}
           component={Box}
         >
-          <Typography sx={{ fontSize: '1rem' }} variant="h1">
-            Email with instructions was sent
+          <Typography sx={{ fontSize: '2rem' }} variant="h1">
+            Password Successfully Reset
           </Typography>
-          <Typography>Please check your inbox for our email</Typography>
+          <Button variant="contained" href="/login">
+            Login
+          </Button>
         </Paper>
       ) : (
         <Formik
@@ -56,9 +63,12 @@ function ForgotPassword() {
           ) => {
             actions.setSubmitting(true);
 
-            const { errors } = await forgotPassword({
+            const { errors } = await resetPassword({
               variables: {
-                email: values.email,
+                data: {
+                  token: router.token as string,
+                  ...values,
+                },
               },
             });
 
@@ -90,37 +100,35 @@ function ForgotPassword() {
                 component={Box}
               >
                 <Typography sx={{ fontSize: '2rem' }} variant="h1">
-                  Forgot Password
+                  Reset Password
                 </Typography>
 
                 <FormControl>
-                  <InputLabel htmlFor="email">
-                    Please enter your email
-                  </InputLabel>
+                  <InputLabel htmlFor="password">New Password</InputLabel>
                   <Input
                     autoComplete="on"
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="Enter your email ..."
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Enter your new password ..."
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.email}
-                    error={Boolean(errors.email)}
+                    value={values.password}
+                    error={Boolean(errors.password)}
                   />
                   <FormHelperText
-                    error={Boolean(errors.email)}
-                    id="email-error-text"
+                    error={Boolean(errors.password)}
+                    id="password-error-text"
                   >
-                    {errors.email}
+                    {errors.password}
                   </FormHelperText>
                 </FormControl>
 
                 <Button
-                  disabled={isSubmitting || Boolean(errors.email)}
+                  disabled={isSubmitting || Boolean(errors.password)}
                   type="submit"
                 >
-                  Submit
+                  Login
                 </Button>
               </Paper>
             </form>
@@ -131,4 +139,4 @@ function ForgotPassword() {
   );
 }
 
-export default ForgotPassword;
+export default ResetPassword;

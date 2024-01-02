@@ -1,7 +1,9 @@
+'use client';
+
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
-import formatISODuration from 'date-fns/formatISODuration';
 import { convertNumberToString } from '../../../utils/utils';
+import { Duration, formatISODuration } from 'date-fns';
 
 type Props = {
   duration: Duration;

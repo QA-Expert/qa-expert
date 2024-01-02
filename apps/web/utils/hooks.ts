@@ -1,3 +1,5 @@
+'use client';
+
 import { RefObject, useEffect, useState } from 'react';
 import { Toast, toastsAtom } from '../src/store';
 import { debounce } from 'lodash';

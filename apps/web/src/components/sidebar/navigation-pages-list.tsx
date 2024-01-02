@@ -36,7 +36,7 @@ export function NavigationPagesList({
           <NavigationPageListItem
             key={page}
             currentPageNumber={page}
-            pageFragment={pages[page - 1]}
+            page={pages[page - 1]}
             selected={selected}
             onClick={() => onPageChange(page - 1)}
           />

@@ -1,4 +1,6 @@
-import { ThemeOptions } from '@mui/material/styles';
+'use client';
+
+import { ThemeOptions, createTheme } from '@mui/material/styles';
 import { merge } from 'lodash';
 
 const base: ThemeOptions = {
@@ -169,3 +171,5 @@ export const dark: ThemeOptions = merge(base, {
 export const light: ThemeOptions = merge(base, {
   palette: { mode: 'light' },
 });
+
+export default createTheme(dark);

@@ -1,14 +1,14 @@
-import type { AppProps } from 'next/app';
-import '../src/styles/globals.css';
-import { ApolloProvider } from '@apollo/client';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/';
-import { dark } from '../src/theme/theme';
+import theme from '../src/theme/theme';
 import { Toasts } from '../src/components/toasts/toast';
-import { ApolloStateProps, useApollo } from '../apollo/client';
-import createTheme from '@mui/material/styles/createTheme';
-
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { Metadata } from 'next';
+import { ApolloWrapper } from './ApolloWrapper';
+import { headers } from 'next/headers';
+import { Provider as JotaiProvider } from 'jotai';
+
+import './global.css';
 
 /**
  * @url https://nextjs.org/docs/app/building-your-application/optimizing/metadata#static-metadata
@@ -38,18 +38,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const apolloClient = useApollo(props);
-  const theme = createTheme(dark);
+  const token = headers().get('Cookie');
 
   return (
     <html lang="en">
-      <ThemeProvider theme={theme}>
-        <ApolloProvider client={apolloClient}>
-          <CssBaseline />
-          <Toasts />
-          <body>{children}</body>
-        </ApolloProvider>
-      </ThemeProvider>
+      <body>
+        <AppRouterCacheProvider>
+          <JotaiProvider>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <ApolloWrapper token={token}>
+                <Toasts />
+                {children}
+              </ApolloWrapper>
+            </ThemeProvider>
+          </JotaiProvider>
+        </AppRouterCacheProvider>
+      </body>
     </html>
   );
 }

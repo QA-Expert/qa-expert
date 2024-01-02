@@ -1,10 +1,9 @@
-import Main from '../src/components/main/main';
+'use client';
+
 import { Formik, FormikProps, FormikHelpers } from 'formik';
-import { UserInputCreate } from '../src/__generated__/graphql';
 import * as Yup from 'yup';
-import { REGISTER } from '../src/graphql/mutations/mutations';
 import { useApolloClient, useMutation } from '@apollo/client';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -14,15 +13,15 @@ import Typography from '@mui/material/Typography';
 import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Link from 'next/link';
-import { Box } from '../src/components/box/box';
-import { useError } from '../utils/hooks';
+import { useError } from '../../utils/hooks';
+import { UserInputLogin } from '../../src/__generated__/graphql';
+import Main from '../../src/components/main/main';
+import { LOGIN } from '../../src/graphql/mutations/mutations';
+import { Box } from '../../src/components/box/box';
 
-function Register() {
+function Login() {
   const client = useApolloClient();
-  const [register, { error }] = useMutation(REGISTER);
-
-  useError([error?.message]);
-
+  const [login, { error }] = useMutation(LOGIN);
   const schema = Yup.object().shape({
     email: Yup.string()
       .required('Email is a required field')
@@ -30,16 +29,14 @@ function Register() {
     password: Yup.string()
       .required('Password is a required field')
       .min(2, 'Password must be at least 2 characters'),
-    firstName: Yup.string().nullable().max(100, 'First Name is too long'),
-    lastName: Yup.string().nullable().max(100, 'Last Name is too long'),
   });
-  const initialValues: UserInputCreate = {
+  const initialValues: UserInputLogin = {
     email: '',
     password: '',
-    firstName: '',
-    lastName: '',
   };
   const router = useRouter();
+
+  useError([error?.message]);
 
   return (
     <Main>
@@ -47,13 +44,14 @@ function Register() {
         validationSchema={schema}
         initialValues={initialValues}
         onSubmit={async (
-          values: UserInputCreate,
-          actions: FormikHelpers<UserInputCreate>,
+          values: UserInputLogin,
+          actions: FormikHelpers<UserInputLogin>,
         ) => {
           actions.setSubmitting(true);
+
           await client.resetStore();
 
-          const { data, errors } = await register({
+          const { data, errors } = await login({
             variables: values,
           });
 
@@ -63,8 +61,8 @@ function Register() {
             throw errors;
           }
 
-          if (data?.register?.access_token) {
-            await router.push('/');
+          if (data?.login?.access_token) {
+            router.push('/courses');
           }
         }}
       >
@@ -75,7 +73,7 @@ function Register() {
           handleSubmit,
           handleBlur,
           errors,
-        }: FormikProps<UserInputCreate>) => (
+        }: FormikProps<UserInputLogin>) => (
           <form noValidate onSubmit={handleSubmit}>
             <Paper
               sx={{
@@ -85,7 +83,7 @@ function Register() {
               component={Box}
             >
               <Typography sx={{ fontSize: '2rem' }} variant="h1">
-                Register
+                Login
               </Typography>
 
               <FormControl>
@@ -112,7 +110,7 @@ function Register() {
               <FormControl>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <Input
-                  autoComplete="new-password"
+                  autoComplete="on"
                   type="password"
                   name="password"
                   id="password"
@@ -130,55 +128,17 @@ function Register() {
                 </FormHelperText>
               </FormControl>
 
-              <FormControl>
-                <InputLabel htmlFor="first-name">First Name</InputLabel>
-                <Input
-                  autoComplete="on"
-                  type="text"
-                  name="firstName"
-                  id="first-name"
-                  placeholder="Enter your first name ..."
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.firstName}
-                  error={Boolean(errors.firstName)}
-                />
-                <FormHelperText
-                  error={Boolean(errors.firstName)}
-                  id="first-name-error-text"
-                >
-                  {errors.firstName}
-                </FormHelperText>
-              </FormControl>
-
-              <FormControl>
-                <InputLabel htmlFor="last-name">Last Name</InputLabel>
-                <Input
-                  autoComplete="on"
-                  type="text"
-                  name="lastName"
-                  id="last-name"
-                  placeholder="Enter your last name ..."
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.lastName}
-                  error={Boolean(errors.lastName)}
-                />
-                <FormHelperText
-                  error={Boolean(errors.lastName)}
-                  id="last-name-error-text"
-                >
-                  {errors.lastName}
-                </FormHelperText>
-              </FormControl>
-
               <Typography>
-                {'If you already have an account, please '}
-                <Link href="/login">
-                  <MuiLink>login</MuiLink>
-                </Link>
+                {'If you do not have an account, please '}
+                <MuiLink href="/register" component={Link}>
+                  register
+                </MuiLink>
                 .
               </Typography>
+
+              <MuiLink href="/forgot-password" component={Link}>
+                Need help?
+              </MuiLink>
 
               <Button
                 variant="contained"
@@ -189,7 +149,7 @@ function Register() {
                 }
                 type="submit"
               >
-                Register
+                Login
               </Button>
             </Paper>
           </form>
@@ -199,4 +159,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;

@@ -1,3 +1,5 @@
+'use client';
+
 import { useMutation } from '@apollo/client';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';

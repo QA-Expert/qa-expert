@@ -352,27 +352,6 @@ export type UserOutputLogin = UserBaseModel & {
   roles: Array<Scalars['String']['output']>;
 };
 
-export type PageFragmentFragment = {
-  __typename?: 'Page';
-  _id: string;
-  title: string;
-  type: CourseType;
-  description: string;
-  content?: string | null;
-  question?: {
-    __typename?: 'Question';
-    content: string;
-    answers: Array<{ __typename?: 'Answer'; _id: string; content: string }>;
-    options: Array<{ __typename?: 'Answer'; _id: string; content: string }>;
-  } | null;
-  progress?: {
-    __typename?: 'PageProgress';
-    _id: string;
-    state: PageProgressState;
-    answers: Array<string>;
-  } | null;
-} & { ' $fragmentName'?: 'PageFragmentFragment' };
-
 export type LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -573,11 +552,26 @@ export type GetCourseQuery = {
       state: CourseProgressState;
       updatedAt: string;
     };
-    pages: Array<
-      { __typename?: 'Page' } & {
-        ' $fragmentRefs'?: { PageFragmentFragment: PageFragmentFragment };
-      }
-    >;
+    pages: Array<{
+      __typename?: 'Page';
+      _id: string;
+      title: string;
+      type: CourseType;
+      description: string;
+      content?: string | null;
+      question?: {
+        __typename?: 'Question';
+        content: string;
+        answers: Array<{ __typename?: 'Answer'; _id: string; content: string }>;
+        options: Array<{ __typename?: 'Answer'; _id: string; content: string }>;
+      } | null;
+      progress?: {
+        __typename?: 'PageProgress';
+        _id: string;
+        state: PageProgressState;
+        answers: Array<string>;
+      } | null;
+    }>;
     recommendedCourses: Array<{
       __typename?: 'Course';
       _id: string;
@@ -661,79 +655,6 @@ export type GetBadgesSubmittedProgressesUserQuery = {
   };
 };
 
-export const PageFragmentFragmentDoc = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'PageFragment' },
-      typeCondition: {
-        kind: 'NamedType',
-        name: { kind: 'Name', value: 'Page' },
-      },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'question' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'answers' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'content' },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'options' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'content' },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'progress' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'answers' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<PageFragmentFragment, unknown>;
 export const LoginDocument = {
   kind: 'Document',
   definitions: [
@@ -1822,9 +1743,84 @@ export const GetCourseDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
                       {
-                        kind: 'FragmentSpread',
-                        name: { kind: 'Name', value: 'PageFragment' },
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'description' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'content' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'question' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'content' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'answers' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: '_id' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'content' },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'options' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: '_id' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'content' },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'progress' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: '_id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'state' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'answers' },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
@@ -1854,74 +1850,6 @@ export const GetCourseDocument = {
                     ],
                   },
                 },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'PageFragment' },
-      typeCondition: {
-        kind: 'NamedType',
-        name: { kind: 'Name', value: 'Page' },
-      },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'question' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'answers' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'content' },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'options' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'content' },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'progress' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'answers' } },
               ],
             },
           },

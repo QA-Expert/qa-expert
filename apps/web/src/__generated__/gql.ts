@@ -13,8 +13,6 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  '\n  fragment PageFragment on Page {\n    _id\n    title\n    type\n    description\n    content\n    question {\n      content\n      answers {\n        _id\n        content\n      }\n      options {\n        _id\n        content\n      }\n    }\n    progress {\n      _id\n      state\n      answers\n    }\n  }\n':
-    types.PageFragmentFragmentDoc,
   '\n  mutation Login($email: String!, $password: String!) {\n    login(data: { email: $email, password: $password }) {\n      access_token\n    }\n  }\n':
     types.LoginDocument,
   '\n  mutation Logout {\n    logout\n  }\n': types.LogoutDocument,
@@ -42,7 +40,7 @@ const documents = {
     types.GetAllCoursesDocument,
   '\n  query GetAllCoursesPublic {\n    coursesPublic {\n      _id\n      title\n      type\n      level\n      description\n      pages {\n        _id\n        type\n      }\n      tags\n      recommendedCourses {\n        _id\n        title\n        level\n      }\n    }\n  }\n':
     types.GetAllCoursesPublicDocument,
-  '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      pages {\n        ...PageFragment\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n':
+  '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n':
     types.GetCourseDocument,
   '\n  query GetCourseProgressAndBadge($_id: String!) {\n    course(_id: $_id) {\n      _id\n      progress {\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n':
     types.GetCourseProgressAndBadgeDocument,
@@ -66,12 +64,6 @@ const documents = {
  */
 export function gql(source: string): unknown;
 
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(
-  source: '\n  fragment PageFragment on Page {\n    _id\n    title\n    type\n    description\n    content\n    question {\n      content\n      answers {\n        _id\n        content\n      }\n      options {\n        _id\n        content\n      }\n    }\n    progress {\n      _id\n      state\n      answers\n    }\n  }\n',
-): (typeof documents)['\n  fragment PageFragment on Page {\n    _id\n    title\n    type\n    description\n    content\n    question {\n      content\n      answers {\n        _id\n        content\n      }\n      options {\n        _id\n        content\n      }\n    }\n    progress {\n      _id\n      state\n      answers\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -160,8 +152,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      pages {\n        ...PageFragment\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n',
-): (typeof documents)['\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      pages {\n        ...PageFragment\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n'];
+  source: '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

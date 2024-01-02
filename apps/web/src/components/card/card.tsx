@@ -1,3 +1,5 @@
+'use client';
+
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import { CourseStates } from './course-states';
@@ -7,17 +9,20 @@ import { CourseMetrics } from './course-metrics';
 import { useTheme } from '@mui/material/styles';
 import { CourseLevelLabel } from './course-level-label';
 import { Box } from '../box/box';
-import { CourseProps } from '../../../pages/courses';
 import { CardImage } from './card-image';
 import { CardAccordion } from './card-accordion';
 import { CardActions } from './card-actions';
 import { getSelectedStyles } from '../../../utils/utils';
-import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation';
+import { CourseProps } from '../../../app/courses/page';
+import { Suspense } from 'react';
+import { CircularProgress } from '@mui/material';
 
 export function CardContainer(props: CourseProps) {
   const theme = useTheme();
-  const router = useRouter();
-  const isSelected = router.asPath.includes(props._id);
+  const params = useParams();
+
+  const isSelected = params.id?.includes(props._id);
   const selectedStyles = isSelected ? getSelectedStyles(theme) : undefined;
   // TODO: Better way to figure out if user is Logged in
   // We need to look into cookie for access_token and validate it on UI as well
@@ -69,7 +74,11 @@ export function CardContainer(props: CourseProps) {
           breakPointWidth={320}
           height={150}
         >
-          {isUserLoggedInBasedOnProgress && <CourseStates _id={props._id} />}
+          {isUserLoggedInBasedOnProgress && (
+            <Suspense fallback={<CircularProgress />}>
+              <CourseStates _id={props._id} />
+            </Suspense>
+          )}
         </CardImage>
 
         <CourseMetrics pages={props.pages} />

@@ -1,3 +1,5 @@
+'use client';
+
 import Button from '@mui/material/Button';
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useState } from 'react';
@@ -5,14 +7,15 @@ import 'react-quill/dist/quill.snow.css';
 import { Box } from '../box/box';
 import { DeltaStatic, Sources } from 'quill';
 import { UPDATE_COURSE_PAGE_CONTENT } from '../../graphql/mutations/mutations';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { GET_COURSE, GET_USER } from '../../graphql/queries/queries';
-import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation';
 import { useError } from '../../../utils/hooks';
 import { UnprivilegedEditor, ReactQuillProps, Value } from 'react-quill';
 // NOTE: I have to user emotion directly - not mui/styled as mui has built in "theme" prop
 // that conflicts with "theme" on Quill component
 import styled from '@emotion/styled';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
 const ReactQuillWrapper = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -47,10 +50,10 @@ const FULL_TOOL_BAR: ReactQuillProps['modules'] = {
 } as const;
 
 export const TextEditor = ({ pageContent, pageId }: Props) => {
-  const { data } = useQuery(GET_USER);
+  const { data } = useSuspenseQuery(GET_USER);
   const user = data?.user;
-  const router = useRouter();
-  const courseId = router.query.id as string;
+  const router = useParams();
+  const courseId = router.id as string;
   // TODO: make roles as string union on back end.
   const isAdmin = user?.roles.includes('admin');
   const [content, setContent] = useState<Value | undefined>();

@@ -72,7 +72,27 @@ export const GET_COURSE = gql(/* GraphQL */ `
         updatedAt
       }
       pages {
-        ...PageFragment
+        _id
+        title
+        type
+        description
+        content
+        question {
+          content
+          answers {
+            _id
+            content
+          }
+          options {
+            _id
+            content
+          }
+        }
+        progress {
+          _id
+          state
+          answers
+        }
       }
       recommendedCourses {
         _id

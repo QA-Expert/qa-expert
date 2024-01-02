@@ -1,4 +1,6 @@
-import { useMutation, useQuery } from '@apollo/client';
+'use client';
+
+import { useMutation } from '@apollo/client';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -14,6 +16,7 @@ import { UPDATE_USER_NAMES } from '../../graphql/mutations/mutations';
 import { Box } from '../box/box';
 import { GET_USER } from '../../graphql/queries/queries';
 import { useError } from '../../../utils/hooks';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
 interface Props {
   open: boolean;
@@ -21,7 +24,7 @@ interface Props {
 }
 
 export function ChangeNamesModal({ open, onClose }: Props) {
-  const { data, error: userError } = useQuery(GET_USER);
+  const { data, error: userError } = useSuspenseQuery(GET_USER);
   const [updateUserNames, { error }] = useMutation(UPDATE_USER_NAMES, {
     refetchQueries: [{ query: GET_USER }],
   });

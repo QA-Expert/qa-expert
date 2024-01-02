@@ -2,14 +2,14 @@ import { Box } from '../box/box';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import { GET_COURSE_PROGRESS_AND_BADGE } from '../../graphql/queries/queries';
-import { useQuery } from '@apollo/client';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
 type Props = {
   _id: string;
 };
 
 export function ProgressBar({ _id }: Props) {
-  const { data: courseData } = useQuery(GET_COURSE_PROGRESS_AND_BADGE, {
+  const { data: courseData } = useSuspenseQuery(GET_COURSE_PROGRESS_AND_BADGE, {
     variables: { _id },
   });
   const course = courseData?.course;
