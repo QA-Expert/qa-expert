@@ -71,6 +71,9 @@ export const GET_COURSE = gql(/* GraphQL */ `
         state
         updatedAt
       }
+      badge {
+        _id
+      }
       pages {
         _id
         title
@@ -101,23 +104,6 @@ export const GET_COURSE = gql(/* GraphQL */ `
         progress {
           state
         }
-      }
-    }
-  }
-`);
-
-export const GET_COURSE_PROGRESS_AND_BADGE = gql(/* GraphQL */ `
-  query GetCourseProgressAndBadge($_id: String!) {
-    course(_id: $_id) {
-      _id
-      progress {
-        pass
-        fail
-        state
-        updatedAt
-      }
-      badge {
-        _id
       }
     }
   }

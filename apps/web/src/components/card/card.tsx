@@ -17,16 +17,17 @@ import { useParams } from 'next/navigation';
 import { CourseProps } from '../../../app/courses/page';
 import { Suspense } from 'react';
 import { CircularProgress } from '@mui/material';
+import { useReactiveVar } from '@apollo/client';
+import { isAuthenticated } from '../../../apollo/store';
+import { GetCourseQuery } from '../../__generated__/graphql';
 
 export function CardContainer(props: CourseProps) {
   const theme = useTheme();
   const params = useParams();
+  const isUserAuthenticated = useReactiveVar(isAuthenticated);
 
   const isSelected = params.id?.includes(props._id);
   const selectedStyles = isSelected ? getSelectedStyles(theme) : undefined;
-  // TODO: Better way to figure out if user is Logged in
-  // We need to look into cookie for access_token and validate it on UI as well
-  const isUserLoggedInBasedOnProgress = 'progress' in props;
 
   return (
     <Card
@@ -74,9 +75,10 @@ export function CardContainer(props: CourseProps) {
           breakPointWidth={320}
           height={150}
         >
-          {isUserLoggedInBasedOnProgress && (
+          {isUserAuthenticated && (
             <Suspense fallback={<CircularProgress />}>
-              <CourseStates _id={props._id} />
+              {/* Since user is authenticated we know that it is course with all props that is why it is safe to do type cast */}
+              <CourseStates {...(props as GetCourseQuery['course'])} />
             </Suspense>
           )}
         </CardImage>
@@ -86,12 +88,14 @@ export function CardContainer(props: CourseProps) {
 
       <CardActions />
 
-      {isUserLoggedInBasedOnProgress && <ProgressBar _id={props._id} />}
+      {isUserAuthenticated && (
+        <Suspense fallback={<CircularProgress />}>
+          {/* Since user is authenticated we know that it is course with all props that is why it is safe to do type cast */}
+          <ProgressBar {...(props as GetCourseQuery['course'])} />
+        </Suspense>
+      )}
 
-      <CardAccordion
-        {...props}
-        showOpenCourseButton={isUserLoggedInBasedOnProgress}
-      />
+      <CardAccordion {...props} showOpenCourseButton={isUserAuthenticated} />
     </Card>
   );
 }

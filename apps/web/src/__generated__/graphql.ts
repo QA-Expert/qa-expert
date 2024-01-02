@@ -552,6 +552,7 @@ export type GetCourseQuery = {
       state: CourseProgressState;
       updatedAt: string;
     };
+    badge?: { __typename?: 'Badge'; _id: string } | null;
     pages: Array<{
       __typename?: 'Page';
       _id: string;
@@ -1734,6 +1735,16 @@ export const GetCourseDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'updatedAt' },
                       },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'badge' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
                     ],
                   },
                 },

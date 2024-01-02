@@ -1,6 +1,5 @@
 import { ApolloLink, HttpLink } from '@apollo/client';
 import { IncomingHttpHeaders } from 'http';
-import { isAuthTokenValid } from '../utils/auth';
 import { onError } from '@apollo/client/link/error';
 
 export const setAuthLink = (token: string | null) =>
@@ -10,7 +9,7 @@ export const setAuthLink = (token: string | null) =>
     operation.setContext(({ headers }: { headers: IncomingHttpHeaders }) => ({
       headers: {
         ...headers,
-        Cookie: token && isAuthTokenValid(token) ? token : undefined,
+        Cookie: token,
       },
     }));
 

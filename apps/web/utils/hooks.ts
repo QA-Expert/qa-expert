@@ -1,12 +1,11 @@
 'use client';
 
 import { RefObject, useEffect, useState } from 'react';
-import { Toast, toastsAtom } from '../src/store';
 import { debounce } from 'lodash';
-import { useSetAtom } from 'jotai/react';
+import { Toast, toastErrors } from '../apollo/store';
 
 export const useError = (messages: (string | undefined)[]) => {
-  const setToasts = useSetAtom(toastsAtom);
+  const setToasts = toastErrors;
 
   useEffect(() => {
     if (messages?.length) {

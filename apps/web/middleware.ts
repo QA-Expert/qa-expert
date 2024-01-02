@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { isAuthTokenValid } from './utils/auth';
 import { ACCESS_TOKEN_KEY, PUBLIC_ROUTES } from './src/constants/constants';
+import { isAuthenticated } from './apollo/store';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -11,10 +12,9 @@ export function middleware(request: NextRequest) {
   const authTokenInvalid = !accessToken || !isAuthTokenValid(accessToken);
   const response = NextResponse.next();
 
+  isAuthenticated(!authTokenInvalid);
+
   if (authTokenInvalid) {
-    // TODO: for some reason Nextjs does not won't to delete cookies without calling set first
-    // https://github.com/vercel/next.js/issues/40146
-    response.cookies.set(ACCESS_TOKEN_KEY, '');
     response.cookies.delete(ACCESS_TOKEN_KEY);
   }
 

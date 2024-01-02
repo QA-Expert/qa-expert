@@ -1,3 +1,5 @@
+'use client';
+
 import Layout from '../../src/components/layout/layout';
 import {
   GET_ALL_COURSES,
@@ -9,24 +11,14 @@ import {
   GetAllCoursesPublicQuery,
   GetAllCoursesQuery,
 } from '../../src/__generated__/graphql';
-import { useError } from '../../utils/hooks';
 import { CardContainer } from '../../src/components/card/card';
-import { isAuthTokenValid } from '../../utils/auth';
 import { CompletedCoursesSection } from '../../src/components/completed-courses-section/completed-courses-section';
 import { Row } from '../../src/components/row/row';
-import { getClient } from '../../apollo/ssr_client';
-import { headers } from 'next/headers';
+import { isAuthenticated } from '../../apollo/store';
+import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useReactiveVar } from '@apollo/client';
 
-export type LoggedInUserCourses = Pick<
-  GetAllCoursesQuery['courses'][number],
-  | '_id'
-  | 'title'
-  | 'description'
-  | 'pages'
-  | 'progress'
-  | 'recommendedCourses'
-  | 'level'
->;
+export type LoggedInUserCourses = GetAllCoursesQuery['courses'][number];
 
 export type PublicCourses = Pick<
   GetAllCoursesPublicQuery['coursesPublic'][number],
@@ -35,17 +27,13 @@ export type PublicCourses = Pick<
 
 export type CourseProps = LoggedInUserCourses | PublicCourses;
 
-const CoursesPage = async () => {
+function CoursesPage() {
   // TODO: Come up with better way of getting different data set where we don't have to specify type on variable
-  const token = headers().get('Cookie');
+  const isUserAuthenticated = useReactiveVar(isAuthenticated);
 
-  const isTokenValid = token && isAuthTokenValid(token);
-
-  const { data } = await getClient().query<
-    GetAllCoursesQuery | GetAllCoursesPublicQuery
-  >({
-    query: isTokenValid ? GET_ALL_COURSES : GET_ALL_COURSES_PUBLIC,
-  });
+  const { data } = useQuery<GetAllCoursesQuery | GetAllCoursesPublicQuery>(
+    isUserAuthenticated ? GET_ALL_COURSES : GET_ALL_COURSES_PUBLIC,
+  );
 
   const courses: CourseProps[] | undefined =
     data && 'coursesPublic' in data ? data?.coursesPublic : data?.courses;
@@ -83,6 +71,6 @@ const CoursesPage = async () => {
       </Box>
     </Layout>
   );
-};
+}
 
 export default CoursesPage;

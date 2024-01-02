@@ -9,9 +9,14 @@ import { GET_USER } from '../../graphql/queries/queries';
 import { Box } from '../box/box';
 import { ProfileMenu } from '../profile-menu/profile-menu';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useReactiveVar } from '@apollo/client';
+import { isAuthenticated } from '../../../apollo/store';
 
 export default function Nav() {
-  // const { data } = useSuspenseQuery(GET_USER);
+  const isUserAuthenticated = useReactiveVar(isAuthenticated);
+  const { data } = useSuspenseQuery(GET_USER, {
+    skip: !isUserAuthenticated,
+  });
 
   return (
     <AppBar component="nav" position="static" sx={{ zIndex: 'appBar' }}>
@@ -45,7 +50,7 @@ export default function Nav() {
             marginLeft: 'auto',
           }}
         >
-          {/* {data?.user ? (
+          {data?.user && isUserAuthenticated ? (
             <ProfileMenu />
           ) : (
             <Link href="/login">
@@ -53,7 +58,7 @@ export default function Nav() {
                 Login
               </Button>
             </Link>
-          )} */}
+          )}
         </Box>
       </Toolbar>
     </AppBar>

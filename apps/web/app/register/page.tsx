@@ -18,6 +18,7 @@ import Link from 'next/link';
 import { Box } from '../../src/components/box/box';
 import { useError } from '../../utils/hooks';
 import { useApolloClient, useMutation } from '@apollo/client';
+import { isAuthenticated } from '../../apollo/store';
 
 function Register() {
   const client = useApolloClient();
@@ -66,7 +67,9 @@ function Register() {
           }
 
           if (data?.register?.access_token) {
-            await router.push('/');
+            isAuthenticated(true);
+
+            router.push('/');
           }
         }}
       >

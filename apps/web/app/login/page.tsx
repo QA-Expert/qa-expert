@@ -18,6 +18,7 @@ import { UserInputLogin } from '../../src/__generated__/graphql';
 import Main from '../../src/components/main/main';
 import { LOGIN } from '../../src/graphql/mutations/mutations';
 import { Box } from '../../src/components/box/box';
+import { isAuthenticated } from '../../apollo/store';
 
 function Login() {
   const client = useApolloClient();
@@ -62,6 +63,8 @@ function Login() {
           }
 
           if (data?.login?.access_token) {
+            isAuthenticated(true);
+
             router.push('/courses');
           }
         }}

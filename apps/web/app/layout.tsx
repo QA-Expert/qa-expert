@@ -6,7 +6,6 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { Metadata } from 'next';
 import { ApolloWrapper } from './ApolloWrapper';
 import { headers } from 'next/headers';
-import { Provider as JotaiProvider } from 'jotai';
 
 import './global.css';
 
@@ -44,15 +43,13 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AppRouterCacheProvider>
-          <JotaiProvider>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <ApolloWrapper token={token}>
-                <Toasts />
-                {children}
-              </ApolloWrapper>
-            </ThemeProvider>
-          </JotaiProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <ApolloWrapper token={token}>
+              <Toasts />
+              {children}
+            </ApolloWrapper>
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
