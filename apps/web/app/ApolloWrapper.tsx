@@ -1,7 +1,7 @@
 'use client';
 
 import { ApolloNextAppProvider } from '@apollo/experimental-nextjs-app-support/ssr';
-import { makeClient } from '../apollo/rfc_client';
+import { makeClient } from '../apollo/rsc_client';
 import { ReactNode } from 'react';
 
 type Props = {

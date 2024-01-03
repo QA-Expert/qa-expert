@@ -15,8 +15,6 @@ import { CardActions } from './card-actions';
 import { getSelectedStyles } from '../../../utils/utils';
 import { useParams } from 'next/navigation';
 import { CourseProps } from '../../../app/courses/page';
-import { Suspense } from 'react';
-import { CircularProgress } from '@mui/material';
 import { useReactiveVar } from '@apollo/client';
 import { isAuthenticated } from '../../../apollo/store';
 import { GetCourseQuery } from '../../__generated__/graphql';
@@ -76,10 +74,8 @@ export function CardContainer(props: CourseProps) {
           height={150}
         >
           {isUserAuthenticated && (
-            <Suspense fallback={<CircularProgress />}>
-              {/* Since user is authenticated we know that it is course with all props that is why it is safe to do type cast */}
-              <CourseStates {...(props as GetCourseQuery['course'])} />
-            </Suspense>
+            /* Since user is authenticated we know that it is course with all props that is why it is safe to do type cast */
+            <CourseStates {...(props as GetCourseQuery['course'])} />
           )}
         </CardImage>
 
@@ -89,10 +85,8 @@ export function CardContainer(props: CourseProps) {
       <CardActions />
 
       {isUserAuthenticated && (
-        <Suspense fallback={<CircularProgress />}>
-          {/* Since user is authenticated we know that it is course with all props that is why it is safe to do type cast */}
-          <ProgressBar {...(props as GetCourseQuery['course'])} />
-        </Suspense>
+        /* Since user is authenticated we know that it is course with all props that is why it is safe to do type cast */
+        <ProgressBar {...(props as GetCourseQuery['course'])} />
       )}
 
       <CardAccordion {...props} showOpenCourseButton={isUserAuthenticated} />

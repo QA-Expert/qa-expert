@@ -14,6 +14,9 @@ interface Props {
   courseInfo: GetCourseQuery['course'];
 }
 
+/**
+ * @description Container that represents a collection of pages inside of the Course.
+ */
 export function Pages({ pages, courseInfo }: Props) {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const currentPage = pages[currentPageIndex];

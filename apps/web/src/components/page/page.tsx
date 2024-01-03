@@ -5,6 +5,10 @@ import CoursePage from '../course-page/course-page';
 import QuizPage from '../quiz-page/quiz-page';
 import { StatusIndicator } from '../status-indicator/status-indicator';
 
+/**
+ * @description Component that represents a page inside of the Course.
+ * NOTE: it is not a separate routing page.
+ */
 export default function Page(page: GetCourseQuery['course']['pages'][number]) {
   return (
     <Box

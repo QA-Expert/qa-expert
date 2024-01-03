@@ -17,6 +17,7 @@ import { Row } from '../../src/components/row/row';
 import { isAuthenticated } from '../../apollo/store';
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useReactiveVar } from '@apollo/client';
+import { useEffect } from 'react';
 
 export type LoggedInUserCourses = GetAllCoursesQuery['courses'][number];
 
@@ -27,10 +28,14 @@ export type PublicCourses = Pick<
 
 export type CourseProps = LoggedInUserCourses | PublicCourses;
 
+/**
+ * @description Routing App component that represents gallery of the Courses.
+ *
+ * NOTE: Courses page is purposely client component as we need to re-render it based on user auth state.
+ */
 function CoursesPage() {
   // TODO: Come up with better way of getting different data set where we don't have to specify type on variable
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
-
   const { data } = useQuery<GetAllCoursesQuery | GetAllCoursesPublicQuery>(
     isUserAuthenticated ? GET_ALL_COURSES : GET_ALL_COURSES_PUBLIC,
   );

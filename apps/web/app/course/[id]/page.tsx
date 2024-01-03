@@ -1,14 +1,20 @@
+'use client';
+
 import { Box } from '../../../src/components/box/box';
 import Layout from '../../../src/components/layout/layout';
 import { Pages } from '../../../src/components/pages/pages';
 import { Row } from '../../../src/components/row/row';
 import { GET_COURSE } from '../../../src/graphql/queries/queries';
-import { getClient } from '../../../apollo/ssr_client';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useParams } from 'next/navigation';
 
-const Course = async ({ params }: { params: { id: string } }) => {
-  const { data } = await getClient().query({
-    variables: { _id: params.id },
-    query: GET_COURSE,
+/**
+ * @description Routing App component that represents a root for a Course
+ */
+const Course = () => {
+  const params = useParams();
+  const { data } = useSuspenseQuery(GET_COURSE, {
+    variables: { _id: params.id as string },
   });
 
   return (

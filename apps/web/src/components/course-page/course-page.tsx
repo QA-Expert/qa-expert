@@ -1,6 +1,5 @@
 'use client';
 
-import { PageFragmentFragment } from '../../__generated__/graphql';
 import { Box } from '../box/box';
 import { TextEditor } from '../text-editor/text-editor';
 import { GET_COURSE } from '../../graphql/queries/queries';
@@ -9,8 +8,12 @@ import { useMutation } from '@apollo/client';
 import { CREATE_COURSE_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
 import { useError } from '../../../utils/hooks';
 import Button from '@mui/material/Button';
+import { GetCourseQuery } from '../../__generated__/graphql';
 
-type Props = PageFragmentFragment;
+type Props = Pick<
+  GetCourseQuery['course']['pages'][number],
+  '_id' | 'content' | 'progress'
+>;
 
 export default function CoursePage({ _id, content, progress }: Props) {
   const router = useParams();

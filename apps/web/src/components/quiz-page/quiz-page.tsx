@@ -3,10 +3,7 @@
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
-import {
-  PageFragmentFragment,
-  PageProgressState,
-} from '../../__generated__/graphql';
+import { GetCourseQuery, PageProgressState } from '../../__generated__/graphql';
 import { Box } from '../box/box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -20,7 +17,10 @@ import { CREATE_QUIZ_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
 import { GET_COURSE } from '../../graphql/queries/queries';
 import { useError } from '../../../utils/hooks';
 
-type Props = PageFragmentFragment;
+type Props = Pick<
+  GetCourseQuery['course']['pages'][number],
+  '_id' | 'question' | 'progress'
+>;
 
 export default function QuizPage({ question, progress, _id: pageId }: Props) {
   const router = useParams();
