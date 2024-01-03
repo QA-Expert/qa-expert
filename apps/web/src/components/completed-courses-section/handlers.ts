@@ -1,4 +1,4 @@
-import { CourseProps } from '../../../pages/courses';
+import { CourseProps } from '../../../app/courses/page';
 
 export const getCoursesToShowBySectionWidth = (
   width: number,
