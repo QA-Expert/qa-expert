@@ -9,10 +9,8 @@ import { isAuthenticated } from '../apollo/store';
 
 export default function GlobalError({
   error,
-  reset,
 }: {
   error: (Error & { digest?: string }) | ApolloError;
-  reset: () => void;
 }) {
   const router = useRouter();
   const apolloClient = useApolloClient();
@@ -40,7 +38,7 @@ export default function GlobalError({
         )
         .then(() => router.push('/courses'));
     }
-  }, [error, router]);
+  }, [error, router, apolloClient]);
 
   return null;
 }

@@ -17,7 +17,6 @@ import { Row } from '../../src/components/row/row';
 import { isAuthenticated } from '../../apollo/store';
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useReactiveVar } from '@apollo/client';
-import { useEffect } from 'react';
 
 export type LoggedInUserCourses = GetAllCoursesQuery['courses'][number];
 
