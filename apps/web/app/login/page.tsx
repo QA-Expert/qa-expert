@@ -1,10 +1,9 @@
-import Main from '../src/components/main/main';
+'use client';
+
 import { Formik, FormikProps, FormikHelpers } from 'formik';
-import { UserInputLogin } from '../src/__generated__/graphql';
 import * as Yup from 'yup';
-import { LOGIN } from '../src/graphql/mutations/mutations';
 import { useApolloClient, useMutation } from '@apollo/client';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -14,8 +13,12 @@ import Typography from '@mui/material/Typography';
 import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Link from 'next/link';
-import { Box } from '../src/components/box/box';
-import { useError } from '../utils/hooks';
+import { useError } from '../../utils/hooks';
+import { UserInputLogin } from '../../src/__generated__/graphql';
+import Main from '../../src/components/main/main';
+import { LOGIN } from '../../src/graphql/mutations/mutations';
+import { Box } from '../../src/components/box/box';
+import { isAuthenticated } from '../../apollo/store';
 
 function Login() {
   const client = useApolloClient();
@@ -46,6 +49,7 @@ function Login() {
           actions: FormikHelpers<UserInputLogin>,
         ) => {
           actions.setSubmitting(true);
+
           await client.resetStore();
 
           const { data, errors } = await login({
@@ -59,7 +63,9 @@ function Login() {
           }
 
           if (data?.login?.access_token) {
-            await router.push('/courses');
+            isAuthenticated(true);
+
+            router.push('/courses');
           }
         }}
       >
@@ -127,15 +133,15 @@ function Login() {
 
               <Typography>
                 {'If you do not have an account, please '}
-                <Link href="/register">
-                  <MuiLink>register</MuiLink>
-                </Link>
+                <MuiLink href="/register" component={Link}>
+                  register
+                </MuiLink>
                 .
               </Typography>
 
-              <Link href="/forgot-password">
-                <MuiLink>Need help?</MuiLink>
-              </Link>
+              <MuiLink href="/forgot-password" component={Link}>
+                Need help?
+              </MuiLink>
 
               <Button
                 variant="contained"

@@ -18,13 +18,13 @@ See instructions in root repo README.md
 
 ```bash
 # development
-$ npm run start
+$ yarn dev
 
-# watch mode
-$ npm run start:dev
+# development
+$ yarn build
 
-# production mode
-$ npm run start:prod
+# production mode - you need to build first
+$ yarn start:prod
 ```
 
 Open http://localhost:3001/graphql to be able to work with playground
@@ -33,11 +33,11 @@ Open http://localhost:3001/graphql to be able to work with playground
 
 ```bash
 # unit tests
-$ npm run test
+$ yarn test test
 
 # e2e tests
-$ npm run test:e2e
+$ yarn test:e2e
 
 # test coverage
-$ npm run test:cov
+$ yarn test:cov
 ```

@@ -1,3 +1,5 @@
+'use client';
+
 import Chip from '@mui/material/Chip';
 import { useTheme } from '@mui/material/styles';
 import { CourseLevel } from '../../__generated__/graphql';

@@ -10,7 +10,7 @@ import { Row } from '../row/row';
 import { INIT_WIDTH } from './sidebar';
 import { GetCourseQuery } from '../../__generated__/graphql';
 
-export function NavigationCard(props: GetCourseQuery['course']) {
+export function NavigationCard(course: GetCourseQuery['course']) {
   return (
     <Card sx={{ width: INIT_WIDTH }} raised>
       <Row
@@ -19,24 +19,24 @@ export function NavigationCard(props: GetCourseQuery['course']) {
         }}
       >
         <CardImage
-          alt={props.title}
+          alt={course.title}
           src="/images/course-default-card.svg"
           width={INIT_WIDTH}
           height={150}
         >
           <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
-            <CourseLevelLabel level={props.level} />
+            <CourseLevelLabel level={course.level} />
           </Box>
 
-          <CourseStates _id={props._id} />
+          <CourseStates {...course} />
         </CardImage>
       </Row>
 
       <CardActions />
 
-      <ProgressBar _id={props._id} />
+      <ProgressBar {...course} />
 
-      <CardAccordion {...props} showOpenCourseButton={false} />
+      <CardAccordion {...course} showOpenCourseButton={false} />
     </Card>
   );
 }

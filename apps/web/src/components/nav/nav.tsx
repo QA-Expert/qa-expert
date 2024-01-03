@@ -1,4 +1,5 @@
-import { useQuery } from '@apollo/client';
+'use client';
+
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,10 +8,14 @@ import Link from 'next/link';
 import { GET_USER } from '../../graphql/queries/queries';
 import { Box } from '../box/box';
 import { ProfileMenu } from '../profile-menu/profile-menu';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useReactiveVar } from '@apollo/client';
+import { isAuthenticated } from '../../../apollo/store';
 
 export default function Nav() {
-  const { data } = useQuery(GET_USER, {
-    fetchPolicy: 'cache-only',
+  const isUserAuthenticated = useReactiveVar(isAuthenticated);
+  const { data } = useSuspenseQuery(GET_USER, {
+    skip: !isUserAuthenticated,
   });
 
   return (
@@ -45,7 +50,7 @@ export default function Nav() {
             marginLeft: 'auto',
           }}
         >
-          {data?.user ? (
+          {data?.user && isUserAuthenticated ? (
             <ProfileMenu />
           ) : (
             <Link href="/login">

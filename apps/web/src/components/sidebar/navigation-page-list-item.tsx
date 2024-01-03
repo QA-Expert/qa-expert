@@ -5,30 +5,25 @@ import ListItem from '@mui/material/ListItem';
 import { styled, useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { getColorForState, getSelectedStyles } from '../../../utils/utils';
-import {
-  FragmentType,
-  useFragment,
-} from '../../__generated__/fragment-masking';
-import { PageFragmentFragmentDoc } from '../../__generated__/graphql';
 import { StatusIndicator } from '../status-indicator/status-indicator';
 import { ArrowIcon } from '../icons/arrow';
 import { Row } from '../row/row';
 import { useState } from 'react';
+import { GetCourseQuery } from '../../__generated__/graphql';
 
 type Props = {
-  pageFragment: FragmentType<typeof PageFragmentFragmentDoc>;
+  page: GetCourseQuery['course']['pages'][number];
   selected: boolean;
   onClick: () => void;
   currentPageNumber: number;
 };
 
 export function NavigationPageListItem({
-  pageFragment,
+  page,
   selected,
   onClick,
   currentPageNumber,
 }: Props) {
-  const page = useFragment(PageFragmentFragmentDoc, pageFragment);
   const theme = useTheme();
   const selectedStyles = selected ? getSelectedStyles(theme) : undefined;
   const [expand, setExpand] = useState(false);

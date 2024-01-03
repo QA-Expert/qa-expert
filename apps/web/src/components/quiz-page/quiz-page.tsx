@@ -1,10 +1,9 @@
+'use client';
+
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
-import {
-  PageFragmentFragment as Props,
-  PageProgressState,
-} from '../../__generated__/graphql';
+import { GetCourseQuery, PageProgressState } from '../../__generated__/graphql';
 import { Box } from '../box/box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -12,16 +11,21 @@ import Radio from '@mui/material/Radio';
 import { ChangeEvent, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
-import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation';
 import { difference } from 'lodash';
 import { CREATE_QUIZ_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
 import { GET_COURSE } from '../../graphql/queries/queries';
 import { useError } from '../../../utils/hooks';
 
+type Props = Pick<
+  GetCourseQuery['course']['pages'][number],
+  '_id' | 'question' | 'progress'
+>;
+
 export default function QuizPage({ question, progress, _id: pageId }: Props) {
-  const router = useRouter();
-  const courseId = router.query.id as string;
-  const [answers, setAnswers] = useState<string[]>(progress?.answers ?? []);
+  const router = useParams();
+  const courseId = router.id as string;
+  const [answers, setAnswers] = useState(progress?.answers ?? []);
   const isSingleAnswerQuestion = question?.answers.length === 1;
   const [createProgress, { error }] = useMutation(CREATE_QUIZ_PAGE_PROGRESS, {
     refetchQueries: [
@@ -39,7 +43,7 @@ export default function QuizPage({ question, progress, _id: pageId }: Props) {
   }
 
   const handleSubmit = async () => {
-    const expectedAnswerIds = question?.answers.map((answer) => answer._id);
+    const expectedAnswerIds = question?.answers?.map((answer) => answer?._id);
 
     await createProgress({
       variables: {

@@ -1,4 +1,6 @@
-import { addDays, intervalToDuration } from 'date-fns';
+'use client';
+
+import { Duration, addDays, intervalToDuration } from 'date-fns';
 import { useEffect, useState } from 'react';
 
 export const useDurationToRetakeQuiz = (createdAt: string) => {

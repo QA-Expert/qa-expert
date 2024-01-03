@@ -1,16 +1,23 @@
-import { PageFragmentFragment as Props } from '../../__generated__/graphql';
+'use client';
+
 import { Box } from '../box/box';
 import { TextEditor } from '../text-editor/text-editor';
 import { GET_COURSE } from '../../graphql/queries/queries';
-import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation';
 import { useMutation } from '@apollo/client';
 import { CREATE_COURSE_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
 import { useError } from '../../../utils/hooks';
 import Button from '@mui/material/Button';
+import { GetCourseQuery } from '../../__generated__/graphql';
+
+type Props = Pick<
+  GetCourseQuery['course']['pages'][number],
+  '_id' | 'content' | 'progress'
+>;
 
 export default function CoursePage({ _id, content, progress }: Props) {
-  const router = useRouter();
-  const courseId = router.query.id as string;
+  const router = useParams();
+  const courseId = router.id as string;
   const [createProgress, { error }] = useMutation(CREATE_COURSE_PAGE_PROGRESS, {
     refetchQueries: [
       {

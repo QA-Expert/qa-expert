@@ -1,5 +1,7 @@
-import { useApolloClient, useMutation, useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
+'use client';
+
+import { useApolloClient, useMutation, useReactiveVar } from '@apollo/client';
+import { usePathname, useRouter } from 'next/navigation';
 import { LOGOUT } from '../../graphql/mutations/mutations';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
@@ -12,14 +14,18 @@ import { useState } from 'react';
 import { Box } from '../box/box';
 import { useError } from '../../../utils/hooks';
 import { GET_USER } from '../../graphql/queries/queries';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { isAuthenticated } from '../../../apollo/store';
 
 export const ProfileMenu = () => {
+  const isUserAuthenticated = useReactiveVar(isAuthenticated);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const router = useRouter();
+  const path = usePathname();
   const client = useApolloClient();
   const [logout, { error }] = useMutation(LOGOUT);
-  const { data, error: userError } = useQuery(GET_USER, {
-    fetchPolicy: 'cache-only',
+  const { data, error: userError } = useSuspenseQuery(GET_USER, {
+    skip: !isUserAuthenticated,
   });
   const user = data?.user;
 
@@ -35,9 +41,17 @@ export const ProfileMenu = () => {
     {
       name: 'Logout',
       handleClick: async () => {
-        await logout();
-        await router.push('/courses');
         await client.resetStore();
+
+        await logout();
+
+        isAuthenticated(false);
+
+        if (path === '/courses') {
+          router.refresh();
+        } else {
+          router.push('/courses');
+        }
       },
     },
   ];

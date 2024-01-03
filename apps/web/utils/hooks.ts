@@ -1,10 +1,11 @@
-import { useUpdateAtom } from 'jotai/utils';
+'use client';
+
 import { RefObject, useEffect, useState } from 'react';
-import { Toast, toastsAtom } from '../src/store';
 import { debounce } from 'lodash';
+import { Toast, toastErrors } from '../apollo/store';
 
 export const useError = (messages: (string | undefined)[]) => {
-  const setToasts = useUpdateAtom(toastsAtom);
+  const setToasts = toastErrors;
 
   useEffect(() => {
     if (messages?.length) {

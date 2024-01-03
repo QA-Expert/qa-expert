@@ -14,8 +14,8 @@ import { ArrowIcon } from '../icons/arrow';
 import ListItemText from '@mui/material/ListItemText';
 import { CourseProgressState } from '../../__generated__/graphql';
 import { useTheme } from '@mui/material/styles';
-import { CourseProps } from '../../../pages/courses';
 import { Box } from '../box/box';
+import { CourseProps } from '../../../app/courses/page';
 
 type Props = {
   _id: CourseProps['_id'];

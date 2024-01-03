@@ -1,29 +1,26 @@
+'use client';
+
 import { useState } from 'react';
 import { Box } from '../box/box';
 import Paper from '@mui/material/Paper';
 import { Row } from '../row/row';
 import Sidebar from '../sidebar/sidebar';
-import {
-  GetCourseQuery,
-  PageFragmentFragmentDoc,
-} from '../../__generated__/graphql';
-import { FragmentType, useFragment } from '../../__generated__';
+import { GetCourseQuery } from '../../__generated__/graphql';
 import Page from '../page/page';
 import { PagePagination } from './pages-pagination';
 
 interface Props {
-  pages: FragmentType<typeof PageFragmentFragmentDoc>[];
+  pages: GetCourseQuery['course']['pages'];
   courseInfo: GetCourseQuery['course'];
 }
 
+/**
+ * @description Container that represents a collection of pages inside of the Course.
+ */
 export function Pages({ pages, courseInfo }: Props) {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const currentPageFragment = useFragment(
-    PageFragmentFragmentDoc,
-    pages[currentPageIndex],
-  );
-
-  if (!currentPageFragment) {
+  const currentPage = pages[currentPageIndex];
+  if (!currentPage) {
     return null;
   }
 
@@ -37,7 +34,7 @@ export function Pages({ pages, courseInfo }: Props) {
       }}
     >
       <Sidebar
-        description={currentPageFragment.description}
+        description={currentPage.description ?? ''}
         courseInfo={courseInfo}
         onPageChange={setCurrentPageIndex}
         currentPageIndex={currentPageIndex}
@@ -57,7 +54,7 @@ export function Pages({ pages, courseInfo }: Props) {
             padding: '2rem',
           }}
         >
-          <Page {...pages[currentPageIndex]} />
+          <Page {...currentPage} />
 
           <PagePagination
             onPageChange={setCurrentPageIndex}

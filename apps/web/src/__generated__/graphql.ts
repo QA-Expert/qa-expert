@@ -11,45 +11,54 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
+    };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
-  DateTime: string;
+  DateTime: { input: string; output: string };
 };
 
 export type Answer = {
   __typename?: 'Answer';
-  _id: Scalars['String'];
+  _id: Scalars['String']['output'];
   /** Answer's content text */
-  content: Scalars['String'];
+  content: Scalars['String']['output'];
 };
 
 export type Badge = {
   __typename?: 'Badge';
-  _id: Scalars['String'];
+  _id: Scalars['String']['output'];
   course?: Maybe<Course>;
-  description: Scalars['String'];
+  description: Scalars['String']['output'];
   /** Icon url */
-  icon: Scalars['String'];
+  icon: Scalars['String']['output'];
   /** Sharable link. Navigating via that link use should be able to see their Badge */
-  link: Scalars['String'];
-  title: Scalars['String'];
+  link: Scalars['String']['output'];
+  title: Scalars['String']['output'];
 };
 
 export type Course = {
   __typename?: 'Course';
-  _id: Scalars['String'];
+  _id: Scalars['String']['output'];
   /** Achievement upon successful completion of course */
   badge?: Maybe<Badge>;
   /** Course description */
-  description: Scalars['String'];
+  description: Scalars['String']['output'];
   /** Icon url */
-  icon: Scalars['String'];
+  icon: Scalars['String']['output'];
   /** Defines level of skill that user gains after finishing the course */
   level: CourseLevel;
   /** Pages included in course */
@@ -61,7 +70,7 @@ export type Course = {
   /** Collection of strings that describe features of the course. Help to filter courses by specific tag/s */
   tags: Array<Tag>;
   /** Course title */
-  title: Scalars['String'];
+  title: Scalars['String']['output'];
   type: CourseType;
 };
 
@@ -74,20 +83,20 @@ export enum CourseLevel {
 }
 
 export type CoursePageContentInput = {
-  content: Scalars['String'];
+  content: Scalars['String']['input'];
 };
 
 export type CoursePageInput = {
-  content: Scalars['String'];
-  description: Scalars['String'];
-  title: Scalars['String'];
+  content: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type CoursePageProgressInput = {
   /** Course id */
-  course: Scalars['String'];
+  course: Scalars['String']['input'];
   /** Page id */
-  page: Scalars['String'];
+  page: Scalars['String']['input'];
 };
 
 /** Defines the state of course progress */
@@ -111,10 +120,10 @@ export type Mutation = {
   createCoursePageProgress: PageProgress;
   createQuizPage: Page;
   createQuizPageProgress: PageProgress;
-  deleteCourseProgresses: Scalars['Boolean'];
-  forgotPassword: Scalars['Boolean'];
+  deleteCourseProgresses: Scalars['Boolean']['output'];
+  forgotPassword: Scalars['Boolean']['output'];
   login: UserOutputLogin;
-  logout: Scalars['Boolean'];
+  logout: Scalars['Boolean']['output'];
   register: UserOutputLogin;
   resetPassword: User;
   updateCoursePageContent: Page;
@@ -123,12 +132,12 @@ export type Mutation = {
 };
 
 export type MutationAddPageArgs = {
-  _id: Scalars['String'];
-  pageId: Scalars['String'];
+  _id: Scalars['String']['input'];
+  pageId: Scalars['String']['input'];
 };
 
 export type MutationClaimBadgeArgs = {
-  badgeId: Scalars['String'];
+  badgeId: Scalars['String']['input'];
 };
 
 export type MutationCreateCoursePageArgs = {
@@ -148,11 +157,11 @@ export type MutationCreateQuizPageProgressArgs = {
 };
 
 export type MutationDeleteCourseProgressesArgs = {
-  _id: Scalars['String'];
+  _id: Scalars['String']['input'];
 };
 
 export type MutationForgotPasswordArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 export type MutationLoginArgs = {
@@ -168,7 +177,7 @@ export type MutationResetPasswordArgs = {
 };
 
 export type MutationUpdateCoursePageContentArgs = {
-  _id: Scalars['String'];
+  _id: Scalars['String']['input'];
   data: CoursePageContentInput;
 };
 
@@ -182,28 +191,28 @@ export type MutationUpdateUserPasswordArgs = {
 
 export type Page = {
   __typename?: 'Page';
-  _id: Scalars['String'];
-  content?: Maybe<Scalars['String']>;
-  description: Scalars['String'];
+  _id: Scalars['String']['output'];
+  content?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
   /** Page progress */
   progress?: Maybe<PageProgress>;
   /** Used in quiz pages */
   question?: Maybe<Question>;
-  title: Scalars['String'];
+  title: Scalars['String']['output'];
   type: CourseType;
 };
 
 export type PageProgress = {
   __typename?: 'PageProgress';
-  _id: Scalars['String'];
+  _id: Scalars['String']['output'];
   /** Array of answers used if page is quiz */
-  answers: Array<Scalars['String']>;
-  course: Scalars['String'];
-  page: Scalars['String'];
+  answers: Array<Scalars['String']['output']>;
+  course: Scalars['String']['output'];
+  page: Scalars['String']['output'];
   state: PageProgressState;
   /** Type of the course - theoretical course or quiz */
   type: CourseType;
-  user: Scalars['String'];
+  user: Scalars['String']['output'];
 };
 
 /** Defines whether User passed or failed or just visited current page */
@@ -223,55 +232,55 @@ export type Query = {
 };
 
 export type QueryCourseArgs = {
-  _id: Scalars['String'];
+  _id: Scalars['String']['input'];
 };
 
 export type Question = {
   __typename?: 'Question';
-  _id: Scalars['String'];
+  _id: Scalars['String']['output'];
   /** Current answer */
   answers: Array<Answer>;
   /** Question content */
-  content: Scalars['String'];
+  content: Scalars['String']['output'];
   /** Answer options */
   options: Array<Answer>;
 };
 
 export type QuizPageInput = {
-  description: Scalars['String'];
-  question: Scalars['String'];
-  title: Scalars['String'];
+  description: Scalars['String']['input'];
+  question: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type QuizPageProgressInput = {
   /** Array of answer ids */
-  answers: Array<Scalars['String']>;
+  answers: Array<Scalars['String']['input']>;
   /** Course id */
-  course: Scalars['String'];
+  course: Scalars['String']['input'];
   /** Page id */
-  page: Scalars['String'];
+  page: Scalars['String']['input'];
   /** Can be pass or fail. The state comes from the client side after checking the answers. Set it in the database as a result of the answer to the quiz */
   state: PageProgressState;
 };
 
 export type ResetPasswordInput = {
-  password: Scalars['String'];
+  password: Scalars['String']['input'];
   /** Token generated while user forgot password */
-  token: Scalars['String'];
+  token: Scalars['String']['input'];
 };
 
 export type SubmittedProgress = {
   __typename?: 'SubmittedProgress';
-  _id: Scalars['String'];
+  _id: Scalars['String']['output'];
   course: Course;
   /** Calculated from submitted course theory */
-  courseProgress: Scalars['Float'];
-  createdAt: Scalars['DateTime'];
+  courseProgress: Scalars['Float']['output'];
+  createdAt: Scalars['DateTime']['output'];
   /** Calculated from submitted course quiz */
-  quizProgress: Scalars['Float'];
+  quizProgress: Scalars['Float']['output'];
   /** Calculated from course plus quiz progress */
-  totalProgress: Scalars['Float'];
-  user: Scalars['String'];
+  totalProgress: Scalars['Float']['output'];
+  user: Scalars['String']['output'];
 };
 
 /** Defines the course tags */
@@ -282,91 +291,70 @@ export enum Tag {
 export type TotalCourseProgress = {
   __typename?: 'TotalCourseProgress';
   /** Total Percentage of failed pages */
-  fail: Scalars['Float'];
+  fail: Scalars['Float']['output'];
   /** Course pages count before finishing course */
-  pagesLeftBeforeFinish?: Maybe<Scalars['Float']>;
+  pagesLeftBeforeFinish?: Maybe<Scalars['Float']['output']>;
   /** Total Percentage of passed pages */
-  pass: Scalars['Float'];
+  pass: Scalars['Float']['output'];
   state: CourseProgressState;
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type User = {
   __typename?: 'User';
-  _id: Scalars['String'];
+  _id: Scalars['String']['output'];
   /** User achievements. Upon successful completion of the course, the user receives an achievement that can be shared */
-  badges: Array<Scalars['String']>;
-  email: Scalars['String'];
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
+  badges: Array<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  firstName?: Maybe<Scalars['String']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
   /** User roles. User - simple platform user. Admin - user with access to course editing */
-  roles: Array<Scalars['String']>;
+  roles: Array<Scalars['String']['output']>;
 };
 
 export type UserBaseModel = {
-  _id: Scalars['String'];
-  email: Scalars['String'];
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  roles: Array<Scalars['String']>;
+  _id: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  firstName?: Maybe<Scalars['String']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
+  roles: Array<Scalars['String']['output']>;
 };
 
 export type UserInputCreate = {
-  email: Scalars['String'];
-  firstName?: InputMaybe<Scalars['String']>;
-  lastName?: InputMaybe<Scalars['String']>;
-  password: Scalars['String'];
+  email: Scalars['String']['input'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
 };
 
 export type UserInputLogin = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type UserInputUpdateNames = {
-  firstName?: InputMaybe<Scalars['String']>;
-  lastName?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserInputUpdatePassword = {
-  newPassword: Scalars['String'];
-  oldPassword: Scalars['String'];
+  newPassword: Scalars['String']['input'];
+  oldPassword: Scalars['String']['input'];
 };
 
 export type UserOutputLogin = UserBaseModel & {
   __typename?: 'UserOutputLogin';
-  _id: Scalars['String'];
-  access_token: Scalars['String'];
-  email: Scalars['String'];
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  roles: Array<Scalars['String']>;
+  _id: Scalars['String']['output'];
+  access_token: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  firstName?: Maybe<Scalars['String']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
+  roles: Array<Scalars['String']['output']>;
 };
 
-export type PageFragmentFragment = {
-  __typename?: 'Page';
-  _id: string;
-  title: string;
-  type: CourseType;
-  description: string;
-  content?: string | null;
-  question?: {
-    __typename?: 'Question';
-    content: string;
-    answers: Array<{ __typename?: 'Answer'; _id: string; content: string }>;
-    options: Array<{ __typename?: 'Answer'; _id: string; content: string }>;
-  } | null;
-  progress?: {
-    __typename?: 'PageProgress';
-    _id: string;
-    state: PageProgressState;
-    answers: Array<string>;
-  } | null;
-} & { ' $fragmentName'?: 'PageFragmentFragment' };
-
 export type LoginMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 }>;
 
 export type LoginMutation = {
@@ -379,10 +367,10 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 export type LogoutMutation = { __typename?: 'Mutation'; logout: boolean };
 
 export type RegisterMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
-  firstName?: InputMaybe<Scalars['String']>;
-  lastName?: InputMaybe<Scalars['String']>;
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type RegisterMutation = {
@@ -392,9 +380,9 @@ export type RegisterMutation = {
 
 export type CreateQuizPageProgressMutationVariables = Exact<{
   state: PageProgressState;
-  page: Scalars['String'];
-  course: Scalars['String'];
-  answers: Array<Scalars['String']> | Scalars['String'];
+  page: Scalars['String']['input'];
+  course: Scalars['String']['input'];
+  answers: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
 
 export type CreateQuizPageProgressMutation = {
@@ -408,8 +396,8 @@ export type CreateQuizPageProgressMutation = {
 };
 
 export type CreateCoursePageProgressMutationVariables = Exact<{
-  page: Scalars['String'];
-  course: Scalars['String'];
+  page: Scalars['String']['input'];
+  course: Scalars['String']['input'];
 }>;
 
 export type CreateCoursePageProgressMutation = {
@@ -418,8 +406,8 @@ export type CreateCoursePageProgressMutation = {
 };
 
 export type UpdateCoursePageContentMutationVariables = Exact<{
-  _id: Scalars['String'];
-  content: Scalars['String'];
+  _id: Scalars['String']['input'];
+  content: Scalars['String']['input'];
 }>;
 
 export type UpdateCoursePageContentMutation = {
@@ -437,7 +425,7 @@ export type ResetPasswordMutation = {
 };
 
 export type ForgotPasswordMutationVariables = Exact<{
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 }>;
 
 export type ForgotPasswordMutation = {
@@ -446,8 +434,8 @@ export type ForgotPasswordMutation = {
 };
 
 export type UpdateUserNamesMutationVariables = Exact<{
-  firstName?: InputMaybe<Scalars['String']>;
-  lastName?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type UpdateUserNamesMutation = {
@@ -460,8 +448,8 @@ export type UpdateUserNamesMutation = {
 };
 
 export type UpdateUserPasswordMutationVariables = Exact<{
-  oldPassword: Scalars['String'];
-  newPassword: Scalars['String'];
+  oldPassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
 }>;
 
 export type UpdateUserPasswordMutation = {
@@ -470,7 +458,7 @@ export type UpdateUserPasswordMutation = {
 };
 
 export type ClaimBadgeMutationVariables = Exact<{
-  badgeId: Scalars['String'];
+  badgeId: Scalars['String']['input'];
 }>;
 
 export type ClaimBadgeMutation = {
@@ -479,7 +467,7 @@ export type ClaimBadgeMutation = {
 };
 
 export type DeleteCourseProgressesMutationVariables = Exact<{
-  _id: Scalars['String'];
+  _id: Scalars['String']['input'];
 }>;
 
 export type DeleteCourseProgressesMutation = {
@@ -544,7 +532,7 @@ export type GetAllCoursesPublicQuery = {
 };
 
 export type GetCourseQueryVariables = Exact<{
-  _id: Scalars['String'];
+  _id: Scalars['String']['input'];
 }>;
 
 export type GetCourseQuery = {
@@ -564,11 +552,27 @@ export type GetCourseQuery = {
       state: CourseProgressState;
       updatedAt: string;
     };
-    pages: Array<
-      { __typename?: 'Page' } & {
-        ' $fragmentRefs'?: { PageFragmentFragment: PageFragmentFragment };
-      }
-    >;
+    badge?: { __typename?: 'Badge'; _id: string } | null;
+    pages: Array<{
+      __typename?: 'Page';
+      _id: string;
+      title: string;
+      type: CourseType;
+      description: string;
+      content?: string | null;
+      question?: {
+        __typename?: 'Question';
+        content: string;
+        answers: Array<{ __typename?: 'Answer'; _id: string; content: string }>;
+        options: Array<{ __typename?: 'Answer'; _id: string; content: string }>;
+      } | null;
+      progress?: {
+        __typename?: 'PageProgress';
+        _id: string;
+        state: PageProgressState;
+        answers: Array<string>;
+      } | null;
+    }>;
     recommendedCourses: Array<{
       __typename?: 'Course';
       _id: string;
@@ -583,7 +587,7 @@ export type GetCourseQuery = {
 };
 
 export type GetCourseProgressAndBadgeQueryVariables = Exact<{
-  _id: Scalars['String'];
+  _id: Scalars['String']['input'];
 }>;
 
 export type GetCourseProgressAndBadgeQuery = {
@@ -652,79 +656,6 @@ export type GetBadgesSubmittedProgressesUserQuery = {
   };
 };
 
-export const PageFragmentFragmentDoc = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'PageFragment' },
-      typeCondition: {
-        kind: 'NamedType',
-        name: { kind: 'Name', value: 'Page' },
-      },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'question' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'answers' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'content' },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'options' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'content' },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'progress' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'answers' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<PageFragmentFragment, unknown>;
 export const LoginDocument = {
   kind: 'Document',
   definitions: [
@@ -1809,13 +1740,98 @@ export const GetCourseDocument = {
                 },
                 {
                   kind: 'Field',
+                  name: { kind: 'Name', value: 'badge' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
                   name: { kind: 'Name', value: 'pages' },
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
                       {
-                        kind: 'FragmentSpread',
-                        name: { kind: 'Name', value: 'PageFragment' },
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'description' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'content' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'question' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'content' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'answers' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: '_id' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'content' },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'options' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: '_id' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'content' },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'progress' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: '_id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'state' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'answers' },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
@@ -1851,7 +1867,6 @@ export const GetCourseDocument = {
         ],
       },
     },
-    ...PageFragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<GetCourseQuery, GetCourseQueryVariables>;
 export const GetCourseProgressAndBadgeDocument = {

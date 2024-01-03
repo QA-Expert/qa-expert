@@ -1,20 +1,11 @@
 import { Box } from '../box/box';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import { GET_COURSE_PROGRESS_AND_BADGE } from '../../graphql/queries/queries';
-import { useQuery } from '@apollo/client';
+import { GetCourseQuery } from '../../__generated__/graphql';
 
-type Props = {
-  _id: string;
-};
-
-export function ProgressBar({ _id }: Props) {
-  const { data: courseData } = useQuery(GET_COURSE_PROGRESS_AND_BADGE, {
-    variables: { _id },
-  });
-  const course = courseData?.course;
+export function ProgressBar(course: GetCourseQuery['course']) {
   const progress = course?.progress;
-  const hasNoProgress = !progress?.pass && !progress?.fail;
+  const hasNoProgress = !progress.pass && !progress.fail;
 
   return (
     <Box sx={{ width: '100%', height: '2rem', justifyContent: 'flex-end' }}>

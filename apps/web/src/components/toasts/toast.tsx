@@ -1,11 +1,15 @@
+'use client';
+
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { useAtom } from 'jotai';
 import { cloneDeep } from 'lodash';
-import { toastsAtom } from '../../store';
+import { useReactiveVar } from '@apollo/client';
+import { toastErrors } from '../../../apollo/store';
 
 export const Toasts = () => {
-  const [toasts, setToasts] = useAtom(toastsAtom);
+  const toasts = useReactiveVar(toastErrors);
+  const setToasts = toastErrors;
+
   if (!toasts.length) {
     return null;
   }

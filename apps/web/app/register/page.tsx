@@ -1,10 +1,11 @@
-import Main from '../src/components/main/main';
+'use client';
+
+import Main from '../../src/components/main/main';
 import { Formik, FormikProps, FormikHelpers } from 'formik';
-import { UserInputCreate } from '../src/__generated__/graphql';
+import { UserInputCreate } from '../../src/__generated__/graphql';
 import * as Yup from 'yup';
-import { REGISTER } from '../src/graphql/mutations/mutations';
-import { useApolloClient, useMutation } from '@apollo/client';
-import { useRouter } from 'next/router';
+import { REGISTER } from '../../src/graphql/mutations/mutations';
+import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -14,8 +15,10 @@ import Typography from '@mui/material/Typography';
 import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Link from 'next/link';
-import { Box } from '../src/components/box/box';
-import { useError } from '../utils/hooks';
+import { Box } from '../../src/components/box/box';
+import { useError } from '../../utils/hooks';
+import { useApolloClient, useMutation } from '@apollo/client';
+import { isAuthenticated } from '../../apollo/store';
 
 function Register() {
   const client = useApolloClient();
@@ -64,7 +67,9 @@ function Register() {
           }
 
           if (data?.register?.access_token) {
-            await router.push('/');
+            isAuthenticated(true);
+
+            router.push('/');
           }
         }}
       >

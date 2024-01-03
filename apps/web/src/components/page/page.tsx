@@ -1,22 +1,15 @@
 import Typography from '@mui/material/Typography';
-import {
-  CourseType,
-  PageFragmentFragmentDoc,
-} from '../../__generated__/graphql';
+import { CourseType, GetCourseQuery } from '../../__generated__/graphql';
 import { Box } from '../box/box';
 import CoursePage from '../course-page/course-page';
 import QuizPage from '../quiz-page/quiz-page';
-import {
-  FragmentType,
-  useFragment,
-} from '../../__generated__/fragment-masking';
 import { StatusIndicator } from '../status-indicator/status-indicator';
 
-export default function Page(
-  props: FragmentType<typeof PageFragmentFragmentDoc>,
-) {
-  const page = useFragment(PageFragmentFragmentDoc, props);
-
+/**
+ * @description Component that represents a page inside of the Course.
+ * NOTE: it is not a separate routing page.
+ */
+export default function Page(page: GetCourseQuery['course']['pages'][number]) {
   return (
     <Box
       sx={{

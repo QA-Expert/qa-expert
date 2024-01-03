@@ -1,4 +1,6 @@
-import { useMutation, useQuery } from '@apollo/client';
+'use client';
+
+import { useMutation } from '@apollo/client';
 import Button from '@mui/material/Button';
 import {
   CLAIM_BADGE,
@@ -7,7 +9,6 @@ import {
 import {
   GET_ALL_COURSES,
   GET_COURSE,
-  GET_COURSE_PROGRESS_AND_BADGE,
   GET_USER,
 } from '../../graphql/queries/queries';
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -17,22 +18,15 @@ import { useError } from '../../../utils/hooks';
 import { Box } from '../box/box';
 import { Timer } from '../timer/timer';
 import Typography from '@mui/material/Typography';
-import { CourseProgressState } from '../../__generated__/graphql';
+import {
+  CourseProgressState,
+  GetCourseQuery,
+} from '../../__generated__/graphql';
 import { Flag } from '../flag/flag';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
-type Props = {
-  _id: string;
-};
-
-export const CourseStates = ({ _id }: Props) => {
-  const { data } = useQuery(GET_USER);
-  // NOTE: Fetching course user specific data here in that component with useQuery
-  // and not using data that came from SSR because when we send mutation query and fetch mutated course there is no way UI knows about changes in Apollo Cache
-  // Where useQuery is hook that listens to the cache changes and keeps UI in sync
-  const { data: courseData } = useQuery(GET_COURSE_PROGRESS_AND_BADGE, {
-    variables: { _id },
-  });
-  const course = courseData?.course;
+export const CourseStates = (course: GetCourseQuery['course']) => {
+  const { data } = useSuspenseQuery(GET_USER);
   const user = data?.user;
   const [claimBadge, { error: badgeError }] = useMutation(CLAIM_BADGE, {
     refetchQueries: [
@@ -47,7 +41,7 @@ export const CourseStates = ({ _id }: Props) => {
       refetchQueries: [
         {
           query: GET_COURSE,
-          variables: { _id },
+          variables: { _id: course._id },
         },
         {
           query: GET_ALL_COURSES,
@@ -143,7 +137,7 @@ export const CourseStates = ({ _id }: Props) => {
             e.preventDefault();
 
             await deleteCourseProgresses({
-              variables: { _id },
+              variables: { _id: course._id },
             });
           }}
         >
