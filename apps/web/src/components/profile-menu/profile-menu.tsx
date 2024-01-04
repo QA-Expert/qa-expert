@@ -47,7 +47,7 @@ export const ProfileMenu = () => {
 
         isAuthenticated(false);
 
-        if (path === '/courses') {
+        if (path === '/courses' || path === '/') {
           router.refresh();
         } else {
           router.push('/courses');

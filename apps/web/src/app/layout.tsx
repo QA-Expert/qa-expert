@@ -32,8 +32,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  login,
 }: {
   children: React.ReactNode;
+  login: React.ReactNode;
 }) {
   const token = headers().get('Cookie');
 
@@ -46,6 +48,7 @@ export default function RootLayout({
             <ApolloWrapper token={token}>
               <Toasts />
               {children}
+              {login}
             </ApolloWrapper>
           </ThemeProvider>
         </AppRouterCacheProvider>
