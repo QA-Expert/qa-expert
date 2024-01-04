@@ -12,7 +12,6 @@ import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Main from '../../../src/components/main/main';
 import { RESET_PASSWORD } from '../../../src/graphql/mutations/mutations';
 import { Box } from '../../../src/components/box/box';
 import { useState } from 'react';

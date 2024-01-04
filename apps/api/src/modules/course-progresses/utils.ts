@@ -7,5 +7,5 @@ export const getState = (pass: number, fail: number) =>
   pass >= 100
     ? CourseProgressState.PASS
     : pass + fail >= 100
-    ? CourseProgressState.FAIL
-    : CourseProgressState.IN_PROGRESS;
+      ? CourseProgressState.FAIL
+      : CourseProgressState.IN_PROGRESS;

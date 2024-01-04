@@ -1,6 +1,5 @@
 'use client';
 
-import Layout from '../../src/components/layout/layout';
 import {
   GET_ALL_COURSES,
   GET_ALL_COURSES_PUBLIC,

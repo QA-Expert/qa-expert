@@ -1,6 +1,5 @@
 'use client';
 
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { Box } from '../../src/components/box/box';

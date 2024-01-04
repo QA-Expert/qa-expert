@@ -4,9 +4,6 @@ import { Box } from '../box/box';
 import CourseSection from '../course-section/course-section';
 import QuizSection from '../quiz-section/quiz-section';
 import { StatusIndicator } from '../status-indicator/status-indicator';
-import { TestAppSection } from '../test-app-section/test-app-section';
-import { Row } from '../row/row';
-
 /**
  * @description Component that represents a page inside of the Course.
  * NOTE: it is not a separate routing page.

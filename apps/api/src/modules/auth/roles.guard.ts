@@ -25,8 +25,8 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    const isPermitter = requiredRoles.some((role) =>
-      user?.roles.includes(role),
+    const isPermitter = requiredRoles.some(
+      (role) => user?.roles.includes(role),
     );
 
     if (!isPermitter) {

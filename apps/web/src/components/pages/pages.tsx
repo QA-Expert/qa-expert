@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Box } from '../box/box';
-import Paper from '@mui/material/Paper';
 import { Row } from '../row/row';
 import Sidebar from '../sidebar/sidebar';
 import { CourseType, GetCourseQuery } from '../../__generated__/graphql';
