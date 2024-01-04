@@ -16,7 +16,7 @@ import { useError } from 'utils/hooks';
 import { UserInputLogin } from '__generated__/graphql';
 import { LOGIN } from 'graphql/mutations/mutations';
 import { isAuthenticated } from 'apollo/store';
-import { Box } from '../box/box';
+import styled from '@emotion/styled';
 
 type Props = {
   onSubmit?: () => void;
@@ -80,7 +80,7 @@ export function LoginForm({ onSubmit }: Props) {
         handleBlur,
         errors,
       }: FormikProps<UserInputLogin>) => (
-        <Box component="form" noValidate onSubmit={handleSubmit}>
+        <Form noValidate onSubmit={handleSubmit}>
           <FormControl>
             <InputLabel htmlFor="email">Email address</InputLabel>
             <Input
@@ -141,8 +141,16 @@ export function LoginForm({ onSubmit }: Props) {
           >
             Login
           </Button>
-        </Box>
+        </Form>
       )}
     </Formik>
   );
 }
+
+const Form = styled('form')({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1rem',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
