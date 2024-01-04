@@ -7,15 +7,15 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
-import { Row } from '../row/row';
+import { Row } from '@/components/row/row';
 import { CourseLevelLabel } from './course-level-label';
 import DoneAll from '@mui/icons-material/DoneAll';
-import { ArrowIcon } from '../icons/arrow';
+import { ArrowIcon } from '@/components/icons/arrow';
 import ListItemText from '@mui/material/ListItemText';
-import { CourseProgressState } from '../../__generated__/graphql';
+import { CourseProgressState } from '__generated__/graphql';
 import { useTheme } from '@mui/material/styles';
-import { Box } from '../box/box';
-import { CourseProps } from '../../../app/courses/page';
+import { Box } from '@/components/box/box';
+import { CourseProps } from 'app/courses/page';
 
 type Props = {
   _id: CourseProps['_id'];

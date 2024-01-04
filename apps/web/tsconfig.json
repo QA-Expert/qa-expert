@@ -7,5 +7,15 @@
     "jest.setup.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "compilerOptions": {
+    "baseUrl": "src/",
+    "paths": {
+      "@/components/*": ["components/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  }
 }

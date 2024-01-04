@@ -4,7 +4,7 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { cloneDeep } from 'lodash';
 import { useReactiveVar } from '@apollo/client';
-import { toastErrors } from '../../../apollo/store';
+import { toastErrors } from 'apollo/store';
 
 export const Toasts = () => {
   const toasts = useReactiveVar(toastErrors);

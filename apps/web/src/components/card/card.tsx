@@ -3,21 +3,21 @@
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import { CourseStates } from './course-states';
-import { ProgressBar } from '../progress-bar/progress-bar';
-import { Row } from '../row/row';
+import { ProgressBar } from '@/components/progress-bar/progress-bar';
+import { Row } from '@/components/row/row';
 import { CourseMetrics } from './course-metrics';
 import { useTheme } from '@mui/material/styles';
 import { CourseLevelLabel } from './course-level-label';
-import { Box } from '../box/box';
+import { Box } from '@/components/box/box';
 import { CardImage } from './card-image';
 import { CardAccordion } from './card-accordion';
 import { CardActions } from './card-actions';
-import { getSelectedStyles } from '../../../utils/utils';
+import { getSelectedStyles } from 'utils/utils';
 import { useParams } from 'next/navigation';
-import { CourseProps } from '../../../app/courses/page';
+import { CourseProps } from 'app/courses/page';
 import { useReactiveVar } from '@apollo/client';
-import { isAuthenticated } from '../../../apollo/store';
-import { GetCourseQuery } from '../../__generated__/graphql';
+import { isAuthenticated } from 'apollo/store';
+import { GetCourseQuery } from '__generated__/graphql';
 
 export function CardContainer(props: CourseProps) {
   const theme = useTheme();

@@ -2,7 +2,7 @@
 
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
-import { convertNumberToString } from '../../../utils/utils';
+import { convertNumberToString } from 'utils/utils';
 import { Duration, formatISODuration } from 'date-fns';
 
 type Props = {

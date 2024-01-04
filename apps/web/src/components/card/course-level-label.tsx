@@ -2,7 +2,7 @@
 
 import Chip from '@mui/material/Chip';
 import { useTheme } from '@mui/material/styles';
-import { CourseLevel } from '../../__generated__/graphql';
+import { CourseLevel } from '__generated__/graphql';
 import { styled } from '@mui/material/styles';
 import { getBackgroundColorForLevelLabel } from './handlers';
 

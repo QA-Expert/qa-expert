@@ -5,13 +5,13 @@ import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { createRef, forwardRef } from 'react';
-import { useWidth } from '../../../utils/hooks';
-import { Box } from '../box/box';
-import { ArrowIcon } from '../icons/arrow';
-import { Row } from '../row/row';
+import { useWidth } from 'utils/hooks';
+import { Box } from '@/components/box/box';
+import { ArrowIcon } from '@/components/icons/arrow';
+import { Row } from '@/components/row/row';
 import { CompletedCourseCard } from './completed-course-card';
 import { getCoursesToShowBySectionWidth } from './handlers';
-import { CourseProps } from '../../../app/courses/page';
+import { CourseProps } from 'app/courses/page';
 
 type Props = {
   courses: CourseProps[];

@@ -1,7 +1,7 @@
-import { Box } from '../box/box';
+import { Box } from '@/components/box/box';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import { GetCourseQuery } from '../../__generated__/graphql';
+import { GetCourseQuery } from '__generated__/graphql';
 
 export function ProgressBar(course: GetCourseQuery['course']) {
   const progress = course?.progress;

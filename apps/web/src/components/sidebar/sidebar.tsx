@@ -3,9 +3,9 @@ import Paper from '@mui/material/Paper';
 import { MouseEvent as MouseEventReact, ReactNode, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Box } from '../box/box';
+import { Box } from '@/components/box/box';
 import { styled } from '@mui/material/styles';
-import { Row } from '../row/row';
+import { Row } from '@/components/row/row';
 import { debounce } from 'lodash';
 
 export const INIT_WIDTH = 320;

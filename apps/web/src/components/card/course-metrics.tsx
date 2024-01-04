@@ -1,12 +1,12 @@
 import CardContent from '@mui/material/CardContent';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { CourseType } from '../../__generated__/graphql';
-import { Box } from '../box/box';
-import { PagesIcon } from '../icons/pages';
-import { QuizIcon } from '../icons/quiz';
-import { Row } from '../row/row';
-import { CourseProps } from '../../../app/courses/page';
+import { CourseType } from '__generated__/graphql';
+import { Box } from '@/components/box/box';
+import { PagesIcon } from '@/components/icons/pages';
+import { QuizIcon } from '@/components/icons/quiz';
+import { Row } from '@/components/row/row';
+import { CourseProps } from 'app/courses/page';
 
 type Props = Pick<CourseProps, 'pages'>;
 

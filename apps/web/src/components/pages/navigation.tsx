@@ -1,10 +1,10 @@
 import { ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { useState, MouseEvent as MouseEventReact } from 'react';
-import { GetCourseQuery } from '../../__generated__/graphql';
-import { Row } from '../row/row';
+import { GetCourseQuery } from '__generated__/graphql';
+import { Row } from '@/components/row/row';
 import { NavigationCard } from './navigation-card';
 import { NavigationPagesList } from './navigation-pages-list';
-import { Box } from '../box/box';
+import { Box } from '@/components/box/box';
 
 type Props = {
   description: string;
