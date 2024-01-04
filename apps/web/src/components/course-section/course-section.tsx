@@ -15,7 +15,7 @@ type Props = Pick<
   '_id' | 'content' | 'progress'
 >;
 
-export default function CoursePage({ _id, content, progress }: Props) {
+export default function CourseSection({ _id, content, progress }: Props) {
   const router = useParams();
   const courseId = router.id as string;
   const [createProgress, { error }] = useMutation(CREATE_COURSE_PAGE_PROGRESS, {
@@ -45,7 +45,6 @@ export default function CoursePage({ _id, content, progress }: Props) {
   return (
     <Box
       sx={{
-        flex: '1',
         gap: '2rem',
       }}
     >

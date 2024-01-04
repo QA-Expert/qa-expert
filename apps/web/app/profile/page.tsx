@@ -1,6 +1,5 @@
 'use client';
 
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { Box } from '../../src/components/box/box';
@@ -19,6 +18,7 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { BadgeComponent } from '../../src/components/badge/badge';
 import { useError } from '../../utils/hooks';
 import { Row } from '../../src/components/row/row';
+import { Section } from '../../src/components/section/section';
 
 function Account() {
   const { data: userData, error: userFetchError } = useSuspenseQuery(GET_USER);
@@ -27,6 +27,9 @@ function Account() {
   );
   const user = userData?.user;
   const badges = badgesData?.badges;
+  const username = user?.firstName
+    ? `${user?.firstName} ${user?.lastName}`
+    : user?.email;
 
   useError([userFetchError?.message, badgesFetchError?.message]);
 
@@ -56,17 +59,14 @@ function Account() {
           flexDirection: 'row',
           width: '100%',
           height: '100%',
-          gap: '2rem',
-          padding: '2rem',
+          gap: '1rem',
+          padding: '1rem',
           flexWrap: 'wrap',
         }}
       >
-        <Paper
-          component={Box}
+        <Section
           sx={{
-            justifyContent: 'start',
             flex: 1,
-            height: '100%',
             padding: '2rem',
             gap: '1rem',
           }}
@@ -80,9 +80,7 @@ function Account() {
 
           <Row sx={{ justifyContent: 'center' }}>
             <Typography variant="h2" sx={{ fontSize: '2rem' }}>
-              {user?.firstName
-                ? `${user?.firstName} ${user?.lastName}`
-                : user?.email}
+              {username}
             </Typography>
             {(user?.firstName || user?.lastName) && (
               <IconButton
@@ -97,13 +95,10 @@ function Account() {
           <Button onClick={handleOpenChangePasswordModal} variant="contained">
             Change Password
           </Button>
-        </Paper>
+        </Section>
 
-        <Paper
-          component={Box}
+        <Section
           sx={{
-            justifyContent: 'start',
-            height: '100%',
             flex: 3.5,
             padding: '2rem',
             gap: '1rem',
@@ -130,7 +125,7 @@ function Account() {
               ))}
             </Box>
           </Box>
-        </Paper>
+        </Section>
       </Box>
 
       <ChangeNamesModal
