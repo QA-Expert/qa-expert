@@ -1,4 +1,4 @@
-import { Row } from '../row/row';
+import { Row } from '@/components/row/row';
 import Pagination from '@mui/material/Pagination';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNew from '@mui/icons-material/ArrowBackIosNew';

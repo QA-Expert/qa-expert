@@ -5,24 +5,17 @@ import Button from '@mui/material/Button';
 import {
   CLAIM_BADGE,
   DELETE_COURSE_PROGRESS,
-} from '../../graphql/mutations/mutations';
-import {
-  GET_ALL_COURSES,
-  GET_COURSE,
-  GET_USER,
-} from '../../graphql/queries/queries';
+} from 'graphql/mutations/mutations';
+import { GET_ALL_COURSES, GET_COURSE, GET_USER } from 'graphql/queries/queries';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import Tooltip from '@mui/material/Tooltip';
 import { useDurationToRetakeQuiz } from './card.hook';
-import { useError } from '../../../utils/hooks';
-import { Box } from '../box/box';
-import { Timer } from '../timer/timer';
+import { useError } from 'utils/hooks';
+import { Box } from '@/components/box/box';
+import { Timer } from '@/components/timer/timer';
 import Typography from '@mui/material/Typography';
-import {
-  CourseProgressState,
-  GetCourseQuery,
-} from '../../__generated__/graphql';
-import { Flag } from '../flag/flag';
+import { CourseProgressState, GetCourseQuery } from '__generated__/graphql';
+import { Flag } from '@/components/flag/flag';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
 export const CourseStates = (course: GetCourseQuery['course']) => {

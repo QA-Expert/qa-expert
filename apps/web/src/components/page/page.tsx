@@ -1,9 +1,9 @@
 import Typography from '@mui/material/Typography';
-import { CourseType, GetCourseQuery } from '../../__generated__/graphql';
-import { Box } from '../box/box';
-import CourseSection from '../course-section/course-section';
-import QuizSection from '../quiz-section/quiz-section';
-import { StatusIndicator } from '../status-indicator/status-indicator';
+import { CourseType, GetCourseQuery } from '__generated__/graphql';
+import { Box } from '@/components/box/box';
+import CourseSection from '@/components/course-section/course-section';
+import QuizSection from '@/components/quiz-section/quiz-section';
+import { StatusIndicator } from '@/components/status-indicator/status-indicator';
 /**
  * @description Component that represents a page inside of the Course.
  * NOTE: it is not a separate routing page.

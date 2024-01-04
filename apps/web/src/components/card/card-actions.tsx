@@ -2,8 +2,8 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import MuiCardActions from '@mui/material/CardActions';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
-import { LikeIcon } from '../icons/like';
-import { ShareIcon } from '../icons/share';
+import { LikeIcon } from '@/components/icons/like';
+import { ShareIcon } from '@/components/icons/share';
 
 export function CardActions() {
   const theme = useTheme();

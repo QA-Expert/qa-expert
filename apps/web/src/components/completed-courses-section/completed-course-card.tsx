@@ -1,12 +1,12 @@
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import { GetAllCoursesQuery } from '../../__generated__/graphql';
-import { Box } from '../box/box';
+import { GetAllCoursesQuery } from '__generated__/graphql';
+import { Box } from '@/components/box/box';
 import Link from 'next/link';
-import { Row } from '../row/row';
+import { Row } from '@/components/row/row';
 import { useTheme } from '@mui/material/styles';
-import { getBackgroundColorForLevelLabel } from '../card/handlers';
+import { getBackgroundColorForLevelLabel } from '@/components/card/handlers';
 import { CARD_WIDTH } from './completed-courses-section';
 
 type Props = Pick<

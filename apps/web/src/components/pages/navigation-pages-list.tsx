@@ -1,5 +1,5 @@
 import List from '@mui/material/List';
-import { GetCourseQuery } from '../../__generated__/graphql';
+import { GetCourseQuery } from '__generated__/graphql';
 import { NavigationPageListItem } from './navigation-page-list-item';
 import usePagination from '@mui/material/usePagination';
 

@@ -3,8 +3,8 @@
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
-import { GetCourseQuery, PageProgressState } from '../../__generated__/graphql';
-import { Box } from '../box/box';
+import { GetCourseQuery, PageProgressState } from '__generated__/graphql';
+import { Box } from '@/components/box/box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
@@ -13,9 +13,9 @@ import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
 import { useParams } from 'next/navigation';
 import { difference } from 'lodash';
-import { CREATE_QUIZ_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
-import { GET_COURSE } from '../../graphql/queries/queries';
-import { useError } from '../../../utils/hooks';
+import { CREATE_QUIZ_PAGE_PROGRESS } from 'graphql/mutations/mutations';
+import { GET_COURSE } from 'graphql/queries/queries';
+import { useError } from 'utils/hooks';
 
 type Props = Pick<
   GetCourseQuery['course']['pages'][number],

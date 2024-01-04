@@ -1,5 +1,5 @@
-import { Box } from '../box/box';
-import { Section } from '../section/section';
+import { Box } from '@/components/box/box';
+import { Section } from '@/components/section/section';
 
 export function TestAppSection() {
   return (

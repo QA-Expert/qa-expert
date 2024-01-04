@@ -1,4 +1,4 @@
-import { Box } from '../box/box';
+import { Box } from '@/components/box/box';
 
 export default function Footer() {
   return (

@@ -4,12 +4,12 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import ListItem from '@mui/material/ListItem';
 import { styled, useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { getColorForState, getSelectedStyles } from '../../../utils/utils';
-import { StatusIndicator } from '../status-indicator/status-indicator';
-import { ArrowIcon } from '../icons/arrow';
-import { Row } from '../row/row';
+import { getColorForState, getSelectedStyles } from 'utils/utils';
+import { StatusIndicator } from '@/components/status-indicator/status-indicator';
+import { ArrowIcon } from '@/components/icons/arrow';
+import { Row } from '@/components/row/row';
 import { useState } from 'react';
-import { GetCourseQuery } from '../../__generated__/graphql';
+import { GetCourseQuery } from '__generated__/graphql';
 
 type Props = {
   page: GetCourseQuery['course']['pages'][number];

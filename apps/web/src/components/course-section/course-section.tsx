@@ -1,14 +1,14 @@
 'use client';
 
-import { Box } from '../box/box';
-import { TextEditor } from '../text-editor/text-editor';
-import { GET_COURSE } from '../../graphql/queries/queries';
+import { Box } from '@/components/box/box';
+import { TextEditor } from '@/components/text-editor/text-editor';
+import { GET_COURSE } from 'graphql/queries/queries';
 import { useParams } from 'next/navigation';
 import { useMutation } from '@apollo/client';
-import { CREATE_COURSE_PAGE_PROGRESS } from '../../graphql/mutations/mutations';
-import { useError } from '../../../utils/hooks';
+import { CREATE_COURSE_PAGE_PROGRESS } from 'graphql/mutations/mutations';
+import { useError } from 'utils/hooks';
 import Button from '@mui/material/Button';
-import { GetCourseQuery } from '../../__generated__/graphql';
+import { GetCourseQuery } from '__generated__/graphql';
 
 type Props = Pick<
   GetCourseQuery['course']['pages'][number],

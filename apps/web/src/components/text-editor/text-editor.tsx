@@ -4,13 +4,13 @@ import Button from '@mui/material/Button';
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
-import { Box } from '../box/box';
+import { Box } from '@/components/box/box';
 import { DeltaStatic, Sources } from 'quill';
-import { UPDATE_COURSE_PAGE_CONTENT } from '../../graphql/mutations/mutations';
+import { UPDATE_COURSE_PAGE_CONTENT } from 'graphql/mutations/mutations';
 import { useMutation } from '@apollo/client';
-import { GET_COURSE, GET_USER } from '../../graphql/queries/queries';
+import { GET_COURSE, GET_USER } from 'graphql/queries/queries';
 import { useParams } from 'next/navigation';
-import { useError } from '../../../utils/hooks';
+import { useError } from 'utils/hooks';
 import { UnprivilegedEditor, ReactQuillProps, Value } from 'react-quill';
 // NOTE: I have to user emotion directly - not mui/styled as mui has built in "theme" prop
 // that conflicts with "theme" on Quill component

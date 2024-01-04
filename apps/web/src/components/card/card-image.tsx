@@ -1,5 +1,5 @@
 import CardMedia from '@mui/material/CardMedia';
-import { Box } from '../box/box';
+import { Box } from '@/components/box/box';
 import Image from 'next/image';
 import { useTheme } from '@mui/material/styles';
 import { ReactNode } from 'react';

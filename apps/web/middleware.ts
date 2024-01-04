@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { isAuthTokenValid } from './utils/auth';
+import { isAuthTokenValid } from './src/utils/auth';
 import { ACCESS_TOKEN_KEY, PUBLIC_ROUTES } from './src/constants/constants';
-import { isAuthenticated } from './apollo/store';
+import { isAuthenticated } from './src/apollo/store';
 
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();

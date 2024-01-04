@@ -10,12 +10,12 @@ import Modal from '@mui/material/Modal';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
-import { UserInputUpdateNames } from '../../__generated__/graphql';
+import { UserInputUpdateNames } from '__generated__/graphql';
 import { object, string } from 'yup';
-import { UPDATE_USER_NAMES } from '../../graphql/mutations/mutations';
-import { Box } from '../box/box';
-import { GET_USER } from '../../graphql/queries/queries';
-import { useError } from '../../../utils/hooks';
+import { UPDATE_USER_NAMES } from 'graphql/mutations/mutations';
+import { Box } from '@/components/box/box';
+import { GET_USER } from 'graphql/queries/queries';
+import { useError } from 'utils/hooks';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
 interface Props {

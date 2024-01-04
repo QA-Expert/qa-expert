@@ -1,14 +1,14 @@
 import Card from '@mui/material/Card';
-import { Box } from '../box/box';
-import { CardAccordion } from '../card/card-accordion';
-import { CardActions } from '../card/card-actions';
-import { CardImage } from '../card/card-image';
-import { CourseLevelLabel } from '../card/course-level-label';
-import { CourseStates } from '../card/course-states';
-import { ProgressBar } from '../progress-bar/progress-bar';
-import { Row } from '../row/row';
-import { INIT_WIDTH } from '../sidebar/sidebar';
-import { GetCourseQuery } from '../../__generated__/graphql';
+import { Box } from '@/components/box/box';
+import { CardAccordion } from '@/components/card/card-accordion';
+import { CardActions } from '@/components/card/card-actions';
+import { CardImage } from '@/components/card/card-image';
+import { CourseLevelLabel } from '@/components/card/course-level-label';
+import { CourseStates } from '@/components/card/course-states';
+import { ProgressBar } from '@/components/progress-bar/progress-bar';
+import { Row } from '@/components/row/row';
+import { INIT_WIDTH } from '@/components/sidebar/sidebar';
+import { GetCourseQuery } from '__generated__/graphql';
 
 export function NavigationCard(course: GetCourseQuery['course']) {
   return (

@@ -2,7 +2,7 @@
 
 import { useApolloClient, useMutation, useReactiveVar } from '@apollo/client';
 import { usePathname, useRouter } from 'next/navigation';
-import { LOGOUT } from '../../graphql/mutations/mutations';
+import { LOGOUT } from 'graphql/mutations/mutations';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -11,11 +11,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { Box } from '../box/box';
-import { useError } from '../../../utils/hooks';
-import { GET_USER } from '../../graphql/queries/queries';
+import { Box } from '@/components/box/box';
+import { useError } from 'utils/hooks';
+import { GET_USER } from 'graphql/queries/queries';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import { isAuthenticated } from '../../../apollo/store';
+import { isAuthenticated } from 'apollo/store';
 
 export const ProfileMenu = () => {
   const isUserAuthenticated = useReactiveVar(isAuthenticated);

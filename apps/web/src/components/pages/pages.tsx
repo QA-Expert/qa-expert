@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Box } from '../box/box';
-import { Row } from '../row/row';
-import Sidebar from '../sidebar/sidebar';
-import { CourseType, GetCourseQuery } from '../../__generated__/graphql';
-import Page from '../page/page';
+import { Box } from '@/components/box/box';
+import { Row } from '@/components/row/row';
+import Sidebar from '@/components/sidebar/sidebar';
+import { CourseType, GetCourseQuery } from '__generated__/graphql';
+import Page from '@/components/page/page';
 import { PagePagination } from './pages-pagination';
-import { TestAppSection } from '../test-app-section/test-app-section';
-import { Section } from '../section/section';
+import { TestAppSection } from '@/components/test-app-section/test-app-section';
+import { Section } from '@/components/section/section';
 import { Navigation } from './navigation';
 
 interface Props {

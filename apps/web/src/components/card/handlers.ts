@@ -1,5 +1,5 @@
 import { Theme } from '@mui/material/styles';
-import { CourseLevel } from '../../__generated__/graphql';
+import { CourseLevel } from '__generated__/graphql';
 
 export const getBackgroundColorForLevelLabel = (
   level: CourseLevel,
