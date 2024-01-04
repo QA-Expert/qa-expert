@@ -22,7 +22,11 @@ type Props = Pick<
   '_id' | 'question' | 'progress'
 >;
 
-export default function QuizPage({ question, progress, _id: pageId }: Props) {
+export default function QuizSection({
+  question,
+  progress,
+  _id: pageId,
+}: Props) {
   const router = useParams();
   const courseId = router.id as string;
   const [answers, setAnswers] = useState(progress?.answers ?? []);
@@ -80,7 +84,6 @@ export default function QuizPage({ question, progress, _id: pageId }: Props) {
     <Box
       sx={{
         gap: '2rem',
-        flex: '1',
       }}
     >
       <Typography

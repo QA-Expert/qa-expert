@@ -11,7 +11,6 @@ import InputLabel from '@mui/material/InputLabel';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
-import Main from '../../src/components/main/main';
 import { Box } from '../../src/components/box/box';
 import { FORGOT_PASSWORD } from '../../src/graphql/mutations/mutations';
 import { useError } from '../../utils/hooks';
@@ -32,7 +31,7 @@ function ForgotPassword() {
   const [isSuccessfullyReset, setIsSuccessfullyReset] = useState(false);
 
   return (
-    <Main>
+    <>
       {isSuccessfullyReset ? (
         <Paper
           sx={{
@@ -129,7 +128,7 @@ function ForgotPassword() {
           )}
         </Formik>
       )}
-    </Main>
+    </>
   );
 }
 

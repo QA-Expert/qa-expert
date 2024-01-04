@@ -49,31 +49,29 @@ function CoursesPage() {
   );
 
   return (
-    <Layout>
-      <Box
+    <Box
+      sx={{
+        gap: '2rem',
+        padding: '2rem',
+      }}
+    >
+      {completedCourses?.length ? (
+        <CompletedCoursesSection courses={completedCourses} />
+      ) : null}
+
+      <Row
         sx={{
+          justifyContent: 'center',
+          alignItems: 'flex-start',
           gap: '2rem',
-          padding: '2rem',
+          flexWrap: 'wrap',
         }}
       >
-        {completedCourses?.length ? (
-          <CompletedCoursesSection courses={completedCourses} />
-        ) : null}
-
-        <Row
-          sx={{
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            gap: '2rem',
-            flexWrap: 'wrap',
-          }}
-        >
-          {courses?.map((course) => (
-            <CardContainer key={course._id} {...course} />
-          ))}
-        </Row>
-      </Box>
-    </Layout>
+        {courses?.map((course) => (
+          <CardContainer key={course._id} {...course} />
+        ))}
+      </Row>
+    </Box>
   );
 }
 

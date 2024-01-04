@@ -36,7 +36,7 @@ export const Toasts = () => {
           // NOTE: offset if we have multiple toasts
           sx={{ top: `${(i + 1) * 3.5}rem` }}
           open={Boolean(toast)}
-          autoHideDuration={6000}
+          autoHideDuration={10000}
           onClose={handleClose(i)}
         >
           <Alert

@@ -35,7 +35,7 @@ function ResetPassword() {
   const [isSuccessfullyReset, setIsSuccessfullyReset] = useState(false);
 
   return (
-    <Main>
+    <>
       {isSuccessfullyReset ? (
         <Paper
           sx={{
@@ -135,7 +135,7 @@ function ResetPassword() {
           )}
         </Formik>
       )}
-    </Main>
+    </>
   );
 }
 

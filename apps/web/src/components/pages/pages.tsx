@@ -5,9 +5,12 @@ import { Box } from '../box/box';
 import Paper from '@mui/material/Paper';
 import { Row } from '../row/row';
 import Sidebar from '../sidebar/sidebar';
-import { GetCourseQuery } from '../../__generated__/graphql';
+import { CourseType, GetCourseQuery } from '../../__generated__/graphql';
 import Page from '../page/page';
 import { PagePagination } from './pages-pagination';
+import { TestAppSection } from '../test-app-section/test-app-section';
+import { Section } from '../section/section';
+import { Navigation } from './navigation';
 
 interface Props {
   pages: GetCourseQuery['course']['pages'];
@@ -33,20 +36,16 @@ export function Pages({ pages, courseInfo }: Props) {
         gap: '1rem',
       }}
     >
-      <Sidebar
-        description={currentPage.description ?? ''}
-        courseInfo={courseInfo}
-        onPageChange={setCurrentPageIndex}
-        currentPageIndex={currentPageIndex}
-      />
+      <Sidebar>
+        <Navigation
+          description={currentPage.description ?? ''}
+          courseInfo={courseInfo}
+          onPageChange={setCurrentPageIndex}
+          currentPageIndex={currentPageIndex}
+        />
+      </Sidebar>
 
-      <Paper
-        component={Row}
-        sx={{
-          height: '100%',
-          alignItems: 'start',
-        }}
-      >
+      <Section sx={{ flex: 1 }}>
         <Box
           sx={{
             gap: '1rem',
@@ -62,7 +61,9 @@ export function Pages({ pages, courseInfo }: Props) {
             currentPageIndex={currentPageIndex}
           />
         </Box>
-      </Paper>
+      </Section>
+
+      {currentPage.type === CourseType.Quiz ? <TestAppSection /> : null}
     </Row>
   );
 }

@@ -7,7 +7,7 @@ import { CourseLevelLabel } from '../card/course-level-label';
 import { CourseStates } from '../card/course-states';
 import { ProgressBar } from '../progress-bar/progress-bar';
 import { Row } from '../row/row';
-import { INIT_WIDTH } from './sidebar';
+import { INIT_WIDTH } from '../sidebar/sidebar';
 import { GetCourseQuery } from '../../__generated__/graphql';
 
 export function NavigationCard(course: GetCourseQuery['course']) {
