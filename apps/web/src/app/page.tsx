@@ -1,5 +1,7 @@
 import { Box } from '@/components/box/box';
 import Layout from '@/components/layout/layout';
+import { Examples } from '@/components/marketing/examples';
+import { Features } from '@/components/marketing/features';
 import { Section, Props as SectionProps } from '@/components/marketing/section';
 
 const SECTIONS: SectionProps[] = [
@@ -8,14 +10,14 @@ const SECTIONS: SectionProps[] = [
     title: 'what is qaexpert',
     description:
       'Lorem ipsum dolor sit amet consectetur. Gravida vel vulputate amet nec tortor. Malesuada non commodo risus amet enim suspendisse.',
-    children: 'TEST',
+    children: <Features />,
   },
   {
     background: 'waives',
     title: 'examples',
     description:
       'Lorem ipsum dolor sit amet consectetur. Gravida vel vulputate amet nec tortor. Malesuada non commodo risus amet enim suspendisse.',
-    children: 'TEST',
+    children: <Examples />,
   },
   {
     background: 'light',
@@ -48,7 +50,7 @@ const SECTIONS: SectionProps[] = [
 const HomePage = () => {
   return (
     <Layout>
-      <Box sx={{ gap: '3rem', height: '100%', width: '100%' }}>
+      <Box sx={{ height: '100%', width: '100%' }}>
         {SECTIONS.map((section) => (
           <Section key={section.title} {...section}>
             {section.children}

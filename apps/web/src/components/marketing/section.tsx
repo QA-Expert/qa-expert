@@ -22,6 +22,9 @@ const getBackgroundStyles = (background: Props['background'], theme: Theme) => {
   if (background === 'waives') {
     return {
       backgroundImage: "url('/images/waives.svg')",
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center center',
     };
   }
 
@@ -38,10 +41,15 @@ export function Section({ background, title, description, children }: Props) {
   return (
     <Box
       sx={{
-        height: '500px',
+        minHeight: '500px',
         width: '100%',
         ...getBackgroundStyles(background, theme),
         padding: '5rem',
+        [theme.breakpoints.down('md')]: {
+          padding: '1rem',
+          gap: '0.75rem',
+        },
+        gap: '2rem',
       }}
     >
       <Typography
@@ -52,6 +60,11 @@ export function Section({ background, title, description, children }: Props) {
           lineHeight: '70px',
           textTransform: 'uppercase',
           textAlign: 'center',
+          [theme.breakpoints.down('md')]: {
+            fontSize: '2rem',
+            fontWeight: '500',
+            lineHeight: '35px',
+          },
         }}
         variant="h2"
       >
@@ -65,6 +78,11 @@ export function Section({ background, title, description, children }: Props) {
           lineHeight: '30px',
           textTransform: 'uppercase',
           textAlign: 'center',
+          [theme.breakpoints.down('md')]: {
+            fontSize: '1rem',
+            fontWeight: '500',
+            lineHeight: '20px',
+          },
         }}
         variant="body1"
       >
