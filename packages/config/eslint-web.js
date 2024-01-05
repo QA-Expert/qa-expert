@@ -6,7 +6,14 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   plugins: ['prettier', '@typescript-eslint'],
-  ignorePatterns: ['node_modules', 'build', 'dist', 'public', "**/__generated__/*", "packages"],
+  ignorePatterns: [
+    'node_modules',
+    'build',
+    'dist',
+    'public',
+    '**/__generated__/*',
+    'packages',
+  ],
   parserOptions: {
     ecmaVersion: 6,
     sourceType: 'module',
@@ -21,7 +28,7 @@ module.exports = {
     jest: true,
   },
   rules: {
-    "@typescript-eslint/ban-ts-comment": "off",
+    '@typescript-eslint/ban-ts-comment': 'off',
     'prettier/prettier': [
       'error',
       {

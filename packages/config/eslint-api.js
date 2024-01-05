@@ -10,7 +10,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'graphql-schema-gen', "packages"],
+  ignorePatterns: ['.eslintrc.js', 'graphql-schema-gen', 'packages'],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
