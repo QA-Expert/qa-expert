@@ -29,7 +29,7 @@
     "apps/**/*.{js,ts,jsx,tsx}": [
       "eslint --fix"
     ],
-    "packages/**/*.{js,ts,jsx,tsx}": [
+    "packages/**/*.{ts,jsx,tsx}": [
       "eslint --fix"
     ],
     "*.json": [

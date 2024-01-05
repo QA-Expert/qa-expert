@@ -6,7 +6,6 @@
       "outputs": ["dist/**", ".next/**"]
     },
     "lint": {
-
       "outputs": []
     },
     "dev": {
