@@ -17,7 +17,7 @@ const PLATFORMS: PlatformProps[] = [
       { ...FEATURES[3], checked: true },
       { ...FEATURES[4], checked: true },
     ],
-    icon: <IntegrationInstructionsIcon />,
+    icon: <IntegrationInstructionsIcon sx={{ fontSize: '3rem' }} />,
   },
   {
     name: 'coursera',
@@ -28,7 +28,7 @@ const PLATFORMS: PlatformProps[] = [
       { ...FEATURES[3], checked: false },
       { ...FEATURES[4], checked: true },
     ],
-    icon: <IntegrationInstructionsIcon />,
+    icon: <IntegrationInstructionsIcon sx={{ fontSize: '3rem' }} />,
   },
   {
     name: 'qaexpert',
@@ -39,7 +39,7 @@ const PLATFORMS: PlatformProps[] = [
       { ...FEATURES[3], checked: true },
       { ...FEATURES[4], checked: true },
     ],
-    icon: <IntegrationInstructionsIcon />,
+    icon: <IntegrationInstructionsIcon sx={{ fontSize: '3rem' }} />,
   },
 ];
 

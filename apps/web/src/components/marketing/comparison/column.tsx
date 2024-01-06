@@ -25,8 +25,10 @@ export function Column({ rows, icon, name, selected }: Props) {
     <CardContainer
       sx={{
         width: '180px',
-        borderWidth: selected ? '4px' : '1px',
-        borderColor: selected ? 'success.main' : 'secondary.main',
+        outlineStyle: selected ? 'solid' : 'none',
+        outlineWidth: selected ? '4px' : '1px',
+        outlineColor: selected ? 'success.main' : 'secondary.main',
+        borderColor: selected ? 'transparent' : 'secondary.main',
       }}
     >
       <CardContentComponent
@@ -40,7 +42,7 @@ export function Column({ rows, icon, name, selected }: Props) {
       >
         {icon ? icon : null}
 
-        {name ? <CardName>{name}</CardName> : null}
+        {name ? <CardName selected={selected}>{name}</CardName> : null}
 
         {rows.map((row, i) => (
           <Row
