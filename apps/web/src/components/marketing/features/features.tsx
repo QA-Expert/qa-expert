@@ -1,45 +1,47 @@
-import { Box } from '../box/box';
-import { Row } from '../row/row';
-import { FeatureCard, Props as FeatureProps } from './feature-card';
+import { Row } from '@/components/row/row';
+import {
+  FeatureCard,
+  Props as FeatureProps,
+} from '@/components/marketing/features/feature-card';
 
-const FEATURES: FeatureProps[] = [
+export const FEATURES: FeatureProps[] = [
   {
-    title: 'Feature 1',
+    name: 'Feature 1',
     description:
       'ExamplesLorem ipsum dolor sit amet consectetur. Rhoncus viverra non sed ac risus. Faucibus urna aliquam vulputate urna nascetur justo. Sit imperdiet cursus',
   },
   {
-    title: 'Feature 2',
+    name: 'Feature 2',
     description:
       'ExamplesLorem ipsum dolor sit amet consectetur. Rhoncus viverra non sed ac risus. Faucibus urna aliquam vulputate urna nascetur justo. Sit imperdiet cursus',
   },
   {
-    title: 'Feature 3',
+    name: 'Feature 3',
     description:
       'ExamplesLorem ipsum dolor sit amet consectetur. Rhoncus viverra non sed ac risus. Faucibus urna aliquam vulputate urna nascetur justo. Sit imperdiet cursus',
   },
   {
-    title: 'Feature 4',
+    name: 'Feature 4',
     description:
       'ExamplesLorem ipsum dolor sit amet consectetur. Rhoncus viverra non sed ac risus. Faucibus urna aliquam vulputate urna nascetur justo. Sit imperdiet cursus',
   },
   {
-    title: 'Feature 5',
+    name: 'Feature 5',
     description:
       'ExamplesLorem ipsum dolor sit amet consectetur. Rhoncus viverra non sed ac risus. Faucibus urna aliquam vulputate urna nascetur justo. Sit imperdiet cursus',
   },
   {
-    title: 'Feature 6',
+    name: 'Feature 6',
     description:
       'ExamplesLorem ipsum dolor sit amet consectetur. Rhoncus viverra non sed ac risus. Faucibus urna aliquam vulputate urna nascetur justo. Sit imperdiet cursus',
   },
   {
-    title: 'Feature 7',
+    name: 'Feature 7',
     description:
       'ExamplesLorem ipsum dolor sit amet consectetur. Rhoncus viverra non sed ac risus. Faucibus urna aliquam vulputate urna nascetur justo. Sit imperdiet cursus',
   },
   {
-    title: 'Feature 8',
+    name: 'Feature 8',
     description:
       'ExamplesLorem ipsum dolor sit amet consectetur. Rhoncus viverra non sed ac risus. Faucibus urna aliquam vulputate urna nascetur justo. Sit imperdiet cursus',
   },
@@ -56,7 +58,7 @@ export function Features() {
       }}
     >
       {FEATURES.map((feature) => (
-        <FeatureCard key={feature.title} {...feature} />
+        <FeatureCard key={feature.name} {...feature} />
       ))}
     </Row>
   );

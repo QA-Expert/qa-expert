@@ -160,6 +160,7 @@ export const dark: ThemeOptions = merge(base, {
     },
     success: {
       main: '#38D3D3',
+      dark: '#38D3D317',
     },
     action: {
       hover: '#232233',

@@ -7,13 +7,13 @@ export function Section(props: PaperProps) {
       {...props}
       component="section"
       sx={{
-        ...props.sx,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'start',
         height: '100%',
         width: '100%',
         alignItems: 'center',
+        ...props.sx,
       }}
     />
   );

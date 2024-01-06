@@ -1,7 +1,8 @@
 import { Box } from '@/components/box/box';
 import Layout from '@/components/layout/layout';
-import { Examples } from '@/components/marketing/examples';
-import { Features } from '@/components/marketing/features';
+import { Comparison } from '@/components/marketing/comparison/comparison';
+import { Examples } from '@/components/marketing/examples/examples';
+import { Features } from '@/components/marketing/features/features';
 import { Section, Props as SectionProps } from '@/components/marketing/section';
 
 const SECTIONS: SectionProps[] = [
@@ -24,7 +25,7 @@ const SECTIONS: SectionProps[] = [
     title: 'comparison our platform with others',
     description:
       'Lorem ipsum dolor sit amet consectetur. Gravida vel vulputate amet nec tortor. Malesuada non commodo risus amet enim suspendisse.',
-    children: 'TEST',
+    children: <Comparison />,
   },
   {
     title: 'reviews',

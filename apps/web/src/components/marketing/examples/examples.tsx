@@ -1,5 +1,8 @@
-import { Row } from '../row/row';
-import { ExampleCard, Props as ExampleCardProps } from './example-card';
+import { Row } from '@/components/row/row';
+import {
+  ExampleCard,
+  Props as ExampleCardProps,
+} from '@/components/marketing/examples/example-card';
 
 const EXAMPLES: ExampleCardProps[] = [
   {
