@@ -45,7 +45,14 @@ const PLATFORMS: PlatformProps[] = [
 
 export function Comparison() {
   return (
-    <Row sx={{ gap: '1rem', justifyContent: 'center', alignItems: 'end' }}>
+    <Row
+      sx={{
+        gap: '1rem',
+        justifyContent: 'center',
+        alignItems: 'end',
+        flexWrap: 'wrap',
+      }}
+    >
       <FeaturesColumn
         features={[
           FEATURES[0],

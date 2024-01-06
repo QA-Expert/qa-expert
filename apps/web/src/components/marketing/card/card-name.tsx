@@ -12,7 +12,7 @@ export function CardName({
     <Typography
       sx={{
         textAlign: 'center',
-        fontSize: selected ? '1.5rem' : '1rem',
+        fontSize: '1.5rem',
         color: selected ? 'text.primary' : 'secondary.main',
         textTransform: 'uppercase',
         paddingLeft: '1rem',

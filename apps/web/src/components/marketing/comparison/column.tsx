@@ -24,7 +24,7 @@ export function Column({ rows, icon, name, selected }: Props) {
   return (
     <CardContainer
       sx={{
-        width: '180px',
+        width: '220px',
         outlineStyle: selected ? 'solid' : 'none',
         outlineWidth: selected ? '4px' : '1px',
         outlineColor: selected ? 'success.main' : 'secondary.main',

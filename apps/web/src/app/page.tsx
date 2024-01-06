@@ -45,6 +45,7 @@ const SECTIONS: SectionProps[] = [
     description:
       'Lorem ipsum dolor sit amet consectetur. Gravida vel vulputate amet nec tortor. Malesuada non commodo risus amet enim suspendisse.',
     children: 'TEST',
+    background: 'waives',
   },
 ] as const;
 
