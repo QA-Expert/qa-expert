@@ -36,7 +36,7 @@ export function PlatformColumn({ icon, name, features }: Props) {
           ),
         };
       }),
-    [icon, name, features],
+    [features, selected],
   );
 
   return <Column icon={icon} name={name} rows={rows} selected={selected} />;

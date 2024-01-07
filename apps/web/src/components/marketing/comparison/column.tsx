@@ -1,7 +1,7 @@
 import { Row } from '@/components/row/row';
-import { CardContainer } from '../card/card';
-import { CardContentComponent } from '../card/card-content';
-import { CardName } from '../card/card-name';
+import { Tile } from '../tile/tile';
+import { TileComponent } from '../tile/tile-content';
+import { TileName } from '../tile/tile-name';
 import { ReactNode } from 'react';
 import { Props as FeatureProps } from '../features/feature-card';
 type Props = {
@@ -22,7 +22,7 @@ type Props = {
 
 export function Column({ rows, icon, name, selected }: Props) {
   return (
-    <CardContainer
+    <Tile
       sx={{
         width: '220px',
         outlineStyle: selected ? 'solid' : 'none',
@@ -31,7 +31,7 @@ export function Column({ rows, icon, name, selected }: Props) {
         borderColor: selected ? 'transparent' : 'secondary.main',
       }}
     >
-      <CardContentComponent
+      <TileComponent
         sx={{
           '&:last-child': {
             paddingLeft: 0,
@@ -42,7 +42,7 @@ export function Column({ rows, icon, name, selected }: Props) {
       >
         {icon ? icon : null}
 
-        {name ? <CardName selected={selected}>{name}</CardName> : null}
+        {name ? <TileName selected={selected}>{name}</TileName> : null}
 
         {rows.map((row, i) => (
           <Row
@@ -59,7 +59,7 @@ export function Column({ rows, icon, name, selected }: Props) {
             {row.element ? row.element : null}
           </Row>
         ))}
-      </CardContentComponent>
-    </CardContainer>
+      </TileComponent>
+    </Tile>
   );
 }

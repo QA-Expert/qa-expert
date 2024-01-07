@@ -11,10 +11,21 @@ export type Props = {
   title: string;
   description: string;
   children: ReactNode;
+  isActive: boolean;
 };
 
-export function Section({ background, title, description, children }: Props) {
+export function Section({
+  background,
+  title,
+  description,
+  children,
+  isActive,
+}: Props) {
   const theme = useTheme();
+
+  if (!isActive) {
+    return null;
+  }
 
   return (
     <Box

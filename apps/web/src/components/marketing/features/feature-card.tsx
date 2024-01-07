@@ -1,10 +1,10 @@
 'use client';
 
 import TipsAndUpdatesOutlinedIcon from '@mui/icons-material/TipsAndUpdatesOutlined';
-import { CardContentComponent } from '@/components/marketing/card/card-content';
-import { CardName } from '@/components/marketing/card/card-name';
+import { TileComponent } from '@/components/marketing/tile/tile-content';
+import { TileName } from '@/components/marketing/tile/tile-name';
 import Typography from '@mui/material/Typography/Typography';
-import { CardContainer } from '@/components/marketing/card/card';
+import { Tile } from '@/components/marketing/tile/tile';
 
 export type Props = {
   name: string;
@@ -13,8 +13,8 @@ export type Props = {
 
 export function FeatureCard({ name, description }: Props) {
   return (
-    <CardContainer sx={{ width: '280px' }}>
-      <CardContentComponent>
+    <Tile sx={{ width: '280px' }}>
+      <TileComponent>
         <TipsAndUpdatesOutlinedIcon
           color="secondary"
           sx={{
@@ -22,11 +22,11 @@ export function FeatureCard({ name, description }: Props) {
             height: '3rem',
           }}
         />
-        <CardName>{name}</CardName>
+        <TileName>{name}</TileName>
         <Typography textAlign="center" variant="body1">
           {description}
         </Typography>
-      </CardContentComponent>
-    </CardContainer>
+      </TileComponent>
+    </Tile>
   );
 }

@@ -1,7 +1,7 @@
 import { CardContentProps } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 
-export function CardContentComponent(props: CardContentProps) {
+export function TileComponent(props: CardContentProps) {
   return (
     <CardContent
       {...props}

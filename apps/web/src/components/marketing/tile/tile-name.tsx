@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography';
 import { ReactNode } from 'react';
 
-export function CardName({
+export function TileName({
   children,
   selected,
 }: {
