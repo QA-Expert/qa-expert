@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useTheme } from '@mui/material/styles';
 import { getBackgroundStyles } from '../handlers';
 import Button from '@mui/material/Button/Button';
+import Link from 'next/link';
 
 const CONTEXT = {
   header: "it's easy to become an IT specialist",
@@ -60,7 +61,7 @@ export function Heading() {
         </Typography>
 
         <Button size="large" color="warning" variant="contained">
-          Start FREE Today
+          <Link href="/courses"> Start FREE Today</Link>
         </Button>
       </Box>
 

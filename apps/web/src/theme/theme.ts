@@ -50,9 +50,10 @@ const base: ThemeOptions = {
         color: 'secondary',
       },
       styleOverrides: {
-        root: () => ({
+        root: ({ theme }) => ({
           fontWeight: 'bold',
           borderRadius: '2rem',
+          color: theme.palette.text.primary,
         }),
       },
     },

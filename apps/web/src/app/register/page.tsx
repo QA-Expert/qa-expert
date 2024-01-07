@@ -184,6 +184,7 @@ function Register() {
             </Typography>
 
             <Button
+              color="warning"
               variant="contained"
               disabled={
                 isSubmitting ||

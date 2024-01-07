@@ -124,6 +124,7 @@ function ResetPassword() {
                 </FormControl>
 
                 <Button
+                  color="warning"
                   disabled={isSubmitting || Boolean(errors.password)}
                   type="submit"
                 >
