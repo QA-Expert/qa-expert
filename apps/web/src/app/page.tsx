@@ -3,6 +3,7 @@ import Layout from '@/components/layout/layout';
 import { Comparison } from '@/components/marketing/comparison/comparison';
 import { Examples } from '@/components/marketing/examples/examples';
 import { Features } from '@/components/marketing/features/features';
+import { Heading } from '@/components/marketing/heading/heading';
 import { Section, Props as SectionProps } from '@/components/marketing/section';
 import { Subscription } from '@/components/marketing/subscription/subscription';
 import { Team } from '@/components/marketing/team/team';
@@ -64,7 +65,9 @@ const HomePage = () => {
 
   return (
     <Layout>
-      <Box sx={{ height: '100%', width: '100%' }}>
+      <Box sx={{ height: '100%', width: '100%', gap: 0 }}>
+        <Heading />
+
         {SECTIONS.map((section) => (
           <Section key={section.title} {...section}>
             {section.children}

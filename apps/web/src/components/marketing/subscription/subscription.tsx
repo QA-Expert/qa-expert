@@ -41,14 +41,14 @@ export function Subscription() {
           <ListItem key={i}>
             <CheckBoxOutlinedIcon
               sx={{ fontSize: '2rem', marginRight: '1rem' }}
-            />{' '}
+            />
             {feature}
           </ListItem>
         ))}
       </List>
 
       {!isUserAuthenticated ? (
-        <Button color="warning" variant="contained">
+        <Button size="large" color="warning" variant="contained">
           Login to Subscribe
         </Button>
       ) : null}

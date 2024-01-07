@@ -46,7 +46,7 @@ export function CardComponent(props: Props) {
   const { name, description, avatar, socials, title } = props;
 
   return (
-    <Card sx={{ width: '550px', padding: '1rem' }}>
+    <Card sx={{ width: '550px', padding: '1rem' }} raised>
       <Row
         sx={{
           padding: '1rem',
