@@ -1,4 +1,6 @@
-import Image from 'next/image';
+'use client';
+
+import Image, { ImageLoader } from 'next/image';
 
 const navigation = [
   { name: 'Dashboard', current: true },
@@ -11,13 +13,18 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
+const imageLoader: ImageLoader = ({ src }) => {
+  return `https://tailwindui.com/img/logos/${src}`;
+};
+
 export default function Nav() {
   return (
     <nav className="bg-gray-800 flex h-14 items-center justify-center gap-4 w-full rounded-t-md">
       <Image
+        loader={imageLoader}
         className="h-8 w-auto"
-        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-        alt="Your Company"
+        src="mark.svg?color=indigo&shade=500"
+        alt="Company Logo"
       />
       <div className="flex gap-4">
         {navigation.map((item) => (
