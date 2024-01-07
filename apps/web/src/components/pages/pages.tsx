@@ -6,10 +6,10 @@ import { Row } from '@/components/row/row';
 import Sidebar from '@/components/sidebar/sidebar';
 import { CourseType, GetCourseQuery } from '__generated__/graphql';
 import Page from '@/components/page/page';
-import { PagePagination } from './pages-pagination';
+import { PagePagination } from '@/components/pages/pages-pagination';
 import { TestAppSection } from '@/components/test-app-section/test-app-section';
 import { Section } from '@/components/section/section';
-import { Navigation } from './navigation';
+import { Navigation } from '@/components/pages/navigation/navigation';
 
 interface Props {
   pages: GetCourseQuery['course']['pages'];
