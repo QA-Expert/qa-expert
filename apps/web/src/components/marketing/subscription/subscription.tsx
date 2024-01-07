@@ -5,6 +5,7 @@ import { Button, List, ListItem, Typography } from '@mui/material';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import { useReactiveVar } from '@apollo/client';
 import { isAuthenticated } from 'apollo/store';
+import Link from 'next/link';
 
 const SUBSCRIPTION = {
   amount: '$30',
@@ -49,7 +50,7 @@ export function Subscription() {
 
       {!isUserAuthenticated ? (
         <Button size="large" color="warning" variant="contained">
-          Login to Subscribe
+          <Link href="/login">Login to Subscribe</Link>
         </Button>
       ) : null}
     </Box>

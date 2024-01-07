@@ -54,7 +54,7 @@ export default function Nav() {
             <ProfileMenu />
           ) : (
             <Link href="/login">
-              <Button variant="contained" color="success">
+              <Button color="warning" variant="contained">
                 Login
               </Button>
             </Link>

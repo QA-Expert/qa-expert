@@ -133,6 +133,7 @@ export function LoginForm({ onSubmit }: Props) {
           </MuiLink>
 
           <Button
+            color="warning"
             variant="contained"
             disabled={
               isSubmitting || Boolean(errors.email) || Boolean(errors.password)
