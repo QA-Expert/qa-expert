@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 const navigation = [
   { name: 'Dashboard', current: true },
   { name: 'Team', current: false },
@@ -12,7 +14,7 @@ function classNames(...classes: string[]) {
 export default function Nav() {
   return (
     <nav className="bg-gray-800 flex h-14 items-center justify-center gap-4 w-full rounded-t-md">
-      <img
+      <Image
         className="h-8 w-auto"
         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
         alt="Your Company"
