@@ -14,6 +14,7 @@ const nextConfig = {
    * @rul https://nextjs.org/docs/app/building-your-application/deploying/static-exports
    */
   output: 'export',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/test-web' : undefined,
 };
 
 module.exports = nextConfig;
