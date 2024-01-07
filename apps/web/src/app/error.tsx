@@ -24,10 +24,13 @@ export default function GlobalError({
    * 3. navigate to /courses route
    */
   useEffect(() => {
+    const apolloError = error as ApolloError;
+
     if (
-      error instanceof ApolloError &&
-      error.name === 'ApolloError' &&
-      error.graphQLErrors.find((e) => e.extensions.code === 'UNAUTHENTICATED')
+      apolloError.name === 'ApolloError' &&
+      apolloError.graphQLErrors.find(
+        (e) => e.extensions.code === 'UNAUTHENTICATED',
+      )
     ) {
       isAuthenticated(false);
 
@@ -36,7 +39,8 @@ export default function GlobalError({
         .then(() =>
           apolloClient.refetchQueries({ include: [GET_ALL_COURSES_PUBLIC] }),
         )
-        .then(() => router.push('/courses'));
+        .finally(() => router.push('/courses'))
+        .catch((e) => console.error(e.message));
     }
   }, [error, router, apolloClient]);
 
