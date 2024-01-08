@@ -6,7 +6,7 @@ import Button from '@mui/material/Button/Button';
 import IconButton from '@mui/material/IconButton/IconButton';
 import List from '@mui/material/List/List';
 import Typography from '@mui/material/Typography/Typography';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { stringAvatar } from 'utils/utils';
 import { ChangeNamesModal } from '@/components/profile/change-names-modal/change-names-modal';
 import { ChangePasswordModal } from '@/components/profile/change-password-modal/change-password-modal';
@@ -16,44 +16,19 @@ import { useError } from 'utils/hooks';
 import { GET_USER } from 'graphql/queries/queries';
 
 export type Section = 'badges' | 'billing' | 'activities' | 'progress';
+const SECTIONS: Section[] = ['badges', 'billing', 'activities', 'progress'];
 
-export function ProfileSidebar() {
+export function ProfileSidebar({
+  onSectionSelect,
+}: {
+  onSectionSelect: (section: Section) => void;
+}) {
   const { data: userData, error: userFetchError } = useSuspenseQuery(GET_USER);
   const [currentSection, setCurrentSection] = useState<Section>('badges');
   const user = userData?.user;
   const username = user?.firstName
     ? `${user?.firstName} ${user?.lastName}`
     : user?.email;
-
-  const SECTIONS: { name: Section; onClick: () => void }[] = useMemo(
-    () => [
-      {
-        name: 'badges',
-        onClick: () => {
-          setCurrentSection('badges');
-        },
-      },
-      {
-        name: 'billing',
-        onClick: () => {
-          setCurrentSection('billing');
-        },
-      },
-      {
-        name: 'activities',
-        onClick: () => {
-          setCurrentSection('activities');
-        },
-      },
-      {
-        name: 'progress',
-        onClick: () => {
-          setCurrentSection('progress');
-        },
-      },
-    ],
-    [setCurrentSection],
-  );
 
   useError([userFetchError?.message]);
 
@@ -121,20 +96,23 @@ export function ProfileSidebar() {
       >
         {SECTIONS.map((section) => (
           <NavigationItem
-            key={section.name}
+            key={section}
             sx={{
               padding: '0.5rem 1rem 0.5rem 1rem',
               textTransform: 'capitalize',
               color: 'secondary.main',
               borderRight:
-                currentSection === section.name
-                  ? 'solid 15px currentcolor'
-                  : '',
+                currentSection === section ? 'solid 15px currentcolor' : '',
+              backgroundColor:
+                currentSection === section ? 'transparent' : 'primary.dark',
             }}
-            onClick={section.onClick}
-            selected={currentSection === section.name}
+            onClick={() => {
+              setCurrentSection(section);
+              onSectionSelect(section);
+            }}
+            selected={currentSection === section}
           >
-            {section.name}
+            {section}
           </NavigationItem>
         ))}
       </List>

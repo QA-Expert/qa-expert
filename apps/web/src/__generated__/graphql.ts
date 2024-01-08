@@ -586,26 +586,6 @@ export type GetCourseQuery = {
   };
 };
 
-export type GetCourseProgressAndBadgeQueryVariables = Exact<{
-  _id: Scalars['String']['input'];
-}>;
-
-export type GetCourseProgressAndBadgeQuery = {
-  __typename?: 'Query';
-  course: {
-    __typename?: 'Course';
-    _id: string;
-    progress: {
-      __typename?: 'TotalCourseProgress';
-      pass: number;
-      fail: number;
-      state: CourseProgressState;
-      updatedAt: string;
-    };
-    badge?: { __typename?: 'Badge'; _id: string } | null;
-  };
-};
-
 export type GetUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUserQuery = {
@@ -621,11 +601,9 @@ export type GetUserQuery = {
   };
 };
 
-export type GetBadgesSubmittedProgressesUserQueryVariables = Exact<{
-  [key: string]: never;
-}>;
+export type GetBadgesAndUserQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetBadgesSubmittedProgressesUserQuery = {
+export type GetBadgesAndUserQuery = {
   __typename?: 'Query';
   badges: Array<{
     __typename?: 'Badge';
@@ -636,15 +614,6 @@ export type GetBadgesSubmittedProgressesUserQuery = {
     link: string;
     course?: { __typename?: 'Course'; _id: string; title: string } | null;
   }>;
-  submittedProgresses: Array<{
-    __typename?: 'SubmittedProgress';
-    _id: string;
-    totalProgress: number;
-    quizProgress: number;
-    courseProgress: number;
-    createdAt: string;
-    course: { __typename?: 'Course'; _id: string; title: string };
-  }>;
   user: {
     __typename?: 'User';
     _id: string;
@@ -654,6 +623,45 @@ export type GetBadgesSubmittedProgressesUserQuery = {
     roles: Array<string>;
     badges: Array<string>;
   };
+};
+
+export type GetSubmittedUserProgressesUserQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetSubmittedUserProgressesUserQuery = {
+  __typename?: 'Query';
+  submittedProgresses: Array<{
+    __typename?: 'SubmittedProgress';
+    _id: string;
+    totalProgress: number;
+    quizProgress: number;
+    courseProgress: number;
+    createdAt: string;
+    course: {
+      __typename?: 'Course';
+      _id: string;
+      title: string;
+      progress: {
+        __typename?: 'TotalCourseProgress';
+        state: CourseProgressState;
+      };
+    };
+  }>;
+};
+
+export type GetBillingQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetBillingQuery = {
+  __typename?: 'Query';
+  user: { __typename?: 'User'; _id: string };
+};
+
+export type GetUserActivitiesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserActivitiesQuery = {
+  __typename?: 'Query';
+  user: { __typename?: 'User'; _id: string };
 };
 
 export const LoginDocument = {
@@ -1869,83 +1877,6 @@ export const GetCourseDocument = {
     },
   ],
 } as unknown as DocumentNode<GetCourseQuery, GetCourseQueryVariables>;
-export const GetCourseProgressAndBadgeDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetCourseProgressAndBadge' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: '_id' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'course' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: '_id' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: '_id' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'progress' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'pass' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'fail' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'state' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'updatedAt' },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'badge' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetCourseProgressAndBadgeQuery,
-  GetCourseProgressAndBadgeQueryVariables
->;
 export const GetUserDocument = {
   kind: 'Document',
   definitions: [
@@ -1976,13 +1907,13 @@ export const GetUserDocument = {
     },
   ],
 } as unknown as DocumentNode<GetUserQuery, GetUserQueryVariables>;
-export const GetBadgesSubmittedProgressesUserDocument = {
+export const GetBadgesAndUserDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'GetBadgesSubmittedProgressesUser' },
+      name: { kind: 'Name', value: 'GetBadgesAndUser' },
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
@@ -1997,40 +1928,6 @@ export const GetBadgesSubmittedProgressesUserDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'link' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'course' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'submittedProgresses' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'totalProgress' },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'quizProgress' },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'courseProgress' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'course' },
@@ -2065,6 +1962,124 @@ export const GetBadgesSubmittedProgressesUserDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  GetBadgesSubmittedProgressesUserQuery,
-  GetBadgesSubmittedProgressesUserQueryVariables
+  GetBadgesAndUserQuery,
+  GetBadgesAndUserQueryVariables
+>;
+export const GetSubmittedUserProgressesUserDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetSubmittedUserProgressesUser' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'submittedProgresses' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'totalProgress' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'quizProgress' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'courseProgress' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'course' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'progress' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'state' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetSubmittedUserProgressesUserQuery,
+  GetSubmittedUserProgressesUserQueryVariables
+>;
+export const GetBillingDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetBilling' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'user' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetBillingQuery, GetBillingQueryVariables>;
+export const GetUserActivitiesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetUserActivities' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'user' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetUserActivitiesQuery,
+  GetUserActivitiesQueryVariables
 >;
