@@ -1,15 +1,15 @@
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import ListItem from '@mui/material/ListItem';
 import { styled, useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { getColorForState, getSelectedStyles } from 'utils/utils';
+import { getColorForState } from 'utils/utils';
 import { StatusIndicator } from '@/components/status-indicator/status-indicator';
 import { ArrowIcon } from '@/components/icons/arrow';
 import { Row } from '@/components/row/row';
 import { useState } from 'react';
 import { GetCourseQuery } from '__generated__/graphql';
+import { NavigationItem } from '@/components/sidebar/navigation-item/navigation-item';
 
 type Props = {
   page: GetCourseQuery['course']['pages'][number];
@@ -25,23 +25,10 @@ export function NavigationPageListItem({
   currentPageNumber,
 }: Props) {
   const theme = useTheme();
-  const selectedStyles = selected ? getSelectedStyles(theme) : undefined;
   const [expand, setExpand] = useState(false);
 
   return (
-    <ListItem
-      onClick={onClick}
-      sx={{
-        borderRadius: '0.75rem',
-        padding: 0,
-        outlineColor: 'transparent',
-        '&:hover': {
-          ...getSelectedStyles(theme),
-          transition: '.2s outline ease',
-        },
-        ...selectedStyles,
-      }}
-    >
+    <NavigationItem selected={selected} onClick={onClick}>
       <Accordion expanded={expand}>
         <AccordionSummary
           expandIcon={
@@ -71,7 +58,7 @@ export function NavigationPageListItem({
           <Typography color="text.secondary">{page.description}</Typography>
         </AccordionDetails>
       </Accordion>
-    </ListItem>
+    </NavigationItem>
   );
 }
 

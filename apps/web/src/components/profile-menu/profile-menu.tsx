@@ -16,6 +16,7 @@ import { useError } from 'utils/hooks';
 import { GET_USER } from 'graphql/queries/queries';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { isAuthenticated } from 'apollo/store';
+import { stringAvatar } from 'utils/utils';
 
 export const ProfileMenu = () => {
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
@@ -28,6 +29,7 @@ export const ProfileMenu = () => {
     skip: !isUserAuthenticated,
   });
   const user = data?.user;
+  const username = `${user?.firstName} ${user?.lastName}`;
 
   useError([error?.message, userError?.message]);
 
@@ -69,7 +71,11 @@ export const ProfileMenu = () => {
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           {/* TODO: Add icon to user model */}
-          <Avatar alt={user?.firstName ?? "user's avatar icon"} src="" />
+          <Avatar
+            alt={user?.firstName ?? "user's avatar icon"}
+            src=""
+            {...stringAvatar(username)}
+          />
         </IconButton>
       </Tooltip>
       <Menu

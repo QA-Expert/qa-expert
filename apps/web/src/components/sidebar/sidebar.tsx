@@ -52,8 +52,6 @@ export default function Sidebar({ children }: { children: ReactNode }) {
         marginRight: 'auto',
         height: '100%',
         transition: 'width 0.5s',
-        position: 'relative',
-        zIndex: 'speedDial',
       }}
     >
       <Row
