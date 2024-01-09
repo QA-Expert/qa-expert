@@ -39,6 +39,7 @@ export function Heading() {
           flex: 0.32,
           height: '100%',
           gap: '2rem',
+          paddingBottom: '2rem',
           [theme.breakpoints.down('md')]: {
             gap: '0.75rem',
             flex: 1,
@@ -48,6 +49,9 @@ export function Heading() {
         <Typography
           variant="h1"
           sx={{
+            [theme.breakpoints.down('lg')]: {
+              fontSize: '3rem',
+            },
             [theme.breakpoints.down('md')]: {
               fontSize: '3rem',
             },

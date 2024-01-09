@@ -22,7 +22,7 @@ export class SubmittedProgressService {
           _id: userId,
         },
       })
-      .populate({ path: 'course', select: 'title' })
+      .populate({ path: 'course', select: 'title level progress' })
       .exec();
   }
 

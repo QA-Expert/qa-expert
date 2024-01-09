@@ -122,25 +122,14 @@ export const GET_USER = gql(/* GraphQL */ `
   }
 `);
 
-export const GET_BADGES_SUBMITTED_PROGRESSES_USER = gql(/* GraphQL */ `
-  query GetBadgesSubmittedProgressesUser {
+export const GET_BADGES_AND_USER = gql(/* GraphQL */ `
+  query GetBadgesAndUser {
     badges {
       _id
       title
       description
       icon
       link
-      course {
-        _id
-        title
-      }
-    }
-    submittedProgresses {
-      _id
-      totalProgress
-      quizProgress
-      courseProgress
-      createdAt
       course {
         _id
         title
@@ -153,6 +142,44 @@ export const GET_BADGES_SUBMITTED_PROGRESSES_USER = gql(/* GraphQL */ `
       lastName
       roles
       badges
+    }
+  }
+`);
+
+export const GET_SUBMITTED_USER_PROGRESSES = gql(/* GraphQL */ `
+  query GetSubmittedUserProgressesUser {
+    submittedProgresses {
+      _id
+      totalProgress
+      quizProgress
+      courseProgress
+      createdAt
+      course {
+        _id
+        title
+        level
+        progress {
+          state
+          pass
+          fail
+        }
+      }
+    }
+  }
+`);
+
+export const GET_BILLING = gql(/* GraphQL */ `
+  query GetBilling {
+    user {
+      _id
+    }
+  }
+`);
+
+export const GET_USER_ACTIVITIES = gql(/* GraphQL */ `
+  query GetUserActivities {
+    user {
+      _id
     }
   }
 `);

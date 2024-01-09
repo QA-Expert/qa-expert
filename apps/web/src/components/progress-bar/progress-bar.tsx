@@ -3,8 +3,11 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import { GetCourseQuery } from '__generated__/graphql';
 
-export function ProgressBar(course: GetCourseQuery['course']) {
-  const progress = course?.progress;
+export function ProgressBar({
+  progress,
+}: {
+  progress: Pick<GetCourseQuery['course']['progress'], 'fail' | 'pass'>;
+}) {
   const hasNoProgress = !progress.pass && !progress.fail;
 
   return (

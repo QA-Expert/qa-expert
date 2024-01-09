@@ -10,7 +10,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import HomeIcon from '@mui/icons-material/Home';
 import EmailIcon from '@mui/icons-material/Email';
 import { Row } from '@/components/row/row';
-import { stringAvatar } from '../handlers';
+import { stringAvatar } from 'utils/utils';
 
 const getSocialIcon = (name: Props['socials'][number]['name']) => {
   switch (name) {
@@ -60,7 +60,7 @@ export function CardComponent(props: Props) {
             alt={name}
             src={avatar}
             {...stringAvatar(name)}
-            sx={{ width: 160, height: 160 }}
+            sx={{ width: 160, height: 160, fontSize: '2rem' }}
           />
 
           <Row sx={{ justifyContent: 'center' }}>
