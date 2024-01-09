@@ -84,9 +84,9 @@ export function CardContainer(props: CourseProps) {
 
       <CardActions />
 
-      {isUserAuthenticated && (
+      {isUserAuthenticated && 'progress' in props && (
         /* Since user is authenticated we know that it is course with all props that is why it is safe to do type cast */
-        <ProgressBar {...(props as GetCourseQuery['course'])} />
+        <ProgressBar progress={props.progress} />
       )}
 
       <CardAccordion {...props} showOpenCourseButton={isUserAuthenticated} />

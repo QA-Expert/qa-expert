@@ -157,8 +157,11 @@ export const GET_SUBMITTED_USER_PROGRESSES = gql(/* GraphQL */ `
       course {
         _id
         title
+        level
         progress {
           state
+          pass
+          fail
         }
       }
     }

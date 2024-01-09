@@ -58,9 +58,9 @@ function Account() {
           />
 
           {section === 'badges' ? <Badges /> : null}
-          {section === 'billing' ? <Billing /> : null}
-          {section === 'activities' ? <Activities /> : null}
           {section === 'progress' ? <Progress /> : null}
+          {section === 'activities' ? <Activities /> : null}
+          {section === 'billing' ? <Billing /> : null}
         </Section>
       </Box>
     </Layout>

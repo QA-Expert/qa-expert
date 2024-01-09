@@ -642,9 +642,12 @@ export type GetSubmittedUserProgressesUserQuery = {
       __typename?: 'Course';
       _id: string;
       title: string;
+      level: CourseLevel;
       progress: {
         __typename?: 'TotalCourseProgress';
         state: CourseProgressState;
+        pass: number;
+        fail: number;
       };
     };
   }>;
@@ -2003,6 +2006,7 @@ export const GetSubmittedUserProgressesUserDocument = {
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: '_id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'level' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'progress' },
@@ -2012,6 +2016,14 @@ export const GetSubmittedUserProgressesUserDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'state' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'pass' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'fail' },
                             },
                           ],
                         },

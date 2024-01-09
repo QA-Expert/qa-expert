@@ -46,7 +46,7 @@ const documents = {
     types.GetUserDocument,
   '\n  query GetBadgesAndUser {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n    user {\n      _id\n      email\n      firstName\n      lastName\n      roles\n      badges\n    }\n  }\n':
     types.GetBadgesAndUserDocument,
-  '\n  query GetSubmittedUserProgressesUser {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n        progress {\n          state\n        }\n      }\n    }\n  }\n':
+  '\n  query GetSubmittedUserProgressesUser {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n        level\n        progress {\n          state\n          pass\n          fail\n        }\n      }\n    }\n  }\n':
     types.GetSubmittedUserProgressesUserDocument,
   '\n  query GetBilling {\n    user {\n      _id\n    }\n  }\n':
     types.GetBillingDocument,
@@ -174,8 +174,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetSubmittedUserProgressesUser {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n        progress {\n          state\n        }\n      }\n    }\n  }\n',
-): (typeof documents)['\n  query GetSubmittedUserProgressesUser {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n        progress {\n          state\n        }\n      }\n    }\n  }\n'];
+  source: '\n  query GetSubmittedUserProgressesUser {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n        level\n        progress {\n          state\n          pass\n          fail\n        }\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query GetSubmittedUserProgressesUser {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n        level\n        progress {\n          state\n          pass\n          fail\n        }\n      }\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
