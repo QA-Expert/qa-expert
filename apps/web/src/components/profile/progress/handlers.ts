@@ -1,12 +1,7 @@
-import {
-  CourseProgressState,
-  GetSubmittedUserProgressesUserQuery,
-} from '__generated__/graphql';
+import { CourseProgressState } from '__generated__/graphql';
 import { Course, States } from './progress';
 
-export const getGroupedCoursesByState = (
-  progresses: GetSubmittedUserProgressesUserQuery['submittedProgresses'],
-) => {
+export const getGroupedCoursesByState = (courses: Course[]) => {
   const groupedByState: {
     [K in States]: Course[];
   } = {
@@ -14,11 +9,17 @@ export const getGroupedCoursesByState = (
     COMPLETED: [],
   };
 
-  progresses.forEach((progress) => {
-    if (progress.course.progress.state !== CourseProgressState.InProgress) {
-      groupedByState['COMPLETED'].push(progress.course);
-    } else {
-      groupedByState[CourseProgressState.InProgress].push(progress.course);
+  courses.forEach((course) => {
+    if (course.progress.state !== CourseProgressState.InProgress) {
+      groupedByState['COMPLETED'].push(course);
+    }
+
+    if (
+      (course.progress.state === CourseProgressState.InProgress &&
+        course.progress.fail > 0) ||
+      course.progress.pass > 0
+    ) {
+      groupedByState[CourseProgressState.InProgress].push(course);
     }
   });
 

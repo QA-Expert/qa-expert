@@ -6,6 +6,11 @@ import { ApolloError, useApolloClient } from '@apollo/client';
 import { useEffect } from 'react';
 import { GET_ALL_COURSES_PUBLIC } from 'graphql/queries/queries';
 import { isAuthenticated } from 'apollo/store';
+import Typography from '@mui/material/Typography/Typography';
+import Main from '@/components/main/main';
+import Link from 'next/link';
+import Button from '@mui/material/Button/Button';
+import { Box } from '@/components/box/box';
 
 export default function GlobalError({
   error,
@@ -25,13 +30,15 @@ export default function GlobalError({
    */
   useEffect(() => {
     const apolloError = error as ApolloError;
-
-    if (
+    const isAuthError =
       apolloError.name === 'ApolloError' &&
-      apolloError.graphQLErrors.find(
-        (e) => e.extensions.code === 'UNAUTHENTICATED',
-      )
-    ) {
+      Boolean(
+        apolloError.graphQLErrors.find(
+          (e) => e.extensions.code === 'UNAUTHENTICATED',
+        ),
+      );
+
+    if (isAuthError) {
       isAuthenticated(false);
 
       apolloClient
@@ -44,5 +51,14 @@ export default function GlobalError({
     }
   }, [error, router, apolloClient]);
 
-  return null;
+  return (
+    <Main>
+      <Box sx={{ gap: '1rem' }}>
+        <Typography variant="h3">Something went wrong</Typography>
+        <Link href="/">
+          <Button variant="contained">Go to main page</Button>
+        </Link>
+      </Box>
+    </Main>
+  );
 }

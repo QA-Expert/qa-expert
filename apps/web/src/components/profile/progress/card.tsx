@@ -1,3 +1,5 @@
+'use client';
+
 import { useTheme } from '@mui/material/styles';
 import { Course } from './progress';
 import Card from '@mui/material/Card/Card';
@@ -9,12 +11,16 @@ import { Row } from '@/components/row/row';
 import { CourseLevelLabel } from '@/components/card/course-level-label';
 import { ProgressBar } from '@/components/progress-bar/progress-bar';
 
-export function ProgressCard({ course }: { course: Course }) {
+type Props = {
+  course: Course;
+  showPRogressBar?: boolean;
+};
+
+export function ProgressCard({ course, showPRogressBar }: Props) {
   const theme = useTheme();
 
   return (
     <Card
-      raised
       sx={{
         width: '100%',
         borderRadius: '0.5rem',
@@ -54,7 +60,7 @@ export function ProgressCard({ course }: { course: Course }) {
         </Link>
       </Row>
 
-      <ProgressBar progress={course.progress} />
+      {showPRogressBar ? <ProgressBar progress={course.progress} /> : null}
     </Card>
   );
 }

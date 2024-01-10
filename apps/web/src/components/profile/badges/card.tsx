@@ -13,15 +13,9 @@ interface Props extends Badge {
   isEarned: boolean;
 }
 
-export const BadgeComponent = ({
-  title,
-  description,
-  course,
-  isEarned,
-}: Props) => {
+export const BadgeCard = ({ title, description, course, isEarned }: Props) => {
   return (
     <Card
-      variant="outlined"
       sx={{
         pointerEvents: isEarned ? 'auto' : 'none',
         opacity: isEarned ? 1 : 0.6,
@@ -33,6 +27,7 @@ export const BadgeComponent = ({
         alignItems: 'center',
         textAlign: 'center',
         padding: '1rem',
+        backgroundColor: 'secondary.dark',
       }}
     >
       <CardMedia>
@@ -48,7 +43,11 @@ export const BadgeComponent = ({
       </CardContent>
       {course && (
         <CardActions>
-          <Button href={`/course/${course?._id}`} size="small">
+          <Button
+            sx={{ padding: '0.5rem' }}
+            href={`/course/${course?._id}`}
+            size="small"
+          >
             Go to Course
           </Button>
         </CardActions>

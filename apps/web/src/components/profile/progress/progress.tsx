@@ -2,82 +2,55 @@
 
 import { Box } from '@/components/box/box';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import Divider from '@mui/material/Divider/Divider';
-import Typography from '@mui/material/Typography/Typography';
-import { useTheme } from '@mui/material/styles';
 import {
   CourseProgressState,
+  GetAllCoursesQuery,
   GetSubmittedUserProgressesUserQuery,
 } from '__generated__/graphql';
-import { GET_SUBMITTED_USER_PROGRESSES } from 'graphql/queries/queries';
+import {
+  GET_ALL_COURSES,
+  GET_SUBMITTED_USER_PROGRESSES,
+} from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
-import { getGroupedCoursesByState } from './handlers';
-import { ProgressCard } from './card';
+import { CoursesList } from './courses-list';
 
-export type Course =
-  GetSubmittedUserProgressesUserQuery['submittedProgresses'][number]['course'];
+export type Course = Pick<
+  | GetAllCoursesQuery['courses'][number]
+  | GetSubmittedUserProgressesUserQuery['submittedProgresses'][number]['course'],
+  '_id' | 'title' | 'progress' | 'level'
+>;
 
 export type States = 'COMPLETED' | CourseProgressState.InProgress;
 
 export function Progress() {
-  const { data, error } = useSuspenseQuery(GET_SUBMITTED_USER_PROGRESSES);
-  const theme = useTheme();
+  const { data: coursesData, error: coursesError } =
+    useSuspenseQuery(GET_ALL_COURSES);
+  const { data: submittedProgresses, error: submittedProgressError } =
+    useSuspenseQuery(GET_SUBMITTED_USER_PROGRESSES);
 
-  useError([error?.message]);
+  useError([coursesError?.message, submittedProgressError?.message]);
 
-  const groupedByState = getGroupedCoursesByState(data.submittedProgresses);
-
-  const states = Object.keys(groupedByState) as States[];
+  const completedCourses = submittedProgresses.submittedProgresses.map(
+    (progress) => progress.course,
+  );
+  const inProgressCourses = coursesData.courses.filter(
+    (course) =>
+      course.progress.state === CourseProgressState.InProgress &&
+      (course.progress.fail > 0 || course.progress.pass > 0),
+  );
 
   return (
     <Box sx={{ width: '100%', gap: '2rem' }}>
-      {states.map((state) => {
-        const courses = groupedByState[state];
-
-        return (
-          <>
-            <Typography
-              sx={{
-                color:
-                  state === 'COMPLETED' ? 'success.main' : 'secondary.main',
-              }}
-            >
-              {state}
-            </Typography>
-
-            <Box
-              key={state}
-              sx={{
-                width: '100%',
-                padding: '1rem',
-                border: `1px solid ${theme.palette.secondary.main}`,
-                borderRadius: '1rem',
-                gap: '1rem',
-              }}
-            >
-              {courses.length === 0 ? (
-                <Typography sx={{ color: 'text.secondary' }}>
-                  Please start your courses to see the progress
-                </Typography>
-              ) : null}
-
-              {courses.map((course, i) => (
-                <Box key={course._id} sx={{ gap: '1rem', width: '100%' }}>
-                  {i > 0 ? (
-                    <Divider
-                      flexItem
-                      variant="fullWidth"
-                      sx={{ backgroundColor: 'warning.main' }}
-                    />
-                  ) : null}
-
-                  <ProgressCard course={course} />
-                </Box>
-              ))}
-            </Box>
-          </>
-        );
-      })}
+      <CoursesList
+        courses={inProgressCourses}
+        title="currently in progress"
+        state={CourseProgressState.InProgress}
+      />
+      <CoursesList
+        courses={completedCourses}
+        title="completed once"
+        state={'COMPLETED'}
+      />
     </Box>
   );
 }

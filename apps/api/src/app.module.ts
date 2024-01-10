@@ -14,6 +14,7 @@ import { SubmittedProgressModule } from './modules/submitted-progresses/submitte
 import { CourseProgressModule } from './modules/course-progresses/course-progress.module';
 import { ConfigModule } from './modules/config/config.module';
 import { ConfigService } from './modules/config/config.service';
+import { ActivityModule } from './modules/activities/activity.modules';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { ConfigService } from './modules/config/config.service';
     BadgeModule,
     SubmittedProgressModule,
     CourseProgressModule,
+    ActivityModule,
   ],
   providers: [],
 })

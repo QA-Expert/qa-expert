@@ -150,7 +150,7 @@ export const dark: ThemeOptions = merge(base, {
     secondary: {
       main: '#7A75CD',
       light: '#8785A3',
-      dark: '#7A75CD',
+      dark: '#1E1D35',
       contrastText: '#fff',
     },
     warning: {

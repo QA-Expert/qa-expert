@@ -14,7 +14,7 @@ export class BadgeService {
     return await this.badgeModel.find().populate('course').exec();
   }
 
-  async findOnByCourseId(courseId: string) {
+  async findOneByCourseId(courseId: string) {
     return await this.badgeModel.findOne({ course: { _id: courseId } });
   }
 }

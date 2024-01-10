@@ -1,3 +1,5 @@
+'use client';
+
 import { Row } from '@/components/row/row';
 import { Section } from '@/components/section/section';
 import { NavigationItem } from '@/components/sidebar/navigation-item/navigation-item';
@@ -16,21 +18,27 @@ import { useError } from 'utils/hooks';
 import { GET_USER } from 'graphql/queries/queries';
 
 export type Section = 'badges' | 'billing' | 'activities' | 'progress';
-const SECTIONS: Section[] = ['badges', 'billing', 'activities', 'progress'];
+
+const SECTIONS: Section[] = [
+  'badges',
+  'activities',
+  'progress',
+  'billing',
+] as const;
 
 export function ProfileSidebar({
   onSectionSelect,
 }: {
   onSectionSelect: (section: Section) => void;
 }) {
-  const { data: userData, error: userFetchError } = useSuspenseQuery(GET_USER);
+  const { data, error } = useSuspenseQuery(GET_USER);
   const [currentSection, setCurrentSection] = useState<Section>('badges');
-  const user = userData?.user;
+  const user = data?.user;
   const username = user?.firstName
     ? `${user?.firstName} ${user?.lastName}`
     : user?.email;
 
-  useError([userFetchError?.message]);
+  useError([error?.message]);
 
   const [changeUserNamesModalOpen, setChangeUserNamesModalOpen] =
     useState(false);
