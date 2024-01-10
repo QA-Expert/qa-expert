@@ -19,12 +19,7 @@ import { GET_USER } from 'graphql/queries/queries';
 
 export type Section = 'badges' | 'billing' | 'activities' | 'progress';
 
-const SECTIONS: Section[] = [
-  'badges',
-  'activities',
-  'progress',
-  'billing',
-] as const;
+const SECTIONS: Section[] = ['badges', 'activities', 'progress', 'billing'];
 
 export function ProfileSidebar({
   onSectionSelect,

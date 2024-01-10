@@ -51,6 +51,26 @@ export enum ActivityType {
   Percentage = 'PERCENTAGE',
 }
 
+export type Address = {
+  __typename?: 'Address';
+  _id: Scalars['String']['output'];
+  /** [Should be Encrypted] City name */
+  city: Scalars['String']['output'];
+  /** [Should be Encrypted] Country code or name */
+  country: Scalars['String']['output'];
+  creditCard: CreditCard;
+  /** [Should be Encrypted] Customer's phone number */
+  phoneNumber: Scalars['String']['output'];
+  /** [Should be Encrypted] State code or name */
+  state: Scalars['String']['output'];
+  /** [Should be Encrypted] Street name */
+  streetLine1: Scalars['String']['output'];
+  /** [Should be Encrypted] Could be apt number */
+  streetLine2: Scalars['String']['output'];
+  /** [Should be Encrypted] Zip code */
+  zip: Scalars['String']['output'];
+};
+
 export type Answer = {
   __typename?: 'Answer';
   _id: Scalars['String']['output'];
@@ -131,6 +151,23 @@ export enum CourseType {
   Course = 'COURSE',
   Quiz = 'QUIZ',
 }
+
+export type CreditCard = {
+  __typename?: 'CreditCard';
+  _id: Scalars['String']['output'];
+  address: Address;
+  /** [Should be Encrypted] Tokenized value of the credit card */
+  cardToken: Scalars['String']['output'];
+  /** [Should be Encrypted] Card type. Example: VISA, MASTERCARD, AMEX etc */
+  cardType: Scalars['String']['output'];
+  /** [Should be Encrypted] Expiration month of the credit card */
+  expiryMonth: Scalars['String']['output'];
+  /** [Should be Encrypted] Expiration year of the credit card */
+  expiryYear: Scalars['String']['output'];
+  /** [Should be Encrypted] Last four numbers of User's credit card */
+  lastFour: Scalars['String']['output'];
+  user: Scalars['String']['output'];
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -248,6 +285,7 @@ export type Query = {
   course: Course;
   courses: Array<Course>;
   coursesPublic: Array<Course>;
+  creditCard?: Maybe<CreditCard>;
   submittedProgresses: Array<SubmittedProgress>;
   user: User;
 };
@@ -674,11 +712,29 @@ export type GetSubmittedUserProgressesUserQuery = {
   }>;
 };
 
-export type GetBillingQueryVariables = Exact<{ [key: string]: never }>;
+export type GetCreditCardQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetBillingQuery = {
+export type GetCreditCardQuery = {
   __typename?: 'Query';
-  user: { __typename?: 'User'; _id: string };
+  creditCard?: {
+    __typename?: 'CreditCard';
+    _id: string;
+    cardToken: string;
+    lastFour: string;
+    expiryMonth: string;
+    expiryYear: string;
+    cardType: string;
+    user: string;
+    address: {
+      __typename?: 'Address';
+      phoneNumber: string;
+      streetLine1: string;
+      streetLine2: string;
+      city: string;
+      country: string;
+      zip: string;
+    };
+  } | null;
 };
 
 export type GetUserActivitiesQueryVariables = Exact<{ [key: string]: never }>;
@@ -2069,23 +2125,56 @@ export const GetSubmittedUserProgressesUserDocument = {
   GetSubmittedUserProgressesUserQuery,
   GetSubmittedUserProgressesUserQueryVariables
 >;
-export const GetBillingDocument = {
+export const GetCreditCardDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'GetBilling' },
+      name: { kind: 'Name', value: 'GetCreditCard' },
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'user' },
+            name: { kind: 'Name', value: 'creditCard' },
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'cardToken' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'lastFour' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'expiryMonth' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'expiryYear' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'cardType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'user' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'address' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'phoneNumber' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'streetLine1' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'streetLine2' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'city' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'country' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'zip' } },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -2093,7 +2182,7 @@ export const GetBillingDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<GetBillingQuery, GetBillingQueryVariables>;
+} as unknown as DocumentNode<GetCreditCardQuery, GetCreditCardQueryVariables>;
 export const GetUserActivitiesDocument = {
   kind: 'Document',
   definitions: [

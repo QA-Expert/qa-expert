@@ -14,6 +14,9 @@ export interface Config {
   EMAIL_PASSWORD: string;
   EMAIL_FROM: string;
   COURSE_COOLDOWN: number;
+  BILLING_ENCRYPTION_METHOD: string;
+  BILLING_SECRET_KEY: string;
+  BILLING_SECRET_IV: string;
 }
 
 export const validationSchema = Joi.object<Config>({
@@ -30,4 +33,7 @@ export const validationSchema = Joi.object<Config>({
   EMAIL_PASSWORD: Joi.string().required(),
   EMAIL_FROM: Joi.string().required(),
   COURSE_COOLDOWN: Joi.number().required(),
+  BILLING_ENCRYPTION_METHOD: Joi.string().default('aes-256-cbc'),
+  BILLING_SECRET_KEY: Joi.string(),
+  BILLING_SECRET_IV: Joi.string(),
 });
