@@ -46,7 +46,7 @@ export default function RootLayout({
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <ApolloWrapper token={token}>
-              {/* <Toasts /> */}
+              <Toasts />
               {children}
               {login}
             </ApolloWrapper>

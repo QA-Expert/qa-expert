@@ -7,7 +7,6 @@ import { useEffect } from 'react';
 import { GET_ALL_COURSES_PUBLIC } from 'graphql/queries/queries';
 import { isAuthenticated } from 'apollo/store';
 import Typography from '@mui/material/Typography/Typography';
-import Layout from '@/components/layout/layout';
 import Main from '@/components/main/main';
 import Link from 'next/link';
 import Button from '@mui/material/Button/Button';
