@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "compile": "graphql-codegen -r dotenv/config",
-    "compile-dev": "graphql-codegen dotenv_config_path=.env.development.local -r dotenv/config ",
+    "compile": "graphql-codegen -r dotenv/config --debug --verbose",
+    "compile-dev": "graphql-codegen dotenv_config_path=.env.development.local -r dotenv/config --debug --verbose",
     "watch": "graphql-codegen-r dotenv/config -w",
     "watch-dev": "graphql-codegen dotenv_config_path=.env.development.local -r dotenv/config -w "
   },

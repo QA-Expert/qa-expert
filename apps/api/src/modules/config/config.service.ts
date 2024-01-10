@@ -59,4 +59,16 @@ export class ConfigService {
   get courseCooldownDays(): number {
     return this.configService.get<number>('COURSE_COOLDOWN');
   }
+
+  get billingEncryptionMethod(): string {
+    return this.configService.get<string>('BILLING_ENCRYPTION_METHOD');
+  }
+
+  get billingSecretKey(): string {
+    return this.configService.get<string>('BILLING_SECRET_KEY');
+  }
+
+  get billingSecretIv(): string {
+    return this.configService.get<string>('BILLING_SECRET_IV');
+  }
 }

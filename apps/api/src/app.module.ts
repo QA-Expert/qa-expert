@@ -15,6 +15,8 @@ import { CourseProgressModule } from './modules/course-progresses/course-progres
 import { ConfigModule } from './modules/config/config.module';
 import { ConfigService } from './modules/config/config.service';
 import { ActivityModule } from './modules/activities/activity.modules';
+import { AddressModule } from './modules/billing/address/address.modules';
+import { CreditCardModule } from './modules/billing/credit-card/credit-card.modules';
 
 @Module({
   imports: [
@@ -63,6 +65,8 @@ import { ActivityModule } from './modules/activities/activity.modules';
     SubmittedProgressModule,
     CourseProgressModule,
     ActivityModule,
+    CreditCardModule,
+    AddressModule,
   ],
   providers: [],
 })

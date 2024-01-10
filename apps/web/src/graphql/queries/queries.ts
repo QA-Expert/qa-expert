@@ -168,10 +168,24 @@ export const GET_SUBMITTED_USER_PROGRESSES = gql(/* GraphQL */ `
   }
 `);
 
-export const GET_BILLING = gql(/* GraphQL */ `
-  query GetBilling {
-    user {
+export const GET_CREDIT_CARD = gql(/* GraphQL */ `
+  query GetCreditCard {
+    creditCard {
       _id
+      cardToken
+      lastFour
+      expiryMonth
+      expiryYear
+      cardType
+      user
+      address {
+        phoneNumber
+        streetLine1
+        streetLine2
+        city
+        country
+        zip
+      }
     }
   }
 `);
