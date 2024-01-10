@@ -1,3 +1,5 @@
+'use client';
+
 import { Box } from '@/components/box/box';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_BILLING } from 'graphql/queries/queries';

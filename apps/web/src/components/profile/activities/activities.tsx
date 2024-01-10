@@ -1,7 +1,10 @@
-import { Box } from '@/components/box/box';
+'use client';
+
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_USER_ACTIVITIES } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
+import { ActivityCard } from './card';
+import { Row } from '@/components/row/row';
 
 export function Activities() {
   const { data, error } = useSuspenseQuery(GET_USER_ACTIVITIES);
@@ -9,8 +12,10 @@ export function Activities() {
   useError([error?.message]);
 
   return (
-    <Box>
-      <h1>Activities {data.user._id}</h1>
-    </Box>
+    <Row sx={{ flexWrap: 'wrap', gap: '1rem' }}>
+      {data.activities.map((activity) => (
+        <ActivityCard key={activity._id} {...activity} />
+      ))}
+    </Row>
   );
 }

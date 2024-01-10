@@ -31,6 +31,26 @@ export type Scalars = {
   DateTime: { input: string; output: string };
 };
 
+export type Activity = {
+  __typename?: 'Activity';
+  _id: Scalars['String']['output'];
+  /** Activity description */
+  description: Scalars['String']['output'];
+  /** Activity title */
+  title: Scalars['String']['output'];
+  type: ActivityType;
+  user: Scalars['String']['output'];
+  /** Activity value. It could be represented as just numeric value, or percentage or duration, depends on the Activity type */
+  value: Scalars['String']['output'];
+};
+
+/** Defines the a type for activity */
+export enum ActivityType {
+  Duration = 'DURATION',
+  Numeric = 'NUMERIC',
+  Percentage = 'PERCENTAGE',
+}
+
 export type Answer = {
   __typename?: 'Answer';
   _id: Scalars['String']['output'];
@@ -223,6 +243,7 @@ export enum PageProgressState {
 
 export type Query = {
   __typename?: 'Query';
+  activities: Array<Activity>;
   badges: Array<Badge>;
   course: Course;
   courses: Array<Course>;
@@ -664,7 +685,13 @@ export type GetUserActivitiesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUserActivitiesQuery = {
   __typename?: 'Query';
-  user: { __typename?: 'User'; _id: string };
+  activities: Array<{
+    __typename?: 'Activity';
+    _id: string;
+    title: string;
+    description: string;
+    value: string;
+  }>;
 };
 
 export const LoginDocument = {
@@ -2079,11 +2106,14 @@ export const GetUserActivitiesDocument = {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'user' },
+            name: { kind: 'Name', value: 'activities' },
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'value' } },
               ],
             },
           },

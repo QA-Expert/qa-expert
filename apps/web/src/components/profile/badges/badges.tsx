@@ -1,4 +1,6 @@
-import { BadgeComponent } from '@/components/badge/badge';
+'use client';
+
+import { BadgeCard } from '@/components/profile/badges/card';
 import { Box } from '@/components/box/box';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_BADGES_AND_USER } from 'graphql/queries/queries';
@@ -22,7 +24,7 @@ export function Badges() {
       }}
     >
       {badges?.map((badge, i) => (
-        <BadgeComponent
+        <BadgeCard
           key={i}
           {...badge}
           isEarned={Boolean(user?.badges?.includes(badge._id))}

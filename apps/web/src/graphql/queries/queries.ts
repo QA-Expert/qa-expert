@@ -178,8 +178,11 @@ export const GET_BILLING = gql(/* GraphQL */ `
 
 export const GET_USER_ACTIVITIES = gql(/* GraphQL */ `
   query GetUserActivities {
-    user {
+    activities {
       _id
+      title
+      description
+      value
     }
   }
 `);

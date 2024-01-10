@@ -1,3 +1,5 @@
+'use client';
+
 import ListItem, { ListItemProps } from '@mui/material/ListItem/ListItem';
 import { useTheme } from '@mui/material/styles';
 import { ReactNode } from 'react';

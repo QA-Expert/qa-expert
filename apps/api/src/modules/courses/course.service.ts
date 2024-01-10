@@ -64,6 +64,6 @@ export class CourseService {
   }
 
   async findBadge(course: Course) {
-    return await this.serviceBadge.findOnByCourseId(course._id);
+    return await this.serviceBadge.findOneByCourseId(course._id);
   }
 }

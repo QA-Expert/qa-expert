@@ -8,7 +8,7 @@ import {
   ProfileSidebar,
   Section as SectionName,
 } from '@/components/profile/sidebar/sidebar';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Typography from '@mui/material/Typography/Typography';
 import Divider from '@mui/material/Divider/Divider';
 import { Billing } from '@/components/profile/billing/billing';
@@ -30,7 +30,9 @@ function Account() {
           flexWrap: 'wrap',
         }}
       >
-        <ProfileSidebar onSectionSelect={setSection} />
+        <Suspense fallback={'...Loading'}>
+          <ProfileSidebar onSectionSelect={setSection} />
+        </Suspense>
 
         <Section
           sx={{
@@ -58,8 +60,11 @@ function Account() {
           />
 
           {section === 'badges' ? <Badges /> : null}
+
           {section === 'progress' ? <Progress /> : null}
+
           {section === 'activities' ? <Activities /> : null}
+
           {section === 'billing' ? <Billing /> : null}
         </Section>
       </Box>
