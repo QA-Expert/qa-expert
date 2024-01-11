@@ -3,7 +3,11 @@
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
-import { GetCourseQuery, PageProgressState } from '__generated__/graphql';
+import {
+  GetCourseQuery,
+  PageProgressState,
+  QuestionType,
+} from '__generated__/graphql';
 import { Box } from '@/components/box/box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -16,8 +20,10 @@ import { difference } from 'lodash';
 import { CREATE_QUIZ_PAGE_PROGRESS } from 'graphql/mutations/mutations';
 import { GET_COURSE } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
+import { SingleChoiceQuestion } from './quistion/single-choice/single-choice';
+import { MultipleChoiceQuestion } from './quistion/multiple-choice/multiple-choice';
 
-type Props = Pick<
+export type Props = Pick<
   GetCourseQuery['course']['pages'][number],
   '_id' | 'question' | 'progress'
 >;
@@ -30,7 +36,6 @@ export default function QuizSection({
   const router = useParams();
   const courseId = router.id as string;
   const [answers, setAnswers] = useState(progress?.answers ?? []);
-  const isSingleAnswerQuestion = question?.answers.length === 1;
   const [createProgress, { error }] = useMutation(CREATE_QUIZ_PAGE_PROGRESS, {
     refetchQueries: [
       {
@@ -45,6 +50,8 @@ export default function QuizSection({
   if (!question) {
     return null;
   }
+
+  const { type, content } = question;
 
   const handleSubmit = async () => {
     const expectedAnswerIds = question?.answers?.map((answer) => answer?._id);
@@ -64,20 +71,24 @@ export default function QuizSection({
   const isAnsweredCorrectly = (expected: string[], actual: string[]) =>
     !difference(expected, actual).length;
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (isSingleAnswerQuestion) {
-      setAnswers([e.target.value]);
+  const handleCHangeSingleChoiceQuestion = (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
+    setAnswers([e.target.value]);
+  };
+
+  const handleChangeMultipleChoiceQuestion = (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
+    let newAnswers = answers.map((a) => a);
+
+    if (e.target.checked) {
+      newAnswers.push(e.target.value);
     } else {
-      let newAnswers = answers.map((a) => a);
-
-      if (e.target.checked) {
-        newAnswers.push(e.target.value);
-      } else {
-        newAnswers = newAnswers.filter((answer) => answer !== e.target.value);
-      }
-
-      setAnswers(newAnswers);
+      newAnswers = newAnswers.filter((answer) => answer !== e.target.value);
     }
+
+    setAnswers(newAnswers);
   };
 
   return (
@@ -91,44 +102,25 @@ export default function QuizSection({
         sx={{ fontSize: '1.5rem' }}
         color={'warning.main'}
       >
-        {question.content}
+        {content}
       </Typography>
+
       <Box>
-        {isSingleAnswerQuestion ? (
-          <RadioGroup sx={{ gap: '0.5rem' }}>
-            {question.options.map((option, i) => (
-              <FormControlLabel
-                key={i}
-                value={option._id}
-                disabled={Boolean(progress?.answers?.length)}
-                control={
-                  <Radio
-                    checked={Boolean(answers?.includes(option._id))}
-                    onChange={handleChange}
-                  />
-                }
-                label={option.content}
-              />
-            ))}
-          </RadioGroup>
-        ) : (
-          <FormGroup sx={{ gap: '0.5rem' }}>
-            {question.options.map((option, i) => (
-              <FormControlLabel
-                key={i}
-                value={option._id}
-                disabled={Boolean(progress?.answers?.length)}
-                control={
-                  <Checkbox
-                    checked={Boolean(answers?.includes(option._id))}
-                    onChange={handleChange}
-                  />
-                }
-                label={option.content}
-              />
-            ))}
-          </FormGroup>
-        )}
+        {type === QuestionType.SingleChoice ? (
+          <SingleChoiceQuestion
+            question={question}
+            onChange={handleCHangeSingleChoiceQuestion}
+            progress={progress}
+          />
+        ) : null}
+
+        {type === QuestionType.MultipleChoice ? (
+          <MultipleChoiceQuestion
+            question={question}
+            onChange={handleChangeMultipleChoiceQuestion}
+            progress={progress}
+          />
+        ) : null}
       </Box>
 
       <Button

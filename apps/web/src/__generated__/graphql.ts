@@ -304,7 +304,20 @@ export type Question = {
   content: Scalars['String']['output'];
   /** Answer options */
   options: Array<Answer>;
+  type: QuestionType;
 };
+
+/** Defines type of the question on quiz page */
+export enum QuestionType {
+  BugReport = 'BUG_REPORT',
+  Checklist = 'CHECKLIST',
+  Coding = 'CODING',
+  Graphql = 'GRAPHQL',
+  MultipleChoice = 'MULTIPLE_CHOICE',
+  RestApi = 'REST_API',
+  SingleChoice = 'SINGLE_CHOICE',
+  TestCase = 'TEST_CASE',
+}
 
 export type QuizPageInput = {
   description: Scalars['String']['input'];
@@ -638,6 +651,7 @@ export type GetCourseQuery = {
       question?: {
         __typename?: 'Question';
         content: string;
+        type: QuestionType;
         answers: Array<{ __typename?: 'Answer'; _id: string; content: string }>;
         options: Array<{ __typename?: 'Answer'; _id: string; content: string }>;
       } | null;
@@ -1897,6 +1911,10 @@ export const GetCourseDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'content' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'type' },
                             },
                             {
                               kind: 'Field',

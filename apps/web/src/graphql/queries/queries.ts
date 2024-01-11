@@ -82,6 +82,7 @@ export const GET_COURSE = gql(/* GraphQL */ `
         content
         question {
           content
+          type
           answers {
             _id
             content
