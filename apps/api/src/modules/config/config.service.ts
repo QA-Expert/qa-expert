@@ -67,8 +67,4 @@ export class ConfigService {
   get billingSecretKey(): string {
     return this.configService.get<string>('BILLING_SECRET_KEY');
   }
-
-  get billingSecretIv(): string {
-    return this.configService.get<string>('BILLING_SECRET_IV');
-  }
 }

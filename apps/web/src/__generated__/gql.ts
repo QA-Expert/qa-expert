@@ -52,6 +52,8 @@ const documents = {
     types.GetCreditCardDocument,
   '\n  query GetUserActivities {\n    activities {\n      _id\n      title\n      description\n      value\n    }\n  }\n':
     types.GetUserActivitiesDocument,
+  '\n  query GetBillingTransactions {\n    transactions {\n      _id\n      createdAt\n    }\n  }\n':
+    types.GetBillingTransactionsDocument,
 };
 
 /**
@@ -188,6 +190,12 @@ export function gql(
 export function gql(
   source: '\n  query GetUserActivities {\n    activities {\n      _id\n      title\n      description\n      value\n    }\n  }\n',
 ): (typeof documents)['\n  query GetUserActivities {\n    activities {\n      _id\n      title\n      description\n      value\n    }\n  }\n'];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetBillingTransactions {\n    transactions {\n      _id\n      createdAt\n    }\n  }\n',
+): (typeof documents)['\n  query GetBillingTransactions {\n    transactions {\n      _id\n      createdAt\n    }\n  }\n'];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

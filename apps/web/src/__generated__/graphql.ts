@@ -287,6 +287,7 @@ export type Query = {
   coursesPublic: Array<Course>;
   creditCard?: Maybe<CreditCard>;
   submittedProgresses: Array<SubmittedProgress>;
+  transactions: Array<Transaction>;
   user: User;
 };
 
@@ -357,6 +358,21 @@ export type TotalCourseProgress = {
   pass: Scalars['Float']['output'];
   state: CourseProgressState;
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type Transaction = {
+  __typename?: 'Transaction';
+  _id: Scalars['String']['output'];
+  /** Transaction amount */
+  amount: Scalars['Float']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  creditCard: Scalars['String']['output'];
+  /** Transaction currency. Could be represented as currency code like USD */
+  currency: Scalars['String']['output'];
+  /** External transaction. Refer to transaction stored on side of Payment Processes like Stripe */
+  externalId: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  user: Scalars['String']['output'];
 };
 
 export type User = {
@@ -747,6 +763,19 @@ export type GetUserActivitiesQuery = {
     title: string;
     description: string;
     value: string;
+  }>;
+};
+
+export type GetBillingTransactionsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetBillingTransactionsQuery = {
+  __typename?: 'Query';
+  transactions: Array<{
+    __typename?: 'Transaction';
+    _id: string;
+    createdAt: string;
   }>;
 };
 
@@ -2213,4 +2242,33 @@ export const GetUserActivitiesDocument = {
 } as unknown as DocumentNode<
   GetUserActivitiesQuery,
   GetUserActivitiesQueryVariables
+>;
+export const GetBillingTransactionsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetBillingTransactions' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'transactions' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetBillingTransactionsQuery,
+  GetBillingTransactionsQueryVariables
 >;
