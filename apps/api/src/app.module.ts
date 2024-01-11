@@ -17,6 +17,7 @@ import { ConfigService } from './modules/config/config.service';
 import { ActivityModule } from './modules/activities/activity.modules';
 import { AddressModule } from './modules/billing/address/address.modules';
 import { CreditCardModule } from './modules/billing/credit-card/credit-card.modules';
+import { TransactionModule } from './modules/billing/transactions/transaction.modules';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { CreditCardModule } from './modules/billing/credit-card/credit-card.modu
     ActivityModule,
     CreditCardModule,
     AddressModule,
+    TransactionModule,
   ],
   providers: [],
 })

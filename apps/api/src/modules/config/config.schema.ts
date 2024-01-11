@@ -16,7 +16,6 @@ export interface Config {
   COURSE_COOLDOWN: number;
   BILLING_ENCRYPTION_METHOD: string;
   BILLING_SECRET_KEY: string;
-  BILLING_SECRET_IV: string;
 }
 
 export const validationSchema = Joi.object<Config>({
@@ -35,5 +34,4 @@ export const validationSchema = Joi.object<Config>({
   COURSE_COOLDOWN: Joi.number().required(),
   BILLING_ENCRYPTION_METHOD: Joi.string().default('aes-256-cbc'),
   BILLING_SECRET_KEY: Joi.string(),
-  BILLING_SECRET_IV: Joi.string(),
 });

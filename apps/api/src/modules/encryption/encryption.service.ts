@@ -1,10 +1,12 @@
-import crypto from 'crypto';
+import crypto, { randomBytes } from 'crypto';
 import { ConfigService } from '../config/config.service.js';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class EncryptionService {
   constructor(private configService: ConfigService) {}
+
+  #iv = randomBytes(16);
 
   // Generate secret hash with crypto to use for encryption
   key = crypto
@@ -15,7 +17,7 @@ export class EncryptionService {
 
   encryptionIV = crypto
     .createHash('sha512')
-    .update(this.configService.billingSecretIv)
+    .update(this.#iv)
     .digest('hex')
     .substring(0, 16);
 

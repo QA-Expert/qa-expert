@@ -200,3 +200,12 @@ export const GET_USER_ACTIVITIES = gql(/* GraphQL */ `
     }
   }
 `);
+
+export const GET_BILLING_TRANSACTIONS = gql(/* GraphQL */ `
+  query GetBillingTransactions {
+    transactions {
+      _id
+      createdAt
+    }
+  }
+`);
