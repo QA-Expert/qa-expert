@@ -19,6 +19,10 @@ import { SingleChoiceQuestion } from './quistion/single-choice/single-choice';
 import { MultipleChoiceQuestion } from './quistion/multiple-choice/multiple-choice';
 import { ChecklistQuestion } from './quistion/checklist/checklist';
 import { TestCaseData, TestCaseQuestion } from './quistion/test-case/test-case';
+import {
+  BugReportData,
+  BugReportQuestion,
+} from './quistion/bug-report/bug-report';
 
 export type Props = Pick<
   GetCourseQuery['course']['pages'][number],
@@ -101,6 +105,10 @@ export default function QuizSection({
     console.log('submit data to OpenAI to validate answer', data);
   };
 
+  const handleBugReportQuestion = (data: BugReportData) => {
+    console.log('submit data to OpenAI to validate answer', data);
+  };
+
   return (
     <Box
       sx={{
@@ -141,6 +149,13 @@ export default function QuizSection({
           <TestCaseQuestion
             question={question}
             onChange={handleTestCaseQuestion}
+          />
+        ) : null}
+
+        {type === QuestionType.BugReport ? (
+          <BugReportQuestion
+            question={question}
+            onChange={handleBugReportQuestion}
           />
         ) : null}
       </Box>
