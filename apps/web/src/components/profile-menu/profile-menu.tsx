@@ -16,7 +16,7 @@ import { useError } from 'utils/hooks';
 import { GET_USER } from 'graphql/queries/queries';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { isAuthenticated } from 'apollo/store';
-import { stringAvatar } from 'utils/utils';
+import { getUsername, stringAvatar } from 'utils/utils';
 
 export const ProfileMenu = () => {
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
@@ -29,7 +29,7 @@ export const ProfileMenu = () => {
     skip: !isUserAuthenticated,
   });
   const user = data?.user;
-  const username = `${user?.firstName} ${user?.lastName}`;
+  const username = getUsername(user);
 
   useError([error?.message, userError?.message]);
 

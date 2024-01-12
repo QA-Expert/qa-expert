@@ -1,5 +1,9 @@
 import { Theme } from '@mui/material/styles';
-import { CourseProgressState, PageProgressState } from '__generated__/graphql';
+import {
+  CourseProgressState,
+  GetUserQuery,
+  PageProgressState,
+} from '__generated__/graphql';
 
 export const convertNumberToString = (num: number, minimumIntegerDigits = 2) =>
   num.toLocaleString('en-US', {
@@ -63,4 +67,14 @@ export const stringAvatar = (name: string) => {
     },
     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`.toUpperCase(),
   };
+};
+
+export const getUsername = (user: GetUserQuery['user'] | undefined) => {
+  if (!user) {
+    return '';
+  }
+
+  return user.firstName && user.lastName
+    ? `${user.firstName} ${user.lastName}`
+    : user.email;
 };

@@ -18,6 +18,7 @@ import { useError } from 'utils/hooks';
 import { SingleChoiceQuestion } from './quistion/single-choice/single-choice';
 import { MultipleChoiceQuestion } from './quistion/multiple-choice/multiple-choice';
 import { ChecklistQuestion } from './quistion/checklist/checklist';
+import { TestCaseData, TestCaseQuestion } from './quistion/test-case/test-case';
 
 export type Props = Pick<
   GetCourseQuery['course']['pages'][number],
@@ -96,6 +97,10 @@ export default function QuizSection({
     console.log('submit data to OpenAI to validate answer', data);
   };
 
+  const handleTestCaseQuestion = (data: TestCaseData) => {
+    console.log('submit data to OpenAI to validate answer', data);
+  };
+
   return (
     <Box
       sx={{
@@ -129,6 +134,13 @@ export default function QuizSection({
           <ChecklistQuestion
             question={question}
             onChange={handleChangeChecklistQuestion}
+          />
+        ) : null}
+
+        {type === QuestionType.TestCase ? (
+          <TestCaseQuestion
+            question={question}
+            onChange={handleTestCaseQuestion}
           />
         ) : null}
       </Box>
