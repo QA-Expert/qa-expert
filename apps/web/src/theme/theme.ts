@@ -164,15 +164,6 @@ const base: ThemeOptions = {
         }),
       },
     },
-    MuiFormLabel: {
-      styleOverrides: {
-        root: () => ({
-          '&.Mui-focused': {
-            display: 'none',
-          },
-        }),
-      },
-    },
   },
 };
 
