@@ -1,7 +1,5 @@
 'use client';
 
-import FormGroup from '@mui/material/FormGroup';
-import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
 import {
   GetCourseQuery,
@@ -9,9 +7,6 @@ import {
   QuestionType,
 } from '__generated__/graphql';
 import { Box } from '@/components/box/box';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import RadioGroup from '@mui/material/RadioGroup';
-import Radio from '@mui/material/Radio';
 import { ChangeEvent, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
@@ -22,11 +17,17 @@ import { GET_COURSE } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
 import { SingleChoiceQuestion } from './quistion/single-choice/single-choice';
 import { MultipleChoiceQuestion } from './quistion/multiple-choice/multiple-choice';
+import { ChecklistQuestion } from './quistion/checklist/checklist';
 
 export type Props = Pick<
   GetCourseQuery['course']['pages'][number],
   '_id' | 'question' | 'progress'
 >;
+
+export type QuestionProps = {
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  question: Props['question'];
+};
 
 export default function QuizSection({
   question,
@@ -91,6 +92,10 @@ export default function QuizSection({
     setAnswers(newAnswers);
   };
 
+  const handleChangeChecklistQuestion = (data: string[]) => {
+    console.log('submit data to OpenAI to validate answer', data);
+  };
+
   return (
     <Box
       sx={{
@@ -105,12 +110,11 @@ export default function QuizSection({
         {content}
       </Typography>
 
-      <Box>
+      <Box sx={{ width: '100%' }}>
         {type === QuestionType.SingleChoice ? (
           <SingleChoiceQuestion
             question={question}
             onChange={handleCHangeSingleChoiceQuestion}
-            progress={progress}
           />
         ) : null}
 
@@ -118,7 +122,13 @@ export default function QuizSection({
           <MultipleChoiceQuestion
             question={question}
             onChange={handleChangeMultipleChoiceQuestion}
-            progress={progress}
+          />
+        ) : null}
+
+        {type === QuestionType.Checklist ? (
+          <ChecklistQuestion
+            question={question}
+            onChange={handleChangeChecklistQuestion}
           />
         ) : null}
       </Box>

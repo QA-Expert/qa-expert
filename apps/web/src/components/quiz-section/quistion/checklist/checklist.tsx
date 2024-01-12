@@ -1,21 +1,16 @@
-import { Props as QuizPageProps } from '@/components/quiz-section/quiz-section';
+import { QuestionProps } from '@/components/quiz-section/quiz-section';
 import { ChangeEvent, useState } from 'react';
 import FormGroup from '@mui/material/FormGroup/FormGroup';
-import InputLabel from '@mui/material/InputLabel/InputLabel';
-import FormHelperText from '@mui/material/FormHelperText/FormHelperText';
-import Input, { InputProps } from '@mui/material/Input/Input';
-import FormControl from '@mui/material/FormControl/FormControl';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Button from '@mui/material/Button/Button';
+import { Box } from '@/components/box/box';
 
-type Props = {
-  onChange: (data: string[]) => void;
-  question: QuizPageProps['question'];
-  progress: QuizPageProps['progress'];
-};
+type ChecklistItemProps = Pick<TextFieldProps, 'name' | 'value' | 'error'>;
 
-type ChecklistItemProps = Pick<InputProps, 'name' | 'value' | 'error'>;
-
-export function ChecklistQuestion({ onChange, question, progress }: Props) {
+export function ChecklistQuestion({
+  onChange,
+  question,
+}: Omit<QuestionProps, 'onChange'> & { onChange: (data: string[]) => void }) {
   const [checklist, setChecklist] = useState<ChecklistItemProps[]>([
     {
       name: 'item-1',
@@ -26,8 +21,6 @@ export function ChecklistQuestion({ onChange, question, progress }: Props) {
   if (!question) {
     return null;
   }
-
-  const answerIds = question.answers?.map((answer) => answer._id);
 
   const handleChange =
     (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +36,7 @@ export function ChecklistQuestion({ onChange, question, progress }: Props) {
 
       onChange(data);
     };
+
   const handleAddItem = () => {
     setChecklist([
       ...checklist,
@@ -54,32 +48,35 @@ export function ChecklistQuestion({ onChange, question, progress }: Props) {
   };
 
   return (
-    <FormGroup sx={{ gap: '0.5rem' }}>
-      {checklist.map((item, i) => (
-        <FormControl key={item.name}>
-          <InputLabel htmlFor={item.name}>Item</InputLabel>
-          <Input
+    <Box sx={{ gap: '1rem', width: '100%' }}>
+      <FormGroup sx={{ gap: '1rem', width: '100%' }}>
+        {checklist.map((item, i) => (
+          <TextField
+            key={i}
+            label={`Item ${i + 1}`}
+            size="small"
+            multiline
             autoComplete="on"
+            maxRows={3}
             type="text"
             name={item.name}
             id={item.name}
             placeholder="Enter your item title ..."
             onChange={handleChange(i)}
             value={item.value}
-            error={Boolean(item.error)}
+            variant="outlined"
           />
-          <FormHelperText
-            error={Boolean(item.error)}
-            id={`${item.name}-error-text`}
-          >
-            {item.error}
-          </FormHelperText>
-        </FormControl>
-      ))}
+        ))}
+      </FormGroup>
 
-      <Button variant="contained" color="success" onClick={handleAddItem}>
+      <Button
+        sx={{ alignSelf: 'flex-start' }}
+        variant="outlined"
+        color="secondary"
+        onClick={handleAddItem}
+      >
         Add Item
       </Button>
-    </FormGroup>
+    </Box>
   );
 }

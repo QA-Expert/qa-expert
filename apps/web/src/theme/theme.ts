@@ -133,6 +133,46 @@ const base: ThemeOptions = {
         }),
       },
     },
+    MuiTextField: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          '& label': {
+            color: theme.palette.secondary.main,
+          },
+          '& label.Mui-focused': {
+            color: theme.palette.secondary.dark,
+            display: 'block',
+          },
+          '&:hover label': {
+            color: theme.palette.secondary.light,
+            display: 'block',
+          },
+          '& .MuiInput-underline:after': {
+            borderBottomColor: theme.palette.secondary.dark,
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: theme.palette.secondary.main,
+            },
+            '&:hover fieldset': {
+              borderColor: theme.palette.secondary.light,
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: theme.palette.secondary.dark,
+            },
+          },
+        }),
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: () => ({
+          '&.Mui-focused': {
+            display: 'none',
+          },
+        }),
+      },
+    },
   },
 };
 

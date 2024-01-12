@@ -1,20 +1,9 @@
 import FormControlLabel from '@mui/material/FormControlLabel/FormControlLabel';
-import { Props as QuizPageProps } from '@/components/quiz-section/quiz-section';
-import { ChangeEvent } from 'react';
+import { QuestionProps } from '@/components/quiz-section/quiz-section';
 import FormGroup from '@mui/material/FormGroup/FormGroup';
 import Checkbox from '@mui/material/Checkbox/Checkbox';
 
-type Props = {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  question: QuizPageProps['question'];
-  progress: QuizPageProps['progress'];
-};
-
-export function MultipleChoiceQuestion({
-  onChange,
-  question,
-  progress,
-}: Props) {
+export function MultipleChoiceQuestion({ onChange, question }: QuestionProps) {
   if (!question) {
     return null;
   }
@@ -27,7 +16,6 @@ export function MultipleChoiceQuestion({
         <FormControlLabel
           key={i}
           value={option._id}
-          disabled={Boolean(progress?.answers?.length)}
           control={
             <Checkbox
               checked={Boolean(answerIds?.includes(option._id))}

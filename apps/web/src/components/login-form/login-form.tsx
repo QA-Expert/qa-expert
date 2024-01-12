@@ -154,4 +154,5 @@ const Form = styled('form')({
   gap: '1rem',
   justifyContent: 'center',
   alignItems: 'center',
+  padding: '1rem',
 });
