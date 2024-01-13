@@ -51,6 +51,7 @@ export default function CourseSection({ _id, content, progress }: Props) {
       {content ? <TextEditor pageContent={content} pageId={_id} /> : null}
 
       <Button
+        size="large"
         variant="contained"
         disabled={Boolean(progress)}
         onClick={handleSubmit}

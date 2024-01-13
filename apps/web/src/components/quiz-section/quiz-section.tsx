@@ -161,6 +161,7 @@ export default function QuizSection({
       </Box>
 
       <Button
+        size="large"
         variant="contained"
         disabled={Boolean(progress?.answers) || !courseId}
         onClick={handleSubmit}

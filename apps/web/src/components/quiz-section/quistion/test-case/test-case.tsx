@@ -8,6 +8,7 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_USER } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
 import { getUsername } from 'utils/utils';
+import { MAX_TEXT_FIELD_LENGTH } from '../../constants';
 
 export type TestCaseData = {
   id: string;
@@ -122,6 +123,7 @@ export function TestCaseQuestion({
           onChange={handleChange('title')}
           value={data.title}
           variant="outlined"
+          inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
         />
 
         <TextField
@@ -137,6 +139,7 @@ export function TestCaseQuestion({
           onChange={handleChange('preCondition')}
           value={data.preCondition}
           variant="outlined"
+          inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
         />
 
         <Box
@@ -168,6 +171,7 @@ export function TestCaseQuestion({
                 onChange={handleStepChange('step', index)}
                 value={step.step}
                 variant="outlined"
+                inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
               />
 
               <TextField
@@ -184,6 +188,7 @@ export function TestCaseQuestion({
                 onChange={handleStepChange('data', index)}
                 value={step.data}
                 variant="outlined"
+                inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
               />
             </FormGroup>
           ))}
@@ -194,6 +199,7 @@ export function TestCaseQuestion({
           variant="outlined"
           color="secondary"
           onClick={handleAddStep}
+          size="small"
         >
           Add Step
         </Button>
@@ -211,6 +217,7 @@ export function TestCaseQuestion({
           onChange={handleChange('postCondition')}
           value={data.postCondition}
           variant="outlined"
+          inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
         />
 
         <TextField
@@ -226,6 +233,7 @@ export function TestCaseQuestion({
           onChange={handleChange('expectedResult')}
           value={data.expectedResult}
           variant="outlined"
+          inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
         />
       </FormGroup>
     </Box>

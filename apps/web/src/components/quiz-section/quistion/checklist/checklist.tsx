@@ -4,6 +4,7 @@ import FormGroup from '@mui/material/FormGroup/FormGroup';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Button from '@mui/material/Button/Button';
 import { Box } from '@/components/box/box';
+import { MAX_TEXT_FIELD_LENGTH } from '../../constants';
 
 type ChecklistItemProps = Pick<TextFieldProps, 'name' | 'value' | 'error'>;
 
@@ -65,6 +66,7 @@ export function ChecklistQuestion({
             onChange={handleChange(i)}
             value={item.value}
             variant="outlined"
+            inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
           />
         ))}
       </FormGroup>
@@ -74,6 +76,7 @@ export function ChecklistQuestion({
         variant="outlined"
         color="secondary"
         onClick={handleAddItem}
+        size="small"
       >
         Add Item
       </Button>
