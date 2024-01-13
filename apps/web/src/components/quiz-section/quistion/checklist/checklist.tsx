@@ -1,23 +1,21 @@
 import { QuestionProps } from '@/components/quiz-section/quiz-section';
 import { ChangeEvent, useState } from 'react';
 import FormGroup from '@mui/material/FormGroup/FormGroup';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
+import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button/Button';
 import { Box } from '@/components/box/box';
 import { MAX_TEXT_FIELD_LENGTH } from '../../constants';
-
-type ChecklistItemProps = Pick<TextFieldProps, 'name' | 'value' | 'error'>;
+import { Row } from '@/components/row/row';
+import IconButton from '@mui/material/IconButton/IconButton';
+import ClearIcon from '@mui/icons-material/Clear';
+import Typography from '@mui/material/Typography/Typography';
+import { BorderBox } from '../components/border-box';
 
 export function ChecklistQuestion({
   onChange,
   question,
 }: Omit<QuestionProps, 'onChange'> & { onChange: (data: string[]) => void }) {
-  const [checklist, setChecklist] = useState<ChecklistItemProps[]>([
-    {
-      name: 'item-1',
-      value: '',
-    },
-  ]);
+  const [data, setData] = useState<string[]>([]);
 
   if (!question) {
     return null;
@@ -25,51 +23,66 @@ export function ChecklistQuestion({
 
   const handleChange =
     (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
-      const newChecklist = [...checklist];
+      const newData = [...data];
 
-      newChecklist[index].value = e.target.value;
+      newData[index] = e.target.value;
 
-      setChecklist(newChecklist);
+      setData(newData);
 
-      const data = newChecklist
-        .map((item) => item.value)
-        .filter<string>((item): item is string => Boolean(item));
+      const filteredData = newData.filter((item) => Boolean(item));
 
-      onChange(data);
+      onChange(filteredData);
     };
 
   const handleAddItem = () => {
-    setChecklist([
-      ...checklist,
-      {
-        name: `item-${checklist.length + 1}`,
-        value: '',
-      },
-    ]);
+    setData([...data, '']);
+  };
+
+  const handleRemoveItem = (index: number) => () => {
+    const newData = [...data];
+
+    newData.splice(index, 1);
+
+    setData(newData);
+    onChange(newData);
   };
 
   return (
     <Box sx={{ gap: '1rem', width: '100%' }}>
-      <FormGroup sx={{ gap: '1rem', width: '100%' }}>
-        {checklist.map((item, i) => (
-          <TextField
-            key={i}
-            label={`Item ${i + 1}`}
-            size="small"
-            multiline
-            autoComplete="on"
-            maxRows={3}
-            type="text"
-            name={item.name}
-            id={item.name}
-            placeholder="Enter your item title ..."
-            onChange={handleChange(i)}
-            value={item.value}
-            variant="outlined"
-            inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
-          />
-        ))}
-      </FormGroup>
+      <BorderBox>
+        <FormGroup sx={{ gap: '1rem', width: '100%' }}>
+          {data.length === 0 ? (
+            <Typography>Please Add Checklist Item</Typography>
+          ) : null}
+
+          {data.map((item, i) => (
+            <Row key={i}>
+              <TextField
+                fullWidth
+                label={`Item ${i + 1}`}
+                size="small"
+                multiline
+                autoComplete="on"
+                maxRows={3}
+                type="text"
+                name={`item-${i + 1}`}
+                id={`item-${i + 1}`}
+                placeholder="Enter your item title ..."
+                onChange={handleChange(i)}
+                value={item}
+                variant="outlined"
+                inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
+              />
+              <IconButton
+                aria-label="Remove Item"
+                onClick={handleRemoveItem(i)}
+              >
+                <ClearIcon />
+              </IconButton>
+            </Row>
+          ))}
+        </FormGroup>
+      </BorderBox>
 
       <Button
         sx={{ alignSelf: 'flex-start' }}

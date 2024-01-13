@@ -9,6 +9,10 @@ import { GET_USER } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
 import { getUsername } from 'utils/utils';
 import { MAX_TEXT_FIELD_LENGTH } from '../../constants';
+import { BorderBox } from '../components/border-box';
+import ClearIcon from '@mui/icons-material/Clear';
+import IconButton from '@mui/material/IconButton/IconButton';
+import Typography from '@mui/material/Typography/Typography';
 
 export type TestCaseData = {
   id: string;
@@ -35,12 +39,7 @@ export function TestCaseQuestion({
     author: getUsername(userData.user),
     title: '',
     preCondition: '',
-    steps: [
-      {
-        step: '',
-        data: '',
-      },
-    ],
+    steps: [],
     postCondition: '',
     expectedResult: '',
   });
@@ -59,7 +58,6 @@ export function TestCaseQuestion({
       newData[fieldName] = e.target.value;
 
       setData(newData);
-
       onChange(newData);
     };
 
@@ -71,7 +69,6 @@ export function TestCaseQuestion({
       newData.steps[index][fieldName] = e.target.value;
 
       setData(newData);
-
       onChange(newData);
     };
 
@@ -84,6 +81,16 @@ export function TestCaseQuestion({
     });
 
     setData(newData);
+    onChange(newData);
+  };
+
+  const handleRemoveStep = (index: number) => () => {
+    const newData = { ...data };
+
+    newData.steps.splice(index, 1);
+
+    setData(newData);
+    onChange(newData);
   };
 
   return (
@@ -142,16 +149,11 @@ export function TestCaseQuestion({
           inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
         />
 
-        <Box
-          sx={{
-            gap: '1rem',
-            width: '100%',
-            border: '1px solid',
-            borderColor: 'secondary.dark',
-            borderRadius: '8px',
-            padding: '1rem',
-          }}
-        >
+        <BorderBox>
+          {data.steps.length === 0 ? (
+            <Typography>Please Add Steps</Typography>
+          ) : null}
+
           {data.steps.map((step, index) => (
             <FormGroup
               key={index}
@@ -190,9 +192,16 @@ export function TestCaseQuestion({
                 variant="outlined"
                 inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
               />
+
+              <IconButton
+                aria-label="Remove Step"
+                onClick={handleRemoveStep(index)}
+              >
+                <ClearIcon />
+              </IconButton>
             </FormGroup>
           ))}
-        </Box>
+        </BorderBox>
 
         <Button
           sx={{ alignSelf: 'flex-start' }}

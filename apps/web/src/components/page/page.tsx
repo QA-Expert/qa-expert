@@ -32,7 +32,7 @@ export default function Page(page: GetCourseQuery['course']['pages'][number]) {
         </Typography>
       </Box>
 
-      <Box sx={{ gap: '2rem' }}>
+      <Box sx={{ gap: '2rem', width: '100%' }}>
         <Typography>{page.description}</Typography>
 
         {page.type === CourseType.Course ? (

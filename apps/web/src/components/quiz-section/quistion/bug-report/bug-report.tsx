@@ -12,6 +12,10 @@ import MenuItem from '@mui/material/MenuItem/MenuItem';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import { MAX_TEXT_FIELD_LENGTH } from '../../constants';
+import ClearIcon from '@mui/icons-material/Clear';
+import IconButton from '@mui/material/IconButton/IconButton';
+import Typography from '@mui/material/Typography/Typography';
+import { BorderBox } from '../components/border-box';
 
 type Status = 'open' | 'fixed' | 'cannot reproduce' | 'not a bug';
 
@@ -45,7 +49,7 @@ export function BugReportQuestion({
     status: 'open',
     severity: 'low',
     title: '',
-    steps: [''],
+    steps: [],
     actualResult: '',
     expectedResult: '',
   });
@@ -65,7 +69,6 @@ export function BugReportQuestion({
       newData[fieldName] = e.target.value;
 
       setData(newData);
-
       onChange(newData);
     };
 
@@ -77,7 +80,6 @@ export function BugReportQuestion({
       newData.steps[index] = e.target.value;
 
       setData(newData);
-
       onChange(newData);
     };
 
@@ -87,6 +89,16 @@ export function BugReportQuestion({
     newData.steps.push('');
 
     setData(newData);
+    onChange(newData);
+  };
+
+  const handleRemoveStep = (index: number) => () => {
+    const newData = { ...data };
+
+    newData.steps.splice(index, 1);
+
+    setData(newData);
+    onChange(newData);
   };
 
   return (
@@ -168,16 +180,11 @@ export function BugReportQuestion({
           inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
         />
 
-        <Box
-          sx={{
-            gap: '1rem',
-            width: '100%',
-            border: '1px solid',
-            borderColor: 'secondary.dark',
-            borderRadius: '8px',
-            padding: '1rem',
-          }}
-        >
+        <BorderBox>
+          {data.steps.length === 0 ? (
+            <Typography>Please Add Steps</Typography>
+          ) : null}
+
           {data.steps.map((step, index) => (
             <FormGroup
               key={index}
@@ -199,9 +206,16 @@ export function BugReportQuestion({
                 variant="outlined"
                 inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
               />
+
+              <IconButton
+                aria-label="Remove Step"
+                onClick={handleRemoveStep(index)}
+              >
+                <ClearIcon />
+              </IconButton>
             </FormGroup>
           ))}
-        </Box>
+        </BorderBox>
 
         <Button
           size="small"

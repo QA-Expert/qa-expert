@@ -23,6 +23,7 @@ import {
   BugReportData,
   BugReportQuestion,
 } from './quistion/bug-report/bug-report';
+import { RestApiData, RestApiQuestion } from './quistion/rest-api/rest-api';
 
 export type Props = Pick<
   GetCourseQuery['course']['pages'][number],
@@ -109,10 +110,15 @@ export default function QuizSection({
     console.log('submit data to OpenAI to validate answer', data);
   };
 
+  const handleRestApiQuestion = (data: RestApiData) => {
+    console.log('submit data to OpenAI to validate answer', data);
+  };
+
   return (
     <Box
       sx={{
         gap: '2rem',
+        width: '100%',
       }}
     >
       <Typography
@@ -156,6 +162,13 @@ export default function QuizSection({
           <BugReportQuestion
             question={question}
             onChange={handleBugReportQuestion}
+          />
+        ) : null}
+
+        {type === QuestionType.RestApi ? (
+          <RestApiQuestion
+            question={question}
+            onChange={handleRestApiQuestion}
           />
         ) : null}
       </Box>
