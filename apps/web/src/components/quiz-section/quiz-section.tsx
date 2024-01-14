@@ -1,23 +1,21 @@
 'use client';
 
 import Typography from '@mui/material/Typography';
-import {
-  GetCourseQuery,
-  PageProgressState,
-  QuestionType,
-} from '__generated__/graphql';
+import { GetCourseQuery, QuestionType } from '__generated__/graphql';
 import { Box } from '@/components/box/box';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
 import { useParams } from 'next/navigation';
-import { difference } from 'lodash';
 import { CREATE_QUIZ_PAGE_PROGRESS } from 'graphql/mutations/mutations';
 import { GET_COURSE } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
 import { SingleChoiceQuestion } from './quistion/single-choice/single-choice';
 import { MultipleChoiceQuestion } from './quistion/multiple-choice/multiple-choice';
-import { ChecklistQuestion } from './quistion/checklist/checklist';
+import {
+  ChecklistData,
+  ChecklistQuestion,
+} from './quistion/checklist/checklist';
 import { TestCaseData, TestCaseQuestion } from './quistion/test-case/test-case';
 import {
   BugReportData,
@@ -35,6 +33,13 @@ export type QuestionProps = {
   question: Props['question'];
 };
 
+type Data =
+  | RestApiData
+  | TestCaseData
+  | BugReportData
+  | ChecklistData
+  | undefined;
+
 export default function QuizSection({
   question,
   progress,
@@ -43,16 +48,33 @@ export default function QuizSection({
   const router = useParams();
   const courseId = router.id as string;
   const [answers, setAnswers] = useState(progress?.answers ?? []);
+  const [data, setData] = useState<Data>();
   const [createProgress, { error }] = useMutation(CREATE_QUIZ_PAGE_PROGRESS, {
     refetchQueries: [
       {
         query: GET_COURSE,
-        variables: { _id: courseId },
+        variables: {
+          _id: courseId,
+        },
       },
     ],
   });
 
   useError([error?.message]);
+
+  useEffect(() => {
+    if (!progress?.data) {
+      return;
+    }
+
+    try {
+      const parsedData: Data = JSON.parse(progress?.data);
+
+      setData(parsedData);
+    } catch (error) {
+      //do nothing
+    }
+  }, [progress?.data]);
 
   if (!question) {
     return null;
@@ -61,22 +83,19 @@ export default function QuizSection({
   const { type, content } = question;
 
   const handleSubmit = async () => {
-    const expectedAnswerIds = question?.answers?.map((answer) => answer?._id);
-
     await createProgress({
       variables: {
-        state: isAnsweredCorrectly(expectedAnswerIds, answers)
-          ? PageProgressState.Pass
-          : PageProgressState.Fail,
-        page: pageId,
-        course: courseId,
-        answers: answers,
+        data: {
+          page: pageId,
+          course: courseId,
+          questionType: question?.type,
+          answers: answers,
+          expectedAnswers: question?.answers.map((answer) => answer._id),
+          stringifiedData: JSON.stringify(data),
+        },
       },
     });
   };
-
-  const isAnsweredCorrectly = (expected: string[], actual: string[]) =>
-    !difference(expected, actual).length;
 
   const handleCHangeSingleChoiceQuestion = (
     e: ChangeEvent<HTMLInputElement>,
@@ -98,20 +117,9 @@ export default function QuizSection({
     setAnswers(newAnswers);
   };
 
-  const handleChangeChecklistQuestion = (data: string[]) => {
+  const handleQuestionDataChange = (data: Data) => {
     console.log('submit data to OpenAI to validate answer', data);
-  };
-
-  const handleTestCaseQuestion = (data: TestCaseData) => {
-    console.log('submit data to OpenAI to validate answer', data);
-  };
-
-  const handleBugReportQuestion = (data: BugReportData) => {
-    console.log('submit data to OpenAI to validate answer', data);
-  };
-
-  const handleRestApiQuestion = (data: RestApiData) => {
-    console.log('submit data to OpenAI to validate answer', data);
+    setData(data);
   };
 
   return (
@@ -146,29 +154,29 @@ export default function QuizSection({
 
         {type === QuestionType.Checklist ? (
           <ChecklistQuestion
-            question={question}
-            onChange={handleChangeChecklistQuestion}
+            progressData={data as ChecklistData}
+            onChange={handleQuestionDataChange}
           />
         ) : null}
 
         {type === QuestionType.TestCase ? (
           <TestCaseQuestion
-            question={question}
-            onChange={handleTestCaseQuestion}
+            progressData={data as TestCaseData}
+            onChange={handleQuestionDataChange}
           />
         ) : null}
 
         {type === QuestionType.BugReport ? (
           <BugReportQuestion
-            question={question}
-            onChange={handleBugReportQuestion}
+            progressData={data as BugReportData}
+            onChange={handleQuestionDataChange}
           />
         ) : null}
 
         {type === QuestionType.RestApi ? (
           <RestApiQuestion
-            question={question}
-            onChange={handleRestApiQuestion}
+            progressData={data as RestApiData}
+            onChange={handleQuestionDataChange}
           />
         ) : null}
       </Box>
@@ -176,7 +184,7 @@ export default function QuizSection({
       <Button
         size="large"
         variant="contained"
-        disabled={Boolean(progress?.answers) || !courseId}
+        disabled={Boolean(progress) || !courseId}
         onClick={handleSubmit}
         color="success"
       >

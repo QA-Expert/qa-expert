@@ -1,5 +1,4 @@
-import { QuestionProps } from '@/components/quiz-section/quiz-section';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import FormGroup from '@mui/material/FormGroup/FormGroup';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button/Button';
@@ -11,15 +10,22 @@ import ClearIcon from '@mui/icons-material/Clear';
 import Typography from '@mui/material/Typography/Typography';
 import { BorderBox } from '../components/border-box';
 
+export type ChecklistData = string[];
+
 export function ChecklistQuestion({
   onChange,
-  question,
-}: Omit<QuestionProps, 'onChange'> & { onChange: (data: string[]) => void }) {
-  const [data, setData] = useState<string[]>([]);
+  progressData,
+}: {
+  onChange: (data: ChecklistData) => void;
+  progressData?: ChecklistData;
+}) {
+  const [data, setData] = useState<ChecklistData>([]);
 
-  if (!question) {
-    return null;
-  }
+  useEffect(() => {
+    if (progressData) {
+      setData(progressData);
+    }
+  }, [progressData]);
 
   const handleChange =
     (index: number) => (e: ChangeEvent<HTMLInputElement>) => {

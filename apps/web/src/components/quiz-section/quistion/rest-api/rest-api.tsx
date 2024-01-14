@@ -1,5 +1,4 @@
-import { QuestionProps } from '@/components/quiz-section/quiz-section';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import FormGroup from '@mui/material/FormGroup/FormGroup';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button/Button';
@@ -34,10 +33,12 @@ const PROTOCOLS: RestApiData['protocol'][] = ['http', 'https'];
 
 export function RestApiQuestion({
   onChange,
-  question,
-}: Omit<QuestionProps, 'onChange'> & {
+  progressData,
+}: {
   onChange: (data: RestApiData) => void;
+  progressData?: RestApiData;
 }) {
+  console.log('DATA', progressData);
   const [data, setData] = useState<RestApiData>({
     method: 'GET',
     protocol: 'http',
@@ -48,12 +49,14 @@ export function RestApiQuestion({
   const [url, setUrl] = useState(`${data.protocol}://${data.host}`);
   const [tabIndex, setTabIndex] = useState(0);
 
+  useEffect(() => {
+    if (progressData) {
+      setData(progressData);
+    }
+  }, [progressData]);
+
   const hasBody =
     data.method === 'POST' || data.method === 'PUT' || data.method === 'PATCH';
-
-  if (!question) {
-    return null;
-  }
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
@@ -388,7 +391,9 @@ export function RestApiQuestion({
             <BorderBox sx={{ minHeight: '160px' }}>
               <TextEditor
                 //We want to start Editor with code formatting by default
-                initialValue={`<code><pre>${'saved answer body should be here'}</pre></code>`}
+                initialValue={`<code><pre>${
+                  progressData?.body ?? 'body data'
+                }</pre></code>`}
                 onChange={handleChangeBody}
                 readOnly={false}
                 modules={undefined}

@@ -96,6 +96,7 @@ export const GET_COURSE = gql(/* GraphQL */ `
           _id
           state
           answers
+          data
         }
       }
       recommendedCourses {

@@ -35,18 +35,12 @@ export const REGISTER = gql(/* GraphQL */ `
 `);
 
 export const CREATE_QUIZ_PAGE_PROGRESS = gql(/* GraphQL */ `
-  mutation CreateQuizPageProgress(
-    $state: PageProgressState!
-    $page: String!
-    $course: String!
-    $answers: [String!]!
-  ) {
-    createQuizPageProgress(
-      data: { state: $state, page: $page, course: $course, answers: $answers }
-    ) {
+  mutation CreateQuizPageProgress($data: QuizPageProgressInput!) {
+    createQuizPageProgress(data: $data) {
       state
       page
       answers
+      data
     }
   }
 `);

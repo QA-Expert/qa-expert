@@ -263,9 +263,13 @@ export type PageProgress = {
   __typename?: 'PageProgress';
   _id: Scalars['String']['output'];
   /** Array of answers used if page is quiz */
-  answers: Array<Scalars['String']['output']>;
+  answers?: Maybe<Array<Scalars['String']['output']>>;
   course: Scalars['String']['output'];
+  /** Stringified user's answer data when user answers complex open answer question like TEST_CASE, REST_API etc */
+  data?: Maybe<Scalars['String']['output']>;
   page: Scalars['String']['output'];
+  /** Type of the question */
+  questionType: QuestionType;
   state: PageProgressState;
   /** Type of the course - theoretical course or quiz */
   type: CourseType;
@@ -326,14 +330,18 @@ export type QuizPageInput = {
 };
 
 export type QuizPageProgressInput = {
-  /** Array of answer ids */
+  /** Answer ids if passed */
   answers: Array<Scalars['String']['input']>;
   /** Course id */
   course: Scalars['String']['input'];
+  /** Expected Answer ids if passed */
+  expectedAnswers: Array<Scalars['String']['input']>;
   /** Page id */
   page: Scalars['String']['input'];
-  /** Can be pass or fail. The state comes from the client side after checking the answers. Set it in the database as a result of the answer to the quiz */
-  state: PageProgressState;
+  /** Type of the question. We use it to determine method of validation */
+  questionType: QuestionType;
+  /** Stringified user's answer data when user answers complex open answer question like TEST_CASE, REST_API etc */
+  stringifiedData: Scalars['String']['input'];
 };
 
 export type ResetPasswordInput = {
@@ -467,10 +475,7 @@ export type RegisterMutation = {
 };
 
 export type CreateQuizPageProgressMutationVariables = Exact<{
-  state: PageProgressState;
-  page: Scalars['String']['input'];
-  course: Scalars['String']['input'];
-  answers: Array<Scalars['String']['input']> | Scalars['String']['input'];
+  data: QuizPageProgressInput;
 }>;
 
 export type CreateQuizPageProgressMutation = {
@@ -479,7 +484,8 @@ export type CreateQuizPageProgressMutation = {
     __typename?: 'PageProgress';
     state: PageProgressState;
     page: string;
-    answers: Array<string>;
+    answers?: Array<string> | null;
+    data?: string | null;
   };
 };
 
@@ -659,7 +665,8 @@ export type GetCourseQuery = {
         __typename?: 'PageProgress';
         _id: string;
         state: PageProgressState;
-        answers: Array<string>;
+        answers?: Array<string> | null;
+        data?: string | null;
       } | null;
     }>;
     recommendedCourses: Array<{
@@ -1021,60 +1028,12 @@ export const CreateQuizPageProgressDocument = {
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'state' },
-          },
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
           type: {
             kind: 'NonNullType',
             type: {
               kind: 'NamedType',
-              name: { kind: 'Name', value: 'PageProgressState' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'course' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'answers' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'ListType',
-              type: {
-                kind: 'NonNullType',
-                type: {
-                  kind: 'NamedType',
-                  name: { kind: 'Name', value: 'String' },
-                },
-              },
+              name: { kind: 'Name', value: 'QuizPageProgressInput' },
             },
           },
         },
@@ -1090,41 +1049,8 @@ export const CreateQuizPageProgressDocument = {
                 kind: 'Argument',
                 name: { kind: 'Name', value: 'data' },
                 value: {
-                  kind: 'ObjectValue',
-                  fields: [
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'state' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'state' },
-                      },
-                    },
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'page' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'page' },
-                      },
-                    },
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'course' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'course' },
-                      },
-                    },
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'answers' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'answers' },
-                      },
-                    },
-                  ],
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
                 },
               },
             ],
@@ -1134,6 +1060,7 @@ export const CreateQuizPageProgressDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'state' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'page' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'answers' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'data' } },
               ],
             },
           },
@@ -1970,6 +1897,10 @@ export const GetCourseDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'answers' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'data' },
                             },
                           ],
                         },

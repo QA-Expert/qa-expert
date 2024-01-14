@@ -1,5 +1,4 @@
-import { QuestionProps } from '@/components/quiz-section/quiz-section';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import FormGroup from '@mui/material/FormGroup/FormGroup';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button/Button';
@@ -38,9 +37,10 @@ const SEVERITY: Severity[] = ['low', 'medium', 'high', 'critical'];
 
 export function BugReportQuestion({
   onChange,
-  question,
-}: Omit<QuestionProps, 'onChange'> & {
+  progressData,
+}: {
   onChange: (data: BugReportData) => void;
+  progressData?: BugReportData;
 }) {
   const { data: userData, error: userError } = useSuspenseQuery(GET_USER);
   const [data, setData] = useState<BugReportData>({
@@ -54,11 +54,13 @@ export function BugReportQuestion({
     expectedResult: '',
   });
 
-  useError([userError?.message]);
+  useEffect(() => {
+    if (progressData) {
+      setData(progressData);
+    }
+  }, [progressData]);
 
-  if (!question) {
-    return null;
-  }
+  useError([userError?.message]);
 
   const handleChange =
     (fieldName: keyof Omit<BugReportData, 'steps'>) =>
