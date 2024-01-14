@@ -14,6 +14,8 @@ import { Tabpanel, a11yProps } from '@/components/tabpanel/tabpanel';
 import ClearIcon from '@mui/icons-material/Clear';
 import IconButton from '@mui/material/IconButton/IconButton';
 import Typography from '@mui/material/Typography/Typography';
+import { TextEditor } from '@/components/text-editor/text-editor';
+import { ReactQuillProps } from 'react-quill';
 
 type Method = 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
 type KeyValue = { name: string; value: string };
@@ -150,6 +152,22 @@ export function RestApiQuestion({
       setData(newData);
       onChange(newData);
     };
+
+  /**
+   *
+   * @description This handler gets args from Editor onChange callback
+   * Then it gets only content text value instead of whole content which is stringified HTML.
+   * Then we store that text into data.body stripping last line break char
+   */
+  const handleChangeBody: ReactQuillProps['onChange'] = (...args) => {
+    const [, , , editor] = args;
+    const newData = { ...data };
+
+    newData.body = editor.getText().replace(RegExp(/\n$/g), '');
+
+    setData(newData);
+    onChange(newData);
+  };
 
   return (
     <Box sx={{ gap: '1rem', width: '100%' }}>
@@ -363,21 +381,20 @@ export function RestApiQuestion({
         </Tabpanel>
 
         {hasBody ? (
-          <TextField
-            label="Body"
-            size="small"
-            multiline
-            autoComplete="on"
-            maxRows={3}
-            type="text"
-            name="rest-api-body"
-            id="rest-api-body"
-            placeholder="Enter Body ..."
-            onChange={handleChange('body')}
-            value={data.body}
-            variant="outlined"
-            inputProps={{ maxLength: MAX_TEXT_FIELD_LENGTH }}
-          />
+          <Box>
+            <Typography variant="h6" sx={{ gap: '1rem' }}>
+              Body
+            </Typography>
+            <BorderBox sx={{ minHeight: '160px' }}>
+              <TextEditor
+                //We want to start Editor with code formatting by default
+                initialValue={`<code><pre>${'saved answer body should be here'}</pre></code>`}
+                onChange={handleChangeBody}
+                readOnly={false}
+                modules={undefined}
+              />
+            </BorderBox>
+          </Box>
         ) : null}
       </FormGroup>
     </Box>

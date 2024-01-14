@@ -1,6 +1,13 @@
 import { Box } from '@/components/box/box';
+import { BoxProps } from '@mui/material';
 
-export function BorderBox({ children }: { children: React.ReactNode }) {
+export function BorderBox({
+  children,
+  sx,
+}: {
+  children: React.ReactNode;
+  sx?: BoxProps['sx'];
+}) {
   return (
     <Box
       sx={{
@@ -10,6 +17,7 @@ export function BorderBox({ children }: { children: React.ReactNode }) {
         borderColor: 'secondary.dark',
         borderRadius: '8px',
         padding: '1rem',
+        ...sx,
       }}
     >
       {children}

@@ -1,30 +1,35 @@
 'use client';
 
-import Button from '@mui/material/Button';
 import dynamic from 'next/dynamic';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import { Box } from '@/components/box/box';
-import { DeltaStatic, Sources } from 'quill';
-import { UPDATE_COURSE_PAGE_CONTENT } from 'graphql/mutations/mutations';
-import { useMutation } from '@apollo/client';
-import { GET_COURSE, GET_USER } from 'graphql/queries/queries';
-import { useParams } from 'next/navigation';
-import { useError } from 'utils/hooks';
-import { UnprivilegedEditor, ReactQuillProps, Value } from 'react-quill';
-// NOTE: I have to user emotion directly - not mui/styled as mui has built in "theme" prop
-// that conflicts with "theme" on Quill component
-import styled from '@emotion/styled';
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { styled } from '@mui/material/styles';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/monokai-sublime.css';
+import { ReactQuillProps, Value } from 'react-quill';
 
-const ReactQuillWrapper = dynamic(() => import('react-quill'), {
-  ssr: false,
-});
+const ReactQuillWrapper = dynamic(
+  () => {
+    hljs.configure({
+      // optionally configure hljs
+      languages: ['javascript', 'xml', 'json'],
+    });
 
-interface Props {
-  pageContent: string;
-  pageId: string;
-}
+    window.hljs = hljs;
+
+    return import('react-quill');
+  },
+  {
+    ssr: false,
+  },
+);
+
+type Props = {
+  allowFormatting?: boolean;
+  modules?: ReactQuillProps['modules'];
+  initialValue?: string;
+} & Required<Pick<ReactQuillProps, 'onChange' | 'readOnly'>>;
 
 /**
  * @url https://quilljs.com/docs/modules/
@@ -49,90 +54,90 @@ const FULL_TOOL_BAR: ReactQuillProps['modules'] = {
   handlers: {},
 } as const;
 
-export const TextEditor = ({ pageContent, pageId }: Props) => {
-  const { data } = useSuspenseQuery(GET_USER);
-  const user = data?.user;
-  const router = useParams();
-  const courseId = router.id as string;
-  // TODO: make roles as string union on back end.
-  const isAdmin = user?.roles.includes('admin');
-  const [content, setContent] = useState<Value | undefined>();
-  const [updateCoursePageContent, { error }] = useMutation(
-    UPDATE_COURSE_PAGE_CONTENT,
-    {
-      refetchQueries: [
-        {
-          query: GET_COURSE,
-          variables: { _id: courseId },
-        },
-      ],
-    },
-  );
+export const TextEditor = ({
+  initialValue = '',
+  onChange,
+  allowFormatting = false,
+  modules,
+  readOnly = false,
+}: Props) => {
+  const [content, setContent] = useState<Value>(initialValue);
 
   useEffect(() => {
     try {
-      const content: Value = JSON.parse(pageContent);
+      const content: Value = JSON.parse(initialValue);
 
       setContent(content);
     } catch (error) {
       // if failed to parse - it means it is a regular string not a JSON. So we set it to our local variable
-      setContent(pageContent);
+      setContent(initialValue);
     }
-  }, [pageContent]);
+  }, [initialValue]);
 
-  useError([error?.message]);
+  const handleChange: ReactQuillProps['onChange'] = (...args) => {
+    const [value] = args;
 
-  const handleClick = async () => {
-    const stringified = JSON.stringify(content);
+    setContent(value);
 
-    await updateCoursePageContent({
-      variables: {
-        _id: pageId,
-        content: stringified,
-      },
-    });
+    onChange(...args);
   };
 
-  const handleChange = useCallback(
-    () =>
-      (
-        _content: string,
-        _delta: DeltaStatic,
-        _source: Sources,
-        editor: UnprivilegedEditor,
-      ) => {
-        setContent(editor.getContents());
-      },
-    [],
-  );
-
   return (
-    <Box sx={{ width: '100%', gap: '1rem' }}>
+    <Box sx={{ width: '100%', gap: '1rem', flex: 1, height: '100%' }}>
       <Editor
-        isAdmin={Boolean(isAdmin)}
         modules={{
-          toolbar: isAdmin ? FULL_TOOL_BAR : false,
+          ...modules,
+          syntax: true,
+          toolbar: allowFormatting ? FULL_TOOL_BAR : modules?.toolbar ?? false,
         }}
-        theme={isAdmin ? 'snow' : ''}
+        quillTheme="snow"
         value={content}
         onChange={handleChange}
-        readOnly={!isAdmin}
+        readOnly={readOnly}
       />
-
-      {isAdmin && (
-        <Button variant="contained" onClick={handleClick}>
-          Submit
-        </Button>
-      )}
     </Box>
   );
 };
 
-const Editor = styled(ReactQuillWrapper)(
-  ({ isAdmin }: { isAdmin: boolean }) => ({
-    width: '100%',
-    '.ql-container': {
-      border: isAdmin ? '1px solid #ccc' : 'none',
+const Editor = styled(
+  (props: ReactQuillProps & { quillTheme: ReactQuillProps['theme'] }) => (
+    <ReactQuillWrapper {...props} theme={props.quillTheme} />
+  ),
+)(({ theme: muiTheme }) => ({
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
+  '& .ql-toolbar': {
+    border: 'none',
+    padding: 0,
+    '.ql-formats *': {
+      color: muiTheme.palette.secondary.main,
+      stroke: muiTheme.palette.secondary.main,
+      '&.ql-fill': {
+        fill: muiTheme.palette.secondary.main,
+        stroke: 'none',
+      },
     },
-  }),
-);
+  },
+  '& .ql-container': {
+    border: 'none',
+    borderRadius: '4px',
+  },
+  '& .ql-editor': {
+    fontSize: '1rem',
+    padding: 0,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  '& .ql-syntax': {
+    margin: 0,
+    height: '100%',
+    borderRadius: '4px',
+  },
+  '& .ql-snow .ql-editor pre': {
+    margin: 0,
+    padding: '0.5rem',
+  },
+}));
