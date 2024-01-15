@@ -7,8 +7,7 @@ import { PageProgressService } from './page-progress.service';
 import { PageProgressResolver } from './page-progress.resolver';
 import { CourseProgressModule } from '../course-progresses/course-progress.module';
 import { SubmittedProgressModule } from '../submitted-progresses/submitted-progress.module';
-import { AnswerModule } from '../answers/answer.module';
-import { AnswerValidationService } from '../answer-validation/answer-validation.service';
+import { AnswerValidationModule } from '../answer-validation/answer-validation.module';
 
 @Module({
   imports: [
@@ -18,14 +17,9 @@ import { AnswerValidationService } from '../answer-validation/answer-validation.
     UserModule,
     forwardRef(() => CourseProgressModule),
     SubmittedProgressModule,
-    AnswerModule,
+    AnswerValidationModule,
   ],
-  providers: [
-    PageProgressService,
-    PageProgressResolver,
-    JwtService,
-    AnswerValidationService,
-  ],
+  providers: [PageProgressService, PageProgressResolver, JwtService],
   exports: [PageProgressService],
 })
 export class PageProgressModule {}

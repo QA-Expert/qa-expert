@@ -107,3 +107,22 @@ export const DELETE_COURSE_PROGRESS = gql(/* GraphQL */ `
     deleteCourseProgresses(_id: $_id)
   }
 `);
+
+export const VALIDATE_REST_API = gql(/* GraphQL */ `
+  mutation ValidateRestApi(
+    $stringifiedRequestData: String!
+    $expectedAnswerId: String!
+  ) {
+    validateRestApi(
+      stringifiedRequestData: $stringifiedRequestData
+      expectedAnswerId: $expectedAnswerId
+    ) {
+      status
+      headers {
+        name
+        value
+      }
+      body
+    }
+  }
+`);

@@ -17,6 +17,9 @@ import { TextEditor } from '@/components/text-editor/text-editor';
 import { ReactQuillProps } from 'react-quill';
 import { getFullUrl } from './handlers';
 import { restApiQuestionResponse } from 'apollo/store';
+import { useMutation } from '@apollo/client';
+import { VALIDATE_REST_API } from 'graphql/mutations/mutations';
+import { useError } from 'utils/hooks';
 
 type Method = 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
 type KeyValue = { name: string; value: string };
@@ -30,24 +33,19 @@ export type RestApiRequestData = {
   body?: string;
 };
 
-export type RestApiResponseData =
-  | {
-      status: number;
-      headers: KeyValue[];
-      body?: string;
-    }
-  | undefined;
-
 const METHODS: Method[] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
 const PROTOCOLS: RestApiRequestData['protocol'][] = ['http', 'https'];
 
 export function RestApiQuestion({
   onChange,
+  expectedAnswerId,
   progressData,
 }: {
   onChange: (data: RestApiRequestData) => void;
-  progressData?: RestApiRequestData;
+  progressData: RestApiRequestData;
+  expectedAnswerId?: string;
 }) {
+  const [validateRestApi, { error }] = useMutation(VALIDATE_REST_API);
   const [data, setData] = useState<RestApiRequestData>({
     method: 'GET',
     protocol: 'http',
@@ -58,11 +56,17 @@ export function RestApiQuestion({
   const [url, setUrl] = useState(`${data.protocol}://${data.host}`);
   const [tabIndex, setTabIndex] = useState(0);
 
+  useError([error?.message]);
+
   useEffect(() => {
     if (progressData) {
       setUrl(getFullUrl(progressData));
       setData(progressData);
     }
+
+    return () => {
+      restApiQuestionResponse(null);
+    };
   }, [progressData]);
 
   const hasBody =
@@ -182,19 +186,18 @@ export function RestApiQuestion({
     onChange(newData);
   };
 
-  const handleSubmitTestRequest = () => {
-    //@TODO: we should send request to BE with request and questionId
-    // BE should validate API request and return response.
-    restApiQuestionResponse({
-      status: 200,
-      headers: [
-        {
-          name: 'Content-Type',
-          value: 'application/json',
-        },
-      ],
-      body: JSON.stringify({ success: true }),
+  const handleSubmitTestRequest = async () => {
+    if (!expectedAnswerId || !data) {
+      return;
+    }
+
+    const response = await validateRestApi({
+      variables: {
+        stringifiedRequestData: JSON.stringify(data),
+        expectedAnswerId,
+      },
     });
+    restApiQuestionResponse(response.data?.validateRestApi);
   };
 
   return (
@@ -208,7 +211,7 @@ export function RestApiQuestion({
             name="rest-api-method"
             select
             label="Method"
-            defaultValue={METHODS[0]}
+            value={data.method}
             onChange={handleChange('method')}
           >
             {METHODS.map((item) => (
@@ -225,7 +228,7 @@ export function RestApiQuestion({
             name="rest-api-protocol"
             select
             label="Protocol"
-            defaultValue={PROTOCOLS[0]}
+            value={data.protocol}
             onChange={handleChange('protocol')}
           >
             {PROTOCOLS.map((item) => (
@@ -405,7 +408,7 @@ export function RestApiQuestion({
               <TextEditor
                 //We want to start Editor with code formatting by default
                 initialValue={`<code><pre>${
-                  progressData?.body ?? 'body data'
+                  data.body ?? 'body data'
                 }</pre></code>`}
                 onChange={handleChangeBody}
                 readOnly={false}

@@ -1,7 +1,7 @@
 'use client';
 
 import Typography from '@mui/material/Typography';
-import { GetCourseQuery, QuestionType } from '__generated__/graphql';
+import { Answer, GetCourseQuery, QuestionType } from '__generated__/graphql';
 import { Box } from '@/components/box/box';
 import { ChangeEvent, Suspense, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
@@ -34,7 +34,8 @@ export type Props = Pick<
 
 export type QuestionProps = {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  question: Props['question'];
+  options: Answer[];
+  actualAnswers: string[];
 };
 
 export type Data =
@@ -51,7 +52,7 @@ export default function QuizSection({
 }: Props) {
   const router = useParams();
   const courseId = router.id as string;
-  const [answers, setAnswers] = useState(progress?.answers ?? []);
+  const [actualAnswers, setActualAnswers] = useState<string[]>([]);
   const [data, setData] = useState<Data>();
   const [createProgress, { error }] = useMutation(CREATE_QUIZ_PAGE_PROGRESS, {
     refetchQueries: [
@@ -67,7 +68,15 @@ export default function QuizSection({
   useError([error?.message]);
 
   useEffect(() => {
-    if (!progress?.data) {
+    quizPageData(null);
+    setData(undefined);
+  }, []);
+
+  useEffect(() => {
+    if (!progress || !progress?.data) {
+      quizPageData(null);
+      setData(undefined);
+
       return;
     }
 
@@ -75,10 +84,19 @@ export default function QuizSection({
       const parsedData: Data = JSON.parse(progress?.data);
 
       setData(parsedData);
+      quizPageData(parsedData);
     } catch (error) {
       //do nothing
     }
-  }, [progress?.data]);
+
+    return () => {
+      quizPageData(null);
+    };
+  }, [progress]);
+
+  useEffect(() => {
+    setActualAnswers(progress?.answers ?? []);
+  }, [progress?.answers]);
 
   if (!question) {
     return null;
@@ -93,7 +111,7 @@ export default function QuizSection({
           page: pageId,
           course: courseId,
           questionType: question?.type,
-          answers: answers,
+          actualAnswers: actualAnswers,
           expectedAnswers: question?.answers.map((answer) => answer._id),
           stringifiedData: JSON.stringify(data),
         },
@@ -104,13 +122,13 @@ export default function QuizSection({
   const handleCHangeSingleChoiceQuestion = (
     e: ChangeEvent<HTMLInputElement>,
   ) => {
-    setAnswers([e.target.value]);
+    setActualAnswers([e.target.value]);
   };
 
   const handleChangeMultipleChoiceQuestion = (
     e: ChangeEvent<HTMLInputElement>,
   ) => {
-    let newAnswers = answers.map((a) => a);
+    let newAnswers = actualAnswers.map((a) => a);
 
     if (e.target.checked) {
       newAnswers.push(e.target.value);
@@ -118,11 +136,10 @@ export default function QuizSection({
       newAnswers = newAnswers.filter((answer) => answer !== e.target.value);
     }
 
-    setAnswers(newAnswers);
+    setActualAnswers(newAnswers);
   };
 
   const handleQuestionDataChange = (data: Data) => {
-    console.log('submit data to OpenAI to validate answer', data);
     setData(data);
     quizPageData(data);
   };
@@ -145,30 +162,32 @@ export default function QuizSection({
       <Box sx={{ width: '100%' }}>
         {type === QuestionType.SingleChoice ? (
           <SingleChoiceQuestion
-            question={question}
+            options={question.options}
+            actualAnswers={actualAnswers}
             onChange={handleCHangeSingleChoiceQuestion}
           />
         ) : null}
 
         {type === QuestionType.MultipleChoice ? (
           <MultipleChoiceQuestion
-            question={question}
+            options={question.options}
+            actualAnswers={actualAnswers}
             onChange={handleChangeMultipleChoiceQuestion}
           />
         ) : null}
 
         {type === QuestionType.Checklist ? (
           <ChecklistQuestion
-            progressData={data as ChecklistData}
             onChange={handleQuestionDataChange}
+            progressData={data as ChecklistData}
           />
         ) : null}
 
         {type === QuestionType.TestCase ? (
           <Suspense fallback={'...Loading'}>
             <TestCaseQuestion
-              progressData={data as TestCaseData}
               onChange={handleQuestionDataChange}
+              progressData={data as TestCaseData}
             />
           </Suspense>
         ) : null}
@@ -176,8 +195,8 @@ export default function QuizSection({
         {type === QuestionType.BugReport ? (
           <Suspense fallback={'...Loading'}>
             <BugReportQuestion
-              progressData={data as BugReportData}
               onChange={handleQuestionDataChange}
+              progressData={data as BugReportData}
             />
           </Suspense>
         ) : null}
@@ -186,6 +205,9 @@ export default function QuizSection({
           <Suspense fallback={'...Loading'}>
             <RestApiQuestion
               progressData={data as RestApiRequestData}
+              expectedAnswerId={
+                question.answers.find((answer) => answer._id)?._id
+              }
               onChange={handleQuestionDataChange}
             />
           </Suspense>

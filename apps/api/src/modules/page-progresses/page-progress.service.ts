@@ -8,8 +8,6 @@ import { CoursePageProgressInput } from './create-course-page-progress.input';
 import { QuizPageProgressInput } from './create-quiz-page-progress.input';
 import { PageProgress, PageProgressState } from './page-progress.schema';
 import { AnswerValidationService } from '../answer-validation/answer-validation.service';
-import { QuestionType } from '../questions/question.schema';
-import _ from 'lodash';
 
 @Injectable()
 export class PageProgressService {
@@ -84,28 +82,13 @@ export class PageProgressService {
   }
 
   async createQuizPageProgress(data: QuizPageProgressInput, userId: string) {
-    let state: PageProgressState = PageProgressState.PASS;
-
-    if (data.questionType === QuestionType.REST_API) {
-      state = await this.serviceAnswerValidation.isRestApiAnswerDataValid({
-        data: data.stringifiedData,
-        context: '',
-      });
-    }
-
-    if (
-      data.questionType === QuestionType.MULTIPLE_CHOICE ||
-      data.questionType === QuestionType.SINGLE_CHOICE
-    ) {
-      state = Boolean(_.difference(data.answers!, data.expectedAnswers!).length)
-        ? PageProgressState.FAIL
-        : PageProgressState.PASS;
-    }
+    const isValid = await this.serviceAnswerValidation.isAnswerValid(data);
+    const state = isValid ? PageProgressState.PASS : PageProgressState.FAIL;
 
     const newProgress: Partial<PageProgress> = {
       ...data,
       state,
-      answers: data.answers?.map(
+      answers: data.actualAnswers?.map(
         (answer) => new mongoose.Types.ObjectId(answer),
       ),
       data: data.stringifiedData,

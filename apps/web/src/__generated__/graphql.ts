@@ -76,6 +76,18 @@ export type Answer = {
   _id: Scalars['String']['output'];
   /** Answer's content text */
   content: Scalars['String']['output'];
+  /** Stringified answer data. Set in case of REST_API question or other questions that might be used to compare user's submitted data with */
+  data?: Maybe<Scalars['String']['output']>;
+};
+
+export type AnswerValidationRestApiOutput = {
+  __typename?: 'AnswerValidationRestApiOutput';
+  /** Stringified JSON or just test */
+  body: Scalars['String']['output'];
+  /** Headers array */
+  headers: Array<KeyValuePair>;
+  /** Status code */
+  status: Status;
 };
 
 export type Badge = {
@@ -169,6 +181,12 @@ export type CreditCard = {
   user: Scalars['String']['output'];
 };
 
+export type KeyValuePair = {
+  __typename?: 'KeyValuePair';
+  name: Scalars['String']['output'];
+  value: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addPage: Course;
@@ -186,6 +204,7 @@ export type Mutation = {
   updateCoursePageContent: Page;
   updateUserNames: User;
   updateUserPassword: User;
+  validateRestApi: AnswerValidationRestApiOutput;
 };
 
 export type MutationAddPageArgs = {
@@ -244,6 +263,11 @@ export type MutationUpdateUserNamesArgs = {
 
 export type MutationUpdateUserPasswordArgs = {
   data: UserInputUpdatePassword;
+};
+
+export type MutationValidateRestApiArgs = {
+  expectedAnswerId: Scalars['String']['input'];
+  stringifiedRequestData: Scalars['String']['input'];
 };
 
 export type Page = {
@@ -330,11 +354,11 @@ export type QuizPageInput = {
 };
 
 export type QuizPageProgressInput = {
-  /** Answer ids if passed */
-  answers: Array<Scalars['String']['input']>;
+  /** Answer ids that submitted by user only if it is single or multiple choice question */
+  actualAnswers: Array<Scalars['String']['input']>;
   /** Course id */
   course: Scalars['String']['input'];
-  /** Expected Answer ids if passed */
+  /** Expected Answer ids if passed. Should be passed in case of single, multiple choice question or rest api */
   expectedAnswers: Array<Scalars['String']['input']>;
   /** Page id */
   page: Scalars['String']['input'];
@@ -349,6 +373,16 @@ export type ResetPasswordInput = {
   /** Token generated while user forgot password */
   token: Scalars['String']['input'];
 };
+
+/** Defines HTTP status code */
+export enum Status {
+  BadRequest = 'BAD_REQUEST',
+  Forbidden = 'FORBIDDEN',
+  MethodNotAllowed = 'METHOD_NOT_ALLOWED',
+  NotFound = 'NOT_FOUND',
+  Ok = 'OK',
+  Unauthorized = 'UNAUTHORIZED',
+}
 
 export type SubmittedProgress = {
   __typename?: 'SubmittedProgress';
@@ -567,6 +601,25 @@ export type DeleteCourseProgressesMutationVariables = Exact<{
 export type DeleteCourseProgressesMutation = {
   __typename?: 'Mutation';
   deleteCourseProgresses: boolean;
+};
+
+export type ValidateRestApiMutationVariables = Exact<{
+  stringifiedRequestData: Scalars['String']['input'];
+  expectedAnswerId: Scalars['String']['input'];
+}>;
+
+export type ValidateRestApiMutation = {
+  __typename?: 'Mutation';
+  validateRestApi: {
+    __typename?: 'AnswerValidationRestApiOutput';
+    status: Status;
+    body: string;
+    headers: Array<{
+      __typename?: 'KeyValuePair';
+      name: string;
+      value: string;
+    }>;
+  };
 };
 
 export type GetAllCoursesQueryVariables = Exact<{ [key: string]: never }>;
@@ -1589,6 +1642,94 @@ export const DeleteCourseProgressesDocument = {
 } as unknown as DocumentNode<
   DeleteCourseProgressesMutation,
   DeleteCourseProgressesMutationVariables
+>;
+export const ValidateRestApiDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'ValidateRestApi' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'stringifiedRequestData' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'expectedAnswerId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'validateRestApi' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'stringifiedRequestData' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'stringifiedRequestData' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'expectedAnswerId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'expectedAnswerId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'headers' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'body' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ValidateRestApiMutation,
+  ValidateRestApiMutationVariables
 >;
 export const GetAllCoursesDocument = {
   kind: 'Document',

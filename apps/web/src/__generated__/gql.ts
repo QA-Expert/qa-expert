@@ -36,6 +36,8 @@ const documents = {
     types.ClaimBadgeDocument,
   '\n  mutation DeleteCourseProgresses($_id: String!) {\n    deleteCourseProgresses(_id: $_id)\n  }\n':
     types.DeleteCourseProgressesDocument,
+  '\n  mutation ValidateRestApi(\n    $stringifiedRequestData: String!\n    $expectedAnswerId: String!\n  ) {\n    validateRestApi(\n      stringifiedRequestData: $stringifiedRequestData\n      expectedAnswerId: $expectedAnswerId\n    ) {\n      status\n      headers {\n        name\n        value\n      }\n      body\n    }\n  }\n':
+    types.ValidateRestApiDocument,
   '\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      level\n      description\n      pages {\n        _id\n        type\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n      tags\n      progress {\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n':
     types.GetAllCoursesDocument,
   '\n  query GetAllCoursesPublic {\n    coursesPublic {\n      _id\n      title\n      type\n      level\n      description\n      pages {\n        _id\n        type\n      }\n      tags\n      recommendedCourses {\n        _id\n        title\n        level\n      }\n    }\n  }\n':
@@ -142,6 +144,12 @@ export function gql(
 export function gql(
   source: '\n  mutation DeleteCourseProgresses($_id: String!) {\n    deleteCourseProgresses(_id: $_id)\n  }\n',
 ): (typeof documents)['\n  mutation DeleteCourseProgresses($_id: String!) {\n    deleteCourseProgresses(_id: $_id)\n  }\n'];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation ValidateRestApi(\n    $stringifiedRequestData: String!\n    $expectedAnswerId: String!\n  ) {\n    validateRestApi(\n      stringifiedRequestData: $stringifiedRequestData\n      expectedAnswerId: $expectedAnswerId\n    ) {\n      status\n      headers {\n        name\n        value\n      }\n      body\n    }\n  }\n',
+): (typeof documents)['\n  mutation ValidateRestApi(\n    $stringifiedRequestData: String!\n    $expectedAnswerId: String!\n  ) {\n    validateRestApi(\n      stringifiedRequestData: $stringifiedRequestData\n      expectedAnswerId: $expectedAnswerId\n    ) {\n      status\n      headers {\n        name\n        value\n      }\n      body\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

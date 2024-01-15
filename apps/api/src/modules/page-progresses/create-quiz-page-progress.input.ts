@@ -20,11 +20,17 @@ export class QuizPageProgressInput {
   questionType: QuestionType;
 
   @IsOptional()
-  @Field(() => [String], { description: 'Answer ids if passed' })
-  answers?: string[];
+  @Field(() => [String], {
+    description:
+      'Answer ids that submitted by user only if it is single or multiple choice question',
+  })
+  actualAnswers?: string[];
 
   @IsOptional()
-  @Field(() => [String], { description: 'Expected Answer ids if passed' })
+  @Field(() => [String], {
+    description:
+      'Expected Answer ids if passed. Should be passed in case of single, multiple choice question or rest api',
+  })
   expectedAnswers?: string[];
 
   @IsOptional()

@@ -40,7 +40,7 @@ export function BugReportQuestion({
   progressData,
 }: {
   onChange: (data: BugReportData) => void;
-  progressData?: BugReportData | undefined;
+  progressData: BugReportData;
 }) {
   const { data: userData, error: userError } = useSuspenseQuery(GET_USER);
   const [data, setData] = useState<BugReportData>({
