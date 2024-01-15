@@ -5,6 +5,7 @@ import { Answer } from '../answers/answer.schema';
 import { Course, CourseType } from '../courses/course.schema';
 import { Page } from '../pages/page.schema';
 import { User } from '../users/user.schema';
+import { QuestionType } from '../questions/question.schema';
 
 export enum PageProgressState {
   PASS = 'pass',
@@ -36,6 +37,12 @@ export class PageProgress extends mongoose.Document {
   })
   type: CourseType;
 
+  @Prop({ type: String, enum: QuestionType, required: true })
+  @Field(() => QuestionType, {
+    description: 'Type of the question',
+  })
+  questionType: QuestionType;
+
   @Prop({ type: ObjectId, ref: 'Page', required: true })
   @Field(() => String)
   page: Page | mongoose.Types.ObjectId;
@@ -49,20 +56,25 @@ export class PageProgress extends mongoose.Document {
       {
         type: ObjectId,
         ref: 'Answer',
-        required: function () {
-          // TODO: make it type safe
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          return this.type === CourseType.QUIZ;
-        },
       },
     ],
   })
   @Field(() => [String], {
     defaultValue: [],
     description: 'Array of answers used if page is quiz',
+    nullable: true,
   })
   answers: Answer[] | mongoose.Types.ObjectId[];
+
+  @Prop({
+    type: String,
+  })
+  @Field(() => String, {
+    description:
+      "Stringified user's answer data when user answers complex open answer question like TEST_CASE, REST_API etc",
+    nullable: true,
+  })
+  data: string;
 
   @Prop({ type: ObjectId, ref: 'User', required: true })
   @Field(() => String)

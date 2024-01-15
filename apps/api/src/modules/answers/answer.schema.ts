@@ -17,6 +17,16 @@ export class Answer extends mongoose.Document {
   content: string;
 
   @Prop({
+    type: String,
+  })
+  @Field(() => String, {
+    description:
+      "Stringified answer data. Set in case of REST_API question or other questions that might be used to compare user's submitted data with",
+    nullable: true,
+  })
+  data?: string;
+
+  @Prop({
     type: ObjectId,
     ref: User.name,
   })

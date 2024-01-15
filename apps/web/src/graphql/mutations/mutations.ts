@@ -35,18 +35,12 @@ export const REGISTER = gql(/* GraphQL */ `
 `);
 
 export const CREATE_QUIZ_PAGE_PROGRESS = gql(/* GraphQL */ `
-  mutation CreateQuizPageProgress(
-    $state: PageProgressState!
-    $page: String!
-    $course: String!
-    $answers: [String!]!
-  ) {
-    createQuizPageProgress(
-      data: { state: $state, page: $page, course: $course, answers: $answers }
-    ) {
+  mutation CreateQuizPageProgress($data: QuizPageProgressInput!) {
+    createQuizPageProgress(data: $data) {
       state
       page
       answers
+      data
     }
   }
 `);
@@ -111,5 +105,24 @@ export const CLAIM_BADGE = gql(/* GraphQL */ `
 export const DELETE_COURSE_PROGRESS = gql(/* GraphQL */ `
   mutation DeleteCourseProgresses($_id: String!) {
     deleteCourseProgresses(_id: $_id)
+  }
+`);
+
+export const VALIDATE_REST_API = gql(/* GraphQL */ `
+  mutation ValidateRestApi(
+    $stringifiedRequestData: String!
+    $expectedAnswerId: String!
+  ) {
+    validateRestApi(
+      stringifiedRequestData: $stringifiedRequestData
+      expectedAnswerId: $expectedAnswerId
+    ) {
+      status
+      headers {
+        name
+        value
+      }
+      body
+    }
   }
 `);

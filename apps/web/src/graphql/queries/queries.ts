@@ -82,6 +82,7 @@ export const GET_COURSE = gql(/* GraphQL */ `
         content
         question {
           content
+          type
           answers {
             _id
             content
@@ -95,6 +96,7 @@ export const GET_COURSE = gql(/* GraphQL */ `
           _id
           state
           answers
+          data
         }
       }
       recommendedCourses {

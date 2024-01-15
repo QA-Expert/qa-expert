@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton/IconButton';
 import List from '@mui/material/List/List';
 import Typography from '@mui/material/Typography/Typography';
 import { useState } from 'react';
-import { stringAvatar } from 'utils/utils';
+import { getUsername, stringAvatar } from 'utils/utils';
 import { ChangeNamesModal } from '@/components/profile/change-names-modal/change-names-modal';
 import { ChangePasswordModal } from '@/components/profile/change-password-modal/change-password-modal';
 import EditIcon from '@mui/icons-material/Edit';
@@ -29,9 +29,7 @@ export function ProfileSidebar({
   const { data, error } = useSuspenseQuery(GET_USER);
   const [currentSection, setCurrentSection] = useState<Section>('badges');
   const user = data?.user;
-  const username = user?.firstName
-    ? `${user?.firstName} ${user?.lastName}`
-    : user?.email;
+  const username = getUsername(user);
 
   useError([error?.message]);
 

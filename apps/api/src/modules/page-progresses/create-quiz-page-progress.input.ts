@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { PageProgressState } from './page-progress.schema';
-import { ArrayNotEmpty, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
+import { QuestionType } from '../questions/question.schema';
 
 @InputType()
 export class QuizPageProgressInput {
@@ -12,14 +12,31 @@ export class QuizPageProgressInput {
   @Field(() => String, { description: 'Course id' })
   course: string;
 
-  @ArrayNotEmpty()
-  @Field(() => [String], { description: 'Array of answer ids' })
-  answers: string[];
-
   @IsNotEmpty()
-  @Field(() => PageProgressState, {
+  @Field(() => QuestionType, {
     description:
-      'Can be pass or fail. The state comes from the client side after checking the answers. Set it in the database as a result of the answer to the quiz',
+      'Type of the question. We use it to determine method of validation',
   })
-  state: PageProgressState;
+  questionType: QuestionType;
+
+  @IsOptional()
+  @Field(() => [String], {
+    description:
+      'Answer ids that submitted by user only if it is single or multiple choice question',
+  })
+  actualAnswers?: string[];
+
+  @IsOptional()
+  @Field(() => [String], {
+    description:
+      'Expected Answer ids if passed. Should be passed in case of single, multiple choice question or rest api',
+  })
+  expectedAnswers?: string[];
+
+  @IsOptional()
+  @Field(() => String, {
+    description:
+      "Stringified user's answer data when user answers complex open answer question like TEST_CASE, REST_API etc",
+  })
+  stringifiedData?: string;
 }

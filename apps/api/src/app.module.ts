@@ -18,6 +18,7 @@ import { ActivityModule } from './modules/activities/activity.modules';
 import { AddressModule } from './modules/billing/address/address.modules';
 import { CreditCardModule } from './modules/billing/credit-card/credit-card.modules';
 import { TransactionModule } from './modules/billing/transactions/transaction.modules';
+import { AnswerValidationModule } from './modules/answer-validation/answer-validation.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { TransactionModule } from './modules/billing/transactions/transaction.mo
     }),
     ConfigModule,
     AnswerModule,
+    AnswerValidationModule,
     QuestionModule,
     UserModule,
     CourseModule,

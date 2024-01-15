@@ -7,6 +7,7 @@ import { SubmittedProgressService } from '../submitted-progresses/submitted-prog
 import { CoursePageProgressInput } from './create-course-page-progress.input';
 import { QuizPageProgressInput } from './create-quiz-page-progress.input';
 import { PageProgress, PageProgressState } from './page-progress.schema';
+import { AnswerValidationService } from '../answer-validation/answer-validation.service';
 
 @Injectable()
 export class PageProgressService {
@@ -16,6 +17,7 @@ export class PageProgressService {
     @Inject(forwardRef(() => CourseProgressService))
     private readonly serviceCourseProgress: CourseProgressService,
     private readonly serviceSubmittedProgress: SubmittedProgressService,
+    private readonly serviceAnswerValidation: AnswerValidationService,
   ) {}
 
   async findAllByCourseIdAndType(
@@ -80,11 +82,16 @@ export class PageProgressService {
   }
 
   async createQuizPageProgress(data: QuizPageProgressInput, userId: string) {
+    const isValid = await this.serviceAnswerValidation.isAnswerValid(data);
+    const state = isValid ? PageProgressState.PASS : PageProgressState.FAIL;
+
     const newProgress: Partial<PageProgress> = {
       ...data,
-      answers: data.answers?.map(
+      state,
+      answers: data.actualAnswers?.map(
         (answer) => new mongoose.Types.ObjectId(answer),
       ),
+      data: data.stringifiedData,
       type: CourseType.QUIZ,
       page: new mongoose.Types.ObjectId(data.page),
       course: new mongoose.Types.ObjectId(data.course),

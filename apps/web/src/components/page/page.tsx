@@ -4,6 +4,7 @@ import { Box } from '@/components/box/box';
 import CourseSection from '@/components/course-section/course-section';
 import QuizSection from '@/components/quiz-section/quiz-section';
 import { StatusIndicator } from '@/components/status-indicator/status-indicator';
+
 /**
  * @description Component that represents a page inside of the Course.
  * NOTE: it is not a separate routing page.
@@ -32,7 +33,7 @@ export default function Page(page: GetCourseQuery['course']['pages'][number]) {
         </Typography>
       </Box>
 
-      <Box sx={{ gap: '2rem' }}>
+      <Box sx={{ gap: '2rem', width: '100%' }}>
         <Typography>{page.description}</Typography>
 
         {page.type === CourseType.Course ? (
