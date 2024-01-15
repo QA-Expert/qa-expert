@@ -82,6 +82,7 @@ export function Heading() {
         <Image
           alt={'hero image'}
           fill
+          sizes="630"
           src={'/images/hero.png'}
           priority
           style={{ objectFit: 'fill' }}

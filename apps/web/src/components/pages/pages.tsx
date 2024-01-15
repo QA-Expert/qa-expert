@@ -4,12 +4,17 @@ import { useState } from 'react';
 import { Box } from '@/components/box/box';
 import { Row } from '@/components/row/row';
 import Sidebar from '@/components/sidebar/sidebar';
-import { CourseType, GetCourseQuery } from '__generated__/graphql';
+import {
+  CourseType,
+  GetCourseQuery,
+  QuestionType,
+} from '__generated__/graphql';
 import Page from '@/components/page/page';
 import { PagePagination } from '@/components/pages/pages-pagination';
 import { TestAppSection } from '@/components/test-app-section/test-app-section';
 import { Section } from '@/components/section/section';
 import { Navigation } from '@/components/pages/navigation/navigation';
+import { RestApiResponseSection } from '@/components/test-app-section/rest-api-response-section';
 
 interface Props {
   pages: GetCourseQuery['course']['pages'];
@@ -22,6 +27,7 @@ interface Props {
 export function Pages({ pages, courseInfo }: Props) {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const currentPage = pages[currentPageIndex];
+
   if (!currentPage) {
     return null;
   }
@@ -62,7 +68,15 @@ export function Pages({ pages, courseInfo }: Props) {
         </Box>
       </Section>
 
-      {currentPage.type === CourseType.Quiz ? <TestAppSection /> : null}
+      {currentPage.type === CourseType.Quiz &&
+      currentPage.question?.type !== QuestionType.RestApi ? (
+        <TestAppSection />
+      ) : null}
+
+      {currentPage.type === CourseType.Quiz &&
+      currentPage.question?.type === QuestionType.RestApi ? (
+        <RestApiResponseSection />
+      ) : null}
     </Row>
   );
 }

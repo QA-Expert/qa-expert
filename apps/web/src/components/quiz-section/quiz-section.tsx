@@ -3,7 +3,7 @@
 import Typography from '@mui/material/Typography';
 import { GetCourseQuery, QuestionType } from '__generated__/graphql';
 import { Box } from '@/components/box/box';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, Suspense, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
 import { useParams } from 'next/navigation';
@@ -21,7 +21,11 @@ import {
   BugReportData,
   BugReportQuestion,
 } from './quistion/bug-report/bug-report';
-import { RestApiData, RestApiQuestion } from './quistion/rest-api/rest-api';
+import {
+  RestApiRequestData,
+  RestApiQuestion,
+} from './quistion/rest-api/rest-api';
+import { quizPageData } from 'apollo/store';
 
 export type Props = Pick<
   GetCourseQuery['course']['pages'][number],
@@ -33,8 +37,8 @@ export type QuestionProps = {
   question: Props['question'];
 };
 
-type Data =
-  | RestApiData
+export type Data =
+  | RestApiRequestData
   | TestCaseData
   | BugReportData
   | ChecklistData
@@ -120,6 +124,7 @@ export default function QuizSection({
   const handleQuestionDataChange = (data: Data) => {
     console.log('submit data to OpenAI to validate answer', data);
     setData(data);
+    quizPageData(data);
   };
 
   return (
@@ -160,24 +165,30 @@ export default function QuizSection({
         ) : null}
 
         {type === QuestionType.TestCase ? (
-          <TestCaseQuestion
-            progressData={data as TestCaseData}
-            onChange={handleQuestionDataChange}
-          />
+          <Suspense fallback={'...Loading'}>
+            <TestCaseQuestion
+              progressData={data as TestCaseData}
+              onChange={handleQuestionDataChange}
+            />
+          </Suspense>
         ) : null}
 
         {type === QuestionType.BugReport ? (
-          <BugReportQuestion
-            progressData={data as BugReportData}
-            onChange={handleQuestionDataChange}
-          />
+          <Suspense fallback={'...Loading'}>
+            <BugReportQuestion
+              progressData={data as BugReportData}
+              onChange={handleQuestionDataChange}
+            />
+          </Suspense>
         ) : null}
 
         {type === QuestionType.RestApi ? (
-          <RestApiQuestion
-            progressData={data as RestApiData}
-            onChange={handleQuestionDataChange}
-          />
+          <Suspense fallback={'...Loading'}>
+            <RestApiQuestion
+              progressData={data as RestApiRequestData}
+              onChange={handleQuestionDataChange}
+            />
+          </Suspense>
         ) : null}
       </Box>
 

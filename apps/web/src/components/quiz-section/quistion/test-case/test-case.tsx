@@ -30,7 +30,7 @@ export function TestCaseQuestion({
   onChange,
   progressData,
 }: {
-  onChange: (data: TestCaseData) => void;
+  onChange: (data: TestCaseData | undefined) => void;
   progressData?: TestCaseData;
 }) {
   const { data: userData, error: userError } = useSuspenseQuery(GET_USER);
@@ -45,7 +45,7 @@ export function TestCaseQuestion({
   });
 
   useEffect(() => {
-    if (progressData) {
+    if (progressData?.steps) {
       setData(progressData);
     }
   }, [progressData]);

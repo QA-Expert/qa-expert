@@ -15,11 +15,13 @@ import IconButton from '@mui/material/IconButton/IconButton';
 import Typography from '@mui/material/Typography/Typography';
 import { TextEditor } from '@/components/text-editor/text-editor';
 import { ReactQuillProps } from 'react-quill';
+import { getFullUrl } from './handlers';
+import { restApiQuestionResponse } from 'apollo/store';
 
 type Method = 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
 type KeyValue = { name: string; value: string };
 
-export type RestApiData = {
+export type RestApiRequestData = {
   method: Method;
   protocol: 'http' | 'https';
   host: string;
@@ -28,18 +30,25 @@ export type RestApiData = {
   body?: string;
 };
 
+export type RestApiResponseData =
+  | {
+      status: number;
+      headers: KeyValue[];
+      body?: string;
+    }
+  | undefined;
+
 const METHODS: Method[] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
-const PROTOCOLS: RestApiData['protocol'][] = ['http', 'https'];
+const PROTOCOLS: RestApiRequestData['protocol'][] = ['http', 'https'];
 
 export function RestApiQuestion({
   onChange,
   progressData,
 }: {
-  onChange: (data: RestApiData) => void;
-  progressData?: RestApiData;
+  onChange: (data: RestApiRequestData) => void;
+  progressData?: RestApiRequestData;
 }) {
-  console.log('DATA', progressData);
-  const [data, setData] = useState<RestApiData>({
+  const [data, setData] = useState<RestApiRequestData>({
     method: 'GET',
     protocol: 'http',
     host: 'base-url-from-question-content.com',
@@ -51,6 +60,7 @@ export function RestApiQuestion({
 
   useEffect(() => {
     if (progressData) {
+      setUrl(getFullUrl(progressData));
       setData(progressData);
     }
   }, [progressData]);
@@ -63,7 +73,7 @@ export function RestApiQuestion({
   };
 
   const handleChange =
-    (fieldName: keyof Omit<RestApiData, 'steps'>) =>
+    (fieldName: keyof Omit<RestApiRequestData, 'steps'>) =>
     (e: ChangeEvent<HTMLInputElement>) => {
       const newData = { ...data };
 
@@ -81,7 +91,7 @@ export function RestApiQuestion({
     };
 
   const handleParamsChange =
-    (fieldName: keyof RestApiData['params'][number], index: number) =>
+    (fieldName: keyof RestApiRequestData['params'][number], index: number) =>
     (e: ChangeEvent<HTMLInputElement>) => {
       const newData = { ...data };
       const oldName = newData.params[index].name;
@@ -106,11 +116,11 @@ export function RestApiQuestion({
     };
 
   const handleHeadersChange =
-    (fieldName: keyof RestApiData['headers'][number], index: number) =>
+    (fieldName: keyof RestApiRequestData['headers'][number], index: number) =>
     (e: ChangeEvent<HTMLInputElement>) => {
       const newData = { ...data };
 
-      newData.params[index][fieldName] = e.target.value;
+      newData.headers[index][fieldName] = e.target.value;
 
       setData(newData);
       onChange(newData);
@@ -118,7 +128,7 @@ export function RestApiQuestion({
 
   const handleAddItem = (fieldName: 'params' | 'headers') => () => {
     const newData = { ...data };
-    const paramName = `param${newData.params.length + 2}`;
+    const paramName = `${fieldName}${newData[fieldName].length + 1}`;
 
     newData[fieldName].push({
       name: paramName,
@@ -172,20 +182,23 @@ export function RestApiQuestion({
     onChange(newData);
   };
 
+  const handleSubmitTestRequest = () => {
+    //@TODO: we should send request to BE with request and questionId
+    // BE should validate API request and return response.
+    restApiQuestionResponse({
+      status: 200,
+      headers: [
+        {
+          name: 'Content-Type',
+          value: 'application/json',
+        },
+      ],
+      body: JSON.stringify({ success: true }),
+    });
+  };
+
   return (
     <Box sx={{ gap: '1rem', width: '100%' }}>
-      <TextField
-        fullWidth
-        disabled
-        label="Full URL"
-        size="small"
-        type="text"
-        name="rest-api-full-url"
-        id="rest-api-full-url"
-        value={url}
-        variant="outlined"
-      />
-
       <FormGroup sx={{ gap: '1rem', width: '100%' }}>
         <Row>
           <TextField
@@ -402,6 +415,10 @@ export function RestApiQuestion({
           </Box>
         ) : null}
       </FormGroup>
+
+      <Button onClick={handleSubmitTestRequest} variant="outlined">
+        Submit Test Request
+      </Button>
     </Box>
   );
 }

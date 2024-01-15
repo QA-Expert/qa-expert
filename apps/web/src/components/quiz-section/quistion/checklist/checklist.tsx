@@ -16,13 +16,13 @@ export function ChecklistQuestion({
   onChange,
   progressData,
 }: {
-  onChange: (data: ChecklistData) => void;
+  onChange: (data: ChecklistData | undefined) => void;
   progressData?: ChecklistData;
 }) {
   const [data, setData] = useState<ChecklistData>([]);
 
   useEffect(() => {
-    if (progressData) {
+    if (progressData?.length) {
       setData(progressData);
     }
   }, [progressData]);
