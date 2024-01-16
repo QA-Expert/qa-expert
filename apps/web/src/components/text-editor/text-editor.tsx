@@ -55,24 +55,30 @@ const FULL_TOOL_BAR: ReactQuillProps['modules'] = {
 } as const;
 
 export const TextEditor = ({
-  initialValue = '',
+  initialValue,
   onChange,
   allowFormatting = false,
   modules,
   readOnly = false,
 }: Props) => {
-  const [content, setContent] = useState<Value>(initialValue);
+  const [isInitValueSet, setIsInitValueSet] = useState(false);
+  const [content, setContent] = useState<Value>();
 
   useEffect(() => {
-    try {
-      const content: Value = JSON.parse(initialValue);
-
-      setContent(content);
-    } catch (error) {
-      // if failed to parse - it means it is a regular string not a JSON. So we set it to our local variable
-      setContent(initialValue);
+    if (!initialValue || isInitValueSet) {
+      return;
     }
-  }, [initialValue]);
+
+    try {
+      const value = JSON.parse(initialValue);
+
+      setContent(value);
+    } catch (error) {
+      setContent(initialValue);
+    } finally {
+      setIsInitValueSet(true);
+    }
+  }, [initialValue, isInitValueSet]);
 
   const handleChange: ReactQuillProps['onChange'] = (...args) => {
     const [value] = args;
@@ -118,6 +124,40 @@ const Editor = styled(
       '&.ql-fill': {
         fill: muiTheme.palette.secondary.main,
         stroke: 'none',
+      },
+    },
+    // Styles specifically for code - block formatting button in toobar.
+    // In case if we want to render Editor with only code formatting option
+    '.ql-code-block:only-child': {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '0.5rem',
+      width: '100%',
+      fontSize: '1rem',
+      visibility: 'hidden',
+      '&:hover': {
+        '::before': {
+          backgroundColor: muiTheme.palette.secondary.dark,
+          color: muiTheme.palette.secondary.main,
+        },
+      },
+      '&.ql-active': {
+        color: muiTheme.palette.secondary.light,
+        '::before': {
+          backgroundColor: muiTheme.palette.secondary.dark,
+          color: muiTheme.palette.secondary.main,
+        },
+      },
+      '&::before': {
+        content: '"Enable Code Editor"',
+        visibility: 'visible',
+        padding: '0.25rem',
+        marginBottom: '0.5rem',
+        border: '1px solid',
+        borderColor: muiTheme.palette.secondary.main,
+        borderRadius: '4px',
+        color: muiTheme.palette.text.secondary,
       },
     },
   },

@@ -18,6 +18,7 @@ import { CourseProps } from 'app/courses/page';
 import { useReactiveVar } from '@apollo/client';
 import { isAuthenticated } from 'apollo/store';
 import { GetCourseQuery } from '__generated__/graphql';
+import { Suspense } from 'react';
 
 export function CardContainer(props: CourseProps) {
   const theme = useTheme();
@@ -74,8 +75,11 @@ export function CardContainer(props: CourseProps) {
           height={150}
         >
           {isUserAuthenticated && (
-            /* Since user is authenticated we know that it is course with all props that is why it is safe to do type cast */
-            <CourseStates {...(props as GetCourseQuery['course'])} />
+            <Suspense fallback={'...Loading'}>
+              {/* Since user is authenticated we know that it is course with all
+              props that is why it is safe to do type cast */}
+              <CourseStates {...(props as GetCourseQuery['course'])} />
+            </Suspense>
           )}
         </CardImage>
 

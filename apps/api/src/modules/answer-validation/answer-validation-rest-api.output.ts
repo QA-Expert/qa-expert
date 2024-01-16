@@ -13,13 +13,13 @@ export enum Status {
 
 registerEnumType(Status, {
   name: 'Status',
-  description: 'Defines HTTP status code',
+  description: 'Defines HTTP status codes',
 });
 
 @ObjectType()
 export class AnswerValidationRestApiOutput {
   @IsNotEmpty()
-  @Field(() => Status, { description: 'Status code' })
+  @Field(() => Number, { description: 'Status code' })
   status: Status;
 
   @IsOptional()

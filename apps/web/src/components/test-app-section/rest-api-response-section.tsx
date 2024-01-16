@@ -46,7 +46,11 @@ export function RestApiResponseSection() {
         </Row>
       </Box>
 
-      <Divider variant="fullWidth" flexItem color="warning" />
+      <Divider
+        variant="fullWidth"
+        flexItem
+        sx={{ backgroundColor: 'warning.main' }}
+      />
 
       <Header variant="h3">Response</Header>
 
