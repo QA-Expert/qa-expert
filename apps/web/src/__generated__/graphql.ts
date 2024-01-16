@@ -355,17 +355,17 @@ export type QuizPageInput = {
 
 export type QuizPageProgressInput = {
   /** Answer ids that submitted by user only if it is single or multiple choice question */
-  actualAnswers: Array<Scalars['String']['input']>;
+  actualAnswers?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Course id */
   course: Scalars['String']['input'];
   /** Expected Answer ids if passed. Should be passed in case of single, multiple choice question or rest api */
-  expectedAnswers: Array<Scalars['String']['input']>;
+  expectedAnswers?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Page id */
   page: Scalars['String']['input'];
   /** Type of the question. We use it to determine method of validation */
   questionType: QuestionType;
   /** Stringified user's answer data when user answers complex open answer question like TEST_CASE, REST_API etc */
-  stringifiedData: Scalars['String']['input'];
+  stringifiedData?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ResetPasswordInput = {

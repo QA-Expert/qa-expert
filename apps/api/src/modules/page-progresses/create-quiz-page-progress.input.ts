@@ -23,6 +23,7 @@ export class QuizPageProgressInput {
   @Field(() => [String], {
     description:
       'Answer ids that submitted by user only if it is single or multiple choice question',
+    nullable: true,
   })
   actualAnswers?: string[];
 
@@ -30,6 +31,7 @@ export class QuizPageProgressInput {
   @Field(() => [String], {
     description:
       'Expected Answer ids if passed. Should be passed in case of single, multiple choice question or rest api',
+    nullable: true,
   })
   expectedAnswers?: string[];
 
@@ -37,6 +39,7 @@ export class QuizPageProgressInput {
   @Field(() => String, {
     description:
       "Stringified user's answer data when user answers complex open answer question like TEST_CASE, REST_API etc",
+    nullable: true,
   })
   stringifiedData?: string;
 }
