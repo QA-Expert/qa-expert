@@ -17,7 +17,7 @@ export function ChecklistQuestion({
   progressData,
 }: {
   onChange: (data: ChecklistData | undefined) => void;
-  progressData: ChecklistData;
+  progressData: ChecklistData | undefined;
 }) {
   const [data, setData] = useState<ChecklistData>([]);
 

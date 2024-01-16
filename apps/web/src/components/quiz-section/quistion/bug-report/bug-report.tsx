@@ -39,8 +39,8 @@ export function BugReportQuestion({
   onChange,
   progressData,
 }: {
-  onChange: (data: BugReportData) => void;
-  progressData: BugReportData;
+  onChange: (data: BugReportData | undefined) => void;
+  progressData: BugReportData | undefined;
 }) {
   const { data: userData, error: userError } = useSuspenseQuery(GET_USER);
   const [data, setData] = useState<BugReportData>({
