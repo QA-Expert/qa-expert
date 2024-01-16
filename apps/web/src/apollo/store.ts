@@ -9,8 +9,8 @@ export interface Toast {
 }
 
 export const isAuthenticated = makeVar(false);
-export const quizPageData = makeVar<QuizPageData | null>(null);
+export const quizPageData = makeVar<QuizPageData | undefined>(undefined);
 export const restApiQuestionResponse = makeVar<
-  AnswerValidationRestApiOutput | null | undefined
->(null);
+  AnswerValidationRestApiOutput | undefined
+>(undefined);
 export const toastErrors = makeVar<Toast[]>([]);

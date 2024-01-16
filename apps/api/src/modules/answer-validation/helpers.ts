@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { AnswerRestApiData } from '../answers/answer-data-types';
+import { Status } from './answer-validation-rest-api.output';
 
 export const getRestApiResponse = (
   actualRequest: AnswerRestApiData,
@@ -7,7 +8,7 @@ export const getRestApiResponse = (
 ) => {
   if (expectedRequest.host !== actualRequest.host) {
     return {
-      status: 403,
+      status: Status.FORBIDDEN,
       body: 'Forbidden - invalid host.',
     };
   }
@@ -17,34 +18,41 @@ export const getRestApiResponse = (
     actualRequest.headers.find((h) => h.name === 'authenticate')?.value
   ) {
     return {
-      status: 401,
+      status: Status.UNAUTHORIZED,
       body: 'Unauthorized - auth token is invalid',
     };
   }
 
   if (!_.isEqual(expectedRequest.params, actualRequest.params)) {
     return {
-      status: 404,
+      status: Status.NOT_FOUND,
       body: 'No Found - invalid url search parameters values or names',
     };
   }
 
   if (!_.isEqual(expectedRequest.headers, actualRequest.headers)) {
     return {
-      status: 400,
+      status: Status.BAD_REQUEST,
       body: 'Bad Request - invalid headers values or names',
     };
   }
 
   if (!_.isEqual(expectedRequest.body, actualRequest.body)) {
     return {
-      status: 400,
+      status: Status.BAD_REQUEST,
       body: 'Bad Request - invalid body',
     };
   }
 
+  if (!_.isEqual(expectedRequest.method, actualRequest.method)) {
+    return {
+      status: Status.METHOD_NOT_ALLOWED,
+      body: 'Method Not Allowed - invalid method',
+    };
+  }
+
   return {
-    status: 200,
+    status: Status.OK,
     body: 'OK',
   };
 };

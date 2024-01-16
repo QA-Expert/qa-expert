@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography/Typography';
 import { TextEditor } from '@/components/text-editor/text-editor';
 import { ReactQuillProps } from 'react-quill';
 import { getFullUrl } from './handlers';
-import { restApiQuestionResponse } from 'apollo/store';
+import { quizPageData, restApiQuestionResponse } from 'apollo/store';
 import { useMutation } from '@apollo/client';
 import { VALIDATE_REST_API } from 'graphql/mutations/mutations';
 import { useError } from 'utils/hooks';
@@ -56,8 +56,13 @@ export function RestApiQuestion({
   const [url, setUrl] = useState(`${data.protocol}://${data.host}`);
   const [tabIndex, setTabIndex] = useState(0);
 
+  quizPageData(data);
+
   useError([error?.message]);
 
+  /**
+   * Set data local state variable from stored progress - in case user already submitted answer
+   */
   useEffect(() => {
     if (progressData) {
       setUrl(getFullUrl(progressData));
@@ -65,7 +70,7 @@ export function RestApiQuestion({
     }
 
     return () => {
-      restApiQuestionResponse(null);
+      restApiQuestionResponse(undefined);
     };
   }, [progressData]);
 
@@ -88,6 +93,13 @@ export function RestApiQuestion({
 
       newUrl.protocol = newData.protocol;
       newUrl.host = newData.host;
+
+      if (
+        fieldName === 'method' &&
+        (newData.method == 'GET' || newData.method == 'DELETE')
+      ) {
+        delete newData.body;
+      }
 
       setUrl(newUrl.toString());
       setData(newData);
@@ -410,10 +422,14 @@ export function RestApiQuestion({
                 //We want to start Editor with code formatting by default
                 initialValue={`<code><pre>${
                   data.body ?? 'body data'
-                }</pre></code>`}
+                } </pre></code>`}
                 onChange={handleChangeBody}
                 readOnly={false}
-                modules={undefined}
+                modules={{
+                  toolbar: {
+                    container: [['code-block']],
+                  },
+                }}
               />
             </BorderBox>
           </Box>

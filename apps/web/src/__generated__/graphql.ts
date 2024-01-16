@@ -87,7 +87,7 @@ export type AnswerValidationRestApiOutput = {
   /** Headers array */
   headers: Array<KeyValuePair>;
   /** Status code */
-  status: Status;
+  status: Scalars['Float']['output'];
 };
 
 export type Badge = {
@@ -374,16 +374,6 @@ export type ResetPasswordInput = {
   token: Scalars['String']['input'];
 };
 
-/** Defines HTTP status code */
-export enum Status {
-  BadRequest = 'BAD_REQUEST',
-  Forbidden = 'FORBIDDEN',
-  MethodNotAllowed = 'METHOD_NOT_ALLOWED',
-  NotFound = 'NOT_FOUND',
-  Ok = 'OK',
-  Unauthorized = 'UNAUTHORIZED',
-}
-
 export type SubmittedProgress = {
   __typename?: 'SubmittedProgress';
   _id: Scalars['String']['output'];
@@ -612,7 +602,7 @@ export type ValidateRestApiMutation = {
   __typename?: 'Mutation';
   validateRestApi: {
     __typename?: 'AnswerValidationRestApiOutput';
-    status: Status;
+    status: number;
     body: string;
     headers: Array<{
       __typename?: 'KeyValuePair';

@@ -9,6 +9,7 @@ import { ProgressBar } from '@/components/progress-bar/progress-bar';
 import { Row } from '@/components/row/row';
 import { INIT_WIDTH } from '@/components/sidebar/sidebar';
 import { GetCourseQuery } from '__generated__/graphql';
+import { Suspense } from 'react';
 
 export function NavigationCard(course: GetCourseQuery['course']) {
   return (
@@ -28,7 +29,9 @@ export function NavigationCard(course: GetCourseQuery['course']) {
             <CourseLevelLabel level={course.level} />
           </Box>
 
-          <CourseStates {...course} />
+          <Suspense fallback={'...Loading'}>
+            <CourseStates {...course} />
+          </Suspense>
         </CardImage>
       </Row>
 

@@ -42,8 +42,7 @@ export type Data =
   | RestApiRequestData
   | TestCaseData
   | BugReportData
-  | ChecklistData
-  | undefined;
+  | ChecklistData;
 
 export default function QuizSection({
   question,
@@ -71,7 +70,7 @@ export default function QuizSection({
     setActualAnswers(progress?.answers ?? []);
 
     if (!progress || !progress?.data) {
-      quizPageData(null);
+      quizPageData(undefined);
       setData(undefined);
 
       return;
@@ -87,7 +86,7 @@ export default function QuizSection({
     }
 
     return () => {
-      quizPageData(null);
+      quizPageData(undefined);
     };
   }, [progress]);
 
@@ -132,7 +131,7 @@ export default function QuizSection({
     setActualAnswers(newAnswers);
   };
 
-  const handleQuestionDataChange = (data: Data) => {
+  const handleQuestionDataChange = (data: Data | undefined) => {
     setData(data);
     quizPageData(data);
   };
@@ -195,8 +194,9 @@ export default function QuizSection({
         ) : null}
 
         {type === QuestionType.RestApi ? (
-          <Suspense fallback={'...Loading'}>
+          <Suspense fallback={'...Loading'} key={pageId}>
             <RestApiQuestion
+              key={pageId}
               progressData={data as RestApiRequestData | undefined}
               expectedAnswerId={
                 question.answers.find((answer) => answer._id)?._id
