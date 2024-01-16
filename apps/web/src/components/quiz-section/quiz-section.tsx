@@ -68,11 +68,8 @@ export default function QuizSection({
   useError([error?.message]);
 
   useEffect(() => {
-    quizPageData(null);
-    setData(undefined);
-  }, []);
+    setActualAnswers(progress?.answers ?? []);
 
-  useEffect(() => {
     if (!progress || !progress?.data) {
       quizPageData(null);
       setData(undefined);
@@ -94,15 +91,11 @@ export default function QuizSection({
     };
   }, [progress]);
 
-  useEffect(() => {
-    setActualAnswers(progress?.answers ?? []);
-  }, [progress?.answers]);
-
   if (!question) {
     return null;
   }
 
-  const { type, content } = question;
+  const { type, content, options } = question;
 
   const handleSubmit = async () => {
     await createProgress({
@@ -170,7 +163,7 @@ export default function QuizSection({
 
         {type === QuestionType.MultipleChoice ? (
           <MultipleChoiceQuestion
-            options={question.options}
+            options={options}
             actualAnswers={actualAnswers}
             onChange={handleChangeMultipleChoiceQuestion}
           />
@@ -179,7 +172,7 @@ export default function QuizSection({
         {type === QuestionType.Checklist ? (
           <ChecklistQuestion
             onChange={handleQuestionDataChange}
-            progressData={data as ChecklistData}
+            progressData={data as ChecklistData | undefined}
           />
         ) : null}
 
@@ -187,7 +180,7 @@ export default function QuizSection({
           <Suspense fallback={'...Loading'}>
             <TestCaseQuestion
               onChange={handleQuestionDataChange}
-              progressData={data as TestCaseData}
+              progressData={data as TestCaseData | undefined}
             />
           </Suspense>
         ) : null}
@@ -196,7 +189,7 @@ export default function QuizSection({
           <Suspense fallback={'...Loading'}>
             <BugReportQuestion
               onChange={handleQuestionDataChange}
-              progressData={data as BugReportData}
+              progressData={data as BugReportData | undefined}
             />
           </Suspense>
         ) : null}
@@ -204,7 +197,7 @@ export default function QuizSection({
         {type === QuestionType.RestApi ? (
           <Suspense fallback={'...Loading'}>
             <RestApiQuestion
-              progressData={data as RestApiRequestData}
+              progressData={data as RestApiRequestData | undefined}
               expectedAnswerId={
                 question.answers.find((answer) => answer._id)?._id
               }

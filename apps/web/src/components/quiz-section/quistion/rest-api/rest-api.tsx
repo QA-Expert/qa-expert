@@ -41,9 +41,9 @@ export function RestApiQuestion({
   expectedAnswerId,
   progressData,
 }: {
-  onChange: (data: RestApiRequestData) => void;
-  progressData: RestApiRequestData;
-  expectedAnswerId?: string;
+  onChange: (data: RestApiRequestData | undefined) => void;
+  progressData: RestApiRequestData | undefined;
+  expectedAnswerId: string | undefined;
 }) {
   const [validateRestApi, { error }] = useMutation(VALIDATE_REST_API);
   const [data, setData] = useState<RestApiRequestData>({
@@ -197,6 +197,7 @@ export function RestApiQuestion({
         expectedAnswerId,
       },
     });
+
     restApiQuestionResponse(response.data?.validateRestApi);
   };
 

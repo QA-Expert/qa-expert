@@ -31,7 +31,7 @@ export function TestCaseQuestion({
   progressData,
 }: {
   onChange: (data: TestCaseData | undefined) => void;
-  progressData: TestCaseData;
+  progressData: TestCaseData | undefined;
 }) {
   const { data: userData, error: userError } = useSuspenseQuery(GET_USER);
   const [data, setData] = useState<TestCaseData>({
