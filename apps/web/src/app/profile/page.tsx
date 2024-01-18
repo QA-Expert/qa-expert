@@ -13,6 +13,8 @@ import { Billing } from '@/components/profile/billing/billing';
 import { Activities } from '@/components/profile/activities/activities';
 import { Progress } from '@/components/profile/progress/progress';
 import Skeleton from '@mui/material/Skeleton/Skeleton';
+import { Skeletons } from '@/components/skeleton/skeleton';
+import { Row } from '@/components/row/row';
 
 function Account() {
   const [section, setSection] = useState<SectionName>('badges');
@@ -48,29 +50,44 @@ function Account() {
           flexItem
         />
 
-        {section === 'badges' ? (
-          <Suspense fallback={'...Loading'}>
-            <Badges />
-          </Suspense>
-        ) : null}
+        <Row
+          sx={{
+            width: '100%',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '1rem',
+          }}
+        >
+          {section === 'badges' ? (
+            <Suspense
+              fallback={<Skeletons width={200} height={200} quantity={20} />}
+            >
+              <Badges />
+            </Suspense>
+          ) : null}
 
-        {section === 'progress' ? (
-          <Suspense fallback={'...Loading'}>
-            <Progress />
-          </Suspense>
-        ) : null}
+          {section === 'progress' ? (
+            <Suspense
+              fallback={<Skeletons width={'100%'} height={110} quantity={8} />}
+            >
+              <Progress />
+            </Suspense>
+          ) : null}
 
-        {section === 'activities' ? (
-          <Suspense fallback={'...Loading'}>
-            <Activities />
-          </Suspense>
-        ) : null}
+          {section === 'activities' ? (
+            <Suspense
+              fallback={<Skeletons width={510} height={155} quantity={8} />}
+            >
+              <Activities />
+            </Suspense>
+          ) : null}
 
-        {section === 'billing' ? (
-          <Suspense fallback={'...Loading'}>
-            <Billing />
-          </Suspense>
-        ) : null}
+          {section === 'billing' ? (
+            <Suspense fallback={'...Loading'}>
+              <Billing />
+            </Suspense>
+          ) : null}
+        </Row>
       </Section>
     </>
   );

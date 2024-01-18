@@ -9,7 +9,7 @@ import { headers } from 'next/headers';
 
 import './global.css';
 import { Suspense } from 'react';
-import { Guard } from './AuthGuard';
+import { AuthGuard } from './AuthGuard';
 
 /**
  * @url https://nextjs.org/docs/app/building-your-application/optimizing/metadata#static-metadata
@@ -48,11 +48,11 @@ export default function RootLayout({
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <ApolloWrapper token={token}>
-              <Guard>
+              <AuthGuard>
                 <Toasts />
                 <Suspense fallback={'...Loading'}>{children}</Suspense>
                 {login}
-              </Guard>
+              </AuthGuard>
             </ApolloWrapper>
           </ThemeProvider>
         </AppRouterCacheProvider>
