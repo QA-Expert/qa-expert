@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Box } from '@/components/box/box';
-import { Row } from '@/components/row/row';
 import Sidebar from '@/components/sidebar/sidebar';
 import {
   CourseType,
@@ -33,14 +32,7 @@ export function Pages({ pages, courseInfo }: Props) {
   }
 
   return (
-    <Row
-      sx={{
-        height: '100%',
-        width: '100%',
-        flexDirection: 'row',
-        gap: '1rem',
-      }}
-    >
+    <>
       <Sidebar>
         <Navigation
           description={currentPage.description ?? ''}
@@ -77,6 +69,6 @@ export function Pages({ pages, courseInfo }: Props) {
       currentPage.question?.type === QuestionType.RestApi ? (
         <RestApiResponseSection />
       ) : null}
-    </Row>
+    </>
   );
 }

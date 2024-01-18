@@ -47,8 +47,6 @@ export const ProfileMenu = () => {
 
         await logout();
 
-        isAuthenticated(false);
-
         if (path === '/courses' || path === '/') {
           router.refresh();
         } else {

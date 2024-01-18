@@ -4,7 +4,6 @@ import {
   GET_ALL_COURSES,
   GET_ALL_COURSES_PUBLIC,
 } from 'graphql/queries/queries';
-import { Box } from '@/components/box/box';
 import {
   CourseProgressState,
   GetAllCoursesPublicQuery,
@@ -47,12 +46,7 @@ function CoursesPage() {
   );
 
   return (
-    <Box
-      sx={{
-        gap: '2rem',
-        padding: '2rem',
-      }}
-    >
+    <>
       {completedCourses?.length ? (
         <CompletedCoursesSection courses={completedCourses} />
       ) : null}
@@ -69,7 +63,7 @@ function CoursesPage() {
           <CardContainer key={course._id} {...course} />
         ))}
       </Row>
-    </Box>
+    </>
   );
 }
 

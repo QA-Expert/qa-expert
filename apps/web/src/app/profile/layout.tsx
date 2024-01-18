@@ -1,7 +1,7 @@
 import Layout from '@/components/layout/layout';
 import { Row } from '@/components/row/row';
 
-export default function CoursesLayout({
+export default function ProfileLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -10,10 +10,10 @@ export default function CoursesLayout({
     <Layout>
       <Row
         sx={{
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          gap: '2rem',
-          padding: '2rem',
+          width: '100%',
+          height: '100%',
+          gap: '1rem',
+          padding: '1rem',
           flexWrap: 'wrap',
         }}
       >
