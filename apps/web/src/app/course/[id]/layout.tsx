@@ -1,4 +1,3 @@
-import { Box } from '@/components/box/box';
 import Layout from '@/components/layout/layout';
 import { Row } from '@/components/row/row';
 
@@ -20,15 +19,7 @@ export default function CourseLayout({
           position: 'relative',
         }}
       >
-        <Box
-          sx={{
-            height: '100%',
-            width: '100%',
-            flexGrow: 1,
-          }}
-        >
-          {children}
-        </Box>
+        {children}
       </Row>
     </Layout>
   );

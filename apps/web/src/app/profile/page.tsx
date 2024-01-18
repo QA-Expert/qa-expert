@@ -1,7 +1,5 @@
 'use client';
 
-import { Box } from '@/components/box/box';
-import Layout from '@/components/layout/layout';
 import { Section } from '@/components/section/section';
 import { Badges } from '@/components/profile/badges/badges';
 import {
@@ -14,61 +12,67 @@ import Divider from '@mui/material/Divider/Divider';
 import { Billing } from '@/components/profile/billing/billing';
 import { Activities } from '@/components/profile/activities/activities';
 import { Progress } from '@/components/profile/progress/progress';
+import Skeleton from '@mui/material/Skeleton/Skeleton';
 
 function Account() {
   const [section, setSection] = useState<SectionName>('badges');
 
   return (
-    <Layout>
-      <Box
+    <>
+      <Suspense fallback={<Skeleton sx={{ flex: 1, height: '100%' }} />}>
+        <ProfileSidebar onSectionSelect={setSection} />
+      </Suspense>
+
+      <Section
         sx={{
-          flexDirection: 'row',
-          width: '100%',
-          height: '100%',
-          gap: '1rem',
-          padding: '1rem',
-          flexWrap: 'wrap',
+          flex: 3.5,
+          padding: '2rem',
+          gap: '1.5rem',
         }}
       >
-        <Suspense fallback={'...Loading'}>
-          <ProfileSidebar onSectionSelect={setSection} />
-        </Suspense>
-
-        <Section
+        <Typography
+          variant="h2"
           sx={{
-            flex: 3.5,
-            padding: '2rem',
-            gap: '1.5rem',
+            fontSize: '2rem',
+            textTransform: 'uppercase',
+            color: 'secondary.main',
           }}
         >
-          <Typography
-            variant="h2"
-            sx={{
-              fontSize: '2rem',
-              textTransform: 'uppercase',
-              color: 'secondary.main',
-            }}
-          >
-            {section}
-          </Typography>
+          {section}
+        </Typography>
 
-          <Divider
-            variant="fullWidth"
-            sx={{ backgroundColor: 'warning.main' }}
-            light
-            flexItem
-          />
+        <Divider
+          variant="fullWidth"
+          sx={{ backgroundColor: 'warning.main' }}
+          light
+          flexItem
+        />
 
-          {section === 'badges' ? <Badges /> : null}
+        {section === 'badges' ? (
+          <Suspense fallback={'...Loading'}>
+            <Badges />
+          </Suspense>
+        ) : null}
 
-          {section === 'progress' ? <Progress /> : null}
+        {section === 'progress' ? (
+          <Suspense fallback={'...Loading'}>
+            <Progress />
+          </Suspense>
+        ) : null}
 
-          {section === 'activities' ? <Activities /> : null}
+        {section === 'activities' ? (
+          <Suspense fallback={'...Loading'}>
+            <Activities />
+          </Suspense>
+        ) : null}
 
-          {section === 'billing' ? <Billing /> : null}
-        </Section>
-      </Box>
-    </Layout>
+        {section === 'billing' ? (
+          <Suspense fallback={'...Loading'}>
+            <Billing />
+          </Suspense>
+        ) : null}
+      </Section>
+    </>
   );
 }
 

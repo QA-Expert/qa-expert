@@ -43,11 +43,9 @@ export const ProfileMenu = () => {
     {
       name: 'Logout',
       handleClick: async () => {
-        await client.resetStore();
+        await client.clearStore();
 
         await logout();
-
-        isAuthenticated(false);
 
         if (path === '/courses' || path === '/') {
           router.refresh();

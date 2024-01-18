@@ -11,6 +11,7 @@ import { ProfileMenu } from '@/components/profile-menu/profile-menu';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useReactiveVar } from '@apollo/client';
 import { isAuthenticated } from 'apollo/store';
+import { Suspense } from 'react';
 
 export default function Nav() {
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
@@ -51,7 +52,9 @@ export default function Nav() {
           }}
         >
           {data?.user && isUserAuthenticated ? (
-            <ProfileMenu />
+            <Suspense fallback={'...Login'}>
+              <ProfileMenu />
+            </Suspense>
           ) : (
             <Link href="/login">
               <Button color="warning" variant="contained">

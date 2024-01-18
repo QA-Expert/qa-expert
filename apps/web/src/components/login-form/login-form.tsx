@@ -3,7 +3,6 @@
 import { Formik, FormikProps, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useApolloClient, useMutation } from '@apollo/client';
-import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -19,7 +18,7 @@ import { isAuthenticated } from 'apollo/store';
 import styled from '@emotion/styled';
 
 type Props = {
-  onSubmit?: () => void;
+  onSubmit: () => void;
 };
 
 export function LoginForm({ onSubmit }: Props) {
@@ -37,7 +36,6 @@ export function LoginForm({ onSubmit }: Props) {
     email: '',
     password: '',
   };
-  const router = useRouter();
 
   useError([error?.message]);
 
@@ -51,11 +49,11 @@ export function LoginForm({ onSubmit }: Props) {
       ) => {
         actions.setSubmitting(true);
 
-        await client.resetStore();
-
         const { data, errors } = await login({
           variables: values,
         });
+
+        await client.resetStore();
 
         actions.setSubmitting(false);
 
@@ -66,9 +64,7 @@ export function LoginForm({ onSubmit }: Props) {
         if (data?.login?.access_token) {
           isAuthenticated(true);
 
-          onSubmit && onSubmit();
-
-          router.back();
+          onSubmit();
         }
       }}
     >

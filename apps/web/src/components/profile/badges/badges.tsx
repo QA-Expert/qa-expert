@@ -1,7 +1,7 @@
 'use client';
 
 import { BadgeCard } from '@/components/profile/badges/card';
-import { Box } from '@/components/box/box';
+import { Row } from '@/components/row/row';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_BADGES_AND_USER } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
@@ -15,7 +15,7 @@ export function Badges() {
   useError([badgesFetchError?.message]);
 
   return (
-    <Box
+    <Row
       sx={{
         flexDirection: 'row',
         justifyContent: 'center',
@@ -30,6 +30,6 @@ export function Badges() {
           isEarned={Boolean(user?.badges?.includes(badge._id))}
         />
       ))}
-    </Box>
+    </Row>
   );
 }

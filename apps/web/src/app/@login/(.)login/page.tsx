@@ -5,16 +5,18 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 
 export default function LoginModal() {
+  const router = useRouter();
   const path = usePathname();
   const [open, setOpen] = useState(path === '/login');
 
   const handleClick = () => {
     setOpen(false);
+    router.back();
   };
 
   return (

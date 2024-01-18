@@ -12,7 +12,7 @@ export function Activities() {
   useError([error?.message]);
 
   return (
-    <Row sx={{ flexWrap: 'wrap', gap: '1rem' }}>
+    <Row sx={{ flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
       {data.activities.map((activity) => (
         <ActivityCard key={activity._id} {...activity} />
       ))}

@@ -47,6 +47,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
 
   return (
     <Paper
+      component="section"
       sx={{
         width: isOpen ? 'auto' : '2.75rem',
         marginRight: 'auto',
