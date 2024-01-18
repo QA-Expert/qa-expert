@@ -14,7 +14,7 @@ import { CardContainer } from '@/components/card/card';
 import { CompletedCoursesSection } from '@/components/completed-courses-section/completed-courses-section';
 import { Row } from '@/components/row/row';
 import { isAuthenticated } from 'apollo/store';
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useReactiveVar } from '@apollo/client';
 
 export type LoggedInUserCourses = GetAllCoursesQuery['courses'][number];
@@ -32,11 +32,10 @@ export type CourseProps = LoggedInUserCourses | PublicCourses;
  * NOTE: Courses page is purposely client component as we need to re-render it based on user auth state.
  */
 function CoursesPage() {
-  // TODO: Come up with better way of getting different data set where we don't have to specify type on variable
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
-  const { data } = useQuery<GetAllCoursesQuery | GetAllCoursesPublicQuery>(
-    isUserAuthenticated ? GET_ALL_COURSES : GET_ALL_COURSES_PUBLIC,
-  );
+  const { data } = useSuspenseQuery<
+    GetAllCoursesQuery | GetAllCoursesPublicQuery
+  >(isUserAuthenticated ? GET_ALL_COURSES : GET_ALL_COURSES_PUBLIC);
 
   const courses: CourseProps[] | undefined =
     data && 'coursesPublic' in data ? data?.coursesPublic : data?.courses;

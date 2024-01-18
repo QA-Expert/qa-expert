@@ -1,6 +1,7 @@
 import { ApolloLink, HttpLink } from '@apollo/client';
 import { IncomingHttpHeaders } from 'http';
 import { onError } from '@apollo/client/link/error';
+import { isAuthenticated } from './store';
 
 export const setAuthLink = (token: string | null) =>
   new ApolloLink((operation, forward) => {
@@ -22,6 +23,10 @@ export const errorLink = onError(({ graphQLErrors, networkError }) => {
       console.error(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}, Extension: ${extensions.code}`,
       );
+
+      if (extensions.code === 'UNAUTHENTICATED') {
+        isAuthenticated(false);
+      }
     });
 
   if (networkError) {

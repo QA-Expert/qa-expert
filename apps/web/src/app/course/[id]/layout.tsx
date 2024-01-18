@@ -1,6 +1,7 @@
 import { Box } from '@/components/box/box';
 import Layout from '@/components/layout/layout';
 import { Row } from '@/components/row/row';
+import { Suspense } from 'react';
 
 export default function CourseLayout({
   children,
@@ -27,7 +28,7 @@ export default function CourseLayout({
             flexGrow: 1,
           }}
         >
-          {children}
+          <Suspense fallback={'...Loading'}>{children}</Suspense>
         </Box>
       </Row>
     </Layout>
