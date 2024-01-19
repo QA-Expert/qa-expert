@@ -181,6 +181,11 @@ export type CreditCard = {
   user: Scalars['String']['output'];
 };
 
+export type EmailInput = {
+  subject: Scalars['String']['input'];
+  text: Scalars['String']['input'];
+};
+
 export type KeyValuePair = {
   __typename?: 'KeyValuePair';
   name: Scalars['String']['output'];
@@ -201,6 +206,8 @@ export type Mutation = {
   logout: Scalars['Boolean']['output'];
   register: UserOutputLogin;
   resetPassword: User;
+  sendBugReport: Scalars['String']['output'];
+  sendCommunication: Scalars['String']['output'];
   updateCoursePageContent: Page;
   updateUserNames: User;
   updateUserPassword: User;
@@ -250,6 +257,14 @@ export type MutationRegisterArgs = {
 
 export type MutationResetPasswordArgs = {
   data: ResetPasswordInput;
+};
+
+export type MutationSendBugReportArgs = {
+  data: EmailInput;
+};
+
+export type MutationSendCommunicationArgs = {
+  data: EmailInput;
 };
 
 export type MutationUpdateCoursePageContentArgs = {
