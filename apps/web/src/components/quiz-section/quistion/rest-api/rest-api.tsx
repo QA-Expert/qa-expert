@@ -6,7 +6,7 @@ import { Box } from '@/components/box/box';
 import { MAX_TEXT_FIELD_LENGTH } from '../../constants';
 import MenuItem from '@mui/material/MenuItem/MenuItem';
 import { Row } from '@/components/row/row';
-import { BorderBox } from '../components/border-box';
+import { BorderBox } from '@/components/box/border-box';
 import Tabs from '@mui/material/Tabs/Tabs';
 import Tab from '@mui/material/Tab/Tab';
 import { Tabpanel, a11yProps } from '@/components/tabpanel/tabpanel';

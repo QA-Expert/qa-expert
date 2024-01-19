@@ -8,7 +8,7 @@ import { GET_USER } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
 import { getUsername } from 'utils/utils';
 import { MAX_TEXT_FIELD_LENGTH } from '../../constants';
-import { BorderBox } from '../components/border-box';
+import { BorderBox } from '@/components/box/border-box';
 import ClearIcon from '@mui/icons-material/Clear';
 import IconButton from '@mui/material/IconButton/IconButton';
 import Typography from '@mui/material/Typography/Typography';

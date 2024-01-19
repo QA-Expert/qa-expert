@@ -8,6 +8,10 @@ import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 import Button from '@mui/material/Button/Button';
 import _ from 'lodash';
 import TextField from '@mui/material/TextField/TextField';
+import { TextEditor } from '@/components/text-editor/text-editor';
+import { Box } from '@/components/box/box';
+import Typography from '@mui/material/Typography/Typography';
+import { BorderBox } from '@/components/box/border-box';
 
 type Props = {
   onSubmit: (values: EmailInput) => Promise<void>;
@@ -28,7 +32,7 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
       .max(100, `${subjectCap} should not be more that 100 characters long`),
     text: Yup.string()
       .required(`${textCap} should not be empty`)
-      .max(500, `${textCap} should not be more that 500 characters long`),
+      .max(1000, `${textCap} should not be more that 500 characters long`),
   });
   const initialValues: EmailInput = {
     subject: '',
@@ -82,19 +86,26 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
           </FormControl>
 
           <FormControl>
-            <TextField
-              variant="outlined"
-              label={subjectCap}
-              autoComplete="on"
-              type="text"
-              name="text"
-              id="text"
-              placeholder={`Enter ${textCap} ...`}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.text}
-              error={Boolean(errors.text)}
-            />
+            <Box>
+              <Typography variant="h6" sx={{ gap: '1rem' }}>
+                Body
+              </Typography>
+              <BorderBox sx={{ minHeight: '160px' }}>
+                <TextEditor
+                  onChange={(value) => {
+                    const event = {
+                      target: {
+                        value,
+                      },
+                    };
+
+                    handleChange(event);
+                  }}
+                  readOnly={false}
+                  allowFormatting
+                />
+              </BorderBox>
+            </Box>
             <FormHelperText error={Boolean(errors.text)} id="text-error-text">
               {errors.text}
             </FormHelperText>

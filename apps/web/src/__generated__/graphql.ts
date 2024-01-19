@@ -627,6 +627,24 @@ export type ValidateRestApiMutation = {
   };
 };
 
+export type SendBugReportMutationVariables = Exact<{
+  data: EmailInput;
+}>;
+
+export type SendBugReportMutation = {
+  __typename?: 'Mutation';
+  sendBugReport: string;
+};
+
+export type SendCommunicationMutationVariables = Exact<{
+  data: EmailInput;
+}>;
+
+export type SendCommunicationMutation = {
+  __typename?: 'Mutation';
+  sendCommunication: string;
+};
+
 export type GetAllCoursesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllCoursesQuery = {
@@ -1735,6 +1753,96 @@ export const ValidateRestApiDocument = {
 } as unknown as DocumentNode<
   ValidateRestApiMutation,
   ValidateRestApiMutationVariables
+>;
+export const SendBugReportDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'SendBugReport' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'EmailInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'sendBugReport' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SendBugReportMutation,
+  SendBugReportMutationVariables
+>;
+export const SendCommunicationDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'SendCommunication' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'EmailInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'sendCommunication' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SendCommunicationMutation,
+  SendCommunicationMutationVariables
 >;
 export const GetAllCoursesDocument = {
   kind: 'Document',

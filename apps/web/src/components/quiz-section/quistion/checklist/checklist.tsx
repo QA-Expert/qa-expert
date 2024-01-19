@@ -8,7 +8,7 @@ import { Row } from '@/components/row/row';
 import IconButton from '@mui/material/IconButton/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
 import Typography from '@mui/material/Typography/Typography';
-import { BorderBox } from '../components/border-box';
+import { BorderBox } from '@/components/box/border-box';
 
 export type ChecklistData = string[];
 

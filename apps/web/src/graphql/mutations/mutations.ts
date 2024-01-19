@@ -126,3 +126,15 @@ export const VALIDATE_REST_API = gql(/* GraphQL */ `
     }
   }
 `);
+
+export const SEND_BUG_REPORT = gql(/* GraphQL */ `
+  mutation SendBugReport($data: EmailInput!) {
+    sendBugReport(data: $data)
+  }
+`);
+
+export const SEND_COMMUNICATION = gql(/* GraphQL */ `
+  mutation SendCommunication($data: EmailInput!) {
+    sendCommunication(data: $data)
+  }
+`);

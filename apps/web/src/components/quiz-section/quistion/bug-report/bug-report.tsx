@@ -14,7 +14,7 @@ import { MAX_TEXT_FIELD_LENGTH } from '../../constants';
 import ClearIcon from '@mui/icons-material/Clear';
 import IconButton from '@mui/material/IconButton/IconButton';
 import Typography from '@mui/material/Typography/Typography';
-import { BorderBox } from '../components/border-box';
+import { BorderBox } from '@/components/box/border-box';
 
 type Status = 'open' | 'fixed' | 'cannot reproduce' | 'not a bug';
 
