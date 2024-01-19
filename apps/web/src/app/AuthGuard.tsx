@@ -7,7 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useEffect } from 'react';
 import { matchesPathname } from 'utils/url';
 
-export function Guard({ children }: { children: ReactNode }) {
+export function AuthGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
   const path = usePathname();
   const isUserAuthenticated = useReactiveVar(isAuthenticated);

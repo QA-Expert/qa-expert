@@ -3,7 +3,6 @@
 import { Formik, FormikProps, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useApolloClient, useMutation } from '@apollo/client';
-import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
@@ -16,12 +15,14 @@ import { UserInputLogin } from '__generated__/graphql';
 import { LOGIN } from 'graphql/mutations/mutations';
 import { isAuthenticated } from 'apollo/store';
 import styled from '@emotion/styled';
+import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 
 type Props = {
   onSubmit: () => void;
+  onLinkClick?: () => void;
 };
 
-export function LoginForm({ onSubmit }: Props) {
+export function LoginForm({ onSubmit, onLinkClick }: Props) {
   const client = useApolloClient();
   const [login, { error }] = useMutation(LOGIN);
   const schema = Yup.object().shape({
@@ -118,26 +119,31 @@ export function LoginForm({ onSubmit }: Props) {
 
           <Typography>
             {'If you do not have an account, please '}
-            <MuiLink href="/register" component={Link}>
+            <MuiLink href="/register" onClick={onLinkClick} component={Link}>
               register
             </MuiLink>
             .
           </Typography>
 
-          <MuiLink href="/forgot-password" component={Link}>
+          <MuiLink
+            href="/forgot-password"
+            onClick={onLinkClick}
+            component={Link}
+          >
             Need help?
           </MuiLink>
 
-          <Button
+          <LoadingButton
             color="warning"
             variant="contained"
+            loading={isSubmitting}
             disabled={
               isSubmitting || Boolean(errors.email) || Boolean(errors.password)
             }
             type="submit"
           >
             Login
-          </Button>
+          </LoadingButton>
         </Form>
       )}
     </Formik>

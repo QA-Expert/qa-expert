@@ -16,6 +16,7 @@ import { RESET_PASSWORD } from 'graphql/mutations/mutations';
 import { Box } from '@/components/box/box';
 import { useState } from 'react';
 import { useError } from 'utils/hooks';
+import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 
 function ResetPassword() {
   const [resetPassword, { error }] = useMutation(RESET_PASSWORD);
@@ -123,13 +124,15 @@ function ResetPassword() {
                   </FormHelperText>
                 </FormControl>
 
-                <Button
+                <LoadingButton
                   color="warning"
+                  variant="contained"
                   disabled={isSubmitting || Boolean(errors.password)}
+                  loading={isSubmitting}
                   type="submit"
                 >
                   Login
-                </Button>
+                </LoadingButton>
               </Paper>
             </form>
           )}

@@ -33,6 +33,12 @@ export type RestApiRequestData = {
   body?: string;
 };
 
+type Props = {
+  onChange: (data: RestApiRequestData | undefined) => void;
+  progressData: RestApiRequestData | undefined;
+  expectedAnswerId: string | undefined;
+};
+
 const METHODS: Method[] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
 const PROTOCOLS: RestApiRequestData['protocol'][] = ['http', 'https'];
 
@@ -40,11 +46,7 @@ export function RestApiQuestion({
   onChange,
   expectedAnswerId,
   progressData,
-}: {
-  onChange: (data: RestApiRequestData | undefined) => void;
-  progressData: RestApiRequestData | undefined;
-  expectedAnswerId: string | undefined;
-}) {
+}: Props) {
   const [validateRestApi, { error }] = useMutation(VALIDATE_REST_API);
   const [data, setData] = useState<RestApiRequestData>({
     method: 'GET',

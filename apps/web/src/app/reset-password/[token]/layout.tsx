@@ -1,9 +1,9 @@
-import Main from '@/components/main/main';
+import Layout from '@/components/layout/layout';
 
 export default function ResetPasswordLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <Main>{children}</Main>;
+  return <Layout>{children}</Layout>;
 }

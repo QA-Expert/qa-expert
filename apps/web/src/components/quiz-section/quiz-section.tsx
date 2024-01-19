@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import { Answer, GetCourseQuery, QuestionType } from '__generated__/graphql';
 import { Box } from '@/components/box/box';
 import { ChangeEvent, Suspense, useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
 import { useParams } from 'next/navigation';
 import { CREATE_QUIZ_PAGE_PROGRESS } from 'graphql/mutations/mutations';
@@ -26,6 +25,7 @@ import {
   RestApiQuestion,
 } from './quistion/rest-api/rest-api';
 import { quizPageData } from 'apollo/store';
+import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 
 export type Props = Pick<
   GetCourseQuery['course']['pages'][number],
@@ -36,6 +36,7 @@ export type QuestionProps = {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   options: Answer[];
   actualAnswers: string[];
+  disabled?: boolean;
 };
 
 export type Data =
@@ -53,16 +54,19 @@ export default function QuizSection({
   const courseId = router.id as string;
   const [actualAnswers, setActualAnswers] = useState<string[]>([]);
   const [data, setData] = useState<Data>();
-  const [createProgress, { error }] = useMutation(CREATE_QUIZ_PAGE_PROGRESS, {
-    refetchQueries: [
-      {
-        query: GET_COURSE,
-        variables: {
-          _id: courseId,
+  const [createProgress, { error, loading }] = useMutation(
+    CREATE_QUIZ_PAGE_PROGRESS,
+    {
+      refetchQueries: [
+        {
+          query: GET_COURSE,
+          variables: {
+            _id: courseId,
+          },
         },
-      },
-    ],
-  });
+      ],
+    },
+  );
 
   useError([error?.message]);
 
@@ -157,6 +161,7 @@ export default function QuizSection({
             options={question.options}
             actualAnswers={actualAnswers}
             onChange={handleCHangeSingleChoiceQuestion}
+            disabled={Boolean(progress)}
           />
         ) : null}
 
@@ -165,6 +170,7 @@ export default function QuizSection({
             options={options}
             actualAnswers={actualAnswers}
             onChange={handleChangeMultipleChoiceQuestion}
+            disabled={Boolean(progress)}
           />
         ) : null}
 
@@ -207,7 +213,8 @@ export default function QuizSection({
         ) : null}
       </Box>
 
-      <Button
+      <LoadingButton
+        loading={loading}
         size="large"
         variant="contained"
         disabled={Boolean(progress) || !courseId}
@@ -215,7 +222,7 @@ export default function QuizSection({
         color="success"
       >
         Submit
-      </Button>
+      </LoadingButton>
     </Box>
   );
 }
