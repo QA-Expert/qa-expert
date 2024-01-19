@@ -3,7 +3,6 @@
 import { Formik, FormikProps, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useMutation } from '@apollo/client';
-import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
@@ -14,6 +13,7 @@ import { useState } from 'react';
 import { Box } from '@/components/box/box';
 import { FORGOT_PASSWORD } from 'graphql/mutations/mutations';
 import { useError } from 'utils/hooks';
+import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 
 function ForgotPassword() {
   const [forgotPassword, { error }] = useMutation(FORGOT_PASSWORD);
@@ -117,12 +117,15 @@ function ForgotPassword() {
                   </FormHelperText>
                 </FormControl>
 
-                <Button
+                <LoadingButton
+                  color="warning"
+                  variant="contained"
+                  loading={isSubmitting}
                   disabled={isSubmitting || Boolean(errors.email)}
                   type="submit"
                 >
                   Submit
-                </Button>
+                </LoadingButton>
               </Paper>
             </form>
           )}

@@ -4,7 +4,6 @@ import { Box } from '@/components/box/box';
 import CourseSection from '@/components/course-section/course-section';
 import QuizSection from '@/components/quiz-section/quiz-section';
 import { StatusIndicator } from '@/components/status-indicator/status-indicator';
-import { Suspense } from 'react';
 
 /**
  * @description Component that represents a page inside of the Course.
@@ -38,17 +37,13 @@ export default function Page(page: GetCourseQuery['course']['pages'][number]) {
         <Typography>{page.description}</Typography>
 
         {page.type === CourseType.Course ? (
-          <Suspense fallback={'...Loading'}>
-            <CourseSection key={page._id} {...page} />
-          </Suspense>
+          <CourseSection key={page._id} {...page} />
         ) : (
-          <Suspense fallback={'...Loading'}>
-            {/* Adding key helps to reset local state. Without key local state
+          /* Adding key helps to reset local state. Without key local state
             keeps the value of one of the first clicked components as
             we don't really change the position of this component in tree
-            @url https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key */}
-            <QuizSection key={page._id} {...page} />
-          </Suspense>
+            @url https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key */
+          <QuizSection key={page._id} {...page} />
         )}
       </Box>
     </Box>

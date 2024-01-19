@@ -7,6 +7,7 @@ export function SingleChoiceQuestion({
   onChange,
   options,
   actualAnswers,
+  disabled,
 }: QuestionProps) {
   return (
     <RadioGroup sx={{ gap: '0.5rem' }}>
@@ -16,6 +17,7 @@ export function SingleChoiceQuestion({
           value={option._id}
           control={
             <Radio
+              disabled={disabled}
               checked={Boolean(actualAnswers.includes(option._id))}
               onChange={onChange}
             />

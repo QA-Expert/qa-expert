@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 
 export default function LoginModal() {
@@ -14,9 +14,17 @@ export default function LoginModal() {
   const path = usePathname();
   const [open, setOpen] = useState(path === '/login');
 
+  useEffect(() => {
+    setOpen(path === '/login');
+  }, [path]);
+
   const handleClick = () => {
     setOpen(false);
     router.back();
+  };
+
+  const handleLinkClick = () => {
+    setOpen(false);
   };
 
   return (
@@ -25,7 +33,7 @@ export default function LoginModal() {
         Login
       </DialogTitle>
       <DialogContent>
-        <LoginForm onSubmit={handleClick} />
+        <LoginForm onSubmit={handleClick} onLinkClick={handleLinkClick} />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClick}>Cancel</Button>

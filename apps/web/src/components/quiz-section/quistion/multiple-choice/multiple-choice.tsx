@@ -7,6 +7,7 @@ export function MultipleChoiceQuestion({
   onChange,
   options,
   actualAnswers,
+  disabled,
 }: QuestionProps) {
   return (
     <FormGroup sx={{ gap: '0.5rem' }}>
@@ -16,6 +17,7 @@ export function MultipleChoiceQuestion({
           value={option._id}
           control={
             <Checkbox
+              disabled={disabled}
               checked={Boolean(actualAnswers?.includes(option._id))}
               onChange={onChange}
             />

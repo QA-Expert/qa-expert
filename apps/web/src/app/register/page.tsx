@@ -18,10 +18,17 @@ import { Box } from '@/components/box/box';
 import { useError } from 'utils/hooks';
 import { useApolloClient, useMutation } from '@apollo/client';
 import { isAuthenticated } from 'apollo/store';
+import { GET_USER } from 'graphql/queries/queries';
 
 function Register() {
   const client = useApolloClient();
-  const [register, { error }] = useMutation(REGISTER);
+  const [register, { error }] = useMutation(REGISTER, {
+    refetchQueries: [
+      {
+        query: GET_USER,
+      },
+    ],
+  });
 
   useError([error?.message]);
 
@@ -52,7 +59,9 @@ function Register() {
         actions: FormikHelpers<UserInputCreate>,
       ) => {
         actions.setSubmitting(true);
-        await client.resetStore();
+
+        await client.clearStore();
+        await client.cache.reset();
 
         const { data, errors } = await register({
           variables: values,
@@ -177,9 +186,9 @@ function Register() {
 
             <Typography>
               {'If you already have an account, please '}
-              <Link href="/login">
-                <MuiLink>login</MuiLink>
-              </Link>
+              <MuiLink href="/login" component={Link}>
+                login
+              </MuiLink>
               .
             </Typography>
 

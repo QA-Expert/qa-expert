@@ -52,6 +52,7 @@ export const ProfileMenu = () => {
       name: 'Logout',
       handleClick: async () => {
         await client.clearStore();
+        await client.cache.reset();
 
         await logout();
 

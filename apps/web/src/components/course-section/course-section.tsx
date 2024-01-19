@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 import { GetCourseQuery } from '__generated__/graphql';
 import { useState } from 'react';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 
 type CoursePage = GetCourseQuery['course']['pages'][number];
 type Content = CoursePage['content'];
@@ -31,14 +32,17 @@ export default function CourseSection({
   const user = data?.user;
   // TODO: make roles as string union on back end.
   const isAdmin = user?.roles.includes('admin');
-  const [createProgress, { error }] = useMutation(CREATE_COURSE_PAGE_PROGRESS, {
-    refetchQueries: [
-      {
-        query: GET_COURSE,
-        variables: { _id: courseId },
-      },
-    ],
-  });
+  const [createProgress, { error, loading }] = useMutation(
+    CREATE_COURSE_PAGE_PROGRESS,
+    {
+      refetchQueries: [
+        {
+          query: GET_COURSE,
+          variables: { _id: courseId },
+        },
+      ],
+    },
+  );
   const [updateCoursePageContent, { error: updateError }] = useMutation(
     UPDATE_COURSE_PAGE_CONTENT,
     {
@@ -101,7 +105,8 @@ export default function CourseSection({
         </>
       ) : null}
 
-      <Button
+      <LoadingButton
+        loading={loading}
         size="large"
         variant="contained"
         disabled={Boolean(progress)}
@@ -109,7 +114,7 @@ export default function CourseSection({
         color="success"
       >
         Complete Reading
-      </Button>
+      </LoadingButton>
     </Box>
   );
 }
