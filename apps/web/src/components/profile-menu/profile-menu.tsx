@@ -13,10 +13,12 @@ import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Box } from '@/components/box/box';
 import { useError } from 'utils/hooks';
-import { GET_USER } from 'graphql/queries/queries';
+import { GET_ALL_COURSES_PUBLIC, GET_USER } from 'graphql/queries/queries';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { isAuthenticated } from 'apollo/store';
 import { getUsername, stringAvatar } from 'utils/utils';
+import { matchesPathname } from 'utils/url';
+import { PUBLIC_ROUTES } from 'constants/constants';
 
 export const ProfileMenu = () => {
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
@@ -24,7 +26,13 @@ export const ProfileMenu = () => {
   const router = useRouter();
   const path = usePathname();
   const client = useApolloClient();
-  const [logout, { error }] = useMutation(LOGOUT);
+  const [logout, { error }] = useMutation(LOGOUT, {
+    refetchQueries: [
+      {
+        query: GET_ALL_COURSES_PUBLIC,
+      },
+    ],
+  });
   const { data, error: userError } = useSuspenseQuery(GET_USER, {
     skip: !isUserAuthenticated,
   });
@@ -47,8 +55,12 @@ export const ProfileMenu = () => {
 
         await logout();
 
-        if (path === '/courses' || path === '/') {
-          router.refresh();
+        const isPublicPath = PUBLIC_ROUTES.find((expectedPath) =>
+          matchesPathname(expectedPath, path),
+        );
+
+        if (isPublicPath) {
+          isAuthenticated(false);
         } else {
           router.push('/courses');
         }
