@@ -6,7 +6,7 @@ import { Box } from '@/components/box/box';
 import { MAX_TEXT_FIELD_LENGTH } from '../../constants';
 import MenuItem from '@mui/material/MenuItem/MenuItem';
 import { Row } from '@/components/row/row';
-import { BorderBox } from '../components/border-box';
+import { BorderBox } from '@/components/box/border-box';
 import Tabs from '@mui/material/Tabs/Tabs';
 import Tab from '@mui/material/Tab/Tab';
 import { Tabpanel, a11yProps } from '@/components/tabpanel/tabpanel';
@@ -416,15 +416,15 @@ export function RestApiQuestion({
 
         {hasBody ? (
           <Box>
-            <Typography variant="h6" sx={{ gap: '1rem' }}>
+            <Typography variant="h6" sx={{ color: 'secondary.main' }}>
               Body
             </Typography>
-            <BorderBox sx={{ minHeight: '160px' }}>
+            <BorderBox
+              sx={{ minHeight: '160px', borderColor: 'secondary.main' }}
+            >
               <TextEditor
                 //We want to start Editor with code formatting by default
-                initialValue={`<code><pre>${
-                  data.body ?? 'body data'
-                } </pre></code>`}
+                initialValue={data.body ?? 'body data'}
                 onChange={handleChangeBody}
                 readOnly={false}
                 modules={{

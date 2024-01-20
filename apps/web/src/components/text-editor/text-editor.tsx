@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/monokai-sublime.css';
 import { ReactQuillProps, Value } from 'react-quill';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const ReactQuillWrapper = dynamic(
   () => {
@@ -22,6 +23,7 @@ const ReactQuillWrapper = dynamic(
   },
   {
     ssr: false,
+    loading: () => <CircularProgress />,
   },
 );
 
@@ -89,7 +91,15 @@ export const TextEditor = ({
   };
 
   return (
-    <Box sx={{ width: '100%', gap: '1rem', flex: 1, height: '100%' }}>
+    <Box
+      sx={{
+        width: '100%',
+        gap: '1rem',
+        flex: 1,
+        height: '100%',
+        justifyContent: 'flex-start',
+      }}
+    >
       <Editor
         modules={{
           ...modules,
@@ -164,12 +174,13 @@ const Editor = styled(
   '& .ql-container': {
     border: 'none',
     borderRadius: '4px',
-  },
-  '& .ql-editor': {
-    fontSize: '1rem',
-    padding: 0,
-    display: 'flex',
-    flexDirection: 'column',
+    '.ql-editor': {
+      fontSize: '1rem',
+      padding: 0,
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    '.ql-tooltip .ql-editing': {},
   },
   '& .ql-syntax': {
     margin: 0,
@@ -179,5 +190,11 @@ const Editor = styled(
   '& .ql-snow .ql-editor pre': {
     margin: 0,
     padding: '0.5rem',
+  },
+  '& .ql-snow .ql-tooltip div["data-mode"]': {
+    position: 'relative',
+    top: 0,
+    left: 0,
+    transform: 'none',
   },
 }));

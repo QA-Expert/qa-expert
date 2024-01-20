@@ -1,13 +1,11 @@
 'use client';
 
 import { LoginForm } from '@/components/login-form/login-form';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
+import { Modal } from '@/components/modal/modal';
+import { ModalTitle } from '@/components/modal/title/title';
+import { ModalContent } from '@/components/modal/content/content';
 
 export default function LoginModal() {
   const router = useRouter();
@@ -28,16 +26,17 @@ export default function LoginModal() {
   };
 
   return (
-    <Dialog open={open} onClose={handleClick}>
-      <DialogTitle sx={{ fontSize: '2rem', textAlign: 'center' }} variant="h1">
+    <Modal open={open} onClose={handleClick}>
+      <ModalTitle variant="h1" sx={{ fontSize: '2rem' }}>
         Login
-      </DialogTitle>
-      <DialogContent>
-        <LoginForm onSubmit={handleClick} onLinkClick={handleLinkClick} />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClick}>Cancel</Button>
-      </DialogActions>
-    </Dialog>
+      </ModalTitle>
+      <ModalContent>
+        <LoginForm
+          onSubmit={handleClick}
+          onLinkClick={handleLinkClick}
+          onCancel={handleClick}
+        />
+      </ModalContent>
+    </Modal>
   );
 }

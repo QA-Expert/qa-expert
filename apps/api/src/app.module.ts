@@ -19,6 +19,7 @@ import { AddressModule } from './modules/billing/address/address.modules';
 import { CreditCardModule } from './modules/billing/credit-card/credit-card.modules';
 import { TransactionModule } from './modules/billing/transactions/transaction.modules';
 import { AnswerValidationModule } from './modules/answer-validation/answer-validation.module';
+import { EmailModule } from './modules/emails/email.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { AnswerValidationModule } from './modules/answer-validation/answer-valid
     CreditCardModule,
     AddressModule,
     TransactionModule,
+    EmailModule,
   ],
   providers: [],
 })

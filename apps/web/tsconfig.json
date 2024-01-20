@@ -5,14 +5,13 @@
     "**/*.ts",
     "**/*.tsx",
     "jest.setup.js",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "src/components/email-modal"
   ],
   "compilerOptions": {
     "baseUrl": "src/",
     "paths": {
-      "@/components/*": [
-        "components/*"
-      ]
+      "@/components/*": ["components/*"]
     },
     "plugins": [
       {

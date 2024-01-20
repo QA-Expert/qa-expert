@@ -16,13 +16,16 @@ import { LOGIN } from 'graphql/mutations/mutations';
 import { isAuthenticated } from 'apollo/store';
 import styled from '@emotion/styled';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
+import Button from '@mui/material/Button/Button';
+import { Row } from '../row/row';
 
 type Props = {
   onSubmit: () => void;
   onLinkClick?: () => void;
+  onCancel?: () => void;
 };
 
-export function LoginForm({ onSubmit, onLinkClick }: Props) {
+export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
   const client = useApolloClient();
   const [login, { error }] = useMutation(LOGIN);
   const schema = Yup.object().shape({
@@ -133,17 +136,29 @@ export function LoginForm({ onSubmit, onLinkClick }: Props) {
             Need help?
           </MuiLink>
 
-          <LoadingButton
-            color="warning"
-            variant="contained"
-            loading={isSubmitting}
-            disabled={
-              isSubmitting || Boolean(errors.email) || Boolean(errors.password)
-            }
-            type="submit"
+          <Row
+            sx={{ alignItems: 'center', justifyContent: 'center', gap: '1rem' }}
           >
-            Login
-          </LoadingButton>
+            <LoadingButton
+              color="warning"
+              variant="contained"
+              loading={isSubmitting}
+              disabled={
+                isSubmitting ||
+                Boolean(errors.email) ||
+                Boolean(errors.password)
+              }
+              type="submit"
+            >
+              Login
+            </LoadingButton>
+
+            {onCancel ? (
+              <Button variant="contained" onClick={onCancel}>
+                Cancel
+              </Button>
+            ) : null}
+          </Row>
         </Form>
       )}
     </Formik>
