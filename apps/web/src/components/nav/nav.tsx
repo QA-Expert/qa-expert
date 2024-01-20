@@ -53,8 +53,8 @@ export default function Nav() {
           <Row sx={{}}>
             {data?.user && isUserAuthenticated ? (
               <>
-                <IconButton>
-                  <BugReportIcon onClick={() => setBugReportModalOpen(true)} />
+                <IconButton onClick={() => setBugReportModalOpen(true)}>
+                  <BugReportIcon />
                 </IconButton>
                 <Suspense fallback={'...Login'}>
                   <ProfileMenu />

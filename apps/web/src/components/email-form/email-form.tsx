@@ -12,6 +12,7 @@ import { TextEditor } from '@/components/text-editor/text-editor';
 import { Box } from '@/components/box/box';
 import Typography from '@mui/material/Typography/Typography';
 import { BorderBox } from '@/components/box/border-box';
+import ButtonGroup from '@mui/material/ButtonGroup/ButtonGroup';
 
 type Props = {
   onSubmit: (values: EmailInput) => Promise<void>;
@@ -60,16 +61,18 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
         isSubmitting,
         handleSubmit,
         handleBlur,
+        setFieldValue,
+        setFieldError,
         errors,
       }: FormikProps<EmailInput>) => (
         <Form noValidate onSubmit={handleSubmit}>
-          <FormControl>
+          <FormControl sx={{ width: '100%' }}>
             <TextField
               variant="outlined"
               label={subjectCap}
               autoComplete="on"
               type="text"
-              name={inputNames.subject}
+              name="subject"
               id="subject"
               placeholder={`Enter ${subjectCap} ...`}
               onChange={handleChange}
@@ -92,14 +95,22 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
               </Typography>
               <BorderBox sx={{ minHeight: '160px' }}>
                 <TextEditor
-                  onChange={(value) => {
-                    const event = {
-                      target: {
-                        value,
-                      },
-                    };
+                  onChange={async (value, _delta, _source, editor) => {
+                    const text = editor.getText().replace(RegExp(/\n$/g), '');
 
-                    handleChange(event);
+                    try {
+                      await setFieldValue('text', value, false);
+                      await setFieldError('text', '');
+
+                      await schema.validateAt('text', {
+                        subject: values.subject,
+                        text,
+                      });
+                    } catch (error) {
+                      if (error instanceof Error) {
+                        await setFieldError('text', error.message);
+                      }
+                    }
                   }}
                   readOnly={false}
                   allowFormatting
@@ -111,26 +122,28 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
             </FormHelperText>
           </FormControl>
 
-          <LoadingButton
-            color="warning"
-            variant="contained"
-            loading={isSubmitting}
-            disabled={
-              isSubmitting || Boolean(errors.subject) || Boolean(errors.text)
-            }
-            type="submit"
-          >
-            Submit
-          </LoadingButton>
+          <ButtonGroup>
+            <LoadingButton
+              color="warning"
+              variant="contained"
+              loading={isSubmitting}
+              disabled={
+                isSubmitting || Boolean(errors.subject) || Boolean(errors.text)
+              }
+              type="submit"
+            >
+              Submit
+            </LoadingButton>
 
-          <Button
-            color="secondary"
-            variant="contained"
-            type="submit"
-            onClick={onCancel}
-          >
-            Cancel
-          </Button>
+            <Button
+              color="secondary"
+              variant="contained"
+              type="submit"
+              onClick={onCancel}
+            >
+              Cancel
+            </Button>
+          </ButtonGroup>
         </Form>
       )}
     </Formik>

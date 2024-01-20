@@ -164,12 +164,13 @@ const Editor = styled(
   '& .ql-container': {
     border: 'none',
     borderRadius: '4px',
-  },
-  '& .ql-editor': {
-    fontSize: '1rem',
-    padding: 0,
-    display: 'flex',
-    flexDirection: 'column',
+    '.ql-editor': {
+      fontSize: '1rem',
+      padding: 0,
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    '.ql-tooltip .ql-editing': {},
   },
   '& .ql-syntax': {
     margin: 0,
@@ -179,5 +180,11 @@ const Editor = styled(
   '& .ql-snow .ql-editor pre': {
     margin: 0,
     padding: '0.5rem',
+  },
+  '& .ql-snow .ql-tooltip div["data-mode"]': {
+    position: 'relative',
+    top: 0,
+    left: 0,
+    transform: 'none',
   },
 }));

@@ -27,7 +27,7 @@ export function BugReportModal({ onClose, isOpen }: Props) {
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      <DialogTitle>Subscribe</DialogTitle>
+      <DialogTitle textAlign="center">Bug Report</DialogTitle>
       <DialogContent>
         <EmailForm
           onCancel={onClose}

@@ -422,9 +422,7 @@ export function RestApiQuestion({
             <BorderBox sx={{ minHeight: '160px' }}>
               <TextEditor
                 //We want to start Editor with code formatting by default
-                initialValue={`<code><pre>${
-                  data.body ?? 'body data'
-                } </pre></code>`}
+                initialValue={data.body ?? 'body data'}
                 onChange={handleChangeBody}
                 readOnly={false}
                 modules={{
