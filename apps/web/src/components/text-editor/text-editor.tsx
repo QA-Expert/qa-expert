@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/monokai-sublime.css';
 import { ReactQuillProps, Value } from 'react-quill';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const ReactQuillWrapper = dynamic(
   () => {
@@ -22,6 +23,7 @@ const ReactQuillWrapper = dynamic(
   },
   {
     ssr: false,
+    loading: () => <CircularProgress />,
   },
 );
 
@@ -89,7 +91,15 @@ export const TextEditor = ({
   };
 
   return (
-    <Box sx={{ width: '100%', gap: '1rem', flex: 1, height: '100%' }}>
+    <Box
+      sx={{
+        width: '100%',
+        gap: '1rem',
+        flex: 1,
+        height: '100%',
+        justifyContent: 'flex-start',
+      }}
+    >
       <Editor
         modules={{
           ...modules,

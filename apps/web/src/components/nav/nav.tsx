@@ -15,9 +15,13 @@ import { Row } from '@/components/row/row';
 import { BugReportModal } from '@/components/bug-report-modal/bug-report-modal';
 import BugReportIcon from '@mui/icons-material/BugReport';
 import IconButton from '@mui/material/IconButton';
+import { ContactUsModal } from '@/components/contact-us-modal/contact-us-modal';
+import ChatIcon from '@mui/icons-material/Chat';
 
 export default function Nav() {
   const [bugReportModalOpen, setBugReportModalOpen] = useState(false);
+  const [contactUsModalOpen, setContactUsModalOpen] = useState(false);
+
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
   const { data } = useSuspenseQuery(GET_USER, {
     skip: !isUserAuthenticated,
@@ -50,12 +54,17 @@ export default function Nav() {
             </Typography>
           </Link>
 
-          <Row sx={{}}>
+          <Row sx={{ marginLeft: 'auto', width: 'auto' }}>
+            <IconButton onClick={() => setContactUsModalOpen(true)}>
+              <ChatIcon />
+            </IconButton>
+
             {data?.user && isUserAuthenticated ? (
               <>
                 <IconButton onClick={() => setBugReportModalOpen(true)}>
                   <BugReportIcon />
                 </IconButton>
+
                 <Suspense fallback={'...Login'}>
                   <ProfileMenu />
                 </Suspense>
@@ -74,6 +83,11 @@ export default function Nav() {
       <BugReportModal
         isOpen={bugReportModalOpen}
         onClose={() => setBugReportModalOpen(false)}
+      />
+
+      <ContactUsModal
+        isOpen={contactUsModalOpen}
+        onClose={() => setContactUsModalOpen(false)}
       />
     </>
   );

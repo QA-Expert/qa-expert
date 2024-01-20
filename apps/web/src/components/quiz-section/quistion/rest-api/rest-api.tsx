@@ -416,10 +416,12 @@ export function RestApiQuestion({
 
         {hasBody ? (
           <Box>
-            <Typography variant="h6" sx={{ gap: '1rem' }}>
+            <Typography variant="h6" sx={{ color: 'secondary.main' }}>
               Body
             </Typography>
-            <BorderBox sx={{ minHeight: '160px' }}>
+            <BorderBox
+              sx={{ minHeight: '160px', borderColor: 'secondary.main' }}
+            >
               <TextEditor
                 //We want to start Editor with code formatting by default
                 initialValue={data.body ?? 'body data'}

@@ -12,7 +12,7 @@ import { TextEditor } from '@/components/text-editor/text-editor';
 import { Box } from '@/components/box/box';
 import Typography from '@mui/material/Typography/Typography';
 import { BorderBox } from '@/components/box/border-box';
-import ButtonGroup from '@mui/material/ButtonGroup/ButtonGroup';
+import { Row } from '@/components/row/row';
 
 type Props = {
   onSubmit: (values: EmailInput) => Promise<void>;
@@ -90,12 +90,20 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
 
           <FormControl>
             <Box>
-              <Typography variant="h6" sx={{ gap: '1rem' }}>
+              <Typography variant="h6" sx={{ color: 'secondary.main' }}>
                 Body
               </Typography>
-              <BorderBox sx={{ minHeight: '160px' }}>
+
+              <BorderBox
+                sx={{
+                  minHeight: '260px',
+                  borderColor: errors.text ? 'error.main' : 'secondary.main',
+                }}
+              >
                 <TextEditor
                   onChange={async (value, _delta, _source, editor) => {
+                    // @NOTE: we have to implemented this logic as TextEditor is not regular MUI input component.
+                    // the idea is to run validation on pure text but set a stringified html value to data eventually
                     const text = editor.getText().replace(RegExp(/\n$/g), '');
 
                     try {
@@ -122,7 +130,7 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
             </FormHelperText>
           </FormControl>
 
-          <ButtonGroup>
+          <Row sx={{ gap: '1rem', justifyContent: 'center' }}>
             <LoadingButton
               color="warning"
               variant="contained"
@@ -143,7 +151,7 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
             >
               Cancel
             </Button>
-          </ButtonGroup>
+          </Row>
         </Form>
       )}
     </Formik>

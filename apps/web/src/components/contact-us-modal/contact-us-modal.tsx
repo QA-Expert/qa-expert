@@ -1,4 +1,4 @@
-import { SEND_BUG_REPORT } from 'graphql/mutations/mutations';
+import { SEND_COMMUNICATION } from 'graphql/mutations/mutations';
 import { useMemo } from 'react';
 import Typography from '@mui/material/Typography/Typography';
 import { EmailModal } from '@/components/email-modal/email-modal';
@@ -8,15 +8,15 @@ type Props = {
   isOpen: boolean;
 };
 
-export function BugReportModal({ onClose, isOpen }: Props) {
+export function ContactUsModal({ onClose, isOpen }: Props) {
   const successComponent = useMemo(
     () => (
       <>
         <Typography variant="body1" textAlign="center">
-          Thank you for submitting Bug Report.
+          Thank you for submitting your message.
         </Typography>
         <Typography variant="body1" textAlign="center">
-          That is huge help for improving quality of the platform.
+          We will follow up with you within next 24 hours via email.
         </Typography>
       </>
     ),
@@ -28,8 +28,8 @@ export function BugReportModal({ onClose, isOpen }: Props) {
       isOpen={isOpen}
       onClose={onClose}
       successComponent={successComponent}
-      title="Bug Report"
-      mutation={SEND_BUG_REPORT}
+      title="Contact Us"
+      mutation={SEND_COMMUNICATION}
     />
   );
 }
