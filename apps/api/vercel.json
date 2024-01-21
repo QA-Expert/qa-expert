@@ -1,6 +1,4 @@
 {
-  "buildCommand": "yarn build",
-  "devCommand": "yarn dev",
   "outputDirectory": "dist",
   "builds": [
     {
@@ -12,6 +10,16 @@
     {
       "src": "/(.*)",
       "dest": "dist/main.js"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "https://qa-expert.vercel.app/api"
+    },
+    {
+      "source": "/:match*",
+      "destination": "https://qa-expert.vercel.app/api/:match*"
     }
   ]
 }
