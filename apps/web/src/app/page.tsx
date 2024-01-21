@@ -65,7 +65,13 @@ const HomePage = () => {
 
   return (
     <Layout>
-      <Box sx={{ height: '100%', width: '100%', gap: 0 }}>
+      <Box
+        sx={{
+          height: '100%',
+          width: '100%',
+          gap: 0,
+        }}
+      >
         <Heading />
 
         {SECTIONS.map((section) => (
