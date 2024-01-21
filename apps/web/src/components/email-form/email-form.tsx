@@ -13,6 +13,10 @@ import { Box } from '@/components/box/box';
 import Typography from '@mui/material/Typography/Typography';
 import { BorderBox } from '@/components/box/border-box';
 import { Row } from '@/components/row/row';
+import { isAuthenticated } from 'apollo/store';
+import { useReactiveVar } from '@apollo/client';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { GET_USER } from 'graphql/queries/queries';
 
 type Props = {
   onSubmit: (values: EmailInput) => Promise<void>;
@@ -24,10 +28,22 @@ type Props = {
 };
 
 export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
+  const isUserAuthenticated = useReactiveVar(isAuthenticated);
+  const user = useSuspenseQuery(GET_USER, {
+    skip: !isUserAuthenticated,
+  });
   const subjectCap = _.capitalize(inputNames.subject);
   const textCap = _.capitalize(inputNames.text);
 
   const schema = Yup.object().shape({
+    from: Yup.string().when([], {
+      is: () => !isUserAuthenticated,
+      then: (schema) =>
+        schema
+          .required('Email is a required field')
+          .email(`Email address is invalid`),
+      otherwise: (schema) => schema.notRequired(),
+    }),
     subject: Yup.string()
       .required(`${subjectCap} is a required field`)
       .max(100, `${subjectCap} should not be more that 100 characters long`),
@@ -38,6 +54,7 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
   const initialValues: EmailInput = {
     subject: '',
     text: '',
+    from: user?.data?.user.email ?? '',
   };
 
   return (
@@ -66,6 +83,30 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
         errors,
       }: FormikProps<EmailInput>) => (
         <Form noValidate onSubmit={handleSubmit}>
+          {!isUserAuthenticated ? (
+            <FormControl sx={{ width: '100%' }}>
+              <TextField
+                variant="outlined"
+                label="Your Email"
+                autoComplete="on"
+                type="email"
+                name="from"
+                id="from"
+                placeholder={'Enter your email address ...'}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.from}
+                error={Boolean(errors.from)}
+              />
+              <FormHelperText
+                error={Boolean(errors.from)}
+                id={'from-error-text'}
+              >
+                {errors.from}
+              </FormHelperText>
+            </FormControl>
+          ) : null}
+
           <FormControl sx={{ width: '100%' }}>
             <TextField
               variant="outlined"

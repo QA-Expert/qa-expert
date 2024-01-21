@@ -11,26 +11,18 @@ export class EmailService {
     });
   }
 
-  async sendBugReportEmail(
-    input: EmailInput,
-    userEmail: string,
-  ): Promise<string> {
+  async sendBugReportEmail(input: EmailInput): Promise<string> {
     const data: EmailData = {
       to: 'bug@qaexpert.io',
-      from: userEmail,
       html: input.text,
       ...input,
     };
     return await this.sendEmail(data);
   }
 
-  async sendCommunicationEmail(
-    input: EmailInput,
-    userEmail: string,
-  ): Promise<string> {
+  async sendCommunicationEmail(input: EmailInput): Promise<string> {
     const data: EmailData = {
       to: 'info@qaexpert.io',
-      from: userEmail,
       html: input.text,
       ...input,
     };

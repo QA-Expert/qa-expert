@@ -19,16 +19,16 @@ export class EmailResolver {
     @CurrentUser() user: User,
     @Args('data') data: EmailInput,
   ): Promise<string> {
-    return await this.service.sendBugReportEmail(data, user.email);
+    data.from = user.email;
+
+    return await this.service.sendBugReportEmail(data);
   }
 
-  @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
   @Mutation(() => String)
   public async sendCommunication(
-    @CurrentUser() user: User,
     @Args('data') data: EmailInput,
   ): Promise<string> {
-    return await this.service.sendCommunicationEmail(data, user.email);
+    return await this.service.sendCommunicationEmail(data);
   }
 }

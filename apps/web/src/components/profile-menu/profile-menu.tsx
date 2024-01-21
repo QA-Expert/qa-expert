@@ -89,6 +89,7 @@ export const ProfileMenu = () => {
           />
         </IconButton>
       </Tooltip>
+
       <Menu
         sx={{ mt: '2.5rem' }}
         id="menu-appbar"

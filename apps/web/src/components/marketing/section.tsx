@@ -40,6 +40,7 @@ export function Section({
           minHeight: '610px',
         },
         gap: '2rem',
+        scrollSnapAlign: 'start',
       }}
     >
       {title ? (

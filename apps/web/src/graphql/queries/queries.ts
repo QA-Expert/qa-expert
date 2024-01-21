@@ -119,13 +119,23 @@ export const GET_USER = gql(/* GraphQL */ `
       firstName
       lastName
       roles
-      badges
     }
   }
 `);
 
-export const GET_BADGES_AND_USER = gql(/* GraphQL */ `
-  query GetBadgesAndUser {
+export const GET_UNLOCKED_BADGES = gql(/* GraphQL */ `
+  query GetUnlockedBadges {
+    unlockedBadges {
+      _id
+      badge
+      user
+      createdAt
+    }
+  }
+`);
+
+export const GET_ALL_AND_UNLOCKED_BADGES = gql(/* GraphQL */ `
+  query GetAllAndUnlockedBadges {
     badges {
       _id
       title
@@ -137,13 +147,10 @@ export const GET_BADGES_AND_USER = gql(/* GraphQL */ `
         title
       }
     }
-    user {
+    unlockedBadges {
       _id
-      email
-      firstName
-      lastName
-      roles
-      badges
+      badge
+      createdAt
     }
   }
 `);

@@ -1,7 +1,6 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { Badge } from '../badges/badge.schema';
 
 export enum Roles {
   USER = 'user',
@@ -46,14 +45,6 @@ export class User extends mongoose.Document {
       'User roles. User - simple platform user. Admin - user with access to course editing',
   })
   roles: Roles[];
-
-  @Prop({ type: [{ type: ObjectId, ref: Badge.name }], default: [] })
-  @Field(() => [String], {
-    defaultValue: [],
-    description:
-      'User achievements. Upon successful completion of the course, the user receives an achievement that can be shared',
-  })
-  badges: Badge[] | mongoose.Types.ObjectId[];
 
   @Prop({
     type: ObjectId,

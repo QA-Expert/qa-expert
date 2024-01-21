@@ -4,10 +4,7 @@ import { Request } from 'express';
 import { User } from '../users/user.schema';
 
 export interface RequestWithUser extends Request {
-  user: Pick<
-    User,
-    '_id' | 'email' | 'firstName' | 'lastName' | 'roles' | 'badges'
-  >;
+  user: Pick<User, '_id' | 'email' | 'firstName' | 'lastName' | 'roles'>;
 }
 
 // Override this method so it can be used in graphql

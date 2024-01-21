@@ -182,6 +182,7 @@ export type CreditCard = {
 };
 
 export type EmailInput = {
+  from: Scalars['String']['input'];
   subject: Scalars['String']['input'];
   text: Scalars['String']['input'];
 };
@@ -195,7 +196,7 @@ export type KeyValuePair = {
 export type Mutation = {
   __typename?: 'Mutation';
   addPage: Course;
-  claimBadge: User;
+  claimBadge: UnlockedBadge;
   createCoursePage: Page;
   createCoursePageProgress: PageProgress;
   createQuizPage: Page;
@@ -331,6 +332,7 @@ export type Query = {
   creditCard?: Maybe<CreditCard>;
   submittedProgresses: Array<SubmittedProgress>;
   transactions: Array<Transaction>;
+  unlockedBadges: Array<UnlockedBadge>;
   user: User;
 };
 
@@ -435,11 +437,18 @@ export type Transaction = {
   user: Scalars['String']['output'];
 };
 
+export type UnlockedBadge = {
+  __typename?: 'UnlockedBadge';
+  _id: Scalars['String']['output'];
+  badge: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  user: Scalars['String']['output'];
+};
+
 export type User = {
   __typename?: 'User';
   _id: Scalars['String']['output'];
-  /** User achievements. Upon successful completion of the course, the user receives an achievement that can be shared */
-  badges: Array<Scalars['String']['output']>;
   email: Scalars['String']['output'];
   firstName?: Maybe<Scalars['String']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
@@ -596,7 +605,12 @@ export type ClaimBadgeMutationVariables = Exact<{
 
 export type ClaimBadgeMutation = {
   __typename?: 'Mutation';
-  claimBadge: { __typename?: 'User'; badges: Array<string> };
+  claimBadge: {
+    __typename?: 'UnlockedBadge';
+    _id: string;
+    badge: string;
+    createdAt: string;
+  };
 };
 
 export type DeleteCourseProgressesMutationVariables = Exact<{
@@ -769,13 +783,27 @@ export type GetUserQuery = {
     firstName?: string | null;
     lastName?: string | null;
     roles: Array<string>;
-    badges: Array<string>;
   };
 };
 
-export type GetBadgesAndUserQueryVariables = Exact<{ [key: string]: never }>;
+export type GetUnlockedBadgesQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetBadgesAndUserQuery = {
+export type GetUnlockedBadgesQuery = {
+  __typename?: 'Query';
+  unlockedBadges: Array<{
+    __typename?: 'UnlockedBadge';
+    _id: string;
+    badge: string;
+    user: string;
+    createdAt: string;
+  }>;
+};
+
+export type GetAllAndUnlockedBadgesQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetAllAndUnlockedBadgesQuery = {
   __typename?: 'Query';
   badges: Array<{
     __typename?: 'Badge';
@@ -786,15 +814,12 @@ export type GetBadgesAndUserQuery = {
     link: string;
     course?: { __typename?: 'Course'; _id: string; title: string } | null;
   }>;
-  user: {
-    __typename?: 'User';
+  unlockedBadges: Array<{
+    __typename?: 'UnlockedBadge';
     _id: string;
-    email: string;
-    firstName?: string | null;
-    lastName?: string | null;
-    roles: Array<string>;
-    badges: Array<string>;
-  };
+    badge: string;
+    createdAt: string;
+  }>;
 };
 
 export type GetSubmittedUserProgressesUserQueryVariables = Exact<{
@@ -1612,7 +1637,9 @@ export const ClaimBadgeDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'badges' } },
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'badge' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
               ],
             },
           },
@@ -2216,7 +2243,6 @@ export const GetUserDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'roles' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'badges' } },
               ],
             },
           },
@@ -2225,13 +2251,44 @@ export const GetUserDocument = {
     },
   ],
 } as unknown as DocumentNode<GetUserQuery, GetUserQueryVariables>;
-export const GetBadgesAndUserDocument = {
+export const GetUnlockedBadgesDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'GetBadgesAndUser' },
+      name: { kind: 'Name', value: 'GetUnlockedBadges' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'unlockedBadges' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'badge' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'user' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetUnlockedBadgesQuery,
+  GetUnlockedBadgesQueryVariables
+>;
+export const GetAllAndUnlockedBadgesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetAllAndUnlockedBadges' },
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
@@ -2262,16 +2319,13 @@ export const GetBadgesAndUserDocument = {
           },
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'user' },
+            name: { kind: 'Name', value: 'unlockedBadges' },
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'roles' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'badges' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'badge' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
               ],
             },
           },
@@ -2280,8 +2334,8 @@ export const GetBadgesAndUserDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  GetBadgesAndUserQuery,
-  GetBadgesAndUserQueryVariables
+  GetAllAndUnlockedBadgesQuery,
+  GetAllAndUnlockedBadgesQueryVariables
 >;
 export const GetSubmittedUserProgressesUserDocument = {
   kind: 'Document',

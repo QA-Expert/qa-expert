@@ -18,6 +18,8 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
+  scroll-snap-type: proximity;
+  scroll-snap-type: y proximity;
 }
 
 a {

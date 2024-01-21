@@ -101,14 +101,4 @@ export class UserResolver {
   ): Promise<User> {
     return await this.userService.updatePassword(data, user._id);
   }
-
-  @UseGuards(GqlAuthGuard)
-  @Roles(RolesEnum.USER)
-  @Mutation(() => User)
-  async claimBadge(
-    @Args('badgeId') badgeId: string,
-    @CurrentUser() user: User,
-  ): Promise<User | null> {
-    return await this.userService.addBadge(badgeId, user._id);
-  }
 }
