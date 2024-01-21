@@ -60,7 +60,7 @@ function Account() {
         >
           {section === 'badges' ? (
             <Suspense
-              fallback={<Skeletons width={200} height={200} quantity={20} />}
+              fallback={<Skeletons width={300} height={300} quantity={20} />}
             >
               <Badges />
             </Suspense>
