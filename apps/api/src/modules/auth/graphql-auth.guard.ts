@@ -33,14 +33,13 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
       const userFromDb = await this.userService.findById(_id);
       const user: Pick<
         User,
-        '_id' | 'email' | 'firstName' | 'lastName' | 'roles' | 'badges'
+        '_id' | 'email' | 'firstName' | 'lastName' | 'roles'
       > = {
         _id: userFromDb._id,
         email: userFromDb.email,
         firstName: userFromDb.firstName,
         lastName: userFromDb.lastName,
         roles: userFromDb.roles,
-        badges: userFromDb.badges,
       };
 
       req.user = user;

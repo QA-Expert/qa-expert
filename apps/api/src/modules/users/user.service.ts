@@ -211,19 +211,4 @@ export class UserService {
 
     return await user.save();
   }
-
-  async addBadge(badgeId: string, userId: string) {
-    return await this.userModel
-      .findByIdAndUpdate(
-        userId,
-        {
-          $push: {
-            badges: new mongoose.Types.ObjectId(badgeId),
-          },
-          updatedBy: new mongoose.Types.ObjectId(userId),
-        },
-        { new: true },
-      )
-      .exec();
-  }
 }

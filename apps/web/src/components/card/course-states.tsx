@@ -6,7 +6,11 @@ import {
   CLAIM_BADGE,
   DELETE_COURSE_PROGRESS,
 } from 'graphql/mutations/mutations';
-import { GET_ALL_COURSES, GET_COURSE, GET_USER } from 'graphql/queries/queries';
+import {
+  GET_ALL_COURSES,
+  GET_COURSE,
+  GET_UNLOCKED_BADGES,
+} from 'graphql/queries/queries';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import Tooltip from '@mui/material/Tooltip';
 import { useDurationToRetakeQuiz } from './card.hook';
@@ -17,14 +21,15 @@ import Typography from '@mui/material/Typography';
 import { CourseProgressState, GetCourseQuery } from '__generated__/graphql';
 import { Flag } from '@/components/flag/flag';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { getClaimedBadge } from '../profile/badges/handlers';
 
 export const CourseStates = (course: GetCourseQuery['course']) => {
-  const { data } = useSuspenseQuery(GET_USER);
-  const user = data?.user;
+  const { data } = useSuspenseQuery(GET_UNLOCKED_BADGES);
+  const unlockedBadges = data?.unlockedBadges;
   const [claimBadge, { error: badgeError }] = useMutation(CLAIM_BADGE, {
     refetchQueries: [
       {
-        query: GET_USER,
+        query: GET_UNLOCKED_BADGES,
       },
     ],
   });
@@ -57,8 +62,8 @@ export const CourseStates = (course: GetCourseQuery['course']) => {
   const isFailedCourse = course.progress.state === CourseProgressState.Fail;
   const isInProgressCourse =
     course.progress.state === CourseProgressState.InProgress;
-  const isBadgeClaimed = course.badge?._id
-    ? user?.badges?.includes(course.badge?._id)
+  const isBadgeClaimed = course.badge
+    ? Boolean(getClaimedBadge(unlockedBadges, course.badge._id))
     : false;
 
   return (

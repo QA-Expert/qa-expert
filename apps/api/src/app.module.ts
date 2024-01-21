@@ -20,6 +20,7 @@ import { CreditCardModule } from './modules/billing/credit-card/credit-card.modu
 import { TransactionModule } from './modules/billing/transactions/transaction.modules';
 import { AnswerValidationModule } from './modules/answer-validation/answer-validation.module';
 import { EmailModule } from './modules/emails/email.module';
+import { UnlockedBadgeModule } from './modules/unlocked-badges/unlocked-badge.modules';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { EmailModule } from './modules/emails/email.module';
     AddressModule,
     TransactionModule,
     EmailModule,
+    UnlockedBadgeModule,
   ],
   providers: [],
 })
