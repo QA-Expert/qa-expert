@@ -182,6 +182,7 @@ export type CreditCard = {
 };
 
 export type EmailInput = {
+  from: Scalars['String']['input'];
   subject: Scalars['String']['input'];
   text: Scalars['String']['input'];
 };

@@ -5,6 +5,10 @@ import { IsNotEmpty } from 'class-validator';
 export class EmailInput {
   @IsNotEmpty()
   @Field(() => String)
+  from: string;
+
+  @IsNotEmpty()
+  @Field(() => String)
   subject: string;
 
   @IsNotEmpty()
