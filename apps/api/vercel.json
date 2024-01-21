@@ -1,5 +1,4 @@
 {
-  "framework": "nestjs",
   "buildCommand": "yarn build",
   "devCommand": "yarn dev",
   "outputDirectory": "dist",
