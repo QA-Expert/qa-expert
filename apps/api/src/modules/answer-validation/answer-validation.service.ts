@@ -73,7 +73,10 @@ export class AnswerValidationService {
       quizPageInput.questionType === QuestionType.MULTIPLE_CHOICE ||
       quizPageInput.questionType === QuestionType.SINGLE_CHOICE
     ) {
-      return Boolean(_.difference(actualAnswers!, expectedAnswers!).length);
+      return (
+        Array.isArray(expectedAnswers) &&
+        Boolean(_.difference(actualAnswers, expectedAnswers).length)
+      );
     }
   }
 }
