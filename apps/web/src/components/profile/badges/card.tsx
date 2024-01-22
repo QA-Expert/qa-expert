@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
 import ShareIcon from '@mui/icons-material/Share';
 import { useState } from 'react';
-import { ShareMenu } from './share-menu';
+import { DropdownMenu } from '@/components/dropdown-menu/dropdown-menu';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
 
 type Badge = GetAllAndUnlockedBadgesQuery['badges'][number];
@@ -35,6 +35,21 @@ export const BadgeCard = ({
   const handleCloseShareMenu = () => {
     setAnchorElShareButton(null);
   };
+
+  const shareMenuItems = [
+    {
+      name: 'LinkedIn',
+      handleClick: () => {
+        console.log('create post on linkedIn');
+      },
+    },
+    {
+      name: 'Facebook',
+      handleClick: () => {
+        console.log('create post on facebook');
+      },
+    },
+  ];
 
   return (
     <>
@@ -114,7 +129,8 @@ export const BadgeCard = ({
         )}
       </Card>
 
-      <ShareMenu
+      <DropdownMenu
+        menuItems={shareMenuItems}
         ancherEl={anchorElShareButton}
         onClose={handleCloseShareMenu}
       />

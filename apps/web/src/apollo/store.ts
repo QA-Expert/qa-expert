@@ -9,8 +9,22 @@ export interface Toast {
 }
 
 export const isAuthenticated = makeVar(false);
+
+/**
+ * @description This var is used to share quiz data object in Test App section
+ */
 export const quizPageData = makeVar<QuizPageData | undefined>(undefined);
+
+/**
+ * @description This var is used to share response object in Test App section
+ */
 export const restApiQuestionResponse = makeVar<
   AnswerValidationRestApiOutput | undefined
 >(undefined);
+
 export const toastErrors = makeVar<Toast[]>([]);
+
+/**
+ * @description This var is used to store course id to be able to use it to highlight course in gallery
+ */
+export const selectedCourseId = makeVar<string | undefined>(undefined);

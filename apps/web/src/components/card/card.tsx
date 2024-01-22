@@ -13,20 +13,26 @@ import { CardImage } from './card-image';
 import { CardAccordion } from './card-accordion';
 import { CardActions } from './card-actions';
 import { getSelectedStyles } from 'utils/utils';
-import { useParams } from 'next/navigation';
 import { CourseProps } from 'app/courses/page';
 import { useReactiveVar } from '@apollo/client';
-import { isAuthenticated } from 'apollo/store';
+import { isAuthenticated, selectedCourseId } from 'apollo/store';
 import { GetCourseQuery } from '__generated__/graphql';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 export function CardContainer(props: CourseProps) {
   const theme = useTheme();
-  const params = useParams();
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
+  const selectedId = useReactiveVar(selectedCourseId);
+  const [selectedStyles, setSelectedStyles] =
+    useState<ReturnType<typeof getSelectedStyles>>();
 
-  const isSelected = params.id?.includes(props._id);
-  const selectedStyles = isSelected ? getSelectedStyles(theme) : undefined;
+  useEffect(() => {
+    if (props._id === selectedId) {
+      setSelectedStyles(getSelectedStyles(theme));
+    } else {
+      setSelectedStyles(undefined);
+    }
+  }, [props._id, theme, selectedId]);
 
   return (
     <Card
@@ -86,7 +92,7 @@ export function CardContainer(props: CourseProps) {
         <CourseMetrics pages={props.pages} />
       </Row>
 
-      <CardActions />
+      <CardActions courseId={props._id} />
 
       {isUserAuthenticated && 'progress' in props && (
         /* Since user is authenticated we know that it is course with all props that is why it is safe to do type cast */

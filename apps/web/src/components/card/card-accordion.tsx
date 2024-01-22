@@ -16,6 +16,7 @@ import { CourseProgressState } from '__generated__/graphql';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@/components/box/box';
 import { CourseProps } from 'app/courses/page';
+import { selectedCourseId } from 'apollo/store';
 
 type Props = {
   _id: CourseProps['_id'];
@@ -97,7 +98,11 @@ export function CardAccordion({
             </Typography>
 
             {recommendedCourses.map((course) => (
-              <Link key={course._id} href={`#course-${course._id}`}>
+              <Link
+                key={course._id}
+                href={`#course-${course._id}`}
+                onClick={() => selectedCourseId(course._id)}
+              >
                 <ListItem
                   sx={{
                     height: '2.5rem',

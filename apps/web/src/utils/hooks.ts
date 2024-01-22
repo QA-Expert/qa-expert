@@ -2,7 +2,8 @@
 
 import { RefObject, useEffect, useState } from 'react';
 import { debounce } from 'lodash';
-import { Toast, toastErrors } from 'apollo/store';
+import { Toast, selectedCourseId, toastErrors } from 'apollo/store';
+import { getSelectedCourseId } from './url';
 
 export const useError = (messages: (string | undefined)[]) => {
   const setToasts = toastErrors;
@@ -35,12 +36,24 @@ export const useWidth = (ref: RefObject<HTMLElement>) => {
       }
     }, 300);
 
-    window.addEventListener('resize', handleWindowResize);
+    global.window.addEventListener('resize', handleWindowResize);
 
     return () => {
-      window.removeEventListener('resize', handleWindowResize);
+      global.window.removeEventListener('resize', handleWindowResize);
     };
   }, [ref]);
 
   return width;
+};
+
+export const useSelectedCourseId = () => {
+  useEffect(() => {
+    const hash = global.window?.location?.hash;
+
+    if (hash) {
+      const idFromHash = getSelectedCourseId(hash);
+
+      selectedCourseId(idFromHash);
+    }
+  }, []);
 };

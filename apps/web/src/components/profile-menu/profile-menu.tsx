@@ -6,8 +6,6 @@ import { LOGOUT } from 'graphql/mutations/mutations';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
@@ -19,6 +17,7 @@ import { isAuthenticated } from 'apollo/store';
 import { getUsername, stringAvatar } from 'utils/utils';
 import { matchesPathname } from 'utils/url';
 import { PUBLIC_ROUTES } from 'constants/constants';
+import { DropdownMenu } from '../dropdown-menu/dropdown-menu';
 
 export const ProfileMenu = () => {
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
@@ -90,21 +89,10 @@ export const ProfileMenu = () => {
         </IconButton>
       </Tooltip>
 
-      <Menu
-        sx={{ mt: '2.5rem' }}
-        id="menu-appbar"
-        anchorEl={anchorElUser}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        open={Boolean(anchorElUser)}
+      <DropdownMenu
+        menuItems={menuItems}
         onClose={handleCloseUserMenu}
+        ancherEl={anchorElUser}
       >
         {user?.firstName && (
           <Typography
@@ -113,17 +101,8 @@ export const ProfileMenu = () => {
             fontWeight="bold"
           >{`${user?.firstName} ${user?.lastName}`}</Typography>
         )}
-
         {user?.firstName && <Divider />}
-
-        {menuItems.map((item, i) => (
-          <MenuItem key={i} onClick={item.handleClick}>
-            <Typography width={'100%'} textAlign="center">
-              {item.name}
-            </Typography>
-          </MenuItem>
-        ))}
-      </Menu>
+      </DropdownMenu>
     </Box>
   );
 };

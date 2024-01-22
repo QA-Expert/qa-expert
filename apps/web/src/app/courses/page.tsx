@@ -15,6 +15,7 @@ import { Row } from '@/components/row/row';
 import { isAuthenticated } from 'apollo/store';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useReactiveVar } from '@apollo/client';
+import { useSelectedCourseId } from 'utils/hooks';
 
 export type LoggedInUserCourses = GetAllCoursesQuery['courses'][number];
 
@@ -44,6 +45,8 @@ function CoursesPage() {
       'progress' in course &&
       course.progress.state === CourseProgressState.Pass,
   );
+
+  useSelectedCourseId();
 
   return (
     <>
