@@ -11,15 +11,5 @@
       "dest": "src/main.ts",
       "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "https://qa-expert.vercel.app/api"
-    },
-    {
-      "source": "/:match*",
-      "destination": "https://qa-expert.vercel.app/api/:match*"
-    }
   ]
 }
