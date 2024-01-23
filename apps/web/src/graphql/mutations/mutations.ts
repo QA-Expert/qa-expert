@@ -140,3 +140,11 @@ export const SEND_COMMUNICATION = gql(/* GraphQL */ `
     sendCommunication(data: $data)
   }
 `);
+
+export const LIKE_COURSE = gql(/* GraphQL */ `
+  mutation LikeCourse($courseId: String!) {
+    likeCourse(courseId: $courseId) {
+      _id
+    }
+  }
+`);

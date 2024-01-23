@@ -1,18 +1,55 @@
 import ButtonGroup from '@mui/material/ButtonGroup';
 import MuiCardActions from '@mui/material/CardActions';
-import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
-import { ShareIcon } from '@/components/icons/share';
 import { useState } from 'react';
-import { DropdownMenu } from '../dropdown-menu/dropdown-menu';
+import { DropdownMenu } from '@/components/dropdown-menu/dropdown-menu';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { useMutation, useReactiveVar } from '@apollo/client';
+import { LIKE_COURSE } from 'graphql/mutations/mutations';
+import { isAuthenticated } from 'apollo/store';
+import { GET_ALL_COURSES, GET_COURSE } from 'graphql/queries/queries';
+import { useError } from 'utils/hooks';
+import ShareIcon from '@mui/icons-material/Share';
+import { Row } from '@/components/row/row';
+import Tooltip from '@mui/material/Tooltip/Tooltip';
+import Typography from '@mui/material/Typography/Typography';
 
-export function CardActions({ courseId }: { courseId: string }) {
-  const theme = useTheme();
+type Props = {
+  courseId: string;
+  isLiked?: boolean;
+  likes: number;
+};
+
+export function CardActions({ courseId, isLiked, likes }: Props) {
+  const isUserAuthenticated = useReactiveVar(isAuthenticated);
+  const [likeCourse, { error, loading }] = useMutation(LIKE_COURSE, {
+    refetchQueries: [
+      {
+        query: GET_COURSE,
+        variables: { _id: courseId },
+      },
+      {
+        query: GET_ALL_COURSES,
+      },
+    ],
+  });
   const [anchorElShareButton, setAnchorElShareButton] =
     useState<null | HTMLElement>(null);
 
-  const handleOpenShareMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpenShareMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
     setAnchorElShareButton(event.currentTarget);
+  };
+
+  const handleOnLikeClick = async (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+
+    await likeCourse({
+      variables: {
+        courseId,
+      },
+    });
   };
 
   const handleCloseShareMenu = () => {
@@ -30,6 +67,8 @@ export function CardActions({ courseId }: { courseId: string }) {
     },
   ];
 
+  useError([error?.message]);
+
   return (
     <>
       <MuiCardActions
@@ -44,20 +83,42 @@ export function CardActions({ courseId }: { courseId: string }) {
       >
         <ButtonGroup
           aria-label="course card actions button group"
-          sx={{ flex: '1' }}
+          sx={{
+            flex: '1',
+            justifyContent: 'start',
+            alignItems: 'center',
+            gap: '1rem',
+          }}
         >
+          <Row sx={{ width: 'auto', gap: '0.125rem' }}>
+            <IconButton
+              disabled={!isUserAuthenticated || loading || isLiked}
+              aria-label="like the course"
+              onClick={handleOnLikeClick}
+            >
+              {isLiked ? (
+                <FavoriteIcon
+                  aria-label="liked icon"
+                  sx={{ fontSize: '1.5rem', color: 'success.main' }}
+                />
+              ) : (
+                <FavoriteBorderOutlinedIcon
+                  aria-label="not liked yet icon"
+                  sx={{ fontSize: '1.5rem' }}
+                />
+              )}
+            </IconButton>
+
+            <Tooltip title="Number of likes">
+              <Typography sx={{ color: 'secondary.main' }}>{likes}</Typography>
+            </Tooltip>
+          </Row>
+
           <IconButton
-            aria-label="share"
-            onClick={async (e) => {
-              e.preventDefault();
-              handleOpenShareMenu(e);
-            }}
+            aria-label="share the course"
+            onClick={handleOpenShareMenuClick}
           >
-            <ShareIcon
-              width="24"
-              height="24"
-              color={theme.palette.secondary.main}
-            />
+            <ShareIcon sx={{ fontSize: '1.5rem' }} />
           </IconButton>
         </ButtonGroup>
       </MuiCardActions>

@@ -2,7 +2,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { GetAllAndUnlockedBadgesQuery } from '__generated__/graphql';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
@@ -10,8 +9,9 @@ import ShareIcon from '@mui/icons-material/Share';
 import { useState } from 'react';
 import { DropdownMenu } from '@/components/dropdown-menu/dropdown-menu';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
+import { GetAllAndClaimedBadgesQuery } from '__generated__/graphql';
 
-type Badge = GetAllAndUnlockedBadgesQuery['badges'][number];
+type Badge = GetAllAndClaimedBadgesQuery['badges'][number];
 
 interface Props extends Badge {
   isEarned: boolean;

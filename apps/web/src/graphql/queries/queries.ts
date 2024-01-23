@@ -8,6 +8,8 @@ export const GET_ALL_COURSES = gql(/* GraphQL */ `
       type
       level
       description
+      likes
+      isLiked
       pages {
         _id
         type
@@ -42,6 +44,7 @@ export const GET_ALL_COURSES_PUBLIC = gql(/* GraphQL */ `
       type
       level
       description
+      likes
       pages {
         _id
         type
@@ -64,6 +67,8 @@ export const GET_COURSE = gql(/* GraphQL */ `
       type
       level
       description
+      likes
+      isLiked
       progress {
         pagesLeftBeforeFinish
         pass
@@ -123,9 +128,9 @@ export const GET_USER = gql(/* GraphQL */ `
   }
 `);
 
-export const GET_UNLOCKED_BADGES = gql(/* GraphQL */ `
-  query GetUnlockedBadges {
-    unlockedBadges {
+export const GET_CLAIMED_BADGES = gql(/* GraphQL */ `
+  query GetClaimedBadges {
+    claimedBadges {
       _id
       badge
       user
@@ -134,8 +139,8 @@ export const GET_UNLOCKED_BADGES = gql(/* GraphQL */ `
   }
 `);
 
-export const GET_ALL_AND_UNLOCKED_BADGES = gql(/* GraphQL */ `
-  query GetAllAndUnlockedBadges {
+export const GET_ALL_AND_CLAIMED_BADGES = gql(/* GraphQL */ `
+  query GetAllAndClaimedBadges {
     badges {
       _id
       title
@@ -147,7 +152,7 @@ export const GET_ALL_AND_UNLOCKED_BADGES = gql(/* GraphQL */ `
         title
       }
     }
-    unlockedBadges {
+    claimedBadges {
       _id
       badge
       createdAt

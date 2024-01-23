@@ -21,7 +21,13 @@ export type LoggedInUserCourses = GetAllCoursesQuery['courses'][number];
 
 export type PublicCourses = Pick<
   GetAllCoursesPublicQuery['coursesPublic'][number],
-  '_id' | 'title' | 'description' | 'pages' | 'recommendedCourses' | 'level'
+  | '_id'
+  | 'title'
+  | 'description'
+  | 'pages'
+  | 'recommendedCourses'
+  | 'level'
+  | 'likes'
 >;
 
 export type CourseProps = LoggedInUserCourses | PublicCourses;

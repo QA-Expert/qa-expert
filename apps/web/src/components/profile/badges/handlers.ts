@@ -1,8 +1,8 @@
-import { GetAllAndUnlockedBadgesQuery } from '__generated__/graphql';
+import { GetAllAndClaimedBadgesQuery } from '__generated__/graphql';
 
 export const getClaimedBadge = (
-  unlockedBadges: GetAllAndUnlockedBadgesQuery['unlockedBadges'],
+  claimedBadges: GetAllAndClaimedBadgesQuery['claimedBadges'],
   badgeId: string,
 ) => {
-  return unlockedBadges?.find((ub) => ub.badge === badgeId);
+  return claimedBadges?.find((ub) => ub.badge === badgeId);
 };

@@ -35,7 +35,11 @@ export function NavigationCard(course: GetCourseQuery['course']) {
         </CardImage>
       </Row>
 
-      <CardActions />
+      <CardActions
+        courseId={course._id}
+        likes={course.likes}
+        isLiked={course.isLiked}
+      />
 
       <ProgressBar {...course} />
 

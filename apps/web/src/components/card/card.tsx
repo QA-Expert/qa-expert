@@ -92,7 +92,11 @@ export function CardContainer(props: CourseProps) {
         <CourseMetrics pages={props.pages} />
       </Row>
 
-      <CardActions courseId={props._id} />
+      <CardActions
+        courseId={props._id}
+        likes={props.likes}
+        isLiked={'isLiked' in props ? props.isLiked : undefined}
+      />
 
       {isUserAuthenticated && 'progress' in props && (
         /* Since user is authenticated we know that it is course with all props that is why it is safe to do type cast */

@@ -42,18 +42,20 @@ const documents = {
     types.SendBugReportDocument,
   '\n  mutation SendCommunication($data: EmailInput!) {\n    sendCommunication(data: $data)\n  }\n':
     types.SendCommunicationDocument,
-  '\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      level\n      description\n      pages {\n        _id\n        type\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n      tags\n      progress {\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n':
+  '\n  mutation LikeCourse($courseId: String!) {\n    likeCourse(courseId: $courseId) {\n      _id\n    }\n  }\n':
+    types.LikeCourseDocument,
+  '\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      isLiked\n      pages {\n        _id\n        type\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n      tags\n      progress {\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n':
     types.GetAllCoursesDocument,
-  '\n  query GetAllCoursesPublic {\n    coursesPublic {\n      _id\n      title\n      type\n      level\n      description\n      pages {\n        _id\n        type\n      }\n      tags\n      recommendedCourses {\n        _id\n        title\n        level\n      }\n    }\n  }\n':
+  '\n  query GetAllCoursesPublic {\n    coursesPublic {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      pages {\n        _id\n        type\n      }\n      tags\n      recommendedCourses {\n        _id\n        title\n        level\n      }\n    }\n  }\n':
     types.GetAllCoursesPublicDocument,
-  '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          type\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n          data\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n':
+  '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      isLiked\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          type\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n          data\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n':
     types.GetCourseDocument,
   '\n  query GetUser {\n    user {\n      _id\n      email\n      firstName\n      lastName\n      roles\n    }\n  }\n':
     types.GetUserDocument,
-  '\n  query GetUnlockedBadges {\n    unlockedBadges {\n      _id\n      badge\n      user\n      createdAt\n    }\n  }\n':
-    types.GetUnlockedBadgesDocument,
-  '\n  query GetAllAndUnlockedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n    unlockedBadges {\n      _id\n      badge\n      createdAt\n    }\n  }\n':
-    types.GetAllAndUnlockedBadgesDocument,
+  '\n  query GetClaimedBadges {\n    claimedBadges {\n      _id\n      badge\n      user\n      createdAt\n    }\n  }\n':
+    types.GetClaimedBadgesDocument,
+  '\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge\n      createdAt\n    }\n  }\n':
+    types.GetAllAndClaimedBadgesDocument,
   '\n  query GetSubmittedUserProgressesUser {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n        level\n        progress {\n          state\n          pass\n          fail\n        }\n      }\n    }\n  }\n':
     types.GetSubmittedUserProgressesUserDocument,
   '\n  query GetCreditCard {\n    creditCard {\n      _id\n      cardToken\n      lastFour\n      expiryMonth\n      expiryYear\n      cardType\n      user\n      address {\n        phoneNumber\n        streetLine1\n        streetLine2\n        city\n        country\n        zip\n      }\n    }\n  }\n':
@@ -172,20 +174,26 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      level\n      description\n      pages {\n        _id\n        type\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n      tags\n      progress {\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n',
-): (typeof documents)['\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      level\n      description\n      pages {\n        _id\n        type\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n      tags\n      progress {\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n'];
+  source: '\n  mutation LikeCourse($courseId: String!) {\n    likeCourse(courseId: $courseId) {\n      _id\n    }\n  }\n',
+): (typeof documents)['\n  mutation LikeCourse($courseId: String!) {\n    likeCourse(courseId: $courseId) {\n      _id\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetAllCoursesPublic {\n    coursesPublic {\n      _id\n      title\n      type\n      level\n      description\n      pages {\n        _id\n        type\n      }\n      tags\n      recommendedCourses {\n        _id\n        title\n        level\n      }\n    }\n  }\n',
-): (typeof documents)['\n  query GetAllCoursesPublic {\n    coursesPublic {\n      _id\n      title\n      type\n      level\n      description\n      pages {\n        _id\n        type\n      }\n      tags\n      recommendedCourses {\n        _id\n        title\n        level\n      }\n    }\n  }\n'];
+  source: '\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      isLiked\n      pages {\n        _id\n        type\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n      tags\n      progress {\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query GetAllCourses {\n    courses {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      isLiked\n      pages {\n        _id\n        type\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n      tags\n      progress {\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          type\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n          data\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n',
-): (typeof documents)['\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          type\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n          data\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n'];
+  source: '\n  query GetAllCoursesPublic {\n    coursesPublic {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      pages {\n        _id\n        type\n      }\n      tags\n      recommendedCourses {\n        _id\n        title\n        level\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query GetAllCoursesPublic {\n    coursesPublic {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      pages {\n        _id\n        type\n      }\n      tags\n      recommendedCourses {\n        _id\n        title\n        level\n      }\n    }\n  }\n'];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      isLiked\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          type\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n          data\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      isLiked\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          type\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n          data\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -196,14 +204,14 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetUnlockedBadges {\n    unlockedBadges {\n      _id\n      badge\n      user\n      createdAt\n    }\n  }\n',
-): (typeof documents)['\n  query GetUnlockedBadges {\n    unlockedBadges {\n      _id\n      badge\n      user\n      createdAt\n    }\n  }\n'];
+  source: '\n  query GetClaimedBadges {\n    claimedBadges {\n      _id\n      badge\n      user\n      createdAt\n    }\n  }\n',
+): (typeof documents)['\n  query GetClaimedBadges {\n    claimedBadges {\n      _id\n      badge\n      user\n      createdAt\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetAllAndUnlockedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n    unlockedBadges {\n      _id\n      badge\n      createdAt\n    }\n  }\n',
-): (typeof documents)['\n  query GetAllAndUnlockedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n    unlockedBadges {\n      _id\n      badge\n      createdAt\n    }\n  }\n'];
+  source: '\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge\n      createdAt\n    }\n  }\n',
+): (typeof documents)['\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge\n      createdAt\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -20,7 +20,8 @@ import { CreditCardModule } from './modules/billing/credit-card/credit-card.modu
 import { TransactionModule } from './modules/billing/transactions/transaction.modules';
 import { AnswerValidationModule } from './modules/answer-validation/answer-validation.module';
 import { EmailModule } from './modules/emails/email.module';
-import { UnlockedBadgeModule } from './modules/unlocked-badges/unlocked-badge.modules';
+import { ClaimedBadgeModule } from './modules/claimed-badges/claimed-badge.modules';
+import { CourseLikeModule } from './modules/course-likes/course-likes.modules';
 
 @Module({
   imports: [
@@ -74,7 +75,8 @@ import { UnlockedBadgeModule } from './modules/unlocked-badges/unlocked-badge.mo
     AddressModule,
     TransactionModule,
     EmailModule,
-    UnlockedBadgeModule,
+    ClaimedBadgeModule,
+    CourseLikeModule,
   ],
   providers: [],
 })

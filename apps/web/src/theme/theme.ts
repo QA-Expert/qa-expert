@@ -189,6 +189,7 @@ export const dark: ThemeOptions = merge(base, {
     },
     error: {
       main: '#E6435E',
+      light: '#FA876B',
     },
     success: {
       main: '#38D3D3',

@@ -3,16 +3,16 @@
 import { BadgeCard } from '@/components/profile/badges/card';
 import { Row } from '@/components/row/row';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import { GET_ALL_AND_UNLOCKED_BADGES } from 'graphql/queries/queries';
+import { GET_ALL_AND_CLAIMED_BADGES } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
 import { getClaimedBadge } from './handlers';
 
 export function Badges() {
   const { data, error: badgesFetchError } = useSuspenseQuery(
-    GET_ALL_AND_UNLOCKED_BADGES,
+    GET_ALL_AND_CLAIMED_BADGES,
   );
 
-  const { unlockedBadges, badges } = data;
+  const { claimedBadges, badges } = data;
 
   useError([badgesFetchError?.message]);
 
@@ -26,7 +26,7 @@ export function Badges() {
       }}
     >
       {badges?.map((badge, i) => {
-        const claimedBadge = getClaimedBadge(unlockedBadges, badge._id);
+        const claimedBadge = getClaimedBadge(claimedBadges, badge._id);
 
         return (
           <BadgeCard

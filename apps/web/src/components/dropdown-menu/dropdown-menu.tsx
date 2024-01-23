@@ -6,7 +6,10 @@ import { ReactNode } from 'react';
 type Props = {
   ancherEl: HTMLElement | null;
   onClose: () => void;
-  menuItems: { name: string; handleClick: () => void }[];
+  menuItems: {
+    name: string;
+    handleClick: () => void;
+  }[];
   children?: ReactNode;
 };
 

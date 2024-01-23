@@ -9,7 +9,7 @@ import {
 import {
   GET_ALL_COURSES,
   GET_COURSE,
-  GET_UNLOCKED_BADGES,
+  GET_CLAIMED_BADGES,
 } from 'graphql/queries/queries';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import Tooltip from '@mui/material/Tooltip';
@@ -24,12 +24,12 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { getClaimedBadge } from '../profile/badges/handlers';
 
 export const CourseStates = (course: GetCourseQuery['course']) => {
-  const { data } = useSuspenseQuery(GET_UNLOCKED_BADGES);
-  const unlockedBadges = data?.unlockedBadges;
+  const { data } = useSuspenseQuery(GET_CLAIMED_BADGES);
+  const claimedBadges = data?.claimedBadges;
   const [claimBadge, { error: badgeError }] = useMutation(CLAIM_BADGE, {
     refetchQueries: [
       {
-        query: GET_UNLOCKED_BADGES,
+        query: GET_CLAIMED_BADGES,
       },
     ],
   });
@@ -63,7 +63,7 @@ export const CourseStates = (course: GetCourseQuery['course']) => {
   const isInProgressCourse =
     course.progress.state === CourseProgressState.InProgress;
   const isBadgeClaimed = course.badge
-    ? Boolean(getClaimedBadge(unlockedBadges, course.badge._id))
+    ? Boolean(getClaimedBadge(claimedBadges, course.badge._id))
     : false;
 
   return (
