@@ -102,6 +102,15 @@ export type Badge = {
   title: Scalars['String']['output'];
 };
 
+export type ClaimedBadge = {
+  __typename?: 'ClaimedBadge';
+  _id: Scalars['String']['output'];
+  badge: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  user: Scalars['String']['output'];
+};
+
 export type Course = {
   __typename?: 'Course';
   _id: Scalars['String']['output'];
@@ -111,8 +120,12 @@ export type Course = {
   description: Scalars['String']['output'];
   /** Icon url */
   icon: Scalars['String']['output'];
+  /** Flag that indicates if course was already liked by user */
+  isLiked: Scalars['Boolean']['output'];
   /** Defines level of skill that user gains after finishing the course */
   level: CourseLevel;
+  /** Number of likes people gave to the course */
+  likes: Scalars['Float']['output'];
   /** Pages included in course */
   pages: Array<Page>;
   /** Course progress */
@@ -133,6 +146,13 @@ export enum CourseLevel {
   Expert = 'EXPERT',
   Intermediate = 'INTERMEDIATE',
 }
+
+export type CourseLike = {
+  __typename?: 'CourseLike';
+  _id: Scalars['String']['output'];
+  course: Scalars['String']['output'];
+  user: Scalars['String']['output'];
+};
 
 export type CoursePageContentInput = {
   content: Scalars['String']['input'];
@@ -196,13 +216,14 @@ export type KeyValuePair = {
 export type Mutation = {
   __typename?: 'Mutation';
   addPage: Course;
-  claimBadge: UnlockedBadge;
+  claimBadge: ClaimedBadge;
   createCoursePage: Page;
   createCoursePageProgress: PageProgress;
   createQuizPage: Page;
   createQuizPageProgress: PageProgress;
   deleteCourseProgresses: Scalars['Boolean']['output'];
   forgotPassword: Scalars['Boolean']['output'];
+  likeCourse: CourseLike;
   login: UserOutputLogin;
   logout: Scalars['Boolean']['output'];
   register: UserOutputLogin;
@@ -246,6 +267,10 @@ export type MutationDeleteCourseProgressesArgs = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String']['input'];
+};
+
+export type MutationLikeCourseArgs = {
+  courseId: Scalars['String']['input'];
 };
 
 export type MutationLoginArgs = {
@@ -326,13 +351,13 @@ export type Query = {
   __typename?: 'Query';
   activities: Array<Activity>;
   badges: Array<Badge>;
+  claimedBadges: Array<ClaimedBadge>;
   course: Course;
   courses: Array<Course>;
   coursesPublic: Array<Course>;
   creditCard?: Maybe<CreditCard>;
   submittedProgresses: Array<SubmittedProgress>;
   transactions: Array<Transaction>;
-  unlockedBadges: Array<UnlockedBadge>;
   user: User;
 };
 
@@ -433,15 +458,6 @@ export type Transaction = {
   currency: Scalars['String']['output'];
   /** External transaction. Refer to transaction stored on side of Payment Processes like Stripe */
   externalId: Scalars['String']['output'];
-  updatedAt: Scalars['DateTime']['output'];
-  user: Scalars['String']['output'];
-};
-
-export type UnlockedBadge = {
-  __typename?: 'UnlockedBadge';
-  _id: Scalars['String']['output'];
-  badge: Scalars['String']['output'];
-  createdAt: Scalars['DateTime']['output'];
   updatedAt: Scalars['DateTime']['output'];
   user: Scalars['String']['output'];
 };
@@ -606,7 +622,7 @@ export type ClaimBadgeMutationVariables = Exact<{
 export type ClaimBadgeMutation = {
   __typename?: 'Mutation';
   claimBadge: {
-    __typename?: 'UnlockedBadge';
+    __typename?: 'ClaimedBadge';
     _id: string;
     badge: string;
     createdAt: string;
@@ -659,6 +675,15 @@ export type SendCommunicationMutation = {
   sendCommunication: string;
 };
 
+export type LikeCourseMutationVariables = Exact<{
+  courseId: Scalars['String']['input'];
+}>;
+
+export type LikeCourseMutation = {
+  __typename?: 'Mutation';
+  likeCourse: { __typename?: 'CourseLike'; _id: string };
+};
+
 export type GetAllCoursesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllCoursesQuery = {
@@ -670,6 +695,8 @@ export type GetAllCoursesQuery = {
     type: CourseType;
     level: CourseLevel;
     description: string;
+    likes: number;
+    isLiked: boolean;
     tags: Array<Tag>;
     pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
     recommendedCourses: Array<{
@@ -704,6 +731,7 @@ export type GetAllCoursesPublicQuery = {
     type: CourseType;
     level: CourseLevel;
     description: string;
+    likes: number;
     tags: Array<Tag>;
     pages: Array<{ __typename?: 'Page'; _id: string; type: CourseType }>;
     recommendedCourses: Array<{
@@ -728,6 +756,8 @@ export type GetCourseQuery = {
     type: CourseType;
     level: CourseLevel;
     description: string;
+    likes: number;
+    isLiked: boolean;
     progress: {
       __typename?: 'TotalCourseProgress';
       pagesLeftBeforeFinish?: number | null;
@@ -786,12 +816,12 @@ export type GetUserQuery = {
   };
 };
 
-export type GetUnlockedBadgesQueryVariables = Exact<{ [key: string]: never }>;
+export type GetClaimedBadgesQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetUnlockedBadgesQuery = {
+export type GetClaimedBadgesQuery = {
   __typename?: 'Query';
-  unlockedBadges: Array<{
-    __typename?: 'UnlockedBadge';
+  claimedBadges: Array<{
+    __typename?: 'ClaimedBadge';
     _id: string;
     badge: string;
     user: string;
@@ -799,11 +829,11 @@ export type GetUnlockedBadgesQuery = {
   }>;
 };
 
-export type GetAllAndUnlockedBadgesQueryVariables = Exact<{
+export type GetAllAndClaimedBadgesQueryVariables = Exact<{
   [key: string]: never;
 }>;
 
-export type GetAllAndUnlockedBadgesQuery = {
+export type GetAllAndClaimedBadgesQuery = {
   __typename?: 'Query';
   badges: Array<{
     __typename?: 'Badge';
@@ -814,8 +844,8 @@ export type GetAllAndUnlockedBadgesQuery = {
     link: string;
     course?: { __typename?: 'Course'; _id: string; title: string } | null;
   }>;
-  unlockedBadges: Array<{
-    __typename?: 'UnlockedBadge';
+  claimedBadges: Array<{
+    __typename?: 'ClaimedBadge';
     _id: string;
     badge: string;
     createdAt: string;
@@ -1871,6 +1901,57 @@ export const SendCommunicationDocument = {
   SendCommunicationMutation,
   SendCommunicationMutationVariables
 >;
+export const LikeCourseDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'LikeCourse' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'courseId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'likeCourse' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'courseId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'courseId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<LikeCourseMutation, LikeCourseMutationVariables>;
 export const GetAllCoursesDocument = {
   kind: 'Document',
   definitions: [
@@ -1892,6 +1973,8 @@ export const GetAllCoursesDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'level' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'likes' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isLiked' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'pages' },
@@ -1984,6 +2067,7 @@ export const GetAllCoursesPublicDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'level' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'likes' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'pages' },
@@ -2063,6 +2147,8 @@ export const GetCourseDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'level' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'likes' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isLiked' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'progress' },
@@ -2251,19 +2337,19 @@ export const GetUserDocument = {
     },
   ],
 } as unknown as DocumentNode<GetUserQuery, GetUserQueryVariables>;
-export const GetUnlockedBadgesDocument = {
+export const GetClaimedBadgesDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'GetUnlockedBadges' },
+      name: { kind: 'Name', value: 'GetClaimedBadges' },
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'unlockedBadges' },
+            name: { kind: 'Name', value: 'claimedBadges' },
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
@@ -2279,16 +2365,16 @@ export const GetUnlockedBadgesDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  GetUnlockedBadgesQuery,
-  GetUnlockedBadgesQueryVariables
+  GetClaimedBadgesQuery,
+  GetClaimedBadgesQueryVariables
 >;
-export const GetAllAndUnlockedBadgesDocument = {
+export const GetAllAndClaimedBadgesDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'GetAllAndUnlockedBadges' },
+      name: { kind: 'Name', value: 'GetAllAndClaimedBadges' },
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
@@ -2319,7 +2405,7 @@ export const GetAllAndUnlockedBadgesDocument = {
           },
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'unlockedBadges' },
+            name: { kind: 'Name', value: 'claimedBadges' },
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
@@ -2334,8 +2420,8 @@ export const GetAllAndUnlockedBadgesDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  GetAllAndUnlockedBadgesQuery,
-  GetAllAndUnlockedBadgesQueryVariables
+  GetAllAndClaimedBadgesQuery,
+  GetAllAndClaimedBadgesQueryVariables
 >;
 export const GetSubmittedUserProgressesUserDocument = {
   kind: 'Document',

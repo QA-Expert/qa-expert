@@ -7,12 +7,14 @@ import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BadgeModule } from '../badges/badge.module';
 import { CourseProgressModule } from '../course-progresses/course-progress.module';
+import { CourseLikeModule } from '../course-likes/course-likes.modules';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Course.name, schema: CourseSchema }]),
     UserModule,
     CourseProgressModule,
+    CourseLikeModule,
     BadgeModule,
   ],
   providers: [CourseService, CourseResolver, JwtService],

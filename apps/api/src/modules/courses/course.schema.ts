@@ -81,6 +81,16 @@ export class Course extends mongoose.Document {
   })
   progress: TotalCourseProgress;
 
+  @Field(() => Number, {
+    description: 'Number of likes people gave to the course',
+  })
+  likes: number;
+
+  @Field(() => Boolean, {
+    description: 'Flag that indicates if course was already liked by user',
+  })
+  isLiked: boolean;
+
   @Prop({ type: [{ type: ObjectId, ref: Course.name }], default: [] })
   @Field(() => [Course], {
     defaultValue: [],

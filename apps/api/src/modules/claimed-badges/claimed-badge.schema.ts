@@ -8,7 +8,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 @Schema({ timestamps: true })
 @ObjectType()
-export class UnlockedBadge extends mongoose.Document {
+export class ClaimedBadge extends mongoose.Document {
   @Field(() => String)
   _id: string;
 
@@ -39,4 +39,4 @@ export class UnlockedBadge extends mongoose.Document {
   updatedBy: User | mongoose.Types.ObjectId;
 }
 
-export const UnlockedBadgeSchema = SchemaFactory.createForClass(UnlockedBadge);
+export const ClaimedBadgeSchema = SchemaFactory.createForClass(ClaimedBadge);

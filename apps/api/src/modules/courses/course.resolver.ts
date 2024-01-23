@@ -17,12 +17,14 @@ import { CurrentUser } from '../users/user.decorator';
 import { Badge } from '../badges/badge.schema';
 import { CourseProgressService } from '../course-progresses/course-progress.service';
 import { TotalCourseProgress } from '../course-progresses/course-progress.schema';
+import { CourseLikeService } from '../course-likes/course-likes.service';
 
 @Resolver(() => Course)
 export class CourseResolver {
   constructor(
     private readonly service: CourseService,
     private readonly serviceCourseProgress: CourseProgressService,
+    private readonly serviceCourseLike: CourseLikeService,
   ) {}
 
   @UseGuards(GqlAuthGuard, RolesGuard)
@@ -50,6 +52,22 @@ export class CourseResolver {
     @Parent() course: Course,
   ): Promise<TotalCourseProgress> {
     return await this.serviceCourseProgress.findTotalProgressByCourseId(
+      course._id,
+      user._id,
+    );
+  }
+
+  @ResolveField('likes', () => Number)
+  public async likes(@Parent() course: Course): Promise<number> {
+    return await this.serviceCourseLike.getNumberOfLikeByCourseId(course._id);
+  }
+
+  @ResolveField('isLiked', () => Boolean)
+  public async isLiked(
+    @CurrentUser() user: User,
+    @Parent() course: Course,
+  ): Promise<boolean> {
+    return await this.serviceCourseLike.isCourseLikedByUser(
       course._id,
       user._id,
     );

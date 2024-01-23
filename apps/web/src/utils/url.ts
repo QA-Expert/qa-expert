@@ -41,3 +41,9 @@ export const matchesPathname = (
 
   return false;
 };
+
+export const getSelectedCourseId = (href: string | undefined) => {
+  const result = href?.match(/(?<=#course-).*/g);
+
+  return result?.length ? result[0] : undefined;
+};

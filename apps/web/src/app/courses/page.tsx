@@ -15,12 +15,19 @@ import { Row } from '@/components/row/row';
 import { isAuthenticated } from 'apollo/store';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useReactiveVar } from '@apollo/client';
+import { useSelectedCourseId } from 'utils/hooks';
 
 export type LoggedInUserCourses = GetAllCoursesQuery['courses'][number];
 
 export type PublicCourses = Pick<
   GetAllCoursesPublicQuery['coursesPublic'][number],
-  '_id' | 'title' | 'description' | 'pages' | 'recommendedCourses' | 'level'
+  | '_id'
+  | 'title'
+  | 'description'
+  | 'pages'
+  | 'recommendedCourses'
+  | 'level'
+  | 'likes'
 >;
 
 export type CourseProps = LoggedInUserCourses | PublicCourses;
@@ -44,6 +51,8 @@ function CoursesPage() {
       'progress' in course &&
       course.progress.state === CourseProgressState.Pass,
   );
+
+  useSelectedCourseId();
 
   return (
     <>

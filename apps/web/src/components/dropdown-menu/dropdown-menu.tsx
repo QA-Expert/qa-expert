@@ -1,32 +1,27 @@
-import Menu from '@mui/material/Menu/Menu';
+import MuiMenu from '@mui/material/Menu/Menu';
 import MenuItem from '@mui/material/MenuItem/MenuItem';
 import Typography from '@mui/material/Typography/Typography';
+import { ReactNode } from 'react';
 
 type Props = {
   ancherEl: HTMLElement | null;
   onClose: () => void;
+  menuItems: {
+    name: string;
+    handleClick: () => void;
+  }[];
+  children?: ReactNode;
 };
 
-export function ShareMenu({ ancherEl, onClose }: Props) {
-  const shareMenuItems = [
-    {
-      name: 'LinkedIn',
-      handleClick: () => {
-        console.log('create post on linkedIn');
-      },
-    },
-    {
-      name: 'Facebook',
-      handleClick: () => {
-        console.log('create post on facebook');
-      },
-    },
-  ];
-
+export function DropdownMenu({
+  ancherEl,
+  onClose,
+  menuItems,
+  children,
+}: Props) {
   return (
-    <Menu
+    <MuiMenu
       sx={{ mt: '2.5rem' }}
-      id="share-badge-menu"
       anchorEl={ancherEl}
       anchorOrigin={{
         vertical: 'top',
@@ -40,13 +35,15 @@ export function ShareMenu({ ancherEl, onClose }: Props) {
       open={Boolean(ancherEl)}
       onClose={onClose}
     >
-      {shareMenuItems.map((item, i) => (
+      {children ? children : null}
+
+      {menuItems.map((item, i) => (
         <MenuItem key={i} onClick={item.handleClick}>
           <Typography width={'100%'} textAlign="center">
             {item.name}
           </Typography>
         </MenuItem>
       ))}
-    </Menu>
+    </MuiMenu>
   );
 }
