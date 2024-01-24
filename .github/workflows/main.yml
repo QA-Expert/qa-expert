@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Set Node env vars
+        run: echo ${{vars.NEXT_PUBLIC_API_URL}} >> NEXT_PUBLIC_API_URL
+
       - name: Build
         run: yarn build
 
