@@ -48,8 +48,12 @@ const documents = {
     types.GetAllCoursesDocument,
   '\n  query GetAllCoursesPublic {\n    coursesPublic {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      pages {\n        _id\n        type\n      }\n      tags\n      recommendedCourses {\n        _id\n        title\n        level\n      }\n    }\n  }\n':
     types.GetAllCoursesPublicDocument,
+  '\n  query GetAllCoursesPublicMetaData {\n    coursesPublic {\n      _id\n      updatedAt\n      title\n      type\n      level\n      description\n    }\n  }\n':
+    types.GetAllCoursesPublicMetaDataDocument,
   '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      isLiked\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          type\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n          data\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n':
     types.GetCourseDocument,
+  '\n  query GetCoursePublicMetaData($_id: String!) {\n    coursePublic(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n    }\n  }\n':
+    types.GetCoursePublicMetaDataDocument,
   '\n  query GetUser {\n    user {\n      _id\n      email\n      firstName\n      lastName\n      roles\n    }\n  }\n':
     types.GetUserDocument,
   '\n  query GetClaimedBadges {\n    claimedBadges {\n      _id\n      badge\n      user\n      createdAt\n    }\n  }\n':
@@ -192,8 +196,20 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
+  source: '\n  query GetAllCoursesPublicMetaData {\n    coursesPublic {\n      _id\n      updatedAt\n      title\n      type\n      level\n      description\n    }\n  }\n',
+): (typeof documents)['\n  query GetAllCoursesPublicMetaData {\n    coursesPublic {\n      _id\n      updatedAt\n      title\n      type\n      level\n      description\n    }\n  }\n'];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
   source: '\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      isLiked\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          type\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n          data\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n',
 ): (typeof documents)['\n  query GetCourse($_id: String!) {\n    course(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n      likes\n      isLiked\n      progress {\n        pagesLeftBeforeFinish\n        pass\n        fail\n        state\n        updatedAt\n      }\n      badge {\n        _id\n      }\n      pages {\n        _id\n        title\n        type\n        description\n        content\n        question {\n          content\n          type\n          answers {\n            _id\n            content\n          }\n          options {\n            _id\n            content\n          }\n        }\n        progress {\n          _id\n          state\n          answers\n          data\n        }\n      }\n      recommendedCourses {\n        _id\n        title\n        level\n        progress {\n          state\n        }\n      }\n    }\n  }\n'];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetCoursePublicMetaData($_id: String!) {\n    coursePublic(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n    }\n  }\n',
+): (typeof documents)['\n  query GetCoursePublicMetaData($_id: String!) {\n    coursePublic(_id: $_id) {\n      _id\n      title\n      type\n      level\n      description\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

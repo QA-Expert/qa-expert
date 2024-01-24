@@ -37,6 +37,10 @@ export class CourseService {
       .exec();
   }
 
+  async findByIdPublic(id: string) {
+    return await this.courseModel.findById(id).exec();
+  }
+
   async findAll() {
     return await this.courseModel
       .find()

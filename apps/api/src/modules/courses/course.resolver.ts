@@ -34,6 +34,11 @@ export class CourseResolver {
     return await this.service.findById(_id);
   }
 
+  @Query(() => Course)
+  async coursePublic(@Args('_id') _id: string): Promise<Course | null> {
+    return await this.service.findByIdPublic(_id);
+  }
+
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
   @Query(() => [Course])

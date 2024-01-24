@@ -59,6 +59,19 @@ export const GET_ALL_COURSES_PUBLIC = gql(/* GraphQL */ `
   }
 `);
 
+export const GET_ALL_COURSES_PUBLIC_META_DATA = gql(/* GraphQL */ `
+  query GetAllCoursesPublicMetaData {
+    coursesPublic {
+      _id
+      updatedAt
+      title
+      type
+      level
+      description
+    }
+  }
+`);
+
 export const GET_COURSE = gql(/* GraphQL */ `
   query GetCourse($_id: String!) {
     course(_id: $_id) {
@@ -112,6 +125,18 @@ export const GET_COURSE = gql(/* GraphQL */ `
           state
         }
       }
+    }
+  }
+`);
+
+export const GET_COURSE_PUBLIC_META_DATA = gql(/* GraphQL */ `
+  query GetCoursePublicMetaData($_id: String!) {
+    coursePublic(_id: $_id) {
+      _id
+      title
+      type
+      level
+      description
     }
   }
 `);
