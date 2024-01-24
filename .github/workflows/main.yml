@@ -32,7 +32,7 @@ jobs:
         run: yarn install
 
       - name: Build
-        run: yarn build NEXT_PUBLIC_API_URL=${{vars.API_URL}}
+        run: yarn build
 
       - name: Lint
         run: yarn lint
