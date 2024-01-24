@@ -15,21 +15,41 @@ import { AuthGuard } from './AuthGuard';
  * @url https://nextjs.org/docs/app/building-your-application/optimizing/metadata#static-metadata
  */
 export const metadata: Metadata = {
+  metadataBase: new URL('https://qaexpert-7g2rd.ondigitalocean.app'),
   title: {
     template: '%s | QA Expert',
     default: 'QA Expert', // a default is required when creating a template
   },
   description: 'QA Expert platform. Learn new Role or improve your skills',
-  keywords: ['Quality Assurance', 'QA Engineer', 'Courses'],
+  keywords: [
+    'Quality Assurance',
+    'QA Engineer',
+    'Courses',
+    'IT',
+    'Software Testing',
+    'QA',
+    'testing',
+  ],
   authors: [
     { name: 'Andrei Surzhan', url: 'https://andrei-builds.software' },
     { name: 'Pavel Surzhan' },
   ],
   creator: 'Andrei Surzhan',
   applicationName: 'QA Expert',
-  //@TODO: add openGraph data
-  //@TODO: add robots data
-  //@TODO: add manifest data
+  manifest: '/manifest.json',
+  openGraph: {
+    title: 'QA Expert',
+    description: 'QA Expert platform. Learn new Role or improve your skills',
+    images: [
+      {
+        url: '/images/hero.png',
+      },
+    ],
+    type: 'website',
+    url: 'https://qaexpert-7g2rd.ondigitalocean.app',
+    siteName: 'QA Expert',
+  },
+  robots: 'index',
 };
 
 export default function RootLayout({

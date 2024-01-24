@@ -112,6 +112,10 @@ export class Course extends mongoose.Document {
   })
   badge: Badge;
 
+  @Prop()
+  @Field(() => Date, { defaultValue: new Date() })
+  updatedAt: Date;
+
   @Prop({
     type: ObjectId,
     ref: 'User',

@@ -32,6 +32,8 @@ jobs:
         run: yarn install
 
       - name: Build
+        env: 
+          NEXT_PUBLIC_API_URL: ${{vars.NEXT_PUBLIC_API_URL}}
         run: yarn build
 
       - name: Lint

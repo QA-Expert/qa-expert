@@ -137,6 +137,7 @@ export type Course = {
   /** Course title */
   title: Scalars['String']['output'];
   type: CourseType;
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 /** Defines the level of the course */
@@ -353,6 +354,7 @@ export type Query = {
   badges: Array<Badge>;
   claimedBadges: Array<ClaimedBadge>;
   course: Course;
+  coursePublic: Course;
   courses: Array<Course>;
   coursesPublic: Array<Course>;
   creditCard?: Maybe<CreditCard>;
@@ -362,6 +364,10 @@ export type Query = {
 };
 
 export type QueryCourseArgs = {
+  _id: Scalars['String']['input'];
+};
+
+export type QueryCoursePublicArgs = {
   _id: Scalars['String']['input'];
 };
 
@@ -743,6 +749,23 @@ export type GetAllCoursesPublicQuery = {
   }>;
 };
 
+export type GetAllCoursesPublicMetaDataQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetAllCoursesPublicMetaDataQuery = {
+  __typename?: 'Query';
+  coursesPublic: Array<{
+    __typename?: 'Course';
+    _id: string;
+    updatedAt: string;
+    title: string;
+    type: CourseType;
+    level: CourseLevel;
+    description: string;
+  }>;
+};
+
 export type GetCourseQueryVariables = Exact<{
   _id: Scalars['String']['input'];
 }>;
@@ -799,6 +822,22 @@ export type GetCourseQuery = {
         state: CourseProgressState;
       };
     }>;
+  };
+};
+
+export type GetCoursePublicMetaDataQueryVariables = Exact<{
+  _id: Scalars['String']['input'];
+}>;
+
+export type GetCoursePublicMetaDataQuery = {
+  __typename?: 'Query';
+  coursePublic: {
+    __typename?: 'Course';
+    _id: string;
+    title: string;
+    type: CourseType;
+    level: CourseLevel;
+    description: string;
   };
 };
 
@@ -2103,6 +2142,39 @@ export const GetAllCoursesPublicDocument = {
   GetAllCoursesPublicQuery,
   GetAllCoursesPublicQueryVariables
 >;
+export const GetAllCoursesPublicMetaDataDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetAllCoursesPublicMetaData' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'coursesPublic' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'level' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAllCoursesPublicMetaDataQuery,
+  GetAllCoursesPublicMetaDataQueryVariables
+>;
 export const GetCourseDocument = {
   kind: 'Document',
   definitions: [
@@ -2308,6 +2380,61 @@ export const GetCourseDocument = {
     },
   ],
 } as unknown as DocumentNode<GetCourseQuery, GetCourseQueryVariables>;
+export const GetCoursePublicMetaDataDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetCoursePublicMetaData' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: '_id' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'coursePublic' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: '_id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: '_id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'level' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetCoursePublicMetaDataQuery,
+  GetCoursePublicMetaDataQueryVariables
+>;
 export const GetUserDocument = {
   kind: 'Document',
   definitions: [
