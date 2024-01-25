@@ -5,9 +5,15 @@ import { UserModule } from '../users/user.module';
 import { AuthService } from './auth.service';
 import { RolesGuard } from './roles.guard';
 import { ConfigModule } from '../config/config.module';
+import { UserSocialProviderModule } from '../user-social-provider/user-social-provider.modules';
 
 @Module({
-  imports: [forwardRef(() => UserModule), PassportModule, ConfigModule],
+  imports: [
+    forwardRef(() => UserModule),
+    PassportModule,
+    ConfigModule,
+    UserSocialProviderModule,
+  ],
   providers: [AuthService, JwtService, RolesGuard],
   exports: [AuthService],
 })

@@ -1,5 +1,6 @@
 import { serialize, parse } from 'cookie';
 import { ServerResponse } from 'http';
+import { RequestWithUser } from 'src/modules/auth/helpers';
 
 const TOKEN_NAME = 'access_token';
 
@@ -33,7 +34,7 @@ export function parseCookies(req: any) {
   return parse(cookie ?? '');
 }
 
-export function getTokenCookie(req: any) {
+export function getTokenCookie(req: RequestWithUser) {
   const cookies = parseCookies(req);
 
   return cookies[TOKEN_NAME];

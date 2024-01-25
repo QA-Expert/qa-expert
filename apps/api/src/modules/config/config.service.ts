@@ -67,4 +67,20 @@ export class ConfigService {
   get billingSecretKey(): string {
     return this.configService.get<string>('BILLING_SECRET_KEY');
   }
+
+  get authGoogleClientId(): string {
+    return this.configService.get<string>('AUTH_GOOGLE_CLIENT_ID');
+  }
+
+  get authGoogleClientSecret(): string {
+    return this.configService.get<string>('AUTH_GOOGLE_CLIENT_SECRET');
+  }
+
+  get authGoogleCallbackUrl(): string {
+    return this.configService.get<string>('AUTH_GOOGLE_CALLBACK_URL');
+  }
+
+  get authGoogleScope(): string[] {
+    return this.configService.get<string[]>('AUTH_GOOGLE_SCOPE');
+  }
 }

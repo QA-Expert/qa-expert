@@ -25,7 +25,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     try {
       const req = getRequest(context);
       const token = getTokenCookie(req);
-      const { _id } = this.jwtService.verify(token, {
+      const { _id } = await this.jwtService.verifyAsync(token, {
         secret: this.configService.authSecret,
       });
 
