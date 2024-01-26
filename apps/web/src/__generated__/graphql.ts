@@ -208,6 +208,13 @@ export type EmailInput = {
   text: Scalars['String']['input'];
 };
 
+export type GoogleAuthInput = {
+  /** Code that is received from client and should be used to get user info from google auth api */
+  code: Scalars['String']['input'];
+  /** Scope of the user permissions */
+  scope: Scalars['String']['input'];
+};
+
 export type KeyValuePair = {
   __typename?: 'KeyValuePair';
   name: Scalars['String']['output'];
@@ -226,6 +233,7 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean']['output'];
   likeCourse: CourseLike;
   login: UserOutputLogin;
+  loginWithGoogle?: Maybe<UserOutputLogin>;
   logout: Scalars['Boolean']['output'];
   register: UserOutputLogin;
   resetPassword: User;
@@ -276,6 +284,10 @@ export type MutationLikeCourseArgs = {
 
 export type MutationLoginArgs = {
   data: UserInputLogin;
+};
+
+export type MutationLoginWithGoogleArgs = {
+  data: GoogleAuthInput;
 };
 
 export type MutationRegisterArgs = {
@@ -531,6 +543,19 @@ export type LoginMutation = {
 export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
 export type LogoutMutation = { __typename?: 'Mutation'; logout: boolean };
+
+export type LoginWithGoogleMutationVariables = Exact<{
+  code: Scalars['String']['input'];
+  scope: Scalars['String']['input'];
+}>;
+
+export type LoginWithGoogleMutation = {
+  __typename?: 'Mutation';
+  loginWithGoogle?: {
+    __typename?: 'UserOutputLogin';
+    access_token: string;
+  } | null;
+};
 
 export type RegisterMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -1071,6 +1096,91 @@ export const LogoutDocument = {
     },
   ],
 } as unknown as DocumentNode<LogoutMutation, LogoutMutationVariables>;
+export const LoginWithGoogleDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'LoginWithGoogle' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'code' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'scope' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'loginWithGoogle' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'code' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'code' },
+                      },
+                    },
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'scope' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'scope' },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'access_token' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  LoginWithGoogleMutation,
+  LoginWithGoogleMutationVariables
+>;
 export const RegisterDocument = {
   kind: 'Document',
   definitions: [

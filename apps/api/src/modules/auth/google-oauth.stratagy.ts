@@ -19,6 +19,8 @@ export class GoogleStrategy extends Strategy {
         profile: Profile,
         done: VerifyCallback,
       ) {
+        console.log('Stratagy', profile, _accessToken, _refreshToken);
+
         if (!profile) {
           return done(new UnauthorizedException(), false);
         }

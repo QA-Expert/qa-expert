@@ -6,6 +6,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { Metadata } from 'next';
 import { ApolloWrapper } from './ApolloWrapper';
 import { headers } from 'next/headers';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import './global.css';
 import { Suspense } from 'react';
@@ -64,18 +65,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <ApolloWrapper token={token}>
-              <AuthGuard>
-                <Toasts />
-                <Suspense fallback={'...Loading'}>{children}</Suspense>
-                {login}
-              </AuthGuard>
-            </ApolloWrapper>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+        <GoogleOAuthProvider
+          clientId={process.env.NEXT_PUBLIC_AUTH_GOOGLE_CLIENT_ID!}
+        >
+          <AppRouterCacheProvider>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <ApolloWrapper token={token}>
+                <AuthGuard>
+                  <Toasts />
+                  <Suspense fallback={'...Loading'}>{children}</Suspense>
+                  {login}
+                </AuthGuard>
+              </ApolloWrapper>
+            </ThemeProvider>
+          </AppRouterCacheProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );

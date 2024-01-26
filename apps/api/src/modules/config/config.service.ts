@@ -81,6 +81,6 @@ export class ConfigService {
   }
 
   get authGoogleScope(): string[] {
-    return this.configService.get<string[]>('AUTH_GOOGLE_SCOPE');
+    return JSON.parse(this.configService.get<string>('AUTH_GOOGLE_SCOPE'));
   }
 }

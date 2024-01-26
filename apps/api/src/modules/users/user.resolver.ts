@@ -16,8 +16,7 @@ import { RolesGuard } from '../auth/roles.guard';
 import { ResetPasswordInput } from './reset-password.input';
 import { UserInputUpdateNames } from './update-user-names.input';
 import { UserInputUpdatePassword } from './update-user-password.input';
-import { Profile } from 'passport-google-oauth20';
-import { UserSocialProviderLoginInput } from '../user-social-provider/user-social-provider-login.input';
+import { GoogleAuthInput } from '../auth/google-auth.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -45,21 +44,13 @@ export class UserResolver {
     return result;
   }
 
-  @UseGuards(SocialAuthGuard)
-  @Mutation(() => UserOutputLogin)
-  public async loginSocial(
-    @SocialProfile() profile: Profile,
-    @Args('providerId') providerId: number,
+  // @UseGuards(GoogleAuthGuard)
+  @Mutation(() => UserOutputLogin, { nullable: true })
+  public async loginWithGoogle(
     @Context() context: { res: ServerResponse },
-  ): Promise<UserOutputLogin | null> {
-    const result = await this.authService.loginWithSocialProvider({
-      id: providerId,
-      socialId: profile.id,
-    });
-
-    setTokenCookie(context.res, result?.access_token ?? '');
-
-    return result;
+    @Args('data') data: GoogleAuthInput,
+  ) {
+    return await this.authService.loginWithGoogle(data);
   }
 
   @Mutation(() => UserOutputLogin)

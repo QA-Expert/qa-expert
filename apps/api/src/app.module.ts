@@ -23,6 +23,7 @@ import { EmailModule } from './modules/emails/email.module';
 import { ClaimedBadgeModule } from './modules/claimed-badges/claimed-badge.modules';
 import { CourseLikeModule } from './modules/course-likes/course-likes.modules';
 import { UserSocialProviderModule } from './modules/user-social-provider/user-social-provider.modules';
+import { AuthService } from './modules/auth/auth.service';
 
 @Module({
   imports: [

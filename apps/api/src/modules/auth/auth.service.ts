@@ -7,8 +7,8 @@ import { UserOutputLogin } from '../users/login-user.output';
 import { ConfigService } from '../config/config.service';
 import { UserBaseModel } from 'src/modules/users/user-base.model';
 import { UserSocialProviderService } from '../user-social-provider/user-social-provider.service';
-import { UserSocialProviderLoginInput } from '../user-social-provider/user-social-provider-login.input';
-import { UserSocialProviderCreateInput } from '../user-social-provider/user-social-provider-create.input';
+import { GoogleAuthInput } from './google-auth.input';
+import { OAuth2Client } from 'google-auth-library';
 
 @Injectable()
 export class AuthService {
@@ -54,19 +54,32 @@ export class AuthService {
     };
   }
 
-  async loginWithSocialProvider(data: UserSocialProviderLoginInput) {
-    const useSocialProviderDoc =
-      await this.userSocialProviderService.findOnByProviderAndSocialId({
-        id: data.id,
-        socialId: data.socialId,
-      });
-
-    const user = await this.usersService.findById(
-      useSocialProviderDoc.user._id,
+  async loginWithGoogle(data: GoogleAuthInput) {
+    const oAuth2Client = new OAuth2Client(
+      this.configService.authGoogleClientId,
+      this.configService.authGoogleClientSecret,
+      'postmessage',
     );
 
-    return await this.login(user);
-  }
+    try {
+      const res = await oAuth2Client.getToken(data.code);
+      const user = await oAuth2Client.getTokenInfo(res.tokens.access_token!);
 
-  async registerWithSocialProvider(data: UserSocialProviderCreateInput) {}
+      console.log('USER', user);
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+
+    // const useSocialProviderDoc =
+    //   await this.userSocialProviderService.findOnByProviderAndSocialId({
+    //     id: data.id,
+    //     socialId: data.socialId,
+    //   });
+
+    // const user = await this.usersService.findById(
+    //   useSocialProviderDoc.user._id,
+    // );
+
+    // return await this.login(user);
+  }
 }

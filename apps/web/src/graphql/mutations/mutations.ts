@@ -14,6 +14,14 @@ export const LOGOUT = gql(/* GraphQL */ `
   }
 `);
 
+export const LOGIN_WITH_GOOGLE = gql(/* GraphQL */ `
+  mutation LoginWithGoogle($code: String!, $scope: String!) {
+    loginWithGoogle(data: { code: $code, scope: $scope }) {
+      access_token
+    }
+  }
+`);
+
 export const REGISTER = gql(/* GraphQL */ `
   mutation Register(
     $email: String!

@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './user.schema';
 import { ForgotPassword, ForgotPasswordSchema } from './forgot-password.schema';
 import { ConfigModule } from '../config/config.module';
+import { UserSocialProviderModule } from '../user-social-provider/user-social-provider.modules';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConfigModule } from '../config/config.module';
     ]),
     AuthModule,
     ConfigModule,
+    UserSocialProviderModule,
   ],
   providers: [UserService, UserResolver, JwtService],
   exports: [UserService],
