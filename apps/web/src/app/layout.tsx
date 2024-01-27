@@ -6,11 +6,12 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { Metadata } from 'next';
 import { ApolloWrapper } from './ApolloWrapper';
 import { headers } from 'next/headers';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import './global.css';
 import { Suspense } from 'react';
 import { AuthGuard } from './AuthGuard';
+import { parse } from 'cookie';
+import { ACCESS_TOKEN_KEY } from 'constants/constants';
 
 /**
  * @url https://nextjs.org/docs/app/building-your-application/optimizing/metadata#static-metadata
@@ -60,27 +61,25 @@ export default function RootLayout({
   children: React.ReactNode;
   login: React.ReactNode;
 }) {
-  const token = headers().get('Cookie');
+  const cookie = headers().get('Cookie');
+  const parsedCookie = parse(cookie ?? '');
+  const token = parsedCookie[ACCESS_TOKEN_KEY];
 
   return (
     <html lang="en">
       <body>
-        <GoogleOAuthProvider
-          clientId={process.env.NEXT_PUBLIC_AUTH_GOOGLE_CLIENT_ID!}
-        >
-          <AppRouterCacheProvider>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <ApolloWrapper token={token}>
-                <AuthGuard>
-                  <Toasts />
-                  <Suspense fallback={'...Loading'}>{children}</Suspense>
-                  {login}
-                </AuthGuard>
-              </ApolloWrapper>
-            </ThemeProvider>
-          </AppRouterCacheProvider>
-        </GoogleOAuthProvider>
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <ApolloWrapper token={token}>
+              <AuthGuard>
+                <Toasts />
+                <Suspense fallback={'...Loading'}>{children}</Suspense>
+                {login}
+              </AuthGuard>
+            </ApolloWrapper>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

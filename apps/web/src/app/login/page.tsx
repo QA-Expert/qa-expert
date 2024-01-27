@@ -1,11 +1,25 @@
 'use client';
 
 import { Box } from '@/components/box/box';
-import { GoogleLoginButton } from '@/components/login-form/google-login-button';
 import { LoginForm } from '@/components/login-form/login-form';
 import Paper from '@mui/material/Paper/Paper';
 import Typography from '@mui/material/Typography/Typography';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+
+const GoogleLogin = dynamic(
+  () => import('@/components/login-form/google-login-button'),
+  {
+    ssr: false,
+  },
+);
+
+const FacebookLogin = dynamic(
+  () => import('@/components/login-form/facebook-login-button'),
+  {
+    ssr: false,
+  },
+);
 
 export default function Login() {
   const router = useRouter();
@@ -28,7 +42,8 @@ export default function Login() {
 
       <LoginForm onSubmit={handleSubmit} />
 
-      <GoogleLoginButton />
+      <GoogleLogin />
+      <FacebookLogin />
     </Paper>
   );
 }

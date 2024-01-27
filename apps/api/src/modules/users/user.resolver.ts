@@ -16,7 +16,7 @@ import { RolesGuard } from '../auth/roles.guard';
 import { ResetPasswordInput } from './reset-password.input';
 import { UserInputUpdateNames } from './update-user-names.input';
 import { UserInputUpdatePassword } from './update-user-password.input';
-import { GoogleAuthInput } from '../auth/google-auth.input';
+import { SocialAuthInput } from '../auth/social-auth.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -44,13 +44,12 @@ export class UserResolver {
     return result;
   }
 
-  // @UseGuards(GoogleAuthGuard)
   @Mutation(() => UserOutputLogin, { nullable: true })
-  public async loginWithGoogle(
+  public async loginSocial(
     @Context() context: { res: ServerResponse },
-    @Args('data') data: GoogleAuthInput,
+    @Args('data') data: SocialAuthInput,
   ) {
-    return await this.authService.loginWithGoogle(data);
+    return await this.authService.loginSocial(data);
   }
 
   @Mutation(() => UserOutputLogin)

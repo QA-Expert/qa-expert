@@ -208,13 +208,6 @@ export type EmailInput = {
   text: Scalars['String']['input'];
 };
 
-export type GoogleAuthInput = {
-  /** Code that is received from client and should be used to get user info from google auth api */
-  code: Scalars['String']['input'];
-  /** Scope of the user permissions */
-  scope: Scalars['String']['input'];
-};
-
 export type KeyValuePair = {
   __typename?: 'KeyValuePair';
   name: Scalars['String']['output'];
@@ -233,7 +226,7 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean']['output'];
   likeCourse: CourseLike;
   login: UserOutputLogin;
-  loginWithGoogle?: Maybe<UserOutputLogin>;
+  loginSocial?: Maybe<UserOutputLogin>;
   logout: Scalars['Boolean']['output'];
   register: UserOutputLogin;
   resetPassword: User;
@@ -286,8 +279,8 @@ export type MutationLoginArgs = {
   data: UserInputLogin;
 };
 
-export type MutationLoginWithGoogleArgs = {
-  data: GoogleAuthInput;
+export type MutationLoginSocialArgs = {
+  data: SocialAuthInput;
 };
 
 export type MutationRegisterArgs = {
@@ -434,6 +427,13 @@ export type ResetPasswordInput = {
   token: Scalars['String']['input'];
 };
 
+export type SocialAuthInput = {
+  /** Access Token that is received from client and should be used to get user info from social auth api */
+  accessToken: Scalars['String']['input'];
+  /** Provider name */
+  provider: Scalars['String']['input'];
+};
+
 export type SubmittedProgress = {
   __typename?: 'SubmittedProgress';
   _id: Scalars['String']['output'];
@@ -544,17 +544,14 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
 export type LogoutMutation = { __typename?: 'Mutation'; logout: boolean };
 
-export type LoginWithGoogleMutationVariables = Exact<{
-  code: Scalars['String']['input'];
-  scope: Scalars['String']['input'];
+export type LoginSocialMutationVariables = Exact<{
+  accessToken: Scalars['String']['input'];
+  provider: Scalars['String']['input'];
 }>;
 
-export type LoginWithGoogleMutation = {
+export type LoginSocialMutation = {
   __typename?: 'Mutation';
-  loginWithGoogle?: {
-    __typename?: 'UserOutputLogin';
-    access_token: string;
-  } | null;
+  loginSocial?: { __typename?: 'UserOutputLogin'; access_token: string } | null;
 };
 
 export type RegisterMutationVariables = Exact<{
@@ -1096,17 +1093,20 @@ export const LogoutDocument = {
     },
   ],
 } as unknown as DocumentNode<LogoutMutation, LogoutMutationVariables>;
-export const LoginWithGoogleDocument = {
+export const LoginSocialDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'mutation',
-      name: { kind: 'Name', value: 'LoginWithGoogle' },
+      name: { kind: 'Name', value: 'loginSocial' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'code' } },
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'accessToken' },
+          },
           type: {
             kind: 'NonNullType',
             type: {
@@ -1119,7 +1119,7 @@ export const LoginWithGoogleDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'scope' },
+            name: { kind: 'Name', value: 'provider' },
           },
           type: {
             kind: 'NonNullType',
@@ -1135,7 +1135,7 @@ export const LoginWithGoogleDocument = {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'loginWithGoogle' },
+            name: { kind: 'Name', value: 'loginSocial' },
             arguments: [
               {
                 kind: 'Argument',
@@ -1145,18 +1145,18 @@ export const LoginWithGoogleDocument = {
                   fields: [
                     {
                       kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'code' },
+                      name: { kind: 'Name', value: 'accessToken' },
                       value: {
                         kind: 'Variable',
-                        name: { kind: 'Name', value: 'code' },
+                        name: { kind: 'Name', value: 'accessToken' },
                       },
                     },
                     {
                       kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'scope' },
+                      name: { kind: 'Name', value: 'provider' },
                       value: {
                         kind: 'Variable',
-                        name: { kind: 'Name', value: 'scope' },
+                        name: { kind: 'Name', value: 'provider' },
                       },
                     },
                   ],
@@ -1177,10 +1177,7 @@ export const LoginWithGoogleDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<
-  LoginWithGoogleMutation,
-  LoginWithGoogleMutationVariables
->;
+} as unknown as DocumentNode<LoginSocialMutation, LoginSocialMutationVariables>;
 export const RegisterDocument = {
   kind: 'Document',
   definitions: [

@@ -7,7 +7,7 @@ import { UserOutputLogin } from '../users/login-user.output';
 import { ConfigService } from '../config/config.service';
 import { UserBaseModel } from 'src/modules/users/user-base.model';
 import { UserSocialProviderService } from '../user-social-provider/user-social-provider.service';
-import { GoogleAuthInput } from './google-auth.input';
+import { SocialAuthInput, SocialProvider } from './social-auth.input';
 import { OAuth2Client } from 'google-auth-library';
 
 @Injectable()
@@ -54,7 +54,7 @@ export class AuthService {
     };
   }
 
-  async loginWithGoogle(data: GoogleAuthInput) {
+  async loginSocial(data: SocialAuthInput) {
     const oAuth2Client = new OAuth2Client(
       this.configService.authGoogleClientId,
       this.configService.authGoogleClientSecret,
@@ -62,10 +62,11 @@ export class AuthService {
     );
 
     try {
-      const res = await oAuth2Client.getToken(data.code);
-      const user = await oAuth2Client.getTokenInfo(res.tokens.access_token!);
+      if (data.provider === SocialProvider.GOOGLE) {
+        const user = await oAuth2Client.getTokenInfo(data.accessToken);
 
-      console.log('USER', user);
+        console.log('USER', user);
+      }
     } catch (error) {
       console.log('ERROR', error);
     }

@@ -2,6 +2,8 @@ import { ApolloLink, HttpLink } from '@apollo/client';
 import { IncomingHttpHeaders } from 'http';
 import { onError } from '@apollo/client/link/error';
 import { isAuthenticated } from './store';
+import { ACCESS_TOKEN_KEY } from 'constants/constants';
+import { serialize } from 'cookie';
 
 export const setAuthLink = (token: string | null) =>
   new ApolloLink((operation, forward) => {
@@ -10,7 +12,7 @@ export const setAuthLink = (token: string | null) =>
     operation.setContext(({ headers }: { headers: IncomingHttpHeaders }) => ({
       headers: {
         ...headers,
-        Cookie: token,
+        Cookie: token ? serialize(ACCESS_TOKEN_KEY, token) : token,
       },
     }));
 
