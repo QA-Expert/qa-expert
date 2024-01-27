@@ -49,7 +49,11 @@ export class UserResolver {
     @Context() context: { res: ServerResponse },
     @Args('data') data: SocialAuthInput,
   ) {
-    return await this.authService.loginSocial(data);
+    const result = await this.authService.loginSocial(data);
+
+    setTokenCookie(context.res, result?.access_token ?? '');
+
+    return result;
   }
 
   @Mutation(() => UserOutputLogin)
