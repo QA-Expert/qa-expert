@@ -15,8 +15,28 @@ export const LOGOUT = gql(/* GraphQL */ `
 `);
 
 export const LOGIN_SOCIAL = gql(/* GraphQL */ `
-  mutation loginSocial($accessToken: String!, $provider: String!) {
-    loginSocial(data: { accessToken: $accessToken, provider: $provider }) {
+  mutation loginSocial(
+    $accessToken: String!
+    $provider: String!
+    $userId: String
+  ) {
+    loginSocial(
+      data: { accessToken: $accessToken, provider: $provider, userId: $userId }
+    ) {
+      access_token
+    }
+  }
+`);
+
+export const REGISTER_SOCIAL = gql(/* GraphQL */ `
+  mutation RegisterSocial(
+    $accessToken: String!
+    $provider: String!
+    $userId: String
+  ) {
+    registerSocial(
+      data: { accessToken: $accessToken, provider: $provider, userId: $userId }
+    ) {
       access_token
     }
   }

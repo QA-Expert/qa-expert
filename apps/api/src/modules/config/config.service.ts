@@ -76,11 +76,11 @@ export class ConfigService {
     return this.configService.get<string>('AUTH_GOOGLE_CLIENT_SECRET');
   }
 
-  get authGoogleCallbackUrl(): string {
-    return this.configService.get<string>('AUTH_GOOGLE_CALLBACK_URL');
+  get authFacebookAppId(): string {
+    return this.configService.get<string>('AUTH_FACEBOOK_APP_ID');
   }
 
-  get authGoogleScope(): string[] {
-    return JSON.parse(this.configService.get<string>('AUTH_GOOGLE_SCOPE'));
+  get authFacebookClientSecret(): string {
+    return this.configService.get<string>('AUTH_FACEBOOK_CLIENT_SECRET');
   }
 }

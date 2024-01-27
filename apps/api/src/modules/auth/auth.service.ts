@@ -6,9 +6,12 @@ import { JwtService } from '@nestjs/jwt';
 import { UserOutputLogin } from '../users/login-user.output';
 import { ConfigService } from '../config/config.service';
 import { UserBaseModel } from 'src/modules/users/user-base.model';
-import { UserSocialProviderService } from '../user-social-provider/user-social-provider.service';
 import { SocialAuthInput, SocialProvider } from './social-auth.input';
 import { OAuth2Client } from 'google-auth-library';
+import { UserInputCreate } from '../users/create-user.input';
+import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import { HttpService } from '@nestjs/axios';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -16,12 +19,10 @@ export class AuthService {
     private usersService: UserService,
     private jwtService: JwtService,
     private configService: ConfigService,
-    private userSocialProviderService: UserSocialProviderService,
+    private readonly httpService: HttpService,
   ) {}
 
-  async validateUserAndLogin(
-    data: UserInputLogin,
-  ): Promise<UserOutputLogin | null> {
+  async validateUserAndLogin(data: UserInputLogin) {
     const result = await this.usersService.findByEmail(data.email);
 
     const match = await bcrypt.compare(data.password, result.hashedPassword);
@@ -41,46 +42,123 @@ export class AuthService {
     throw new UnauthorizedException('Incorrect credentials');
   }
 
-  async login(user: UserBaseModel): Promise<UserOutputLogin> {
-    return {
-      ...user,
+  async login(data: UserBaseModel) {
+    const user: UserOutputLogin = {
+      ...data,
       access_token: await this.jwtService.signAsync(
-        { ...user },
+        { ...data },
         {
           secret: this.configService.authSecret,
           expiresIn: this.configService.authTokenExpiresIn,
         },
       ),
     };
+
+    return user;
+  }
+
+  async register(data: UserInputLogin) {
+    const user = await this.usersService.create(data);
+
+    return await this.login({
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      roles: user.roles,
+    });
   }
 
   async loginSocial(data: SocialAuthInput) {
-    const oAuth2Client = new OAuth2Client(
-      this.configService.authGoogleClientId,
-      this.configService.authGoogleClientSecret,
-      'postmessage',
-    );
+    {
+      const userInfo = await this.#getUserInfoFromSocialProvider(data);
 
-    try {
-      if (data.provider === SocialProvider.GOOGLE) {
-        const user = await oAuth2Client.getTokenInfo(data.accessToken);
-
-        console.log('USER', user);
+      if (!userInfo) {
+        throw new UnauthorizedException(
+          `Failed to login with ${data.provider}`,
+        );
       }
-    } catch (error) {
-      console.log('ERROR', error);
+
+      const user = await this.usersService.findByEmail(userInfo.email);
+
+      return await this.login(user);
+    }
+  }
+
+  async registerSocial(data: SocialAuthInput) {
+    const userInfo = await this.#getUserInfoFromSocialProvider(data);
+
+    if (!userInfo) {
+      throw new UnauthorizedException(
+        `Failed to register with ${data.provider}`,
+      );
     }
 
-    // const useSocialProviderDoc =
-    //   await this.userSocialProviderService.findOnByProviderAndSocialId({
-    //     id: data.id,
-    //     socialId: data.socialId,
-    //   });
+    const userData: UserInputCreate = {
+      ...userInfo,
+      password: randomStringGenerator(),
+    };
 
-    // const user = await this.usersService.findById(
-    //   useSocialProviderDoc.user._id,
-    // );
+    const newRegisteredUser = await this.register(userData);
 
-    // return await this.login(user);
+    return await this.login(newRegisteredUser);
+  }
+
+  async #getUserInfoFromSocialProvider({
+    provider,
+    accessToken,
+    userId,
+  }: SocialAuthInput) {
+    let userInfo: Pick<UserBaseModel, 'email' | 'firstName' | 'lastName'>;
+
+    if (provider === SocialProvider.GOOGLE) {
+      try {
+        const client = new OAuth2Client(
+          this.configService.authGoogleClientId,
+          this.configService.authGoogleClientSecret,
+          'postmessage',
+        );
+
+        const tokenInfo = await client.getTokenInfo(accessToken);
+
+        if (!tokenInfo || !tokenInfo.email) {
+          throw new UnauthorizedException(
+            `Failed to get user info from ${provider}`,
+          );
+        }
+
+        userInfo = {
+          email: tokenInfo.email,
+        };
+
+        return userInfo;
+      } catch (error) {
+        throw new UnauthorizedException(
+          `Failed to get user info from ${provider}`,
+        );
+      }
+    }
+
+    if (provider === SocialProvider.FACEBOOK) {
+      try {
+        const response = await lastValueFrom(
+          this.httpService.get(
+            `https://graph.facebook.com/${userId}?fields=first_name,last_name,email&access_token=${accessToken}`,
+          ),
+        );
+
+        userInfo = {
+          email: response.data.email,
+          firstName: response.data.first_name,
+          lastName: response.data.last_name,
+        };
+
+        return userInfo;
+      } catch (error) {
+        throw new UnauthorizedException(
+          `Failed to get user info from ${provider}`,
+        );
+      }
+    }
   }
 }

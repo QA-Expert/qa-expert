@@ -44,7 +44,7 @@ export class UserService {
   }
 
   async create(data: UserInputCreate) {
-    const user = await this.userModel.findOne({ email: data.email });
+    const user = await this.findByEmail(data.email);
 
     if (user) {
       throw new Error('User already exists');
@@ -162,7 +162,7 @@ export class UserService {
   async updateNames(
     data: UserInputUpdateNames,
     userId: string | mongoose.Types.ObjectId,
-  ): Promise<User> {
+  ) {
     const user = await this.findById(userId);
 
     if (data.firstName) {
@@ -181,7 +181,7 @@ export class UserService {
   async updatePassword(
     data: UserInputUpdatePassword,
     userId: string | mongoose.Types.ObjectId,
-  ): Promise<User> {
+  ) {
     const user = await this.findById(userId);
 
     const matchNewPassword = await bcrypt.compare(

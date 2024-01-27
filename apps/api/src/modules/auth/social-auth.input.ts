@@ -1,5 +1,5 @@
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export enum SocialProvider {
   FACEBOOK = 'facebook',
@@ -22,4 +22,11 @@ export class SocialAuthInput {
   @IsNotEmpty()
   @Field(() => String, { description: 'Provider name' })
   provider: SocialProvider;
+
+  @IsOptional()
+  @Field(() => String, {
+    description: 'Social Provider userId',
+    nullable: true,
+  })
+  userId?: string;
 }

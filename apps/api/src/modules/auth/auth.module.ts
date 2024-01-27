@@ -5,14 +5,14 @@ import { UserModule } from '../users/user.module';
 import { AuthService } from './auth.service';
 import { RolesGuard } from './roles.guard';
 import { ConfigModule } from '../config/config.module';
-import { UserSocialProviderModule } from '../user-social-provider/user-social-provider.modules';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
     forwardRef(() => UserModule),
     PassportModule,
     ConfigModule,
-    UserSocialProviderModule,
+    HttpModule,
   ],
   providers: [AuthService, JwtService, RolesGuard],
   exports: [AuthService],

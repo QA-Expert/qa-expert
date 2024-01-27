@@ -229,6 +229,7 @@ export type Mutation = {
   loginSocial?: Maybe<UserOutputLogin>;
   logout: Scalars['Boolean']['output'];
   register: UserOutputLogin;
+  registerSocial: UserOutputLogin;
   resetPassword: User;
   sendBugReport: Scalars['String']['output'];
   sendCommunication: Scalars['String']['output'];
@@ -285,6 +286,10 @@ export type MutationLoginSocialArgs = {
 
 export type MutationRegisterArgs = {
   data: UserInputCreate;
+};
+
+export type MutationRegisterSocialArgs = {
+  data: SocialAuthInput;
 };
 
 export type MutationResetPasswordArgs = {
@@ -432,6 +437,8 @@ export type SocialAuthInput = {
   accessToken: Scalars['String']['input'];
   /** Provider name */
   provider: Scalars['String']['input'];
+  /** Social Provider userId */
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SubmittedProgress = {
@@ -547,11 +554,23 @@ export type LogoutMutation = { __typename?: 'Mutation'; logout: boolean };
 export type LoginSocialMutationVariables = Exact<{
   accessToken: Scalars['String']['input'];
   provider: Scalars['String']['input'];
+  userId?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type LoginSocialMutation = {
   __typename?: 'Mutation';
   loginSocial?: { __typename?: 'UserOutputLogin'; access_token: string } | null;
+};
+
+export type RegisterSocialMutationVariables = Exact<{
+  accessToken: Scalars['String']['input'];
+  provider: Scalars['String']['input'];
+  userId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type RegisterSocialMutation = {
+  __typename?: 'Mutation';
+  registerSocial: { __typename?: 'UserOutputLogin'; access_token: string };
 };
 
 export type RegisterMutationVariables = Exact<{
@@ -1129,6 +1148,14 @@ export const LoginSocialDocument = {
             },
           },
         },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userId' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
       ],
       selectionSet: {
         kind: 'SelectionSet',
@@ -1159,6 +1186,14 @@ export const LoginSocialDocument = {
                         name: { kind: 'Name', value: 'provider' },
                       },
                     },
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'userId' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'userId' },
+                      },
+                    },
                   ],
                 },
               },
@@ -1178,6 +1213,110 @@ export const LoginSocialDocument = {
     },
   ],
 } as unknown as DocumentNode<LoginSocialMutation, LoginSocialMutationVariables>;
+export const RegisterSocialDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'RegisterSocial' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'accessToken' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'provider' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userId' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'registerSocial' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'accessToken' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'accessToken' },
+                      },
+                    },
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'provider' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'provider' },
+                      },
+                    },
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'userId' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'userId' },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'access_token' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RegisterSocialMutation,
+  RegisterSocialMutationVariables
+>;
 export const RegisterDocument = {
   kind: 'Document',
   definitions: [

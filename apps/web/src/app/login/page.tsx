@@ -7,20 +7,6 @@ import Typography from '@mui/material/Typography/Typography';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
-const GoogleLogin = dynamic(
-  () => import('@/components/login-form/google-login-button'),
-  {
-    ssr: false,
-  },
-);
-
-const FacebookLogin = dynamic(
-  () => import('@/components/login-form/facebook-login-button'),
-  {
-    ssr: false,
-  },
-);
-
 export default function Login() {
   const router = useRouter();
 
@@ -41,9 +27,6 @@ export default function Login() {
       </Typography>
 
       <LoginForm onSubmit={handleSubmit} />
-
-      <GoogleLogin />
-      <FacebookLogin />
     </Paper>
   );
 }

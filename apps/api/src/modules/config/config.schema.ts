@@ -18,8 +18,8 @@ export interface Config {
   BILLING_SECRET_KEY: string;
   AUTH_GOOGLE_CLIENT_ID: string;
   AUTH_GOOGLE_CLIENT_SECRET: string;
-  AUTH_GOOGLE_CALLBACK_URL: string;
-  AUTH_GOOGLE_SCOPE: string;
+  AUTH_FACEBOOK_APP_ID: string;
+  AUTH_FACEBOOK_CLIENT_SECRET: string;
 }
 
 export const validationSchema = Joi.object<Config>({
@@ -40,6 +40,6 @@ export const validationSchema = Joi.object<Config>({
   BILLING_SECRET_KEY: Joi.string(),
   AUTH_GOOGLE_CLIENT_ID: Joi.string(),
   AUTH_GOOGLE_CLIENT_SECRET: Joi.string(),
-  AUTH_GOOGLE_CALLBACK_URL: Joi.string(),
-  AUTH_GOOGLE_SCOPE: Joi.string(),
+  AUTH_FACEBOOK_APP_ID: Joi.string(),
+  AUTH_FACEBOOK_CLIENT_SECRET: Joi.string(),
 });
