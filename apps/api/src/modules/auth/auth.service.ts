@@ -79,7 +79,15 @@ export class AuthService {
         );
       }
 
-      const user = await this.usersService.findByEmail(userInfo.email);
+      const userFromDb = await this.usersService.findByEmail(userInfo.email);
+
+      const user: UserBaseModel = {
+        _id: userFromDb._id,
+        email: userFromDb.email,
+        firstName: userFromDb.firstName,
+        lastName: userFromDb.lastName,
+        roles: userFromDb.roles,
+      };
 
       return await this.login(user);
     }
