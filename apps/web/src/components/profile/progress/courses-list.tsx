@@ -39,7 +39,7 @@ export function CoursesList({ courses, state, title }: Props) {
       >
         {courses.length === 0 ? (
           <Typography sx={{ color: 'text.secondary' }}>
-            Please start your courses to see the progress
+            Please start taking courses to see the progress
           </Typography>
         ) : null}
 

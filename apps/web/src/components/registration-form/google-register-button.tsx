@@ -1,11 +1,10 @@
 'use client';
 
 import { useMutation } from '@apollo/client';
-import { LoginSocialFacebook } from 'reactjs-social-login';
-import { LOGIN_SOCIAL } from 'graphql/mutations/mutations';
+import { LoginSocialGoogle } from 'reactjs-social-login';
+import { REGISTER_SOCIAL } from 'graphql/mutations/mutations';
 import { useError } from 'utils/hooks';
 import { SocialIcon } from 'react-social-icons';
-import { isAuthenticated } from 'apollo/store';
 import IconButton from '@mui/material/IconButton/IconButton';
 
 type Props = {
@@ -13,23 +12,22 @@ type Props = {
   onStart?: () => void;
 };
 
-function FacebookLogin({ onSubmit, onStart }: Props) {
-  const [login, { error }] = useMutation(LOGIN_SOCIAL);
+function GoogleRegister({ onSubmit, onStart }: Props) {
+  const [register, { error }] = useMutation(REGISTER_SOCIAL);
 
   useError([error?.message]);
 
   return (
-    <LoginSocialFacebook
+    <LoginSocialGoogle
       isOnlyGetToken
       onLoginStart={onStart}
-      appId={process.env.NEXT_PUBLIC_AUTH_FACEBOOK_CLIENT_ID || ''}
+      client_id={process.env.NEXT_PUBLIC_AUTH_GOOGLE_CLIENT_ID || ''}
       onResolve={async ({ provider, data }) => {
-        if (data?.accessToken) {
-          const { data: loginData, errors } = await login({
+        if (data?.access_token) {
+          const { data: loginData, errors } = await register({
             variables: {
-              accessToken: data.accessToken,
+              accessToken: data.access_token,
               provider,
-              userId: data.userID,
             },
           });
 
@@ -37,9 +35,7 @@ function FacebookLogin({ onSubmit, onStart }: Props) {
             throw errors;
           }
 
-          if (loginData?.loginSocial?.access_token) {
-            isAuthenticated(true);
-
+          if (loginData?.registerSocial?.access_token) {
             onSubmit();
           }
         }
@@ -49,10 +45,10 @@ function FacebookLogin({ onSubmit, onStart }: Props) {
       }}
     >
       <IconButton>
-        <SocialIcon network="facebook" />
+        <SocialIcon network="google" />
       </IconButton>
-    </LoginSocialFacebook>
+    </LoginSocialGoogle>
   );
 }
 
-export default FacebookLogin;
+export default GoogleRegister;

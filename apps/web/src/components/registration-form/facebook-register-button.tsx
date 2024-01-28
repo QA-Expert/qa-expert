@@ -2,10 +2,9 @@
 
 import { useMutation } from '@apollo/client';
 import { LoginSocialFacebook } from 'reactjs-social-login';
-import { LOGIN_SOCIAL } from 'graphql/mutations/mutations';
+import { REGISTER_SOCIAL } from 'graphql/mutations/mutations';
 import { useError } from 'utils/hooks';
 import { SocialIcon } from 'react-social-icons';
-import { isAuthenticated } from 'apollo/store';
 import IconButton from '@mui/material/IconButton/IconButton';
 
 type Props = {
@@ -13,8 +12,8 @@ type Props = {
   onStart?: () => void;
 };
 
-function FacebookLogin({ onSubmit, onStart }: Props) {
-  const [login, { error }] = useMutation(LOGIN_SOCIAL);
+function FacebookRegister({ onSubmit, onStart }: Props) {
+  const [register, { error }] = useMutation(REGISTER_SOCIAL);
 
   useError([error?.message]);
 
@@ -25,7 +24,7 @@ function FacebookLogin({ onSubmit, onStart }: Props) {
       appId={process.env.NEXT_PUBLIC_AUTH_FACEBOOK_CLIENT_ID || ''}
       onResolve={async ({ provider, data }) => {
         if (data?.accessToken) {
-          const { data: loginData, errors } = await login({
+          const { data: loginData, errors } = await register({
             variables: {
               accessToken: data.accessToken,
               provider,
@@ -37,9 +36,7 @@ function FacebookLogin({ onSubmit, onStart }: Props) {
             throw errors;
           }
 
-          if (loginData?.loginSocial?.access_token) {
-            isAuthenticated(true);
-
+          if (loginData?.registerSocial?.access_token) {
             onSubmit();
           }
         }
@@ -55,4 +52,4 @@ function FacebookLogin({ onSubmit, onStart }: Props) {
   );
 }
 
-export default FacebookLogin;
+export default FacebookRegister;

@@ -10,10 +10,10 @@ import IconButton from '@mui/material/IconButton/IconButton';
 
 type Props = {
   onSubmit: () => void;
-  onLoginStart?: () => void;
+  onStart?: () => void;
 };
 
-function GoogleLogin({ onSubmit, onLoginStart }: Props) {
+function GoogleLogin({ onSubmit, onStart }: Props) {
   const [login, { error }] = useMutation(LOGIN_SOCIAL);
 
   useError([error?.message]);
@@ -21,7 +21,7 @@ function GoogleLogin({ onSubmit, onLoginStart }: Props) {
   return (
     <LoginSocialGoogle
       isOnlyGetToken
-      onLoginStart={onLoginStart}
+      onLoginStart={onStart}
       client_id={process.env.NEXT_PUBLIC_AUTH_GOOGLE_CLIENT_ID || ''}
       onResolve={async ({ provider, data }) => {
         if (data?.access_token) {

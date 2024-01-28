@@ -2,10 +2,9 @@
 
 import { useMutation } from '@apollo/client';
 import { LoginSocialLinkedin } from 'reactjs-social-login';
-import { LOGIN_SOCIAL } from 'graphql/mutations/mutations';
+import { REGISTER_SOCIAL } from 'graphql/mutations/mutations';
 import { useError } from 'utils/hooks';
 import { SocialIcon } from 'react-social-icons';
-import { isAuthenticated } from 'apollo/store';
 import { AUTH_REDIRECT_URI } from 'constants/constants';
 import IconButton from '@mui/material/IconButton/IconButton';
 
@@ -14,8 +13,8 @@ type Props = {
   onStart?: () => void;
 };
 
-function LinkedInLogin({ onSubmit, onStart }: Props) {
-  const [login, { error }] = useMutation(LOGIN_SOCIAL);
+function LinkedInRegister({ onSubmit, onStart }: Props) {
+  const [register, { error }] = useMutation(REGISTER_SOCIAL);
 
   useError([error?.message]);
 
@@ -37,7 +36,7 @@ function LinkedInLogin({ onSubmit, onStart }: Props) {
          * @url https://www.linkedin.com/developers/news/featured-updates/openid-connect-authentication
          */
         if (data?.id_token) {
-          const { data: loginData, errors } = await login({
+          const { data: loginData, errors } = await register({
             variables: {
               accessToken: data.id_token,
               provider,
@@ -48,9 +47,7 @@ function LinkedInLogin({ onSubmit, onStart }: Props) {
             throw errors;
           }
 
-          if (loginData?.loginSocial?.access_token) {
-            isAuthenticated(true);
-
+          if (loginData?.registerSocial?.access_token) {
             onSubmit();
           }
         }
@@ -67,4 +64,4 @@ function LinkedInLogin({ onSubmit, onStart }: Props) {
   );
 }
 
-export default LinkedInLogin;
+export default LinkedInRegister;
