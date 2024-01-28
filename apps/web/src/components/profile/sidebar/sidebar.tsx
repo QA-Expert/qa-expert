@@ -72,15 +72,21 @@ export function ProfileSidebar({
           {username}
         </Typography>
 
-        {(user?.firstName || user?.lastName) && (
+        {user?.firstName || user?.lastName ? (
           <IconButton
             aria-label="change-user-names"
             onClick={handleOpenChangeUserNamesModal}
           >
             <EditIcon />
           </IconButton>
-        )}
+        ) : null}
       </Row>
+
+      {!user?.firstName && !user?.lastName ? (
+        <Button variant="contained" onClick={handleOpenChangeUserNamesModal}>
+          Add First and Last Name
+        </Button>
+      ) : null}
 
       <Button onClick={handleOpenChangePasswordModal} variant="contained">
         Change Password

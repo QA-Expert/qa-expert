@@ -59,13 +59,19 @@ export const stringToColor = (string: string) => {
 /**
  *
  * Got the code from @url  https://github.com/mui/material-ui/blob/v5.15.3/docs/data/material/components/avatars/BackgroundLetterAvatars.tsx
+ *
+ * @param name Could be email or combination of first and last names (e.g. "Andrei Surzhan" or "test@test.com")
  */
 export const stringAvatar = (name: string) => {
+  const text = name.includes(' ')
+    ? `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`
+    : name[0];
+
   return {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`.toUpperCase(),
+    children: text.toUpperCase(),
   };
 };
 

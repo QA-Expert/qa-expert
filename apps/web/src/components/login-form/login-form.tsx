@@ -17,15 +17,17 @@ import { isAuthenticated } from 'apollo/store';
 import styled from '@emotion/styled';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 import Button from '@mui/material/Button/Button';
-import { Row } from '../row/row';
+import { Row } from '@/components/row/row';
 import { useState } from 'react';
 import Divider from '@mui/material/Divider/Divider';
 import dynamic from 'next/dynamic';
+import { SocialButtonsSkeleton } from '@/components/skeleton/social-buttons-skeleton';
 
 const GoogleLogin = dynamic(
   () => import('@/components/login-form/google-login-button'),
   {
     ssr: false,
+    loading: SocialButtonsSkeleton,
   },
 );
 
@@ -33,6 +35,7 @@ const FacebookLogin = dynamic(
   () => import('@/components/login-form/facebook-login-button'),
   {
     ssr: false,
+    loading: SocialButtonsSkeleton,
   },
 );
 
@@ -40,6 +43,7 @@ const LinkedInLogin = dynamic(
   () => import('@/components/login-form/linkedin-login-button'),
   {
     ssr: false,
+    loading: SocialButtonsSkeleton,
   },
 );
 
@@ -209,7 +213,7 @@ export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
 
       <Row sx={{ justifyContent: 'center' }}>
         <GoogleLogin
-          onLoginStart={() => setHasSocialLoginStarted(true)}
+          onStart={() => setHasSocialLoginStarted(true)}
           onSubmit={() => {
             setHasSocialLoginStarted(false);
 
@@ -217,7 +221,7 @@ export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
           }}
         />
         <FacebookLogin
-          onLoginStart={() => setHasSocialLoginStarted(true)}
+          onStart={() => setHasSocialLoginStarted(true)}
           onSubmit={() => {
             setHasSocialLoginStarted(false);
 
@@ -225,7 +229,7 @@ export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
           }}
         />
         <LinkedInLogin
-          onLoginStart={() => setHasSocialLoginStarted(true)}
+          onStart={() => setHasSocialLoginStarted(true)}
           onSubmit={() => {
             setHasSocialLoginStarted(false);
 

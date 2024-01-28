@@ -1118,7 +1118,7 @@ export const LoginSocialDocument = {
     {
       kind: 'OperationDefinition',
       operation: 'mutation',
-      name: { kind: 'Name', value: 'loginSocial' },
+      name: { kind: 'Name', value: 'LoginSocial' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',

@@ -16,7 +16,7 @@ const documents = {
   '\n  mutation Login($email: String!, $password: String!) {\n    login(data: { email: $email, password: $password }) {\n      access_token\n    }\n  }\n':
     types.LoginDocument,
   '\n  mutation Logout {\n    logout\n  }\n': types.LogoutDocument,
-  '\n  mutation loginSocial(\n    $accessToken: String!\n    $provider: String!\n    $userId: String\n  ) {\n    loginSocial(\n      data: { accessToken: $accessToken, provider: $provider, userId: $userId }\n    ) {\n      access_token\n    }\n  }\n':
+  '\n  mutation LoginSocial(\n    $accessToken: String!\n    $provider: String!\n    $userId: String\n  ) {\n    loginSocial(\n      data: { accessToken: $accessToken, provider: $provider, userId: $userId }\n    ) {\n      access_token\n    }\n  }\n':
     types.LoginSocialDocument,
   '\n  mutation RegisterSocial(\n    $accessToken: String!\n    $provider: String!\n    $userId: String\n  ) {\n    registerSocial(\n      data: { accessToken: $accessToken, provider: $provider, userId: $userId }\n    ) {\n      access_token\n    }\n  }\n':
     types.RegisterSocialDocument,
@@ -104,8 +104,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation loginSocial(\n    $accessToken: String!\n    $provider: String!\n    $userId: String\n  ) {\n    loginSocial(\n      data: { accessToken: $accessToken, provider: $provider, userId: $userId }\n    ) {\n      access_token\n    }\n  }\n',
-): (typeof documents)['\n  mutation loginSocial(\n    $accessToken: String!\n    $provider: String!\n    $userId: String\n  ) {\n    loginSocial(\n      data: { accessToken: $accessToken, provider: $provider, userId: $userId }\n    ) {\n      access_token\n    }\n  }\n'];
+  source: '\n  mutation LoginSocial(\n    $accessToken: String!\n    $provider: String!\n    $userId: String\n  ) {\n    loginSocial(\n      data: { accessToken: $accessToken, provider: $provider, userId: $userId }\n    ) {\n      access_token\n    }\n  }\n',
+): (typeof documents)['\n  mutation LoginSocial(\n    $accessToken: String!\n    $provider: String!\n    $userId: String\n  ) {\n    loginSocial(\n      data: { accessToken: $accessToken, provider: $provider, userId: $userId }\n    ) {\n      access_token\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

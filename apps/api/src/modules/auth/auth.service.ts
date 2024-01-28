@@ -107,9 +107,7 @@ export class AuthService {
       password: randomStringGenerator(),
     };
 
-    const newRegisteredUser = await this.register(userData);
-
-    return await this.login(newRegisteredUser);
+    return await this.register(userData);
   }
 
   async #getUserInfoFromSocialProvider({

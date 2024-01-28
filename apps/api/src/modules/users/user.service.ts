@@ -37,17 +37,19 @@ export class UserService {
     const user = await this.userModel.findOne({ email });
 
     if (!user) {
-      throw new NotFoundException(`User ${email} is not found`);
+      throw new NotFoundException(
+        `User ${email} is not found. Please register.`,
+      );
     }
 
     return user;
   }
 
   async create(data: UserInputCreate) {
-    const user = await this.findByEmail(data.email);
+    const user = await this.userModel.findOne({ email: data.email });
 
     if (user) {
-      throw new Error('User already exists');
+      throw new Error('User already exists.');
     }
 
     const hashedPassword = await bcrypt.hash(

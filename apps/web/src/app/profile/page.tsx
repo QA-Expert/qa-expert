@@ -45,7 +45,6 @@ function Account() {
         <Divider
           variant="fullWidth"
           sx={{ backgroundColor: 'warning.main' }}
-          light
           flexItem
         />
 

@@ -15,7 +15,7 @@ export const LOGOUT = gql(/* GraphQL */ `
 `);
 
 export const LOGIN_SOCIAL = gql(/* GraphQL */ `
-  mutation loginSocial(
+  mutation LoginSocial(
     $accessToken: String!
     $provider: String!
     $userId: String
