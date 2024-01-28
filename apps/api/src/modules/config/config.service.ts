@@ -75,12 +75,4 @@ export class ConfigService {
   get authGoogleClientSecret(): string {
     return this.configService.get<string>('AUTH_GOOGLE_CLIENT_SECRET');
   }
-
-  get authFacebookAppId(): string {
-    return this.configService.get<string>('AUTH_FACEBOOK_APP_ID');
-  }
-
-  get authFacebookClientSecret(): string {
-    return this.configService.get<string>('AUTH_FACEBOOK_CLIENT_SECRET');
-  }
 }

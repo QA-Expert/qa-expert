@@ -168,5 +168,31 @@ export class AuthService {
         );
       }
     }
+
+    if (provider === SocialProvider.LINKEDIN) {
+      try {
+        //@url https://www.linkedin.com/developers/news/featured-updates/openid-connect-authentication
+        const parsedData = this.jwtService.decode(accessToken);
+
+        if (!parsedData || typeof parsedData === 'string') {
+          throw new UnauthorizedException(
+            `Failed to get user info from ${provider}`,
+          );
+        }
+
+        userInfo = {
+          email: parsedData.email,
+          firstName: parsedData.given_name,
+          lastName: parsedData.family_name,
+        };
+
+        return userInfo;
+      } catch (error) {
+        console.log(error);
+        throw new UnauthorizedException(
+          `Failed to get user info from ${provider}`,
+        );
+      }
+    }
   }
 }

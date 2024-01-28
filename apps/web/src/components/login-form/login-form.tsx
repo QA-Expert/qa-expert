@@ -36,6 +36,13 @@ const FacebookLogin = dynamic(
   },
 );
 
+const LinkedInLogin = dynamic(
+  () => import('@/components/login-form/linkedin-login-button'),
+  {
+    ssr: false,
+  },
+);
+
 type Props = {
   onSubmit: () => void;
   onLinkClick?: () => void;
@@ -189,7 +196,14 @@ export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
           </Form>
         )}
       </Formik>
-      <Divider variant="fullWidth" flexItem color="success">
+      <Divider
+        variant="fullWidth"
+        flexItem
+        sx={{
+          color: 'secondary.main',
+          '&::before, &::after': { backgroundColor: 'warning.main' },
+        }}
+      >
         or use
       </Divider>
 
@@ -202,6 +216,14 @@ export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
         }}
       />
       <FacebookLogin
+        onLoginStart={() => setHasSocialLoginStarted(true)}
+        onSubmit={() => {
+          setHasSocialLoginStarted(false);
+
+          onSubmit();
+        }}
+      />
+      <LinkedInLogin
         onLoginStart={() => setHasSocialLoginStarted(true)}
         onSubmit={() => {
           setHasSocialLoginStarted(false);

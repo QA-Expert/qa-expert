@@ -4,6 +4,7 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 export enum SocialProvider {
   FACEBOOK = 'facebook',
   GOOGLE = 'google',
+  LINKEDIN = 'linkedin',
 }
 
 registerEnumType(SocialProvider, {

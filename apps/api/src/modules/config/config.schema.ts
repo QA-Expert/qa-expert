@@ -40,6 +40,4 @@ export const validationSchema = Joi.object<Config>({
   BILLING_SECRET_KEY: Joi.string(),
   AUTH_GOOGLE_CLIENT_ID: Joi.string(),
   AUTH_GOOGLE_CLIENT_SECRET: Joi.string(),
-  AUTH_FACEBOOK_APP_ID: Joi.string(),
-  AUTH_FACEBOOK_CLIENT_SECRET: Joi.string(),
 });
