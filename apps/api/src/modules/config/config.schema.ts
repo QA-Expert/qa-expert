@@ -18,8 +18,6 @@ export interface Config {
   BILLING_SECRET_KEY: string;
   AUTH_GOOGLE_CLIENT_ID: string;
   AUTH_GOOGLE_CLIENT_SECRET: string;
-  AUTH_FACEBOOK_APP_ID: string;
-  AUTH_FACEBOOK_CLIENT_SECRET: string;
 }
 
 export const validationSchema = Joi.object<Config>({
