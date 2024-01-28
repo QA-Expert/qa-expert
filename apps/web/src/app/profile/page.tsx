@@ -12,7 +12,6 @@ import Divider from '@mui/material/Divider/Divider';
 import { Billing } from '@/components/profile/billing/billing';
 import { Activities } from '@/components/profile/activities/activities';
 import { Progress } from '@/components/profile/progress/progress';
-import Skeleton from '@mui/material/Skeleton/Skeleton';
 import { Skeletons } from '@/components/skeleton/skeleton';
 import { Row } from '@/components/row/row';
 
@@ -21,7 +20,7 @@ function Account() {
 
   return (
     <>
-      <Suspense fallback={<Skeleton sx={{ flex: 1, height: '100%' }} />}>
+      <Suspense fallback={<Skeletons sx={{ flex: 1, height: '100%' }} />}>
         <ProfileSidebar onSectionSelect={setSection} />
       </Suspense>
 

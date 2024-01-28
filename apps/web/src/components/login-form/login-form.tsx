@@ -18,6 +18,30 @@ import styled from '@emotion/styled';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 import Button from '@mui/material/Button/Button';
 import { Row } from '../row/row';
+import { useState } from 'react';
+import Divider from '@mui/material/Divider/Divider';
+import dynamic from 'next/dynamic';
+
+const GoogleLogin = dynamic(
+  () => import('@/components/login-form/google-login-button'),
+  {
+    ssr: false,
+  },
+);
+
+const FacebookLogin = dynamic(
+  () => import('@/components/login-form/facebook-login-button'),
+  {
+    ssr: false,
+  },
+);
+
+const LinkedInLogin = dynamic(
+  () => import('@/components/login-form/linkedin-login-button'),
+  {
+    ssr: false,
+  },
+);
 
 type Props = {
   onSubmit: () => void;
@@ -26,6 +50,7 @@ type Props = {
 };
 
 export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
+  const [hasSocialLoginStarted, setHasSocialLoginStarted] = useState(false);
   const client = useApolloClient();
   const [login, { error }] = useMutation(LOGIN);
   const schema = Yup.object().shape({
@@ -44,124 +69,171 @@ export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
   useError([error?.message]);
 
   return (
-    <Formik
-      validationSchema={schema}
-      initialValues={initialValues}
-      onSubmit={async (
-        values: UserInputLogin,
-        actions: FormikHelpers<UserInputLogin>,
-      ) => {
-        actions.setSubmitting(true);
+    <>
+      <Formik
+        validationSchema={schema}
+        initialValues={initialValues}
+        onSubmit={async (
+          values: UserInputLogin,
+          actions: FormikHelpers<UserInputLogin>,
+        ) => {
+          actions.setSubmitting(true);
 
-        const { data, errors } = await login({
-          variables: values,
-        });
+          const { data, errors } = await login({
+            variables: values,
+          });
 
-        await client.resetStore();
+          await client.resetStore();
 
-        actions.setSubmitting(false);
+          actions.setSubmitting(false);
 
-        if (errors) {
-          throw errors;
-        }
+          if (errors) {
+            throw errors;
+          }
 
-        if (data?.login?.access_token) {
-          isAuthenticated(true);
+          if (data?.login?.access_token) {
+            isAuthenticated(true);
 
-          onSubmit();
-        }
-      }}
-    >
-      {({
-        values,
-        handleChange,
-        isSubmitting,
-        handleSubmit,
-        handleBlur,
-        errors,
-      }: FormikProps<UserInputLogin>) => (
-        <Form noValidate onSubmit={handleSubmit}>
-          <FormControl>
-            <InputLabel htmlFor="email">Email address</InputLabel>
-            <Input
-              autoComplete="on"
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Enter your email ..."
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-              error={Boolean(errors.email)}
-            />
-            <FormHelperText error={Boolean(errors.email)} id="email-error-text">
-              {errors.email}
-            </FormHelperText>
-          </FormControl>
+            onSubmit();
+          }
+        }}
+      >
+        {({
+          values,
+          handleChange,
+          isSubmitting,
+          handleSubmit,
+          handleBlur,
+          errors,
+        }: FormikProps<UserInputLogin>) => (
+          <Form noValidate onSubmit={handleSubmit}>
+            <FormControl>
+              <InputLabel htmlFor="email">Email address</InputLabel>
+              <Input
+                autoComplete="on"
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter your email ..."
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+                error={Boolean(errors.email)}
+              />
+              <FormHelperText
+                error={Boolean(errors.email)}
+                id="email-error-text"
+              >
+                {errors.email}
+              </FormHelperText>
+            </FormControl>
 
-          <FormControl>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
-              autoComplete="on"
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Enter your password ..."
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-              error={Boolean(errors.password)}
-            />
-            <FormHelperText
-              error={Boolean(errors.password)}
-              id="password-error-text"
+            <FormControl>
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <Input
+                autoComplete="on"
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Enter your password ..."
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.password}
+                error={Boolean(errors.password)}
+              />
+              <FormHelperText
+                error={Boolean(errors.password)}
+                id="password-error-text"
+              >
+                {errors.password}
+              </FormHelperText>
+            </FormControl>
+
+            <Typography>
+              {'If you do not have an account, please '}
+              <MuiLink href="/register" onClick={onLinkClick} component={Link}>
+                register
+              </MuiLink>
+              .
+            </Typography>
+
+            <MuiLink
+              href="/forgot-password"
+              onClick={onLinkClick}
+              component={Link}
             >
-              {errors.password}
-            </FormHelperText>
-          </FormControl>
-
-          <Typography>
-            {'If you do not have an account, please '}
-            <MuiLink href="/register" onClick={onLinkClick} component={Link}>
-              register
+              Need help?
             </MuiLink>
-            .
-          </Typography>
 
-          <MuiLink
-            href="/forgot-password"
-            onClick={onLinkClick}
-            component={Link}
-          >
-            Need help?
-          </MuiLink>
-
-          <Row
-            sx={{ alignItems: 'center', justifyContent: 'center', gap: '1rem' }}
-          >
-            <LoadingButton
-              color="warning"
-              variant="contained"
-              loading={isSubmitting}
-              disabled={
-                isSubmitting ||
-                Boolean(errors.email) ||
-                Boolean(errors.password)
-              }
-              type="submit"
+            <Row
+              sx={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '1rem',
+              }}
             >
-              Login
-            </LoadingButton>
+              <LoadingButton
+                color="warning"
+                variant="contained"
+                loading={isSubmitting}
+                disabled={
+                  isSubmitting ||
+                  Boolean(errors.email) ||
+                  Boolean(errors.password) ||
+                  hasSocialLoginStarted
+                }
+                type="submit"
+              >
+                Login
+              </LoadingButton>
 
-            {onCancel ? (
-              <Button variant="contained" onClick={onCancel}>
-                Cancel
-              </Button>
-            ) : null}
-          </Row>
-        </Form>
-      )}
-    </Formik>
+              {onCancel ? (
+                <Button variant="contained" onClick={onCancel}>
+                  Cancel
+                </Button>
+              ) : null}
+            </Row>
+          </Form>
+        )}
+      </Formik>
+      <Divider
+        variant="fullWidth"
+        flexItem
+        sx={{
+          color: 'secondary.main',
+          '&::before, &::after': { backgroundColor: 'warning.main' },
+        }}
+      >
+        or use
+      </Divider>
+
+      <Row sx={{ justifyContent: 'center' }}>
+        <GoogleLogin
+          onLoginStart={() => setHasSocialLoginStarted(true)}
+          onSubmit={() => {
+            setHasSocialLoginStarted(false);
+
+            onSubmit();
+          }}
+        />
+        <FacebookLogin
+          onLoginStart={() => setHasSocialLoginStarted(true)}
+          onSubmit={() => {
+            setHasSocialLoginStarted(false);
+
+            onSubmit();
+          }}
+        />
+        <LinkedInLogin
+          onLoginStart={() => setHasSocialLoginStarted(true)}
+          onSubmit={() => {
+            setHasSocialLoginStarted(false);
+
+            onSubmit();
+          }}
+        />
+      </Row>
+    </>
   );
 }
 

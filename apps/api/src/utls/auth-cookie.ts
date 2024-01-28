@@ -1,7 +1,8 @@
 import { serialize, parse } from 'cookie';
 import { ServerResponse } from 'http';
+import { RequestWithUser } from 'src/modules/auth/helpers';
 
-const TOKEN_NAME = 'access_token';
+export const TOKEN_NAME = 'qaexpert_io_access_token';
 
 export const MAX_AGE = 60 * 60 * 8; // 8 hours
 
@@ -27,13 +28,13 @@ export function removeTokenCookie(res: ServerResponse) {
   res.setHeader('Set-Cookie', cookie);
 }
 
-export function parseCookies(req: any) {
+export function parseCookies(req: RequestWithUser) {
   const cookie = req.headers?.cookie;
 
   return parse(cookie ?? '');
 }
 
-export function getTokenCookie(req: any) {
+export function getTokenCookie(req: RequestWithUser) {
   const cookies = parseCookies(req);
 
   return cookies[TOKEN_NAME];

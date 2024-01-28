@@ -10,6 +10,8 @@ import { headers } from 'next/headers';
 import './global.css';
 import { Suspense } from 'react';
 import { AuthGuard } from './AuthGuard';
+import { parse } from 'cookie';
+import { ACCESS_TOKEN_KEY } from 'constants/constants';
 
 /**
  * @url https://nextjs.org/docs/app/building-your-application/optimizing/metadata#static-metadata
@@ -59,7 +61,9 @@ export default function RootLayout({
   children: React.ReactNode;
   login: React.ReactNode;
 }) {
-  const token = headers().get('Cookie');
+  const cookie = headers().get('Cookie');
+  const parsedCookie = parse(cookie ?? '');
+  const token = parsedCookie[ACCESS_TOKEN_KEY];
 
   return (
     <html lang="en">
