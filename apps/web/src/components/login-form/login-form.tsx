@@ -207,30 +207,32 @@ export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
         or use
       </Divider>
 
-      <GoogleLogin
-        onLoginStart={() => setHasSocialLoginStarted(true)}
-        onSubmit={() => {
-          setHasSocialLoginStarted(false);
+      <Row sx={{ justifyContent: 'center' }}>
+        <GoogleLogin
+          onLoginStart={() => setHasSocialLoginStarted(true)}
+          onSubmit={() => {
+            setHasSocialLoginStarted(false);
 
-          onSubmit();
-        }}
-      />
-      <FacebookLogin
-        onLoginStart={() => setHasSocialLoginStarted(true)}
-        onSubmit={() => {
-          setHasSocialLoginStarted(false);
+            onSubmit();
+          }}
+        />
+        <FacebookLogin
+          onLoginStart={() => setHasSocialLoginStarted(true)}
+          onSubmit={() => {
+            setHasSocialLoginStarted(false);
 
-          onSubmit();
-        }}
-      />
-      <LinkedInLogin
-        onLoginStart={() => setHasSocialLoginStarted(true)}
-        onSubmit={() => {
-          setHasSocialLoginStarted(false);
+            onSubmit();
+          }}
+        />
+        <LinkedInLogin
+          onLoginStart={() => setHasSocialLoginStarted(true)}
+          onSubmit={() => {
+            setHasSocialLoginStarted(false);
 
-          onSubmit();
-        }}
-      />
+            onSubmit();
+          }}
+        />
+      </Row>
     </>
   );
 }

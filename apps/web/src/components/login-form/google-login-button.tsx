@@ -4,8 +4,9 @@ import { useMutation } from '@apollo/client';
 import { LoginSocialGoogle } from 'reactjs-social-login';
 import { LOGIN_SOCIAL } from 'graphql/mutations/mutations';
 import { useError } from 'utils/hooks';
-import { GoogleLoginButton } from 'react-social-login-buttons';
+import { SocialIcon } from 'react-social-icons';
 import { isAuthenticated } from 'apollo/store';
+import IconButton from '@mui/material/IconButton/IconButton';
 
 type Props = {
   onSubmit: () => void;
@@ -46,7 +47,9 @@ function GoogleLogin({ onSubmit, onLoginStart }: Props) {
         console.error(err);
       }}
     >
-      <GoogleLoginButton />
+      <IconButton>
+        <SocialIcon network="google" />
+      </IconButton>
     </LoginSocialGoogle>
   );
 }

@@ -4,9 +4,10 @@ import { useMutation } from '@apollo/client';
 import { LoginSocialLinkedin } from 'reactjs-social-login';
 import { LOGIN_SOCIAL } from 'graphql/mutations/mutations';
 import { useError } from 'utils/hooks';
-import { LinkedInLoginButton } from 'react-social-login-buttons';
+import { SocialIcon } from 'react-social-icons';
 import { isAuthenticated } from 'apollo/store';
 import { AUTH_REDIRECT_URI } from 'constants/constants';
+import IconButton from '@mui/material/IconButton/IconButton';
 
 type Props = {
   onSubmit: () => void;
@@ -59,7 +60,9 @@ function LinkedInLogin({ onSubmit, onLoginStart }: Props) {
       }}
       redirect_uri={AUTH_REDIRECT_URI}
     >
-      <LinkedInLoginButton />
+      <IconButton>
+        <SocialIcon network="linkedin" />
+      </IconButton>
     </LoginSocialLinkedin>
   );
 }

@@ -4,8 +4,9 @@ import { useMutation } from '@apollo/client';
 import { LoginSocialFacebook } from 'reactjs-social-login';
 import { LOGIN_SOCIAL } from 'graphql/mutations/mutations';
 import { useError } from 'utils/hooks';
-import { FacebookLoginButton } from 'react-social-login-buttons';
+import { SocialIcon } from 'react-social-icons';
 import { isAuthenticated } from 'apollo/store';
+import IconButton from '@mui/material/IconButton/IconButton';
 
 type Props = {
   onSubmit: () => void;
@@ -47,7 +48,9 @@ function FacebookLogin({ onSubmit, onLoginStart }: Props) {
         console.error(err);
       }}
     >
-      <FacebookLoginButton />
+      <IconButton>
+        <SocialIcon network="facebook" />
+      </IconButton>
     </LoginSocialFacebook>
   );
 }
