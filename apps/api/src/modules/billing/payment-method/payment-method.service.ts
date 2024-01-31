@@ -40,25 +40,21 @@ export class PaymentMethodService {
   }
 
   async create(data: PaymentMethodInput, user: UserBaseModel) {
-    const { decryptData } = this.encryptionService;
-
     try {
-      const paymentMethodId = decryptData(data.paymentMethodId);
-
       // We create new customer with payment provider and attach payment method to customer by default so we can charge recouping subscription
       const customer =
         await this.servicePaymentProvider.client.customers.create({
           name: `${user.firstName} ${user.lastName}`,
           email: user.email,
           invoice_settings: {
-            default_payment_method: paymentMethodId,
+            default_payment_method: data.paymentMethodId,
           },
         });
 
       const newPaymentMethod: Partial<PaymentMethod> = {
         user: new mongoose.Types.ObjectId(user._id),
-        externalCustomerId: customer.id,
-        externalId: paymentMethodId,
+        externalCustomerId: this.encryptionService.encryptData(customer.id),
+        externalId: this.encryptionService.encryptData(data.paymentMethodId),
         createdBy: new mongoose.Types.ObjectId(user._id),
         updatedBy: new mongoose.Types.ObjectId(user._id),
       };
@@ -76,11 +72,7 @@ export class PaymentMethodService {
   }
 
   async update(data: PaymentMethodInput, user: UserBaseModel) {
-    const { decryptData } = this.encryptionService;
-
     try {
-      const paymentMethodId = decryptData(data.paymentMethodId);
-
       const paymentMethodFromDb = await this.findOneByUserId(user._id);
 
       await this.servicePaymentProvider.client.customers.update(
@@ -88,7 +80,7 @@ export class PaymentMethodService {
         {
           name: `${user.firstName} ${user.lastName}`,
           invoice_settings: {
-            default_payment_method: paymentMethodId,
+            default_payment_method: data.paymentMethodId,
           },
         },
       );
@@ -96,7 +88,7 @@ export class PaymentMethodService {
       return this.model.findByIdAndUpdate(
         paymentMethodFromDb._id,
         {
-          externalId: paymentMethodId,
+          externalId: this.encryptionService.encryptData(data.paymentMethodId),
         },
         { new: true },
       );
