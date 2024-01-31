@@ -75,4 +75,8 @@ export class ConfigService {
   get authGoogleClientSecret(): string {
     return this.configService.get<string>('AUTH_GOOGLE_CLIENT_SECRET');
   }
+
+  get paymentProviderApiKey(): string {
+    return this.configService.get<string>('PAYMENT_PROVIDER_API_KEY');
+  }
 }

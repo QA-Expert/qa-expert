@@ -5,17 +5,19 @@ import { Roles } from '../../auth/roles.decorator';
 import { RolesGuard } from '../../auth/roles.guard';
 import { CurrentUser } from '../../users/user.decorator';
 import { User, Roles as RolesEnum } from '../../users/user.schema';
-import { Transaction } from './transaction.schema';
-import { TransactionService } from './transaction.service';
+import { Subscription } from './subscription.schema';
+import { SubscriptionService } from './subscription.service';
 
-@Resolver(() => Transaction)
-export class TransactionResolver {
-  constructor(private readonly service: TransactionService) {}
+@Resolver(() => Subscription)
+export class SubscriptionResolver {
+  constructor(private readonly service: SubscriptionService) {}
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
-  @Query(() => [Transaction])
-  public async transactions(@CurrentUser() user: User): Promise<Transaction[]> {
-    return await this.service.findAll(user._id);
+  @Query(() => Subscription, { nullable: true })
+  public async transactions(
+    @CurrentUser() user: User,
+  ): Promise<Subscription | null> {
+    return await this.service.findOneByUserId(user._id);
   }
 }

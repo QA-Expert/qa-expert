@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { User } from '../../users/user.schema';
-import { Address } from '../address/address.schema';
+import { Address } from '../payment-method/payment-method.schema';
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
 

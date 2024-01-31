@@ -14,12 +14,18 @@ import { Activities } from '@/components/profile/activities/activities';
 import { Progress } from '@/components/profile/progress/progress';
 import { Skeletons } from '@/components/skeleton/skeleton';
 import { Row } from '@/components/row/row';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY ?? '',
+);
 
 function Account() {
   const [section, setSection] = useState<SectionName>('badges');
 
   return (
-    <>
+    <Elements stripe={stripePromise}>
       <Suspense fallback={<Skeletons sx={{ flex: 1, height: '100%' }} />}>
         <ProfileSidebar onSectionSelect={setSection} />
       </Suspense>
@@ -87,7 +93,7 @@ function Account() {
           ) : null}
         </Row>
       </Section>
-    </>
+    </Elements>
   );
 }
 

@@ -7,7 +7,7 @@ import { CurrentUser } from '../../users/user.decorator';
 import { User, Roles as RolesEnum } from '../../users/user.schema';
 import { CreditCard } from './credit-card.schema';
 import { CreditCardService } from './credit-card.service';
-import { Address } from '../address/address.schema';
+import { Address } from '../payment-method/payment-method.schema';
 
 @Resolver(() => CreditCard)
 export class CreditCardResolver {

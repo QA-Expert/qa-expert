@@ -18,24 +18,28 @@ export interface Config {
   BILLING_SECRET_KEY: string;
   AUTH_GOOGLE_CLIENT_ID: string;
   AUTH_GOOGLE_CLIENT_SECRET: string;
+  PAYMENT_PROVIDER_API_KEY: string;
 }
 
 export const validationSchema = Joi.object<Config>({
   APP_NAME: Joi.string().default('QA Expert'),
-  PORT: Joi.number().default(3001),
-  HOST: Joi.string().default('localhost'),
-  DATABASE_URI: Joi.string().default('mongodb//localhost:27017/qaexpert'),
+  PORT: Joi.number().default(3001).required(),
+  HOST: Joi.string().default('localhost').required(),
+  DATABASE_URI: Joi.string()
+    .default('mongodb//localhost:27017/qaexpert')
+    .required(),
   AUTH_SECRET: Joi.string().required(),
-  AUTH_TOKEN_EXPIRES_IN: Joi.string().default('1h'),
-  AUTH_SALT: Joi.number().default(10),
+  AUTH_TOKEN_EXPIRES_IN: Joi.string().default('1h').required(),
+  AUTH_SALT: Joi.number().default(10).required(),
   AUTH_FORGOT_PASSWORD_TOKEN_EXPIRES_IN: Joi.number().default(24),
   EMAIL_SERVICE: Joi.string().required(),
   EMAIL_USERNAME: Joi.string().required(),
   EMAIL_PASSWORD: Joi.string().required(),
   EMAIL_FROM: Joi.string().required(),
   COURSE_COOLDOWN: Joi.number().required(),
-  BILLING_ENCRYPTION_METHOD: Joi.string().default('aes-256-cbc'),
-  BILLING_SECRET_KEY: Joi.string(),
-  AUTH_GOOGLE_CLIENT_ID: Joi.string(),
-  AUTH_GOOGLE_CLIENT_SECRET: Joi.string(),
+  BILLING_ENCRYPTION_METHOD: Joi.string().default('aes-256-cbc').required(),
+  BILLING_SECRET_KEY: Joi.string().required(),
+  AUTH_GOOGLE_CLIENT_ID: Joi.string().required(),
+  AUTH_GOOGLE_CLIENT_SECRET: Joi.string().required(),
+  PAYMENT_PROVIDER_API_KEY: Joi.string().required(),
 });
