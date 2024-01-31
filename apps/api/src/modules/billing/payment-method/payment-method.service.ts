@@ -43,17 +43,7 @@ export class PaymentMethodService {
     const { decryptData } = this.encryptionService;
 
     try {
-      const decodedString = decryptData(data.stringifiedObject);
-
-      const decodedPaymentMethod = JSON.parse(decodedString);
-
-      if (
-        !decodedPaymentMethod.type ||
-        !decodedPaymentMethod.billing_details ||
-        !decodedPaymentMethod.card
-      ) {
-        throw new Error('Something is wrong with payment information');
-      }
+      const paymentMethodId = decryptData(data.paymentMethodId);
 
       // We create new customer with payment provider and attach payment method to customer by default so we can charge recouping subscription
       const customer =
@@ -61,14 +51,14 @@ export class PaymentMethodService {
           name: `${user.firstName} ${user.lastName}`,
           email: user.email,
           invoice_settings: {
-            default_payment_method: decodedPaymentMethod.id,
+            default_payment_method: paymentMethodId,
           },
         });
 
       const newPaymentMethod: Partial<PaymentMethod> = {
         user: new mongoose.Types.ObjectId(user._id),
         externalCustomerId: customer.id,
-        externalId: decodedPaymentMethod.id,
+        externalId: paymentMethodId,
         createdBy: new mongoose.Types.ObjectId(user._id),
         updatedBy: new mongoose.Types.ObjectId(user._id),
       };
@@ -89,17 +79,7 @@ export class PaymentMethodService {
     const { decryptData } = this.encryptionService;
 
     try {
-      const decodedString = decryptData(data.stringifiedObject);
-
-      const decodedPaymentMethod = JSON.parse(decodedString);
-
-      if (
-        !decodedPaymentMethod.type ||
-        !decodedPaymentMethod.billing_details ||
-        !decodedPaymentMethod.card
-      ) {
-        throw new Error('Something is wrong with payment information');
-      }
+      const paymentMethodId = decryptData(data.paymentMethodId);
 
       const paymentMethodFromDb = await this.findOneByUserId(user._id);
 
@@ -108,7 +88,7 @@ export class PaymentMethodService {
         {
           name: `${user.firstName} ${user.lastName}`,
           invoice_settings: {
-            default_payment_method: decodedPaymentMethod.id,
+            default_payment_method: paymentMethodId,
           },
         },
       );
@@ -116,7 +96,7 @@ export class PaymentMethodService {
       return this.model.findByIdAndUpdate(
         paymentMethodFromDb._id,
         {
-          externalId: decodedPaymentMethod.id,
+          externalId: paymentMethodId,
         },
         { new: true },
       );
