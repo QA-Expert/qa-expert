@@ -5,6 +5,9 @@ import { PaymentMethodService } from './payment-method.service';
 import { EncryptionModule } from 'src/modules/encryption/encryption.modules';
 import { EncryptionService } from 'src/modules/encryption/encryption.service';
 import { PaymentProviderModule } from '../payment-provider/payment-provider.modules';
+import { PaymentMethodResolver } from './payment-method.resolver';
+import { UserModule } from 'src/modules/users/user.module';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -13,8 +16,14 @@ import { PaymentProviderModule } from '../payment-provider/payment-provider.modu
     ]),
     EncryptionModule,
     PaymentProviderModule,
+    UserModule,
   ],
-  providers: [PaymentMethodService, EncryptionService],
+  providers: [
+    PaymentMethodService,
+    EncryptionService,
+    PaymentMethodResolver,
+    JwtService,
+  ],
   exports: [PaymentMethodService],
 })
 export class PaymentMethodModule {}

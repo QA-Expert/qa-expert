@@ -5,7 +5,9 @@ import { EncryptionService } from 'src/modules/encryption/encryption.service';
 import mongoose, { Model } from 'mongoose';
 import { PaymentProviderService } from '../payment-provider/payment-provider.service';
 import { PaymentMethodInput } from './payment-method.input';
-import { UserBaseModel } from 'src/modules/users/user-base.model';
+import { User } from 'src/modules/users/user.schema';
+import { PaymentMethodOutput } from './payment-method.output';
+import e from 'express';
 
 @Injectable()
 export class PaymentMethodService {
@@ -27,7 +29,7 @@ export class PaymentMethodService {
       .exec();
 
     if (!encryptedData) {
-      throw new NotFoundException('Failed to find payment method');
+      return null;
     }
 
     const decryptedData: PaymentMethod = {
@@ -39,13 +41,43 @@ export class PaymentMethodService {
     return decryptedData;
   }
 
-  async create(data: PaymentMethodInput, user: UserBaseModel) {
+  async retrieve(userId: string) {
+    const paymentMethodFromDb = await this.findOneByUserId(userId);
+
+    if (!paymentMethodFromDb) {
+      return null;
+    }
+
+    const { externalCustomerId, externalId } = paymentMethodFromDb;
+
+    const paymentMethod =
+      await this.servicePaymentProvider.client.customers.retrievePaymentMethod(
+        externalCustomerId,
+        externalId,
+      );
+
+    if (!paymentMethod || !paymentMethod.card) {
+      return null;
+    }
+
+    const result: PaymentMethodOutput = {
+      cardBrand: paymentMethod.card.brand,
+      cardLast4: paymentMethod.card.last4,
+    };
+
+    return result;
+  }
+
+  async create(data: PaymentMethodInput, user: User) {
     try {
-      // We create new customer with payment provider and attach payment method to customer by default so we can charge recouping subscription
+      // We create new customer with payment provider and attach payment method to customer by default so we can charge for subscription
       const customer =
         await this.servicePaymentProvider.client.customers.create({
           name: `${user.firstName} ${user.lastName}`,
           email: user.email,
+          payment_method: data.paymentMethodId,
+          // @url https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method
+          // setting default payment method that is used to pay for sub
           invoice_settings: {
             default_payment_method: data.paymentMethodId,
           },
@@ -67,13 +99,18 @@ export class PaymentMethodService {
 
       return await model.save();
     } catch (error) {
+      console.log(error);
       throw new Error('Failed to create payment method with Payment provider');
     }
   }
 
-  async update(data: PaymentMethodInput, user: UserBaseModel) {
+  async update(data: PaymentMethodInput, user: User) {
     try {
       const paymentMethodFromDb = await this.findOneByUserId(user._id);
+
+      if (!paymentMethodFromDb) {
+        throw new NotFoundException('Failed to find saved payment method');
+      }
 
       await this.servicePaymentProvider.client.customers.update(
         paymentMethodFromDb?.externalCustomerId,
@@ -85,13 +122,42 @@ export class PaymentMethodService {
         },
       );
 
-      return this.model.findByIdAndUpdate(
-        paymentMethodFromDb._id,
+      return await this.model
+        .findByIdAndUpdate(
+          paymentMethodFromDb._id,
+          {
+            externalId: this.encryptionService.encryptData(
+              data.paymentMethodId,
+            ),
+          },
+          { new: true },
+        )
+        .exec();
+    } catch (error) {
+      throw new Error('Failed to create payment method with Payment provider');
+    }
+  }
+
+  async remove(userId: string) {
+    try {
+      const paymentMethodFromDb = await this.findOneByUserId(userId);
+
+      if (!paymentMethodFromDb) {
+        throw new NotFoundException('Failed to find saved payment method');
+      }
+
+      await this.servicePaymentProvider.client.customers.update(
+        paymentMethodFromDb?.externalCustomerId,
         {
-          externalId: this.encryptionService.encryptData(data.paymentMethodId),
+          invoice_settings: {
+            default_payment_method: undefined,
+          },
         },
-        { new: true },
       );
+
+      return await this.model
+        .findByIdAndDelete(paymentMethodFromDb._id, { new: true })
+        .exec();
     } catch (error) {
       throw new Error('Failed to create payment method with Payment provider');
     }

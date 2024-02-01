@@ -207,28 +207,6 @@ export const GET_SUBMITTED_USER_PROGRESSES = gql(/* GraphQL */ `
   }
 `);
 
-export const GET_CREDIT_CARD = gql(/* GraphQL */ `
-  query GetCreditCard {
-    creditCard {
-      _id
-      cardToken
-      lastFour
-      expiryMonth
-      expiryYear
-      cardType
-      user
-      address {
-        phoneNumber
-        streetLine1
-        streetLine2
-        city
-        country
-        zip
-      }
-    }
-  }
-`);
-
 export const GET_USER_ACTIVITIES = gql(/* GraphQL */ `
   query GetUserActivities {
     activities {
@@ -240,11 +218,20 @@ export const GET_USER_ACTIVITIES = gql(/* GraphQL */ `
   }
 `);
 
-export const GET_BILLING_TRANSACTIONS = gql(/* GraphQL */ `
-  query GetBillingTransactions {
-    transactions {
+export const GET_SUBSCRIPTION = gql(/* GraphQL */ `
+  query GetSubscription {
+    subscription {
       _id
-      createdAt
+      status
+    }
+  }
+`);
+
+export const GET_PAYMENT_METHOD = gql(/* GraphQL */ `
+  query GetPaymentMethod {
+    paymentMethod {
+      cardLast4
+      cardBrand
     }
   }
 `);

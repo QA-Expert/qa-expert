@@ -176,3 +176,51 @@ export const LIKE_COURSE = gql(/* GraphQL */ `
     }
   }
 `);
+
+export const ADD_PAYMENT_METHOD = gql(/* GraphQL */ `
+  mutation AddPaymentMethod($data: PaymentMethodInput!) {
+    addPaymentMethod(data: $data) {
+      _id
+    }
+  }
+`);
+
+export const UPDATE_PAYMENT_METHOD = gql(/* GraphQL */ `
+  mutation UpdatePaymentMethod($data: PaymentMethodInput!) {
+    updatePaymentMethod(data: $data) {
+      _id
+    }
+  }
+`);
+
+export const REMOVE_PAYMENT_METHOD = gql(/* GraphQL */ `
+  mutation RemovePaymentMethod {
+    removePaymentMethod {
+      _id
+    }
+  }
+`);
+
+export const SUBSCRIBE = gql(/* GraphQL */ `
+  mutation Subscribe($data: SubscriptionInput!) {
+    subscribe(data: $data) {
+      _id
+    }
+  }
+`);
+
+export const ACTIVATE_SUBSCRIPTION = gql(/* GraphQL */ `
+  mutation ActivateSubscription {
+    activateSubscription {
+      _id
+    }
+  }
+`);
+
+export const CANCEL_SUBSCRIPTION = gql(/* GraphQL */ `
+  mutation CancelSubscription {
+    cancelSubscription {
+      _id
+    }
+  }
+`);

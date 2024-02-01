@@ -51,26 +51,6 @@ export enum ActivityType {
   Percentage = 'PERCENTAGE',
 }
 
-export type Address = {
-  __typename?: 'Address';
-  _id: Scalars['String']['output'];
-  /** [Should be Encrypted] City name */
-  city: Scalars['String']['output'];
-  /** [Should be Encrypted] Country code or name */
-  country: Scalars['String']['output'];
-  creditCard: CreditCard;
-  /** [Should be Encrypted] Customer's phone number */
-  phoneNumber: Scalars['String']['output'];
-  /** [Should be Encrypted] State code or name */
-  state: Scalars['String']['output'];
-  /** [Should be Encrypted] Street name */
-  streetLine1: Scalars['String']['output'];
-  /** [Should be Encrypted] Could be apt number */
-  streetLine2: Scalars['String']['output'];
-  /** [Should be Encrypted] Zip code */
-  zip: Scalars['String']['output'];
-};
-
 export type Answer = {
   __typename?: 'Answer';
   _id: Scalars['String']['output'];
@@ -185,23 +165,6 @@ export enum CourseType {
   Quiz = 'QUIZ',
 }
 
-export type CreditCard = {
-  __typename?: 'CreditCard';
-  _id: Scalars['String']['output'];
-  address: Address;
-  /** [Should be Encrypted] Tokenized value of the credit card */
-  cardToken: Scalars['String']['output'];
-  /** [Should be Encrypted] Card type. Example: VISA, MASTERCARD, AMEX etc */
-  cardType: Scalars['String']['output'];
-  /** [Should be Encrypted] Expiration month of the credit card */
-  expiryMonth: Scalars['String']['output'];
-  /** [Should be Encrypted] Expiration year of the credit card */
-  expiryYear: Scalars['String']['output'];
-  /** [Should be Encrypted] Last four numbers of User's credit card */
-  lastFour: Scalars['String']['output'];
-  user: Scalars['String']['output'];
-};
-
 export type EmailInput = {
   from: Scalars['String']['input'];
   subject: Scalars['String']['input'];
@@ -216,7 +179,10 @@ export type KeyValuePair = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  activateSubscription: Subscription;
   addPage: Course;
+  addPaymentMethod: PaymentMethod;
+  cancelSubscription: Subscription;
   claimBadge: ClaimedBadge;
   createCoursePage: Page;
   createCoursePageProgress: PageProgress;
@@ -230,10 +196,13 @@ export type Mutation = {
   logout: Scalars['Boolean']['output'];
   register: UserOutputLogin;
   registerSocial: UserOutputLogin;
+  removePaymentMethod: PaymentMethod;
   resetPassword: User;
   sendBugReport: Scalars['String']['output'];
   sendCommunication: Scalars['String']['output'];
+  subscribe: Subscription;
   updateCoursePageContent: Page;
+  updatePaymentMethod: PaymentMethod;
   updateUserNames: User;
   updateUserPassword: User;
   validateRestApi: AnswerValidationRestApiOutput;
@@ -242,6 +211,10 @@ export type Mutation = {
 export type MutationAddPageArgs = {
   _id: Scalars['String']['input'];
   pageId: Scalars['String']['input'];
+};
+
+export type MutationAddPaymentMethodArgs = {
+  data: PaymentMethodInput;
 };
 
 export type MutationClaimBadgeArgs = {
@@ -304,9 +277,17 @@ export type MutationSendCommunicationArgs = {
   data: EmailInput;
 };
 
+export type MutationSubscribeArgs = {
+  data: SubscriptionInput;
+};
+
 export type MutationUpdateCoursePageContentArgs = {
   _id: Scalars['String']['input'];
   data: CoursePageContentInput;
+};
+
+export type MutationUpdatePaymentMethodArgs = {
+  data: PaymentMethodInput;
 };
 
 export type MutationUpdateUserNamesArgs = {
@@ -358,6 +339,27 @@ export enum PageProgressState {
   Pass = 'PASS',
 }
 
+export type PaymentMethod = {
+  __typename?: 'PaymentMethod';
+  _id: Scalars['String']['output'];
+  /** [Should be Encrypted] external Payment Provider customer id. Used to pull customer info from Payment Provider */
+  externalCustomerId: Scalars['String']['output'];
+  /** [Should be Encrypted] external Payment Provider payment method id. Used to pull user's payment method (credit card) from Payment Provider */
+  externalId: Scalars['String']['output'];
+  user: Scalars['String']['output'];
+};
+
+export type PaymentMethodInput = {
+  /** Payment Provider Payment Method id */
+  paymentMethodId: Scalars['String']['input'];
+};
+
+export type PaymentMethodOutput = {
+  __typename?: 'PaymentMethodOutput';
+  cardBrand: Scalars['String']['output'];
+  cardLast4: Scalars['String']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   activities: Array<Activity>;
@@ -367,9 +369,9 @@ export type Query = {
   coursePublic: Course;
   courses: Array<Course>;
   coursesPublic: Array<Course>;
-  creditCard?: Maybe<CreditCard>;
+  paymentMethod?: Maybe<PaymentMethodOutput>;
   submittedProgresses: Array<SubmittedProgress>;
-  transactions: Array<Transaction>;
+  subscription?: Maybe<Subscription>;
   user: User;
 };
 
@@ -455,6 +457,28 @@ export type SubmittedProgress = {
   user: Scalars['String']['output'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  _id: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  /** External transaction. Refer to transaction stored on side of Payment Processes like Stripe */
+  externalId: Scalars['String']['output'];
+  status: SubscriptionStatus;
+  updatedAt: Scalars['DateTime']['output'];
+  user: Scalars['String']['output'];
+};
+
+export type SubscriptionInput = {
+  couponId?: InputMaybe<Scalars['String']['input']>;
+  priceId: Scalars['String']['input'];
+};
+
+/** Defines users subscription is active or not */
+export enum SubscriptionStatus {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+}
+
 /** Defines the course tags */
 export enum Tag {
   Ai = 'AI',
@@ -470,21 +494,6 @@ export type TotalCourseProgress = {
   pass: Scalars['Float']['output'];
   state: CourseProgressState;
   updatedAt: Scalars['DateTime']['output'];
-};
-
-export type Transaction = {
-  __typename?: 'Transaction';
-  _id: Scalars['String']['output'];
-  /** Transaction amount */
-  amount: Scalars['Float']['output'];
-  createdAt: Scalars['DateTime']['output'];
-  creditCard: Scalars['String']['output'];
-  /** Transaction currency. Could be represented as currency code like USD */
-  currency: Scalars['String']['output'];
-  /** External transaction. Refer to transaction stored on side of Payment Processes like Stripe */
-  externalId: Scalars['String']['output'];
-  updatedAt: Scalars['DateTime']['output'];
-  user: Scalars['String']['output'];
 };
 
 export type User = {
@@ -731,6 +740,60 @@ export type LikeCourseMutation = {
   likeCourse: { __typename?: 'CourseLike'; _id: string };
 };
 
+export type AddPaymentMethodMutationVariables = Exact<{
+  data: PaymentMethodInput;
+}>;
+
+export type AddPaymentMethodMutation = {
+  __typename?: 'Mutation';
+  addPaymentMethod: { __typename?: 'PaymentMethod'; _id: string };
+};
+
+export type UpdatePaymentMethodMutationVariables = Exact<{
+  data: PaymentMethodInput;
+}>;
+
+export type UpdatePaymentMethodMutation = {
+  __typename?: 'Mutation';
+  updatePaymentMethod: { __typename?: 'PaymentMethod'; _id: string };
+};
+
+export type RemovePaymentMethodMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type RemovePaymentMethodMutation = {
+  __typename?: 'Mutation';
+  removePaymentMethod: { __typename?: 'PaymentMethod'; _id: string };
+};
+
+export type SubscribeMutationVariables = Exact<{
+  data: SubscriptionInput;
+}>;
+
+export type SubscribeMutation = {
+  __typename?: 'Mutation';
+  subscribe: { __typename?: 'Subscription'; _id: string };
+};
+
+export type ActivateSubscriptionMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type ActivateSubscriptionMutation = {
+  __typename?: 'Mutation';
+  activateSubscription: { __typename?: 'Subscription'; _id: string };
+};
+
+export type CancelSubscriptionMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type CancelSubscriptionMutation = {
+  __typename?: 'Mutation';
+  cancelSubscription: { __typename?: 'Subscription'; _id: string };
+};
+
 export type GetAllCoursesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllCoursesQuery = {
@@ -960,31 +1023,6 @@ export type GetSubmittedUserProgressesUserQuery = {
   }>;
 };
 
-export type GetCreditCardQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetCreditCardQuery = {
-  __typename?: 'Query';
-  creditCard?: {
-    __typename?: 'CreditCard';
-    _id: string;
-    cardToken: string;
-    lastFour: string;
-    expiryMonth: string;
-    expiryYear: string;
-    cardType: string;
-    user: string;
-    address: {
-      __typename?: 'Address';
-      phoneNumber: string;
-      streetLine1: string;
-      streetLine2: string;
-      city: string;
-      country: string;
-      zip: string;
-    };
-  } | null;
-};
-
 export type GetUserActivitiesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUserActivitiesQuery = {
@@ -998,17 +1036,26 @@ export type GetUserActivitiesQuery = {
   }>;
 };
 
-export type GetBillingTransactionsQueryVariables = Exact<{
-  [key: string]: never;
-}>;
+export type GetSubscriptionQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetBillingTransactionsQuery = {
+export type GetSubscriptionQuery = {
   __typename?: 'Query';
-  transactions: Array<{
-    __typename?: 'Transaction';
+  subscription?: {
+    __typename?: 'Subscription';
     _id: string;
-    createdAt: string;
-  }>;
+    status: SubscriptionStatus;
+  } | null;
+};
+
+export type GetPaymentMethodQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetPaymentMethodQuery = {
+  __typename?: 'Query';
+  paymentMethod?: {
+    __typename?: 'PaymentMethodOutput';
+    cardLast4: string;
+    cardBrand: string;
+  } | null;
 };
 
 export const LoginDocument = {
@@ -2237,6 +2284,240 @@ export const LikeCourseDocument = {
     },
   ],
 } as unknown as DocumentNode<LikeCourseMutation, LikeCourseMutationVariables>;
+export const AddPaymentMethodDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'AddPaymentMethod' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'PaymentMethodInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'addPaymentMethod' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AddPaymentMethodMutation,
+  AddPaymentMethodMutationVariables
+>;
+export const UpdatePaymentMethodDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UpdatePaymentMethod' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'PaymentMethodInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updatePaymentMethod' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UpdatePaymentMethodMutation,
+  UpdatePaymentMethodMutationVariables
+>;
+export const RemovePaymentMethodDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'RemovePaymentMethod' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'removePaymentMethod' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RemovePaymentMethodMutation,
+  RemovePaymentMethodMutationVariables
+>;
+export const SubscribeDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'Subscribe' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'SubscriptionInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'subscribe' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SubscribeMutation, SubscribeMutationVariables>;
+export const ActivateSubscriptionDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'ActivateSubscription' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'activateSubscription' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ActivateSubscriptionMutation,
+  ActivateSubscriptionMutationVariables
+>;
+export const CancelSubscriptionDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CancelSubscription' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'cancelSubscription' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CancelSubscriptionMutation,
+  CancelSubscriptionMutationVariables
+>;
 export const GetAllCoursesDocument = {
   kind: 'Document',
   definitions: [
@@ -2870,64 +3151,6 @@ export const GetSubmittedUserProgressesUserDocument = {
   GetSubmittedUserProgressesUserQuery,
   GetSubmittedUserProgressesUserQueryVariables
 >;
-export const GetCreditCardDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetCreditCard' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'creditCard' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'cardToken' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'lastFour' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'expiryMonth' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'expiryYear' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'cardType' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'user' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'address' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'phoneNumber' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'streetLine1' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'streetLine2' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'city' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'country' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'zip' } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetCreditCardQuery, GetCreditCardQueryVariables>;
 export const GetUserActivitiesDocument = {
   kind: 'Document',
   definitions: [
@@ -2959,24 +3182,24 @@ export const GetUserActivitiesDocument = {
   GetUserActivitiesQuery,
   GetUserActivitiesQueryVariables
 >;
-export const GetBillingTransactionsDocument = {
+export const GetSubscriptionDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'GetBillingTransactions' },
+      name: { kind: 'Name', value: 'GetSubscription' },
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'transactions' },
+            name: { kind: 'Name', value: 'subscription' },
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
               ],
             },
           },
@@ -2985,6 +3208,35 @@ export const GetBillingTransactionsDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  GetBillingTransactionsQuery,
-  GetBillingTransactionsQueryVariables
+  GetSubscriptionQuery,
+  GetSubscriptionQueryVariables
+>;
+export const GetPaymentMethodDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetPaymentMethod' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'paymentMethod' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'cardLast4' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'cardBrand' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetPaymentMethodQuery,
+  GetPaymentMethodQueryVariables
 >;

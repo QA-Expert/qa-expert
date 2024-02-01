@@ -9,7 +9,7 @@ export enum SubscriptionStatus {
 }
 
 registerEnumType(SubscriptionStatus, {
-  name: 'Subscription Status',
+  name: 'SubscriptionStatus',
   description: 'Defines users subscription is active or not',
 });
 

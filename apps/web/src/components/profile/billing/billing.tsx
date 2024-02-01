@@ -1,31 +1,49 @@
 'use client';
 
 import { Box } from '@/components/box/box';
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import {
-  GET_BILLING_TRANSACTIONS,
-  GET_CREDIT_CARD,
-} from 'graphql/queries/queries';
-import { useError } from 'utils/hooks';
+  AddressElement,
+  CardCvcElement,
+  CardExpiryElement,
+  CardNumberElement,
+} from '@stripe/react-stripe-js';
+import { useCardPaymentMethod } from './hooks';
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button/Button';
 
 export function Billing() {
-  const { data: creditCardData, error: creditCardError } =
-    useSuspenseQuery(GET_CREDIT_CARD);
-  const { data: transactionsData, error: transactionsError } = useSuspenseQuery(
-    GET_BILLING_TRANSACTIONS,
-  );
+  const { createPaymentMethod } = useCardPaymentMethod();
 
-  useError([transactionsError?.message, creditCardError?.message]);
+  const handleSubmit = async () => {
+    const result = await createPaymentMethod();
+    console.log(result);
+  };
 
   return (
     <Box>
-      <h1>Billing {creditCardData?.creditCard?._id}</h1>
-      <h1>
-        Transactions
-        {transactionsData?.transactions?.map((transaction) => (
-          <div key={transaction._id}>{transaction.createdAt}</div>
-        ))}
-      </h1>
+      <h1>Billing</h1>
+      <h1>Transactions</h1>
+
+      <Form>
+        <AddressElement options={{ mode: 'billing' }} />
+        <CardNumberElement />
+        <CardExpiryElement />
+        <CardCvcElement />
+      </Form>
+
+      <Button variant="contained" onClick={handleSubmit}>
+        Add
+      </Button>
     </Box>
   );
 }
+
+const Form = styled('form')({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1rem',
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'white',
+  padding: '2rem',
+});

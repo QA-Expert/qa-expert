@@ -65,8 +65,8 @@ export class SubscriptionService {
     return await model.save();
   }
 
-  async activate(_id: string) {
-    const subscriptionFromDb = await this.model.findById(_id).exec();
+  async activate(userId: string) {
+    const subscriptionFromDb = await this.findOneByUserId(userId);
 
     if (!subscriptionFromDb) {
       throw new NotFoundException(
@@ -83,26 +83,26 @@ export class SubscriptionService {
 
     return await this.model
       .findByIdAndUpdate(
-        _id,
+        subscriptionFromDb._id,
         {
           status: SubscriptionStatus.ACTIVE,
-          updatedBy: new mongoose.Types.ObjectId(subscriptionFromDb.user._id),
+          updatedBy: new mongoose.Types.ObjectId(userId),
         },
         { new: true },
       )
       .exec();
   }
 
-  async cancel(_id: string) {
-    const subscription = await this.model.findById(_id).exec();
+  async cancel(userId: string) {
+    const subscriptionFromDb = await this.findOneByUserId(userId);
 
-    if (!subscription) {
+    if (!subscriptionFromDb) {
       throw new Error('Subscription not found');
     }
 
     const result =
       await this.servicePaymentProvider.client.subscriptions.cancel(
-        subscription.externalId,
+        subscriptionFromDb.externalId,
       );
 
     if (result.status !== 'canceled') {
@@ -111,10 +111,10 @@ export class SubscriptionService {
 
     return await this.model
       .findByIdAndUpdate(
-        _id,
+        subscriptionFromDb._id,
         {
           status: SubscriptionStatus.INACTIVE,
-          updatedBy: new mongoose.Types.ObjectId(subscription.user._id),
+          updatedBy: new mongoose.Types.ObjectId(userId),
         },
         { new: true },
       )

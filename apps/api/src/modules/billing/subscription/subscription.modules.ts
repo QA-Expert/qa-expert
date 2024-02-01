@@ -6,12 +6,14 @@ import { SubscriptionService } from './subscription.service';
 import { SubscriptionResolver } from './subscription.resolver';
 import { PaymentProviderModule } from '../payment-provider/payment-provider.modules';
 import { PaymentMethodModule } from '../payment-method/payment-method.modules';
+import { UserModule } from 'src/modules/users/user.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Subscription.name, schema: SubscriptionSchema },
     ]),
+    UserModule,
     PaymentProviderModule,
     PaymentMethodModule,
   ],

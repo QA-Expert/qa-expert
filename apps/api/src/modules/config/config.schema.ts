@@ -37,7 +37,7 @@ export const validationSchema = Joi.object<Config>({
   EMAIL_PASSWORD: Joi.string().required(),
   EMAIL_FROM: Joi.string().required(),
   COURSE_COOLDOWN: Joi.number().required(),
-  BILLING_ENCRYPTION_METHOD: Joi.string().default('aes-256-cbc').required(),
+  BILLING_ENCRYPTION_METHOD: Joi.string().required().default('aes-256-cbc'),
   BILLING_SECRET_KEY: Joi.string().required(),
   AUTH_GOOGLE_CLIENT_ID: Joi.string().required(),
   AUTH_GOOGLE_CLIENT_SECRET: Joi.string().required(),
