@@ -202,7 +202,6 @@ export type Mutation = {
   sendCommunication: Scalars['String']['output'];
   subscribe: Subscription;
   updateCoursePageContent: Page;
-  updatePaymentMethod: PaymentMethod;
   updateUserNames: User;
   updateUserPassword: User;
   validateRestApi: AnswerValidationRestApiOutput;
@@ -284,10 +283,6 @@ export type MutationSubscribeArgs = {
 export type MutationUpdateCoursePageContentArgs = {
   _id: Scalars['String']['input'];
   data: CoursePageContentInput;
-};
-
-export type MutationUpdatePaymentMethodArgs = {
-  data: PaymentMethodInput;
 };
 
 export type MutationUpdateUserNamesArgs = {
@@ -747,15 +742,6 @@ export type AddPaymentMethodMutationVariables = Exact<{
 export type AddPaymentMethodMutation = {
   __typename?: 'Mutation';
   addPaymentMethod: { __typename?: 'PaymentMethod'; _id: string };
-};
-
-export type UpdatePaymentMethodMutationVariables = Exact<{
-  data: PaymentMethodInput;
-}>;
-
-export type UpdatePaymentMethodMutation = {
-  __typename?: 'Mutation';
-  updatePaymentMethod: { __typename?: 'PaymentMethod'; _id: string };
 };
 
 export type RemovePaymentMethodMutationVariables = Exact<{
@@ -2334,57 +2320,6 @@ export const AddPaymentMethodDocument = {
 } as unknown as DocumentNode<
   AddPaymentMethodMutation,
   AddPaymentMethodMutationVariables
->;
-export const UpdatePaymentMethodDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'UpdatePaymentMethod' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'PaymentMethodInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'updatePaymentMethod' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'data' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'data' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  UpdatePaymentMethodMutation,
-  UpdatePaymentMethodMutationVariables
 >;
 export const RemovePaymentMethodDocument = {
   kind: 'Document',

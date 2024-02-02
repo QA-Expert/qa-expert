@@ -28,17 +28,7 @@ export class PaymentMethodResolver {
     @CurrentUser() user: User,
     @Args('data') data: PaymentMethodInput,
   ) {
-    return await this.service.create(data, user);
-  }
-
-  @UseGuards(GqlAuthGuard, RolesGuard)
-  @Roles(RolesEnum.USER)
-  @Mutation(() => PaymentMethod)
-  public async updatePaymentMethod(
-    @CurrentUser() user: User,
-    @Args('data') data: PaymentMethodInput,
-  ) {
-    return await this.service.update(data, user);
+    return await this.service.createOrUpdate(data, user);
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)

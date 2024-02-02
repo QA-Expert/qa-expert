@@ -19,7 +19,6 @@ export class PaymentMethodService {
   ) {}
 
   async findOneByUserId(userId: string) {
-    const { decryptData } = this.encryptionService;
     const encryptedData = await this.model
       .findOne({
         user: {
@@ -34,8 +33,10 @@ export class PaymentMethodService {
 
     const decryptedData: PaymentMethod = {
       ...encryptedData,
-      externalCustomerId: decryptData(encryptedData.externalCustomerId),
-      externalId: decryptData(encryptedData.externalId),
+      externalCustomerId: this.encryptionService.decryptData(
+        encryptedData.externalCustomerId,
+      ),
+      externalId: this.encryptionService.decryptData(encryptedData.externalId),
     } as PaymentMethod;
 
     return decryptedData;
@@ -68,76 +69,91 @@ export class PaymentMethodService {
     return result;
   }
 
-  async create(data: PaymentMethodInput, user: User) {
+  /**
+   *
+   * 1. We check if customer exists on Payment Provider side
+   * 2. If exists we update customer's payment method
+   * 3. If does not exist we create new customer with give payment method
+   * 4. Finally we upsert PaymentMethod document in our DB
+   */
+  async createOrUpdate(data: PaymentMethodInput, user: User) {
     try {
-      // We create new customer with payment provider and attach payment method to customer by default so we can charge for subscription
-      const customer =
-        await this.servicePaymentProvider.client.customers.create({
-          name: `${user.firstName} ${user.lastName}`,
-          email: user.email,
-          payment_method: data.paymentMethodId,
-          // @url https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method
-          // setting default payment method that is used to pay for sub
-          invoice_settings: {
-            default_payment_method: data.paymentMethodId,
-          },
+      let externalCustomerId: string;
+
+      const customerSearchResult =
+        await this.servicePaymentProvider.client.customers.search({
+          query: `email:'${user.email}'`,
         });
 
-      const newPaymentMethod: Partial<PaymentMethod> = {
-        user: new mongoose.Types.ObjectId(user._id),
-        externalCustomerId: this.encryptionService.encryptData(customer.id),
-        externalId: this.encryptionService.encryptData(data.paymentMethodId),
-        createdBy: new mongoose.Types.ObjectId(user._id),
-        updatedBy: new mongoose.Types.ObjectId(user._id),
-      };
+      const isCustomerExist =
+        Array.isArray(customerSearchResult.data) &&
+        customerSearchResult.data.length === 1 &&
+        customerSearchResult.data[0].id;
 
-      const model = new this.model(newPaymentMethod);
+      if (!isCustomerExist) {
+        // We create new customer with payment provider and attach payment method to customer by default so we can charge for subscription
+        const customer =
+          await this.servicePaymentProvider.client.customers.create({
+            name: `${user.firstName} ${user.lastName}`,
+            email: user.email,
+            payment_method: data.paymentMethodId,
+            // @url https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method
+            // setting default payment method that is used to pay for sub
+            invoice_settings: {
+              default_payment_method: data.paymentMethodId,
+            },
+          });
 
-      if (!model) {
-        throw new Error('Failed to create new payment method');
-      }
+        externalCustomerId = customer.id;
+      } else {
+        // If customer exists 1-attach new payment method 2-update their default payment method to new one
+        externalCustomerId = customerSearchResult.data[0].id;
 
-      return await model.save();
-    } catch (error) {
-      console.log(error);
-      throw new Error('Failed to create payment method with Payment provider');
-    }
-  }
+        await this.servicePaymentProvider.client.paymentMethods.attach(
+          data.paymentMethodId,
+          { customer: externalCustomerId },
+        );
 
-  async update(data: PaymentMethodInput, user: User) {
-    try {
-      const paymentMethodFromDb = await this.findOneByUserId(user._id);
-
-      if (!paymentMethodFromDb) {
-        throw new NotFoundException('Failed to find saved payment method');
-      }
-
-      await this.servicePaymentProvider.client.customers.update(
-        paymentMethodFromDb?.externalCustomerId,
-        {
-          name: `${user.firstName} ${user.lastName}`,
-          invoice_settings: {
-            default_payment_method: data.paymentMethodId,
-          },
-        },
-      );
-
-      return await this.model
-        .findByIdAndUpdate(
-          paymentMethodFromDb._id,
+        await this.servicePaymentProvider.client.customers.update(
+          externalCustomerId,
           {
+            name: `${user.firstName} ${user.lastName}`,
+
+            invoice_settings: {
+              default_payment_method: data.paymentMethodId,
+            },
+          },
+        );
+      }
+
+      // upsert document
+      return await this.model
+        .findOneAndUpdate(
+          {
+            user: {
+              _id: user._id,
+            },
+          },
+          {
+            user: new mongoose.Types.ObjectId(user._id),
+            externalCustomerId:
+              this.encryptionService.encryptData(externalCustomerId),
             externalId: this.encryptionService.encryptData(
               data.paymentMethodId,
             ),
+            createdBy: new mongoose.Types.ObjectId(user._id),
+            updatedBy: new mongoose.Types.ObjectId(user._id),
           },
-          { new: true },
+          { new: true, upsert: true },
         )
         .exec();
     } catch (error) {
-      throw new Error('Failed to create payment method with Payment provider');
+      console.log(error);
+      throw new Error(
+        'Failed to create or update payment method with Payment provider',
+      );
     }
   }
-
   async remove(userId: string) {
     try {
       const paymentMethodFromDb = await this.findOneByUserId(userId);
@@ -146,8 +162,12 @@ export class PaymentMethodService {
         throw new NotFoundException('Failed to find saved payment method');
       }
 
+      await this.servicePaymentProvider.client.paymentMethods.detach(
+        paymentMethodFromDb.externalId,
+      );
+
       await this.servicePaymentProvider.client.customers.update(
-        paymentMethodFromDb?.externalCustomerId,
+        paymentMethodFromDb.externalCustomerId,
         {
           invoice_settings: {
             default_payment_method: undefined,

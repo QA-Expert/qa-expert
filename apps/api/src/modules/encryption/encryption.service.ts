@@ -1,23 +1,21 @@
-import crypto, { randomBytes } from 'crypto';
+import crypto from 'crypto';
 import { ConfigService } from '../config/config.service.js';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class EncryptionService {
-  constructor(private configService: ConfigService) {}
-
-  #iv = randomBytes(16);
+  constructor(private readonly configService: ConfigService) {}
 
   // Generate secret hash with crypto to use for encryption
   key = crypto
     .createHash('sha512')
-    .update(this.configService.billingSecretKey)
+    .update(this.configService.encryptionSecretKey)
     .digest('hex')
     .substring(0, 32);
 
   encryptionIV = crypto
     .createHash('sha512')
-    .update(this.#iv)
+    .update(this.configService.encryptionIv)
     .digest('hex')
     .substring(0, 16);
 
@@ -27,7 +25,7 @@ export class EncryptionService {
    */
   encryptData(data: string) {
     const cipher = crypto.createCipheriv(
-      this.configService.billingEncryptionMethod,
+      this.configService.encryptionMethod,
       this.key,
       this.encryptionIV,
     );
@@ -44,7 +42,7 @@ export class EncryptionService {
   decryptData(data: string) {
     const buff = Buffer.from(data, 'base64');
     const decipher = crypto.createDecipheriv(
-      this.configService.billingEncryptionMethod,
+      this.configService.encryptionMethod,
       this.key,
       this.encryptionIV,
     );

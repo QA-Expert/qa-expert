@@ -50,8 +50,6 @@ const documents = {
     types.LikeCourseDocument,
   '\n  mutation AddPaymentMethod($data: PaymentMethodInput!) {\n    addPaymentMethod(data: $data) {\n      _id\n    }\n  }\n':
     types.AddPaymentMethodDocument,
-  '\n  mutation UpdatePaymentMethod($data: PaymentMethodInput!) {\n    updatePaymentMethod(data: $data) {\n      _id\n    }\n  }\n':
-    types.UpdatePaymentMethodDocument,
   '\n  mutation RemovePaymentMethod {\n    removePaymentMethod {\n      _id\n    }\n  }\n':
     types.RemovePaymentMethodDocument,
   '\n  mutation Subscribe($data: SubscriptionInput!) {\n    subscribe(data: $data) {\n      _id\n    }\n  }\n':
@@ -214,12 +212,6 @@ export function gql(
 export function gql(
   source: '\n  mutation AddPaymentMethod($data: PaymentMethodInput!) {\n    addPaymentMethod(data: $data) {\n      _id\n    }\n  }\n',
 ): (typeof documents)['\n  mutation AddPaymentMethod($data: PaymentMethodInput!) {\n    addPaymentMethod(data: $data) {\n      _id\n    }\n  }\n'];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(
-  source: '\n  mutation UpdatePaymentMethod($data: PaymentMethodInput!) {\n    updatePaymentMethod(data: $data) {\n      _id\n    }\n  }\n',
-): (typeof documents)['\n  mutation UpdatePaymentMethod($data: PaymentMethodInput!) {\n    updatePaymentMethod(data: $data) {\n      _id\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

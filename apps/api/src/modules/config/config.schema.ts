@@ -14,8 +14,9 @@ export interface Config {
   EMAIL_PASSWORD: string;
   EMAIL_FROM: string;
   COURSE_COOLDOWN: number;
-  BILLING_ENCRYPTION_METHOD: string;
-  BILLING_SECRET_KEY: string;
+  ENCRYPTION_METHOD: string;
+  ENCRYPTION_SECRET_KEY: string;
+  ENCRYPTION_IV: string;
   AUTH_GOOGLE_CLIENT_ID: string;
   AUTH_GOOGLE_CLIENT_SECRET: string;
   PAYMENT_PROVIDER_API_KEY: string;
@@ -37,8 +38,9 @@ export const validationSchema = Joi.object<Config>({
   EMAIL_PASSWORD: Joi.string().required(),
   EMAIL_FROM: Joi.string().required(),
   COURSE_COOLDOWN: Joi.number().required(),
-  BILLING_ENCRYPTION_METHOD: Joi.string().required().default('aes-256-cbc'),
-  BILLING_SECRET_KEY: Joi.string().required(),
+  ENCRYPTION_METHOD: Joi.string().required().default('aes-256-cbc'),
+  ENCRYPTION_SECRET_KEY: Joi.string().required(),
+  ENCRYPTION_IV: Joi.string().required(),
   AUTH_GOOGLE_CLIENT_ID: Joi.string().required(),
   AUTH_GOOGLE_CLIENT_SECRET: Joi.string().required(),
   PAYMENT_PROVIDER_API_KEY: Joi.string().required(),

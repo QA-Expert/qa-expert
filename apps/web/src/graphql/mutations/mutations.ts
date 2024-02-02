@@ -185,14 +185,6 @@ export const ADD_PAYMENT_METHOD = gql(/* GraphQL */ `
   }
 `);
 
-export const UPDATE_PAYMENT_METHOD = gql(/* GraphQL */ `
-  mutation UpdatePaymentMethod($data: PaymentMethodInput!) {
-    updatePaymentMethod(data: $data) {
-      _id
-    }
-  }
-`);
-
 export const REMOVE_PAYMENT_METHOD = gql(/* GraphQL */ `
   mutation RemovePaymentMethod {
     removePaymentMethod {
