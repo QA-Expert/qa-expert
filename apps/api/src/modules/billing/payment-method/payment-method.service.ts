@@ -7,7 +7,6 @@ import { PaymentProviderService } from '../payment-provider/payment-provider.ser
 import { PaymentMethodInput } from './payment-method.input';
 import { User } from 'src/modules/users/user.schema';
 import { PaymentMethodOutput } from './payment-method.output';
-import e from 'express';
 
 @Injectable()
 export class PaymentMethodService {
@@ -32,7 +31,8 @@ export class PaymentMethodService {
     }
 
     const decryptedData: PaymentMethod = {
-      ...encryptedData,
+      _id: encryptedData._id,
+      user: encryptedData.user._id,
       externalCustomerId: this.encryptionService.decryptData(
         encryptedData.externalCustomerId,
       ),
@@ -43,30 +43,36 @@ export class PaymentMethodService {
   }
 
   async retrieve(userId: string) {
-    const paymentMethodFromDb = await this.findOneByUserId(userId);
+    try {
+      const paymentMethodFromDb = await this.findOneByUserId(userId);
 
-    if (!paymentMethodFromDb) {
-      return null;
+      if (!paymentMethodFromDb) {
+        return null;
+      }
+
+      const { externalCustomerId, externalId } = paymentMethodFromDb;
+      const paymentMethod =
+        await this.servicePaymentProvider.client.customers.retrievePaymentMethod(
+          externalCustomerId,
+          externalId,
+        );
+
+      if (!paymentMethod || !paymentMethod.card) {
+        return null;
+      }
+
+      const result: PaymentMethodOutput = {
+        cardBrand: paymentMethod.card.brand,
+        cardLast4: paymentMethod.card.last4,
+      };
+
+      return result;
+    } catch (error) {
+      // @ts-expect-error cannot import Stripe error
+      if ('statusCode' in error && error.statusCode === 404) {
+        return null;
+      }
     }
-
-    const { externalCustomerId, externalId } = paymentMethodFromDb;
-
-    const paymentMethod =
-      await this.servicePaymentProvider.client.customers.retrievePaymentMethod(
-        externalCustomerId,
-        externalId,
-      );
-
-    if (!paymentMethod || !paymentMethod.card) {
-      return null;
-    }
-
-    const result: PaymentMethodOutput = {
-      cardBrand: paymentMethod.card.brand,
-      cardLast4: paymentMethod.card.last4,
-    };
-
-    return result;
   }
 
   /**
@@ -148,7 +154,6 @@ export class PaymentMethodService {
         )
         .exec();
     } catch (error) {
-      console.log(error);
       throw new Error(
         'Failed to create or update payment method with Payment provider',
       );
@@ -175,11 +180,17 @@ export class PaymentMethodService {
         },
       );
 
-      return await this.model
-        .findByIdAndDelete(paymentMethodFromDb._id, { new: true })
+      const result = await this.model
+        .findByIdAndDelete(paymentMethodFromDb._id)
         .exec();
+
+      if (result === null) {
+        throw new Error('Failed to remove payment method from DB');
+      }
+
+      return result;
     } catch (error) {
-      throw new Error('Failed to create payment method with Payment provider');
+      throw new Error('Failed to remove payment method');
     }
   }
 }

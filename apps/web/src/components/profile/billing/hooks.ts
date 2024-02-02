@@ -11,7 +11,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { CreatePaymentMethodData } from '@stripe/stripe-js';
 import { ADD_PAYMENT_METHOD } from 'graphql/mutations/mutations';
-import { GET_USER } from 'graphql/queries/queries';
+import { GET_PAYMENT_METHOD, GET_USER } from 'graphql/queries/queries';
 import { useCallback, useEffect, useState } from 'react';
 import { useError } from 'utils/hooks';
 
@@ -21,8 +21,12 @@ export const useCardPaymentMethod = () => {
   const { data: userData, error } = useSuspenseQuery(GET_USER);
   const [paymentMethodData, setPaymentMethodData] =
     useState<CreatePaymentMethodData>();
-  const [addPaymentMethod, { error: mutationError }] =
-    useMutation(ADD_PAYMENT_METHOD);
+  const [addPaymentMethod, { error: mutationError }] = useMutation(
+    ADD_PAYMENT_METHOD,
+    {
+      refetchQueries: [GET_PAYMENT_METHOD],
+    },
+  );
   const email = userData.user.email;
 
   const createPaymentMethod = useCallback(async () => {

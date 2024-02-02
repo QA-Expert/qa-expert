@@ -167,11 +167,13 @@ export class CourseProgressService {
       );
     }
 
-    const result = await this.courseProgressModel.findOneAndRemove({
-      course: { _id },
-      type: CourseType.QUIZ,
-      user: userId,
-    });
+    const result = await this.courseProgressModel
+      .findOneAndDelete({
+        course: { _id },
+        type: CourseType.QUIZ,
+        user: userId,
+      })
+      .exec();
 
     if (result === null) {
       throw new Error('Failed to delete course progress');
