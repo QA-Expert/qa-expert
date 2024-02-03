@@ -2,20 +2,42 @@ import { useMutation } from '@apollo/client';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import {
   AddressElement,
-  CardCvcElement,
-  CardElement,
-  CardExpiryElement,
   CardNumberElement,
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js';
-import { CreatePaymentMethodData } from '@stripe/stripe-js';
+import {
+  CreatePaymentMethodData,
+  PaymentMethodCreateParams,
+} from '@stripe/stripe-js';
 import { ADD_PAYMENT_METHOD } from 'graphql/mutations/mutations';
 import { GET_PAYMENT_METHOD, GET_USER } from 'graphql/queries/queries';
 import { useCallback, useEffect, useState } from 'react';
 import { useError } from 'utils/hooks';
 
+export const useAddress = () => {
+  const [address, setAddress] =
+    useState<PaymentMethodCreateParams.BillingDetails.Address>();
+  const elements = useElements();
+
+  useEffect(() => {
+    if (elements) {
+      const addressElement = elements.getElement(AddressElement);
+
+      addressElement?.on('change', (event) => {
+        setAddress({
+          ...event.value.address,
+          line2: event.value.address.line2 ?? undefined,
+        });
+      });
+    }
+  }, [elements]);
+
+  return address;
+};
+
 export const useCardPaymentMethod = () => {
+  const address = useAddress();
   const stripe = useStripe();
   const elements = useElements();
   const { data: userData, error } = useSuspenseQuery(GET_USER);
@@ -57,27 +79,26 @@ export const useCardPaymentMethod = () => {
 
   useEffect(() => {
     const canCreatePaymentMethodData =
-      stripe !== null && elements !== null && email;
-
-    console.log('canCreatePaymentMethodData', canCreatePaymentMethodData);
+      stripe !== null && elements !== null && email && address;
 
     if (canCreatePaymentMethodData) {
       const cardElement = elements.getElement(CardNumberElement);
-      const addressElement = elements.getElement(AddressElement);
 
-      if (!cardElement || !addressElement) {
+      if (!cardElement) {
         return;
       }
 
+      console.log('ADDING PAYMENT METHOD DATA', address);
       setPaymentMethodData({
         type: 'card',
         card: cardElement,
         billing_details: {
           email: email,
+          address,
         },
       });
     }
-  }, [stripe, elements, email]);
+  }, [stripe, elements, email, address]);
 
   return {
     error,
