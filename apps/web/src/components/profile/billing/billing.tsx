@@ -10,30 +10,14 @@ import {
 import { useCardPaymentMethod } from './hooks';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button/Button';
-import { BorderBox } from '@/components/box/border-box';
-import Typography from '@mui/material/Typography/Typography';
-import { GET_PAYMENT_METHOD } from 'graphql/queries/queries';
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
-import { useError } from 'utils/hooks';
-import { useMutation } from '@apollo/client';
-import { REMOVE_PAYMENT_METHOD } from 'graphql/mutations/mutations';
+import { PaymentMethodCard } from './payment-method/payment-method';
 
 export function Billing() {
   const { createPaymentMethod } = useCardPaymentMethod();
-  const [removePaymentMethod, { error: removePaymentMethodError, loading }] =
-    useMutation(REMOVE_PAYMENT_METHOD, {
-      refetchQueries: [GET_PAYMENT_METHOD],
-    });
-  const { data: paymentMethodData, error: paymentMethodError } =
-    useSuspenseQuery(GET_PAYMENT_METHOD);
 
   const handleSubmit = async () => {
-    const result = await createPaymentMethod();
-    console.log(result);
+    await createPaymentMethod();
   };
-
-  useError([paymentMethodError?.message, removePaymentMethodError?.message]);
 
   return (
     <Box>
@@ -41,6 +25,7 @@ export function Billing() {
       <h1>Transactions</h1>
 
       <Form>
+        {/* @TODO: add autocomplete via google @url https://stripe.com/docs/js/elements_object/create_address_element#address_element_create-options-autocomplete */}
         <AddressElement options={{ mode: 'billing' }} />
         <CardNumberElement />
         <CardExpiryElement />
@@ -51,21 +36,7 @@ export function Billing() {
         </Button>
       </Form>
 
-      <BorderBox>
-        <Typography>
-          {paymentMethodData.paymentMethod?.cardBrand ?? '--'}
-        </Typography>
-        <Typography>
-          {paymentMethodData.paymentMethod?.cardLast4 ?? '--'}
-        </Typography>
-        <LoadingButton
-          variant="contained"
-          loading={loading}
-          onClick={async () => await removePaymentMethod()}
-        >
-          Remove
-        </LoadingButton>
-      </BorderBox>
+      <PaymentMethodCard />
     </Box>
   );
 }

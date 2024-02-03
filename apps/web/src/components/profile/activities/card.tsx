@@ -1,4 +1,4 @@
-import Card from '@mui/material/Card/Card';
+import { Card } from '@/components/profile/card/card';
 import Typography from '@mui/material/Typography/Typography';
 import { GetUserActivitiesQuery } from '__generated__/graphql';
 
@@ -11,11 +11,6 @@ export function ActivityCard({ title, description, value }: Props) {
   return (
     <Card
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: 'secondary.dark',
-        padding: '1rem',
-        gap: '1rem',
         minWidth: '510px',
       }}
     >

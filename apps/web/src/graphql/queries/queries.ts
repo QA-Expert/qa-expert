@@ -232,6 +232,8 @@ export const GET_PAYMENT_METHOD = gql(/* GraphQL */ `
     paymentMethod {
       cardLast4
       cardBrand
+      type
+      address
     }
   }
 `);

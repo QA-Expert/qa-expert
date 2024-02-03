@@ -88,7 +88,6 @@ export const useCardPaymentMethod = () => {
         return;
       }
 
-      console.log('ADDING PAYMENT METHOD DATA', address);
       setPaymentMethodData({
         type: 'card',
         card: cardElement,
@@ -101,7 +100,6 @@ export const useCardPaymentMethod = () => {
   }, [stripe, elements, email, address]);
 
   return {
-    error,
     createPaymentMethod,
   };
 };

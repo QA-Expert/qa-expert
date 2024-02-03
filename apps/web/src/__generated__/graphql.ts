@@ -351,8 +351,11 @@ export type PaymentMethodInput = {
 
 export type PaymentMethodOutput = {
   __typename?: 'PaymentMethodOutput';
+  address: Scalars['String']['output'];
   cardBrand: Scalars['String']['output'];
   cardLast4: Scalars['String']['output'];
+  /** Indicates what type of payment method. Could be card, digital wallet etc. */
+  type: Scalars['String']['output'];
 };
 
 export type Query = {
@@ -1041,6 +1044,8 @@ export type GetPaymentMethodQuery = {
     __typename?: 'PaymentMethodOutput';
     cardLast4: string;
     cardBrand: string;
+    type: string;
+    address: string;
   } | null;
 };
 
@@ -3164,6 +3169,8 @@ export const GetPaymentMethodDocument = {
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'cardLast4' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'cardBrand' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'address' } },
               ],
             },
           },

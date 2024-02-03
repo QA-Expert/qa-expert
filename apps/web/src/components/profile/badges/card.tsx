@@ -1,4 +1,3 @@
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
@@ -10,6 +9,7 @@ import { useState } from 'react';
 import { DropdownMenu } from '@/components/dropdown-menu/dropdown-menu';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
 import { GetAllAndClaimedBadgesQuery } from '__generated__/graphql';
+import { Card } from '@/components/profile/card/card';
 
 type Badge = GetAllAndClaimedBadgesQuery['badges'][number];
 
@@ -59,14 +59,10 @@ export const BadgeCard = ({
           opacity: isEarned ? 1 : 0.6,
           width: '300px',
           height: '300px',
-          display: 'flex',
-          flexDirection: 'column',
           justifyContent: 'start',
-          gap: '1rem',
           alignItems: 'center',
           textAlign: 'center',
           padding: '0',
-          backgroundColor: 'secondary.dark',
         }}
       >
         <Typography
