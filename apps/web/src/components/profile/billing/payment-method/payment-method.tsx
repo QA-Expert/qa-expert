@@ -1,100 +1,68 @@
-import Typography from '@mui/material/Typography/Typography';
-import { GetUserActivitiesQuery } from '__generated__/graphql';
-import { Card } from '@/components/profile/card/card';
 import { GET_PAYMENT_METHOD } from 'graphql/queries/queries';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useError } from 'utils/hooks';
 import { useMutation } from '@apollo/client';
-import {
-  ADD_PAYMENT_METHOD,
-  REMOVE_PAYMENT_METHOD,
-} from 'graphql/mutations/mutations';
-import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
-import { useMemo } from 'react';
-import { getPaymentMethodInfoString } from './handlers';
-import { Row } from '@/components/row/row';
+import { REMOVE_PAYMENT_METHOD } from 'graphql/mutations/mutations';
+import { ConfirmationModal } from '@/components/confirmation-modal/confirmation-modal';
+import { PaymentMethodCard } from './card/card';
+import { useState } from 'react';
+import { PaymentMethodModal } from './modal/modal';
 
-export function PaymentMethodCard() {
+export function PaymentMethod() {
+  const [removeConfirmationModalOpen, setRemoveConfirmationModalOpen] =
+    useState(false);
+  const [paymentMethodModalOpen, setPaymentMethodModalOpen] = useState(false);
+  const [paymentModalType, setPaymentModalType] = useState<'update' | 'add'>(
+    'add',
+  );
   const { data, error } = useSuspenseQuery(GET_PAYMENT_METHOD);
-  const [remove, { error: removeError, loading: loadingRemove }] = useMutation(
+  const [remove, { error: removeError, loading: removeLoading }] = useMutation(
     REMOVE_PAYMENT_METHOD,
     {
       refetchQueries: [GET_PAYMENT_METHOD],
     },
   );
-  const [upsert, { error: updateError, loading: loadingUpdate }] = useMutation(
-    ADD_PAYMENT_METHOD,
-    {
-      refetchQueries: [GET_PAYMENT_METHOD],
-    },
-  );
-  const paymentMethodData = useMemo(
-    () => getPaymentMethodInfoString(data.paymentMethod),
-    [data],
-  );
 
-  useError([error?.message, updateError?.message, removeError?.message]);
+  useError([error?.message, removeError?.message]);
+
+  const handleOnRemove = async () => {
+    await remove();
+    setRemoveConfirmationModalOpen(false);
+  };
 
   return (
-    <Card
-      sx={{
-        maxWidth: '350px',
-      }}
-    >
-      <Typography
-        variant="h4"
-        sx={{
-          color: 'secondary.main',
-          fontSize: '1rem',
-          textTransform: 'uppercase',
+    <>
+      <PaymentMethodCard
+        paymentMethod={data.paymentMethod}
+        onUpdate={() => {
+          setPaymentMethodModalOpen(true);
+          setPaymentModalType('update');
         }}
-      >
-        Payment Method Information
-      </Typography>
-
-      <Typography
-        variant="body1"
-        sx={{
-          color: 'text.secondary',
+        onAdd={() => {
+          setPaymentMethodModalOpen(true);
+          setPaymentModalType('add');
         }}
-      >
-        Payment Method: {paymentMethodData}
-      </Typography>
+        onRemove={() => setRemoveConfirmationModalOpen(true)}
+        removeLoading={removeLoading}
+      />
 
-      <Typography
-        variant="body1"
-        sx={{
-          color: 'text.secondary',
-        }}
-      >
-        Billing Address: {data.paymentMethod?.address ?? '--'}
-      </Typography>
+      <ConfirmationModal
+        onCancel={() => setRemoveConfirmationModalOpen(false)}
+        onConfirm={handleOnRemove}
+        title={'Confirm payment method removal'}
+        content={
+          'This action will delete the payment method from your account. You will need to add a new payment method to continue your subscription.'
+        }
+        open={removeConfirmationModalOpen}
+        buttonName={'Confirm Removal'}
+      />
 
-      <Row
-        sx={{
-          gap: '1rem',
-          justifyContent: 'center',
-          flex: 1,
-          alignItems: 'flex-end',
-        }}
-      >
-        <LoadingButton
-          variant="contained"
-          loading={loadingUpdate}
-          onClick={async () => await upsert()}
-        >
-          update
-        </LoadingButton>
-
-        <LoadingButton
-          variant="outlined"
-          color="error"
-          loading={loadingRemove}
-          onClick={async () => await remove()}
-        >
-          Remove
-        </LoadingButton>
-      </Row>
-    </Card>
+      <PaymentMethodModal
+        key={new Date().getTime()}
+        type={paymentModalType}
+        onCancel={() => setPaymentMethodModalOpen(false)}
+        open={paymentMethodModalOpen}
+      />
+    </>
   );
 }

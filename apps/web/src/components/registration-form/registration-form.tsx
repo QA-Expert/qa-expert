@@ -21,8 +21,8 @@ import Divider from '@mui/material/Divider/Divider';
 import { Row } from '@/components/row/row';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { styled } from '@mui/material/styles';
 import { SocialButtonsSkeleton } from '@/components/skeleton/social-buttons-skeleton';
+import { Form } from '@/components/form/form';
 
 const GoogleRegister = dynamic(
   () => import('@/components/registration-form/google-register-button'),
@@ -216,6 +216,8 @@ export function RegistrationForm() {
               .
             </Typography>
 
+            <Divider flexItem />
+
             <Button
               color="warning"
               variant="contained"
@@ -270,12 +272,3 @@ export function RegistrationForm() {
     </>
   );
 }
-
-const Form = styled('form')({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '1rem',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '1rem',
-});

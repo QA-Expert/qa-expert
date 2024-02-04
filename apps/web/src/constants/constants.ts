@@ -9,6 +9,7 @@ export const PUBLIC_ROUTES = [
   '/register',
   '/reset-password/[token]',
   '/forgot-password',
+  '/reset-password',
 ];
 
 export const BASE_URL = 'https://qaexpert-7g2rd.ondigitalocean.app';

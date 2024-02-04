@@ -6,17 +6,20 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
-import Modal from '@mui/material/Modal';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { UserInputUpdateNames } from '__generated__/graphql';
 import { object, string } from 'yup';
 import { UPDATE_USER_NAMES } from 'graphql/mutations/mutations';
-import { Box } from '@/components/box/box';
 import { GET_USER } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { Form } from '@/components/form/form';
+import { ModalContent } from '@/components/modal/content/content';
+import { ModalTitle } from '@/components/modal/title/title';
+import { Modal } from '@/components/modal/modal';
+import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
+import { Row } from '@/components/row/row';
+import Divider from '@mui/material/Divider/Divider';
 
 interface Props {
   open: boolean;
@@ -49,7 +52,9 @@ export function ChangeNamesModal({ open, onClose }: Props) {
       aria-labelledby="modal-change-user-names"
       aria-describedby="Modal where user can change last and first names"
     >
-      <>
+      <ModalTitle id="modal-change-user-names">Change names</ModalTitle>
+
+      <ModalContent>
         <Formik
           validationSchema={schema}
           initialValues={initialValues}
@@ -80,84 +85,75 @@ export function ChangeNamesModal({ open, onClose }: Props) {
             handleBlur,
             errors,
           }: FormikProps<UserInputUpdateNames>) => (
-            <form noValidate onSubmit={handleSubmit}>
-              <Paper
-                sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  minWidth: '30%',
-                  minHeight: '30%',
-                  gap: '1rem',
-                  padding: '2rem',
-                }}
-                component={Box}
-              >
-                <Typography
-                  id="modal-change-user-names-title"
-                  sx={{ fontSize: '2rem' }}
-                  variant="h1"
+            <Form noValidate onSubmit={handleSubmit}>
+              <FormControl>
+                <InputLabel htmlFor="first-name">First Name</InputLabel>
+                <Input
+                  autoComplete="on"
+                  type="text"
+                  name="firstName"
+                  id="first-name"
+                  placeholder="Enter your first name ..."
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.firstName}
+                  error={Boolean(errors.firstName)}
+                />
+                <FormHelperText
+                  error={Boolean(errors.firstName)}
+                  id="first-name-error-text"
                 >
-                  Change names
-                </Typography>
-                <FormControl>
-                  <InputLabel htmlFor="first-name">First Name</InputLabel>
-                  <Input
-                    autoComplete="on"
-                    type="text"
-                    name="firstName"
-                    id="first-name"
-                    placeholder="Enter your first name ..."
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.firstName}
-                    error={Boolean(errors.firstName)}
-                  />
-                  <FormHelperText
-                    error={Boolean(errors.firstName)}
-                    id="first-name-error-text"
-                  >
-                    {errors.firstName}
-                  </FormHelperText>
-                </FormControl>
+                  {errors.firstName}
+                </FormHelperText>
+              </FormControl>
 
-                <FormControl>
-                  <InputLabel htmlFor="last-name">Last Name</InputLabel>
-                  <Input
-                    autoComplete="on"
-                    type="text"
-                    name="lastName"
-                    id="last-name"
-                    placeholder="Enter your last name ..."
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.lastName}
-                    error={Boolean(errors.lastName)}
-                  />
-                  <FormHelperText
-                    error={Boolean(errors.lastName)}
-                    id="last-name-error-text"
-                  >
-                    {errors.lastName}
-                  </FormHelperText>
-                </FormControl>
-                <Button
+              <FormControl>
+                <InputLabel htmlFor="last-name">Last Name</InputLabel>
+                <Input
+                  autoComplete="on"
+                  type="text"
+                  name="lastName"
+                  id="last-name"
+                  placeholder="Enter your last name ..."
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.lastName}
+                  error={Boolean(errors.lastName)}
+                />
+                <FormHelperText
+                  error={Boolean(errors.lastName)}
+                  id="last-name-error-text"
+                >
+                  {errors.lastName}
+                </FormHelperText>
+              </FormControl>
+
+              <Divider flexItem />
+
+              <Row sx={{ gap: '1rem', justifyContent: 'center' }}>
+                <LoadingButton
                   variant="contained"
+                  color="warning"
+                  loading={isSubmitting}
                   disabled={
-                    isSubmitting ||
-                    Boolean(errors.firstName) ||
-                    Boolean(errors.lastName)
+                    Boolean(errors.firstName) || Boolean(errors.lastName)
                   }
                   type="submit"
                 >
                   Submit
+                </LoadingButton>
+                <Button
+                  variant="contained"
+                  disabled={isSubmitting}
+                  onClick={onClose}
+                >
+                  Cancel
                 </Button>
-              </Paper>
-            </form>
+              </Row>
+            </Form>
           )}
         </Formik>
-      </>
+      </ModalContent>
     </Modal>
   );
 }
