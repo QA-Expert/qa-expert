@@ -2,7 +2,7 @@ import { ModalActionButtons } from '@/components/modal/action-buttons/action-but
 import { ModalContent } from '@/components/modal/content/content';
 import { Modal } from '@/components/modal/modal';
 import { ModalTitle } from '@/components/modal/title/title';
-import Button from '@mui/material/Button/Button';
+import FormHelperText from '@mui/material/FormHelperText';
 import Divider from '@mui/material/Divider/Divider';
 import Typography from '@mui/material/Typography/Typography';
 import { Theme, useTheme } from '@mui/material/styles';
@@ -72,12 +72,7 @@ export function PaymentMethodModal({ type, onCancel, open }: Props) {
     if (event.empty) {
       setIsAddressValid(false);
     } else {
-      const { address, phone, name } = event.value;
-      const { line1, city, state, postal_code } = address;
-
-      setIsAddressValid(
-        Boolean(phone && name && line1 && city && state && postal_code),
-      );
+      setIsAddressValid(event.complete);
 
       setBillingDetails(
         event.value as CreatePaymentMethodData['billing_details'],
@@ -206,6 +201,16 @@ export function PaymentMethodModal({ type, onCancel, open }: Props) {
               },
             }}
           />
+
+          {!isIsAddressValid ||
+          !isCardNumberValid ||
+          !isCardExpiryValid ||
+          !isCardCvvValid ? (
+            <FormHelperText sx={{ color: 'error.main' }}>
+              Please feel Address and Card Information fields, Full name and
+              Phone number
+            </FormHelperText>
+          ) : null}
         </Form>
       </ModalContent>
 
