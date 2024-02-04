@@ -22,6 +22,7 @@ import {
   StripeCardExpiryElementChangeEvent,
   StripeCardNumberElementChangeEvent,
   StripeElementStyleVariant,
+  StripeAddressElementOptions,
 } from '@stripe/stripe-js';
 import { useCallback, useState } from 'react';
 import { GET_PAYMENT_METHOD, GET_USER } from 'graphql/queries/queries';
@@ -29,14 +30,21 @@ import { useMutation } from '@apollo/client';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { ADD_PAYMENT_METHOD } from 'graphql/mutations/mutations';
 import { useError } from 'utils/hooks';
+import { GetPaymentMethodQuery } from '__generated__/graphql';
 
 type Props = {
   type: 'update' | 'add';
   open: boolean;
   onCancel: () => void;
+  defaultValues?: GetPaymentMethodQuery['paymentMethod'];
 };
 
-export function PaymentMethodModal({ type, onCancel, open }: Props) {
+export function PaymentMethodModal({
+  type,
+  onCancel,
+  open,
+  defaultValues,
+}: Props) {
   const stripe = useStripe();
   const [isIsAddressValid, setIsAddressValid] = useState(false);
   const [isCardNumberValid, setIsCardNumberValid] = useState(false);
@@ -62,6 +70,18 @@ export function PaymentMethodModal({ type, onCancel, open }: Props) {
     color: theme.palette.text.primary,
     fontFamily: theme.typography.fontFamily,
     fontSize: '16px',
+  };
+  const defaultBillingDetails: StripeAddressElementOptions['defaultValues'] = {
+    name: defaultValues?.fullName,
+    phone: defaultValues?.phone,
+    address: {
+      city: defaultValues?.city,
+      country: defaultValues?.country ?? '',
+      line1: defaultValues?.line1,
+      line2: defaultValues?.line2,
+      postal_code: defaultValues?.postalCode,
+      state: defaultValues?.state,
+    },
   };
 
   useError([error?.message, mutationError?.message]);
@@ -160,6 +180,7 @@ export function PaymentMethodModal({ type, onCancel, open }: Props) {
           <AddressElement
             onChange={handleAddressElementChange}
             options={{
+              defaultValues: defaultBillingDetails,
               mode: 'billing',
               fields: {
                 phone: 'always',

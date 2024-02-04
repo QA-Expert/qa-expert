@@ -233,7 +233,14 @@ export const GET_PAYMENT_METHOD = gql(/* GraphQL */ `
       cardLast4
       cardBrand
       type
-      address
+      fullName
+      phone
+      line1
+      line2
+      city
+      state
+      country
+      postalCode
     }
   }
 `);

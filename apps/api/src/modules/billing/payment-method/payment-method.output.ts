@@ -15,6 +15,28 @@ export class PaymentMethodOutput {
   })
   type: Stripe.PaymentMethod.Type;
 
-  @Field(() => String)
-  address: string;
+  // Billing information
+  @Field(() => String, { nullable: true })
+  fullName?: string;
+
+  @Field(() => String, { nullable: true })
+  phone?: string;
+
+  @Field(() => String, { nullable: true })
+  line1?: string;
+
+  @Field(() => String, { nullable: true })
+  line2?: string;
+
+  @Field(() => String, { nullable: true })
+  city?: string;
+
+  @Field(() => String, { nullable: true })
+  country?: string;
+
+  @Field(() => String, { nullable: true })
+  state?: string;
+
+  @Field(() => String, { nullable: true })
+  postalCode?: string;
 }

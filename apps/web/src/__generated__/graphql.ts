@@ -351,9 +351,16 @@ export type PaymentMethodInput = {
 
 export type PaymentMethodOutput = {
   __typename?: 'PaymentMethodOutput';
-  address: Scalars['String']['output'];
   cardBrand: Scalars['String']['output'];
   cardLast4: Scalars['String']['output'];
+  city?: Maybe<Scalars['String']['output']>;
+  country?: Maybe<Scalars['String']['output']>;
+  fullName?: Maybe<Scalars['String']['output']>;
+  line1?: Maybe<Scalars['String']['output']>;
+  line2?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+  postalCode?: Maybe<Scalars['String']['output']>;
+  state?: Maybe<Scalars['String']['output']>;
   /** Indicates what type of payment method. Could be card, digital wallet etc. */
   type: Scalars['String']['output'];
 };
@@ -1045,7 +1052,14 @@ export type GetPaymentMethodQuery = {
     cardLast4: string;
     cardBrand: string;
     type: string;
-    address: string;
+    fullName?: string | null;
+    phone?: string | null;
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
   } | null;
 };
 
@@ -3170,7 +3184,14 @@ export const GetPaymentMethodDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'cardLast4' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'cardBrand' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'address' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'fullName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'line1' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'line2' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'city' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'country' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'postalCode' } },
               ],
             },
           },

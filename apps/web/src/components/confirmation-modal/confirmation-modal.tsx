@@ -1,8 +1,6 @@
 import Typography from '@mui/material/Typography/Typography';
 import { ModalContent } from '@/components/modal/content/content';
 import { Modal } from '@/components/modal/modal';
-import { Row } from '@/components/row/row';
-import Button from '@mui/material/Button/Button';
 import { ModalTitle } from '../modal/title/title';
 import Divider from '@mui/material/Divider/Divider';
 import { ReactNode } from 'react';

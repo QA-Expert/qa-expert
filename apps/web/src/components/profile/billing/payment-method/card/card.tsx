@@ -2,9 +2,14 @@ import { Card } from '@/components/profile/card/card';
 import { Row } from '@/components/row/row';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 import Typography from '@mui/material/Typography/Typography';
-import { getPaymentMethodInfoString } from '../handlers';
+import {
+  getBillingAddressString,
+  getPaymentMethodInfoString,
+} from '../handlers';
 import { GetPaymentMethodQuery } from '__generated__/graphql';
 import Button from '@mui/material/Button/Button';
+import { CardTitle } from '@/components/profile/card/card-title';
+import { Box } from '@/components/box/box';
 
 type Props = {
   paymentMethod: GetPaymentMethodQuery['paymentMethod'];
@@ -22,47 +27,60 @@ export function PaymentMethodCard({
   onAdd,
 }: Props) {
   const paymentMethodData = getPaymentMethodInfoString(paymentMethod);
+  const billingAddress = getBillingAddressString(paymentMethod);
 
   return (
     <Card
       sx={{
-        maxWidth: '350px',
+        width: '350px',
+        padding: '2rem',
+        minHeight: '350px',
       }}
     >
-      <Typography
-        variant="h4"
-        sx={{
-          color: 'secondary.main',
-          fontSize: '1rem',
-          textTransform: 'uppercase',
-        }}
-      >
-        Payment Method Information
-      </Typography>
+      <CardTitle>Payment Method Information</CardTitle>
 
-      <Typography
-        variant="body1"
-        sx={{
-          color: 'text.secondary',
-        }}
-      >
-        Payment Method: {paymentMethodData}
-      </Typography>
+      <Box sx={{ flex: 1, alignItems: 'flex-start' }}>
+        <Typography
+          variant="body1"
+          sx={{
+            color: 'text.secondary',
+          }}
+        >
+          Full name: {paymentMethod?.fullName ?? '--'}
+        </Typography>
 
-      <Typography
-        variant="body1"
-        sx={{
-          color: 'text.secondary',
-        }}
-      >
-        Billing Address: {paymentMethod?.address ?? '--'}
-      </Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            color: 'text.secondary',
+          }}
+        >
+          Payment Method: {paymentMethodData}
+        </Typography>
+
+        <Typography
+          variant="body1"
+          sx={{
+            color: 'text.secondary',
+          }}
+        >
+          Billing Address: {billingAddress}
+        </Typography>
+
+        <Typography
+          variant="body1"
+          sx={{
+            color: 'text.secondary',
+          }}
+        >
+          Phone: {paymentMethod?.phone ?? '--'}
+        </Typography>
+      </Box>
 
       <Row
         sx={{
           gap: '1rem',
           justifyContent: 'center',
-          flex: 1,
           alignItems: 'flex-end',
         }}
       >

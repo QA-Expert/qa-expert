@@ -62,21 +62,19 @@ export class PaymentMethodService {
       }
 
       const billingAddress = paymentMethod.billing_details.address;
-      const address = billingAddress
-        ? `${billingAddress?.line1 ? billingAddress?.line1 + ', ' : ''}
-      ${billingAddress?.line2 ? billingAddress?.line2 + ', ' : ''}
-      ${billingAddress?.city ? billingAddress?.city + ', ' : ''}
-      ${billingAddress?.country ? billingAddress?.country + ', ' : ''}
-      ${billingAddress?.state ? billingAddress?.state + ', ' : ''}
-      ${billingAddress?.postal_code ?? ''}
-      `
-        : '--';
 
       const result: PaymentMethodOutput = {
         cardBrand: paymentMethod.card.brand,
         cardLast4: paymentMethod.card.last4,
         type: paymentMethod.type,
-        address,
+        fullName: paymentMethod.billing_details.name ?? undefined,
+        phone: paymentMethod.billing_details.phone ?? undefined,
+        line1: billingAddress?.line1 ?? undefined,
+        line2: billingAddress?.line2 ?? undefined,
+        city: billingAddress?.city ?? undefined,
+        state: billingAddress?.state ?? undefined,
+        country: billingAddress?.country ?? undefined,
+        postalCode: billingAddress?.postal_code ?? undefined,
       };
 
       return result;
