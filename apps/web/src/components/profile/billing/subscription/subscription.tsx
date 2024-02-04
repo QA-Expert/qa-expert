@@ -62,7 +62,6 @@ export function Subscription() {
             color="error"
             loading={deactivationLoading}
             onClick={async () => deactivate()}
-            sx={{ width: 'auto' }}
           >
             Deactivate
           </LoadingButton>
@@ -70,9 +69,9 @@ export function Subscription() {
           <LoadingButton
             variant="contained"
             color="warning"
+            disabled={!paymentMethodData.paymentMethod}
             loading={activationLoading}
             onClick={async () => activate()}
-            sx={{ width: 'auto' }}
           >
             Activate
           </LoadingButton>
