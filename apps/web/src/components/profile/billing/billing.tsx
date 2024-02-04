@@ -1,18 +1,21 @@
 'use client';
 
-import { Box } from '@/components/box/box';
+import { Suspense } from 'react';
 import { PaymentMethod } from './payment-method/payment-method';
 import { Subscription } from './subscription/subscription';
+import { Row } from '@/components/row/row';
+import { Skeletons } from '@/components/skeleton/skeleton';
 
 export function Billing() {
   return (
-    <Box>
-      <h1>Billing</h1>
-      <h1>Transactions</h1>
+    <Row sx={{ gap: '1rem', justifyContent: 'center' }}>
+      <Suspense fallback={<Skeletons width={350} height={350} />}>
+        <PaymentMethod />
+      </Suspense>
 
-      <PaymentMethod />
-
-      <Subscription />
-    </Box>
+      <Suspense fallback={<Skeletons width={350} height={350} />}>
+        <Subscription />
+      </Suspense>
+    </Row>
   );
 }
