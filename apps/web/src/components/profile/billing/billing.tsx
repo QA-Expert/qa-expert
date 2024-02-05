@@ -1,31 +1,21 @@
 'use client';
 
-import { Box } from '@/components/box/box';
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import {
-  GET_BILLING_TRANSACTIONS,
-  GET_CREDIT_CARD,
-} from 'graphql/queries/queries';
-import { useError } from 'utils/hooks';
+import { Suspense } from 'react';
+import { PaymentMethod } from './payment-method/payment-method';
+import { Subscription } from './subscription/subscription';
+import { Row } from '@/components/row/row';
+import { Skeletons } from '@/components/skeleton/skeleton';
 
 export function Billing() {
-  const { data: creditCardData, error: creditCardError } =
-    useSuspenseQuery(GET_CREDIT_CARD);
-  const { data: transactionsData, error: transactionsError } = useSuspenseQuery(
-    GET_BILLING_TRANSACTIONS,
-  );
-
-  useError([transactionsError?.message, creditCardError?.message]);
-
   return (
-    <Box>
-      <h1>Billing {creditCardData?.creditCard?._id}</h1>
-      <h1>
-        Transactions
-        {transactionsData?.transactions?.map((transaction) => (
-          <div key={transaction._id}>{transaction.createdAt}</div>
-        ))}
-      </h1>
-    </Box>
+    <Row sx={{ gap: '1rem', justifyContent: 'center' }}>
+      <Suspense fallback={<Skeletons width={350} height={350} />}>
+        <PaymentMethod />
+      </Suspense>
+
+      <Suspense fallback={<Skeletons width={350} height={350} />}>
+        <Subscription />
+      </Suspense>
+    </Row>
   );
 }

@@ -3,7 +3,6 @@ import * as Yup from 'yup';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import { EmailInput } from '__generated__/graphql';
-import styled from '@emotion/styled';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 import Button from '@mui/material/Button/Button';
 import _ from 'lodash';
@@ -17,6 +16,8 @@ import { isAuthenticated } from 'apollo/store';
 import { useReactiveVar } from '@apollo/client';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_USER } from 'graphql/queries/queries';
+import Divider from '@mui/material/Divider/Divider';
+import { Form } from '@/components/form/form';
 
 type Props = {
   onSubmit: (values: EmailInput) => Promise<void>;
@@ -171,6 +172,8 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
             </FormHelperText>
           </FormControl>
 
+          <Divider flexItem />
+
           <Row sx={{ gap: '1rem', justifyContent: 'center' }}>
             <LoadingButton
               color="warning"
@@ -198,12 +201,3 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
     </Formik>
   );
 }
-
-const Form = styled('form')({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '1rem',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '1rem',
-});

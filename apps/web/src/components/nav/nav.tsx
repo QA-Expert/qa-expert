@@ -6,7 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { GET_USER } from 'graphql/queries/queries';
-import { ProfileMenu } from '@/components/profile-menu/profile-menu';
+import { ProfileMenu } from '@/components/nav/profile-menu/profile-menu';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useReactiveVar } from '@apollo/client';
 import { isAuthenticated } from 'apollo/store';

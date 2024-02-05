@@ -17,7 +17,7 @@ import { isAuthenticated } from 'apollo/store';
 import { getUsername, stringAvatar } from 'utils/utils';
 import { matchesPathname } from 'utils/url';
 import { PUBLIC_ROUTES } from 'constants/constants';
-import { DropdownMenu } from '../dropdown-menu/dropdown-menu';
+import { DropdownMenu } from '../../dropdown-menu/dropdown-menu';
 
 export const ProfileMenu = () => {
   const isUserAuthenticated = useReactiveVar(isAuthenticated);

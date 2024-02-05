@@ -12,6 +12,8 @@ import {
   SEND_COMMUNICATION,
 } from 'graphql/mutations/mutations';
 import { useMutation } from '@apollo/client';
+import Divider from '@mui/material/Divider/Divider';
+import { Row } from '../row/row';
 
 type Props = {
   onClose: () => void;
@@ -59,6 +61,7 @@ export function EmailModal({
       <ModalContent
         sx={{
           minHeight: '300px',
+          paddingBottom: 0,
         }}
       >
         {!isSent ? (
@@ -75,13 +78,21 @@ export function EmailModal({
             <CheckCircleIcon sx={{ color: 'success.main', fontSize: '4rem' }} />
 
             {successComponent}
-
-            <Button variant="contained" onClick={onClose}>
-              Close
-            </Button>
           </>
         )}
       </ModalContent>
+
+      {isSent ? (
+        <>
+          <Divider flexItem />
+
+          <Row sx={{ padding: '1rem', justifyContent: 'center' }}>
+            <Button variant="contained" onClick={onClose}>
+              Close
+            </Button>
+          </Row>
+        </>
+      ) : null}
     </Modal>
   );
 }

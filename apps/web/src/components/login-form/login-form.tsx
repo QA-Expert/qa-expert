@@ -14,14 +14,14 @@ import { useError } from 'utils/hooks';
 import { UserInputLogin } from '__generated__/graphql';
 import { LOGIN } from 'graphql/mutations/mutations';
 import { isAuthenticated } from 'apollo/store';
-import styled from '@emotion/styled';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 import Button from '@mui/material/Button/Button';
 import { Row } from '@/components/row/row';
 import { useState } from 'react';
-import Divider from '@mui/material/Divider/Divider';
 import dynamic from 'next/dynamic';
 import { SocialButtonsSkeleton } from '@/components/skeleton/social-buttons-skeleton';
+import { Form } from '@/components/form/form';
+import { Divider } from '@/components/divider/divider';
 
 const GoogleLogin = dynamic(
   () => import('@/components/login-form/google-login-button'),
@@ -169,6 +169,8 @@ export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
               Need help?
             </MuiLink>
 
+            <Divider />
+
             <Row
               sx={{
                 alignItems: 'center',
@@ -200,16 +202,8 @@ export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
           </Form>
         )}
       </Formik>
-      <Divider
-        variant="fullWidth"
-        flexItem
-        sx={{
-          color: 'secondary.main',
-          '&::before, &::after': { backgroundColor: 'warning.main' },
-        }}
-      >
-        or use
-      </Divider>
+
+      <Divider>or use</Divider>
 
       <Row sx={{ justifyContent: 'center' }}>
         <GoogleLogin
@@ -240,12 +234,3 @@ export function LoginForm({ onSubmit, onLinkClick, onCancel }: Props) {
     </>
   );
 }
-
-const Form = styled('form')({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '1rem',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '1rem',
-});

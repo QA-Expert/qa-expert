@@ -2,8 +2,8 @@
 
 import { Box } from '@/components/box/box';
 import { LoginForm } from '@/components/login-form/login-form';
+import { ModalTitle } from '@/components/modal/title/title';
 import Paper from '@mui/material/Paper/Paper';
-import Typography from '@mui/material/Typography/Typography';
 import { useRouter } from 'next/navigation';
 
 export default function Login() {
@@ -21,16 +21,7 @@ export default function Login() {
       }}
       component={Box}
     >
-      <Typography
-        sx={{
-          fontSize: '2rem',
-          color: 'warning.main',
-          textTransform: 'uppercase',
-        }}
-        variant="h1"
-      >
-        Login
-      </Typography>
+      <ModalTitle>Login</ModalTitle>
 
       <LoginForm onSubmit={handleSubmit} />
     </Paper>

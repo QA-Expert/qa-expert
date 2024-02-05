@@ -14,6 +14,9 @@ import { Box } from '@/components/box/box';
 import { FORGOT_PASSWORD } from 'graphql/mutations/mutations';
 import { useError } from 'utils/hooks';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
+import Divider from '@mui/material/Divider/Divider';
+import { Form } from '@/components/form/form';
+import { ModalTitle } from '@/components/modal/title/title';
 
 function ForgotPassword() {
   const [forgotPassword, { error }] = useMutation(FORGOT_PASSWORD);
@@ -31,22 +34,20 @@ function ForgotPassword() {
   const [isSuccessfullyReset, setIsSuccessfullyReset] = useState(false);
 
   return (
-    <>
+    <Paper
+      sx={{
+        minWidth: '30%',
+        minHeight: '30%',
+        gap: '1rem',
+      }}
+      component={Box}
+    >
       {isSuccessfullyReset ? (
-        <Paper
-          sx={{
-            minWidth: '30%',
-            minHeight: '30%',
-            gap: '1rem',
-            padding: '2rem',
-          }}
-          component={Box}
-        >
-          <Typography sx={{ fontSize: '1rem' }} variant="h1">
-            Email with instructions was sent
-          </Typography>
+        <>
+          <ModalTitle>Email with instructions was sent</ModalTitle>
+
           <Typography>Please check your inbox for our email</Typography>
-        </Paper>
+        </>
       ) : (
         <Formik
           validationSchema={schema}
@@ -80,58 +81,46 @@ function ForgotPassword() {
             handleBlur,
             errors,
           }: FormikProps<typeof initialValues>) => (
-            <form noValidate onSubmit={handleSubmit}>
-              <Paper
-                sx={{
-                  minWidth: '30%',
-                  minHeight: '30%',
-                  gap: '1rem',
-                  padding: '2rem',
-                }}
-                component={Box}
-              >
-                <Typography sx={{ fontSize: '2rem' }} variant="h1">
-                  Forgot Password
-                </Typography>
+            <Form noValidate onSubmit={handleSubmit}>
+              <ModalTitle>Forgot Password</ModalTitle>
 
-                <FormControl>
-                  <InputLabel htmlFor="email">
-                    Please enter your email
-                  </InputLabel>
-                  <Input
-                    autoComplete="on"
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="Enter your email ..."
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.email}
-                    error={Boolean(errors.email)}
-                  />
-                  <FormHelperText
-                    error={Boolean(errors.email)}
-                    id="email-error-text"
-                  >
-                    {errors.email}
-                  </FormHelperText>
-                </FormControl>
-
-                <LoadingButton
-                  color="warning"
-                  variant="contained"
-                  loading={isSubmitting}
-                  disabled={isSubmitting || Boolean(errors.email)}
-                  type="submit"
+              <FormControl>
+                <InputLabel htmlFor="email">Please enter your email</InputLabel>
+                <Input
+                  autoComplete="on"
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="Enter your email ..."
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.email}
+                  error={Boolean(errors.email)}
+                />
+                <FormHelperText
+                  error={Boolean(errors.email)}
+                  id="email-error-text"
                 >
-                  Submit
-                </LoadingButton>
-              </Paper>
-            </form>
+                  {errors.email}
+                </FormHelperText>
+              </FormControl>
+
+              <Divider flexItem />
+
+              <LoadingButton
+                color="warning"
+                variant="contained"
+                loading={isSubmitting}
+                disabled={isSubmitting || Boolean(errors.email)}
+                type="submit"
+              >
+                Submit
+              </LoadingButton>
+            </Form>
           )}
         </Formik>
       )}
-    </>
+    </Paper>
   );
 }
 

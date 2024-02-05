@@ -2,43 +2,32 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { User } from '../../users/user.schema';
-import { CreditCard } from '../credit-card/credit-card.schema';
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 @Schema({ timestamps: true })
 @ObjectType()
-export class Transaction extends mongoose.Document {
+export class PaymentMethod extends mongoose.Document {
   @Field(() => String)
   _id: string;
 
   @Prop()
   @Field({
     description:
-      'External transaction. Refer to transaction stored on side of Payment Processes like Stripe',
+      "[Should be Encrypted] external Payment Provider payment method id. Used to pull user's payment method (credit card) from Payment Provider",
   })
   externalId: string;
 
   @Prop()
   @Field({
-    description: 'Transaction amount',
-  })
-  amount: number;
-
-  @Prop()
-  @Field({
     description:
-      'Transaction currency. Could be represented as currency code like USD',
+      '[Should be Encrypted] external Payment Provider customer id. Used to pull customer info from Payment Provider',
   })
-  currency: string;
+  externalCustomerId: string;
 
   @Prop({ type: ObjectId, ref: User.name, required: true })
   @Field(() => String)
   user: User | mongoose.Types.ObjectId;
-
-  @Prop({ type: ObjectId, ref: CreditCard.name, required: true })
-  @Field(() => String)
-  creditCard: CreditCard | mongoose.Types.ObjectId;
 
   @Prop({
     type: ObjectId,
@@ -51,12 +40,6 @@ export class Transaction extends mongoose.Document {
     ref: 'User',
   })
   updatedBy: User | mongoose.Types.ObjectId;
-
-  @Field(() => Date)
-  createdAt: Date;
-
-  @Field(() => Date)
-  updatedAt: Date;
 }
 
-export const TransactionSchema = SchemaFactory.createForClass(Transaction);
+export const PaymentMethodSchema = SchemaFactory.createForClass(PaymentMethod);

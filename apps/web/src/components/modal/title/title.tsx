@@ -10,6 +10,7 @@ export function ModalTitle(props: DialogTitleProps) {
         textAlign: 'center',
         color: 'warning.main',
         textTransform: 'uppercase',
+        fontSize: '2rem',
         ...props.sx,
       }}
     >

@@ -15,13 +15,13 @@ import { CourseProgressModule } from './modules/course-progresses/course-progres
 import { ConfigModule } from './modules/config/config.module';
 import { ConfigService } from './modules/config/config.service';
 import { ActivityModule } from './modules/activities/activity.modules';
-import { AddressModule } from './modules/billing/address/address.modules';
-import { CreditCardModule } from './modules/billing/credit-card/credit-card.modules';
-import { TransactionModule } from './modules/billing/transactions/transaction.modules';
+import { PaymentMethodModule } from './modules/billing/payment-method/payment-method.modules';
+import { SubscriptionModule } from './modules/billing/subscription/subscription.modules';
 import { AnswerValidationModule } from './modules/answer-validation/answer-validation.module';
 import { EmailModule } from './modules/emails/email.module';
 import { ClaimedBadgeModule } from './modules/claimed-badges/claimed-badge.modules';
 import { CourseLikeModule } from './modules/course-likes/course-likes.modules';
+import { PaymentProviderModule } from './modules/billing/payment-provider/payment-provider.modules';
 
 @Module({
   imports: [
@@ -71,12 +71,12 @@ import { CourseLikeModule } from './modules/course-likes/course-likes.modules';
     SubmittedProgressModule,
     CourseProgressModule,
     ActivityModule,
-    CreditCardModule,
-    AddressModule,
-    TransactionModule,
+    PaymentMethodModule,
+    SubscriptionModule,
     EmailModule,
     ClaimedBadgeModule,
     CourseLikeModule,
+    PaymentProviderModule,
   ],
   providers: [],
 })
