@@ -6,6 +6,7 @@ import { User } from '../../users/user.schema';
 export enum SubscriptionStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
+  CANCELED = 'canceled',
 }
 
 registerEnumType(SubscriptionStatus, {
@@ -14,6 +15,18 @@ registerEnumType(SubscriptionStatus, {
 });
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
+
+@ObjectType()
+export class Price {
+  @Field(() => String)
+  currency: string;
+
+  @Field(() => String)
+  id: string;
+
+  @Field(() => Number, { nullable: true, description: 'Amount in cents' })
+  amount: number | null;
+}
 
 @Schema({ timestamps: true })
 @ObjectType()

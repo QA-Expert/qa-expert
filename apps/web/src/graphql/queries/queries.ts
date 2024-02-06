@@ -223,6 +223,18 @@ export const GET_SUBSCRIPTION = gql(/* GraphQL */ `
     subscription {
       _id
       status
+      nextInvoiceDate
+      lastInvoiceDate
+    }
+  }
+`);
+
+export const GET_PRICES = gql(/* GraphQL */ `
+  query GetPrices {
+    prices {
+      id
+      currency
+      amount
     }
   }
 `);
