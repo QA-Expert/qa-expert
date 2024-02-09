@@ -5,9 +5,10 @@ import { Roles } from '../../auth/roles.decorator';
 import { RolesGuard } from '../../auth/roles.guard';
 import { CurrentUser } from '../../users/user.decorator';
 import { User, Roles as RolesEnum } from '../../users/user.schema';
-import { Subscription } from './subscription.schema';
+import { Price, Subscription } from './subscription.schema';
 import { SubscriptionService } from './subscription.service';
 import { SubscriptionInput } from './subscription.input';
+import { SubscriptionOutput } from './subscription.output';
 
 @Resolver(() => Subscription)
 export class SubscriptionResolver {
@@ -15,9 +16,16 @@ export class SubscriptionResolver {
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
-  @Query(() => Subscription, { nullable: true })
+  @Query(() => SubscriptionOutput, { nullable: true })
   public async subscription(@CurrentUser() user: User) {
-    return await this.service.findOneByUserId(user._id);
+    return await this.service.retrieve(user._id);
+  }
+
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles(RolesEnum.USER)
+  @Query(() => [Price])
+  public async prices() {
+    return await this.service.getPrices();
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
@@ -40,7 +48,10 @@ export class SubscriptionResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
   @Mutation(() => Subscription)
-  public async activateSubscription(@CurrentUser() user: User) {
-    return await this.service.activate(user._id);
+  public async activateSubscription(
+    @CurrentUser() user: User,
+    @Args('data') data: SubscriptionInput,
+  ) {
+    return await this.service.activate(data, user._id);
   }
 }

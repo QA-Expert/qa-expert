@@ -202,8 +202,8 @@ export const SUBSCRIBE = gql(/* GraphQL */ `
 `);
 
 export const ACTIVATE_SUBSCRIPTION = gql(/* GraphQL */ `
-  mutation ActivateSubscription {
-    activateSubscription {
+  mutation ActivateSubscription($data: SubscriptionInput!) {
+    activateSubscription(data: $data) {
       _id
     }
   }

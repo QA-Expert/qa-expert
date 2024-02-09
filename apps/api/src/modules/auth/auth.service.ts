@@ -186,10 +186,7 @@ export class AuthService {
 
         return userInfo;
       } catch (error) {
-        console.log(error);
-        throw new UnauthorizedException(
-          `Failed to get user info from ${provider}`,
-        );
+        throw error;
       }
     }
   }

@@ -207,6 +207,10 @@ export type Mutation = {
   validateRestApi: AnswerValidationRestApiOutput;
 };
 
+export type MutationActivateSubscriptionArgs = {
+  data: SubscriptionInput;
+};
+
 export type MutationAddPageArgs = {
   _id: Scalars['String']['input'];
   pageId: Scalars['String']['input'];
@@ -365,6 +369,14 @@ export type PaymentMethodOutput = {
   type: Scalars['String']['output'];
 };
 
+export type Price = {
+  __typename?: 'Price';
+  /** Amount in cents */
+  amount?: Maybe<Scalars['Float']['output']>;
+  currency: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   activities: Array<Activity>;
@@ -375,8 +387,9 @@ export type Query = {
   courses: Array<Course>;
   coursesPublic: Array<Course>;
   paymentMethod?: Maybe<PaymentMethodOutput>;
+  prices: Array<Price>;
   submittedProgresses: Array<SubmittedProgress>;
-  subscription?: Maybe<Subscription>;
+  subscription?: Maybe<SubscriptionOutput>;
   user: User;
 };
 
@@ -466,6 +479,10 @@ export type Subscription = {
   __typename?: 'Subscription';
   _id: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  /** End of the current period that the subscription has been invoiced for. At the end of this period, a new invoice will be created. */
+  currentPeriodEnd: Scalars['DateTime']['output'];
+  /** Start of the current period that the subscription has been invoiced for. */
+  currentPeriodStart: Scalars['DateTime']['output'];
   /** External transaction. Refer to transaction stored on side of Payment Processes like Stripe */
   externalId: Scalars['String']['output'];
   status: SubscriptionStatus;
@@ -478,9 +495,18 @@ export type SubscriptionInput = {
   priceId: Scalars['String']['input'];
 };
 
+export type SubscriptionOutput = {
+  __typename?: 'SubscriptionOutput';
+  _id: Scalars['String']['output'];
+  currentPeriodEnd?: Maybe<Scalars['DateTime']['output']>;
+  currentPeriodStart?: Maybe<Scalars['DateTime']['output']>;
+  status: SubscriptionStatus;
+};
+
 /** Defines users subscription is active or not */
 export enum SubscriptionStatus {
   Active = 'ACTIVE',
+  Canceled = 'CANCELED',
   Inactive = 'INACTIVE',
 }
 
@@ -773,7 +799,7 @@ export type SubscribeMutation = {
 };
 
 export type ActivateSubscriptionMutationVariables = Exact<{
-  [key: string]: never;
+  data: SubscriptionInput;
 }>;
 
 export type ActivateSubscriptionMutation = {
@@ -1037,10 +1063,24 @@ export type GetSubscriptionQueryVariables = Exact<{ [key: string]: never }>;
 export type GetSubscriptionQuery = {
   __typename?: 'Query';
   subscription?: {
-    __typename?: 'Subscription';
+    __typename?: 'SubscriptionOutput';
     _id: string;
     status: SubscriptionStatus;
+    currentPeriodStart?: string | null;
+    currentPeriodEnd?: string | null;
   } | null;
+};
+
+export type GetPricesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetPricesQuery = {
+  __typename?: 'Query';
+  prices: Array<{
+    __typename?: 'Price';
+    id: string;
+    currency: string;
+    amount?: number | null;
+  }>;
 };
 
 export type GetPaymentMethodQueryVariables = Exact<{ [key: string]: never }>;
@@ -2423,12 +2463,35 @@ export const ActivateSubscriptionDocument = {
       kind: 'OperationDefinition',
       operation: 'mutation',
       name: { kind: 'Name', value: 'ActivateSubscription' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'SubscriptionInput' },
+            },
+          },
+        },
+      ],
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
           {
             kind: 'Field',
             name: { kind: 'Name', value: 'activateSubscription' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
@@ -3154,6 +3217,14 @@ export const GetSubscriptionDocument = {
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'currentPeriodStart' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'currentPeriodEnd' },
+                },
               ],
             },
           },
@@ -3165,6 +3236,33 @@ export const GetSubscriptionDocument = {
   GetSubscriptionQuery,
   GetSubscriptionQueryVariables
 >;
+export const GetPricesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetPrices' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'prices' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'currency' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetPricesQuery, GetPricesQueryVariables>;
 export const GetPaymentMethodDocument = {
   kind: 'Document',
   definitions: [
