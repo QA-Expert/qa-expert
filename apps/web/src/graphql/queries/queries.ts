@@ -223,8 +223,8 @@ export const GET_SUBSCRIPTION = gql(/* GraphQL */ `
     subscription {
       _id
       status
-      nextInvoiceDate
-      lastInvoiceDate
+      currentPeriodStart
+      currentPeriodEnd
     }
   }
 `);

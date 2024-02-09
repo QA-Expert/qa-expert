@@ -207,6 +207,10 @@ export type Mutation = {
   validateRestApi: AnswerValidationRestApiOutput;
 };
 
+export type MutationActivateSubscriptionArgs = {
+  data: SubscriptionInput;
+};
+
 export type MutationAddPageArgs = {
   _id: Scalars['String']['input'];
   pageId: Scalars['String']['input'];
@@ -475,6 +479,10 @@ export type Subscription = {
   __typename?: 'Subscription';
   _id: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  /** End of the current period that the subscription has been invoiced for. At the end of this period, a new invoice will be created. */
+  currentPeriodEnd: Scalars['DateTime']['output'];
+  /** Start of the current period that the subscription has been invoiced for. */
+  currentPeriodStart: Scalars['DateTime']['output'];
   /** External transaction. Refer to transaction stored on side of Payment Processes like Stripe */
   externalId: Scalars['String']['output'];
   status: SubscriptionStatus;
@@ -490,14 +498,15 @@ export type SubscriptionInput = {
 export type SubscriptionOutput = {
   __typename?: 'SubscriptionOutput';
   _id: Scalars['String']['output'];
-  lastInvoiceDate?: Maybe<Scalars['DateTime']['output']>;
-  nextInvoiceDate?: Maybe<Scalars['DateTime']['output']>;
+  currentPeriodEnd?: Maybe<Scalars['DateTime']['output']>;
+  currentPeriodStart?: Maybe<Scalars['DateTime']['output']>;
   status: SubscriptionStatus;
 };
 
 /** Defines users subscription is active or not */
 export enum SubscriptionStatus {
   Active = 'ACTIVE',
+  Canceled = 'CANCELED',
   Inactive = 'INACTIVE',
 }
 
@@ -790,7 +799,7 @@ export type SubscribeMutation = {
 };
 
 export type ActivateSubscriptionMutationVariables = Exact<{
-  [key: string]: never;
+  data: SubscriptionInput;
 }>;
 
 export type ActivateSubscriptionMutation = {
@@ -1057,8 +1066,8 @@ export type GetSubscriptionQuery = {
     __typename?: 'SubscriptionOutput';
     _id: string;
     status: SubscriptionStatus;
-    nextInvoiceDate?: string | null;
-    lastInvoiceDate?: string | null;
+    currentPeriodStart?: string | null;
+    currentPeriodEnd?: string | null;
   } | null;
 };
 
@@ -2454,12 +2463,35 @@ export const ActivateSubscriptionDocument = {
       kind: 'OperationDefinition',
       operation: 'mutation',
       name: { kind: 'Name', value: 'ActivateSubscription' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'SubscriptionInput' },
+            },
+          },
+        },
+      ],
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
           {
             kind: 'Field',
             name: { kind: 'Name', value: 'activateSubscription' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
@@ -3187,11 +3219,11 @@ export const GetSubscriptionDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'status' } },
                 {
                   kind: 'Field',
-                  name: { kind: 'Name', value: 'nextInvoiceDate' },
+                  name: { kind: 'Name', value: 'currentPeriodStart' },
                 },
                 {
                   kind: 'Field',
-                  name: { kind: 'Name', value: 'lastInvoiceDate' },
+                  name: { kind: 'Name', value: 'currentPeriodEnd' },
                 },
               ],
             },

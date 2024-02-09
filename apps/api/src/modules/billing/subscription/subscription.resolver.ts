@@ -48,7 +48,10 @@ export class SubscriptionResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
   @Mutation(() => Subscription)
-  public async activateSubscription(@CurrentUser() user: User) {
-    return await this.service.activate(user._id);
+  public async activateSubscription(
+    @CurrentUser() user: User,
+    @Args('data') data: SubscriptionInput,
+  ) {
+    return await this.service.activate(data, user._id);
   }
 }

@@ -10,8 +10,8 @@ export class SubscriptionOutput {
   status: SubscriptionStatus;
 
   @Field(() => Date, { nullable: true })
-  nextInvoiceDate: Date | null;
+  currentPeriodEnd: Date | null;
 
   @Field(() => Date, { nullable: true })
-  lastInvoiceDate: Date | null;
+  currentPeriodStart: Date | null;
 }

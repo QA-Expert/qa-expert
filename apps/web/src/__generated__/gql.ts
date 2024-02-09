@@ -54,7 +54,7 @@ const documents = {
     types.RemovePaymentMethodDocument,
   '\n  mutation Subscribe($data: SubscriptionInput!) {\n    subscribe(data: $data) {\n      _id\n    }\n  }\n':
     types.SubscribeDocument,
-  '\n  mutation ActivateSubscription {\n    activateSubscription {\n      _id\n    }\n  }\n':
+  '\n  mutation ActivateSubscription($data: SubscriptionInput!) {\n    activateSubscription(data: $data) {\n      _id\n    }\n  }\n':
     types.ActivateSubscriptionDocument,
   '\n  mutation CancelSubscription {\n    cancelSubscription {\n      _id\n    }\n  }\n':
     types.CancelSubscriptionDocument,
@@ -78,7 +78,7 @@ const documents = {
     types.GetSubmittedUserProgressesUserDocument,
   '\n  query GetUserActivities {\n    activities {\n      _id\n      title\n      description\n      value\n    }\n  }\n':
     types.GetUserActivitiesDocument,
-  '\n  query GetSubscription {\n    subscription {\n      _id\n      status\n      nextInvoiceDate\n      lastInvoiceDate\n    }\n  }\n':
+  '\n  query GetSubscription {\n    subscription {\n      _id\n      status\n      currentPeriodStart\n      currentPeriodEnd\n    }\n  }\n':
     types.GetSubscriptionDocument,
   '\n  query GetPrices {\n    prices {\n      id\n      currency\n      amount\n    }\n  }\n':
     types.GetPricesDocument,
@@ -230,8 +230,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation ActivateSubscription {\n    activateSubscription {\n      _id\n    }\n  }\n',
-): (typeof documents)['\n  mutation ActivateSubscription {\n    activateSubscription {\n      _id\n    }\n  }\n'];
+  source: '\n  mutation ActivateSubscription($data: SubscriptionInput!) {\n    activateSubscription(data: $data) {\n      _id\n    }\n  }\n',
+): (typeof documents)['\n  mutation ActivateSubscription($data: SubscriptionInput!) {\n    activateSubscription(data: $data) {\n      _id\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -302,8 +302,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetSubscription {\n    subscription {\n      _id\n      status\n      nextInvoiceDate\n      lastInvoiceDate\n    }\n  }\n',
-): (typeof documents)['\n  query GetSubscription {\n    subscription {\n      _id\n      status\n      nextInvoiceDate\n      lastInvoiceDate\n    }\n  }\n'];
+  source: '\n  query GetSubscription {\n    subscription {\n      _id\n      status\n      currentPeriodStart\n      currentPeriodEnd\n    }\n  }\n',
+): (typeof documents)['\n  query GetSubscription {\n    subscription {\n      _id\n      status\n      currentPeriodStart\n      currentPeriodEnd\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

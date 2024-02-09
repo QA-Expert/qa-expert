@@ -51,6 +51,20 @@ export class Subscription extends mongoose.Document {
   @Field(() => String)
   user: User | mongoose.Types.ObjectId;
 
+  @Prop({ type: Date })
+  @Field(() => Date, {
+    description:
+      'End of the current period that the subscription has been invoiced for. At the end of this period, a new invoice will be created.',
+  })
+  currentPeriodEnd: Date;
+
+  @Prop({ type: Date })
+  @Field(() => Date, {
+    description:
+      'Start of the current period that the subscription has been invoiced for.',
+  })
+  currentPeriodStart: Date;
+
   @Prop({
     type: ObjectId,
     ref: 'User',

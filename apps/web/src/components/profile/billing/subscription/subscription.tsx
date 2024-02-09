@@ -79,10 +79,10 @@ export function Subscription({ price }: Props) {
         ) : null}
 
         {data.subscription?.status === SubscriptionStatus.Active &&
-        data.subscription.lastInvoiceDate ? (
+        data.subscription.currentPeriodStart ? (
           <Typography sx={{ color: 'text.secondary' }}>
             Last Payment was on{' '}
-            {format(data.subscription.lastInvoiceDate, 'MM/dd/yyyy')}
+            {format(data.subscription.currentPeriodStart, 'MM/dd/yyyy')}
           </Typography>
         ) : null}
       </Box>
@@ -114,17 +114,25 @@ export function Subscription({ price }: Props) {
             loading={deactivationLoading}
             onClick={async () => deactivate()}
           >
-            Deactivate
+            Cancel
           </LoadingButton>
         ) : null}
 
-        {data.subscription?.status === SubscriptionStatus.Inactive ? (
+        {data.subscription?.status === SubscriptionStatus.Canceled ? (
           <LoadingButton
             variant="contained"
             color="warning"
             disabled={!paymentMethodData.paymentMethod}
             loading={activationLoading}
-            onClick={async () => activate()}
+            onClick={async () =>
+              activate({
+                variables: {
+                  data: {
+                    priceId: price.id,
+                  },
+                },
+              })
+            }
           >
             Activate
           </LoadingButton>
