@@ -112,7 +112,13 @@ export function Subscription({ price }: Props) {
             variant="outlined"
             color="error"
             loading={deactivationLoading}
-            onClick={async () => deactivate()}
+            onClick={async () =>
+              deactivate({
+                variables: {
+                  externalId: data.subscription.externalId,
+                },
+              })
+            }
           >
             Cancel
           </LoadingButton>
@@ -127,9 +133,7 @@ export function Subscription({ price }: Props) {
             onClick={async () =>
               activate({
                 variables: {
-                  data: {
-                    priceId: price.id,
-                  },
+                  externalId: data.subscription.externalId,
                 },
               })
             }

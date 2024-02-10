@@ -41,17 +41,14 @@ export class SubscriptionResolver {
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
   @Mutation(() => Subscription)
-  public async cancelSubscription(@CurrentUser() user: User) {
-    return await this.service.cancel(user._id);
+  public async cancelSubscription(@Args('externalId') externalId: string) {
+    return await this.service.cancel(externalId);
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
   @Mutation(() => Subscription)
-  public async activateSubscription(
-    @CurrentUser() user: User,
-    @Args('data') data: SubscriptionInput,
-  ) {
-    return await this.service.activate(data, user._id);
+  public async activateSubscription(@Args('externalId') externalId: string) {
+    return await this.service.activate(externalId);
   }
 }

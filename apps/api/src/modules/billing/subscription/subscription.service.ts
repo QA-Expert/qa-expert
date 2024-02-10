@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Price, Subscription, SubscriptionStatus } from './subscription.schema';
@@ -13,7 +18,9 @@ export class SubscriptionService {
   constructor(
     @InjectModel(Subscription.name)
     private model: Model<Subscription>,
+    @Inject(forwardRef(() => PaymentProviderService))
     private readonly servicePaymentProvider: PaymentProviderService,
+    @Inject(forwardRef(() => PaymentMethodService))
     private readonly servicePaymentMethod: PaymentMethodService,
   ) {}
 
@@ -23,6 +30,14 @@ export class SubscriptionService {
         user: {
           _id: userId,
         },
+      })
+      .exec();
+  }
+
+  async findOneByExternalId(externalId: string) {
+    return await this.model
+      .findOne({
+        externalId,
       })
       .exec();
   }
@@ -82,7 +97,7 @@ export class SubscriptionService {
 
     const subscription =
       await this.servicePaymentProvider.client.subscriptions.create({
-        customer: paymentMethodFromDb?.externalCustomerId,
+        customer: paymentMethodFromDb.externalCustomerId,
         items: [{ price: data.priceId }],
         collection_method: 'charge_automatically',
         coupon: data.couponId,
@@ -92,6 +107,7 @@ export class SubscriptionService {
       externalId: subscription.id,
       status: SubscriptionStatus.ACTIVE,
       user: new mongoose.Types.ObjectId(userId),
+      priceId: data.priceId,
       currentPeriodEnd: new Date(subscription.current_period_end * 1000),
       currentPeriodStart: new Date(subscription.current_period_start * 1000),
       createdBy: new mongoose.Types.ObjectId(userId),
@@ -117,9 +133,8 @@ export class SubscriptionService {
    * 4. If db sub currentPeriodEnd > today then we want to create new sub
    * 5. Update db sub with new currentPeriodEnd and currentPeriodStart
    */
-  async activate(data: SubscriptionInput, userId: string) {
-    const subscriptionFromDb = await this.findOneByUserId(userId);
-
+  async activate(externalId: string) {
+    const subscriptionFromDb = await this.findOneByExternalId(externalId);
     if (!subscriptionFromDb) {
       throw new NotFoundException(
         'Failed to find existing subscription to activate',
@@ -130,8 +145,11 @@ export class SubscriptionService {
       throw new NotFoundException('Existing subscription is marked as active');
     }
 
-    const paymentMethodFromDb =
-      await this.servicePaymentMethod.findOneByUserId(userId);
+    const userId = subscriptionFromDb.user._id;
+
+    const paymentMethodFromDb = await this.servicePaymentMethod.findOneByUserId(
+      userId.toString(),
+    );
 
     if (!paymentMethodFromDb) {
       throw new NotFoundException('Failed to find saved payment method');
@@ -147,9 +165,8 @@ export class SubscriptionService {
         subscription =
           await this.servicePaymentProvider.client.subscriptions.create({
             customer: paymentMethodFromDb?.externalCustomerId,
-            items: [{ price: data.priceId }],
+            items: [{ price: subscriptionFromDb.priceId }],
             collection_method: 'charge_automatically',
-            coupon: data.couponId,
             proration_behavior: 'none',
             billing_cycle_anchor: currentEndPeriod.getTime() / 1000,
           });
@@ -157,9 +174,8 @@ export class SubscriptionService {
         subscription =
           await this.servicePaymentProvider.client.subscriptions.create({
             customer: paymentMethodFromDb?.externalCustomerId,
-            items: [{ price: data.priceId }],
+            items: [{ price: subscriptionFromDb.priceId }],
             collection_method: 'charge_automatically',
-            coupon: data.couponId,
           });
       }
 
@@ -169,7 +185,7 @@ export class SubscriptionService {
           {
             externalId: subscription.id,
             status: SubscriptionStatus.ACTIVE,
-            updatedBy: new mongoose.Types.ObjectId(userId),
+            updatedBy: userId,
             currentPeriodStart: new Date(
               subscription.current_period_start * 1000,
             ),
@@ -194,12 +210,14 @@ export class SubscriptionService {
    * In that case we will look into end period date and compare it with today to figure out if we need to just
    * create new sub with end period date as first billing date OR we just create new sub with current start and future end period
    */
-  async cancel(userId: string) {
-    const subscriptionFromDb = await this.findOneByUserId(userId);
+  async cancel(externalId: string) {
+    const subscriptionFromDb = await this.findOneByExternalId(externalId);
 
     if (!subscriptionFromDb) {
       throw new Error('Failed to find existing subscription to cancel');
     }
+
+    const userId = subscriptionFromDb.user._id;
 
     try {
       const subscription =
@@ -227,7 +245,7 @@ export class SubscriptionService {
             ),
             currentPeriodEnd: new Date(subscription.current_period_end * 1000),
             status: SubscriptionStatus.CANCELED,
-            updatedBy: new mongoose.Types.ObjectId(userId),
+            updatedBy: userId,
           },
           { new: true },
         )

@@ -222,6 +222,7 @@ export const GET_SUBSCRIPTION = gql(/* GraphQL */ `
   query GetSubscription {
     subscription {
       _id
+      externalId
       status
       currentPeriodStart
       currentPeriodEnd
