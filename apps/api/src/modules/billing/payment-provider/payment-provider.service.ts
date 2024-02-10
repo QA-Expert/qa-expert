@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable, RawBodyRequest } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger, RawBodyRequest } from '@nestjs/common';
 import { ConfigService } from 'src/modules/config/config.service';
 import { Stripe } from 'stripe';
 import { Response, Request } from 'express';
@@ -7,6 +7,7 @@ import { SubscriptionService } from '../subscription/subscription.service';
 @Injectable()
 export class PaymentProviderService {
   client: Stripe;
+  private readonly logger = new Logger(PaymentProviderService.name);
 
   constructor(
     private readonly serviceConfig: ConfigService,
@@ -19,77 +20,74 @@ export class PaymentProviderService {
     request: RawBodyRequest<Request>,
     response: Response,
   ) {
-    const signature = request.headers['stripe-signature'];
-    const endpointSecret = this.serviceConfig.paymentProviderWebhookSecret;
-
     let event: Stripe.Event;
 
-    if (!signature) {
-      return response
-        .status(HttpStatus.BAD_REQUEST)
-        .send(`Webhook Error: Missing Signature`);
-    }
-
-    if (!request.rawBody) {
-      return response
-        .status(HttpStatus.BAD_REQUEST)
-        .send(`Webhook Error: Raw body is missing`);
-    }
-
     try {
+      const signature = request.headers['stripe-signature'];
+      const endpointSecret = this.serviceConfig.paymentProviderWebhookSecret;
+
+      if (!signature) {
+        throw new Error('Missing Signature');
+      }
+
+      if (!request.rawBody) {
+        throw new Error('Raw body is missing');
+      }
+
       event = this.client.webhooks.constructEvent(
         request.rawBody,
         signature,
         endpointSecret,
       );
+
+      // @url https://stripe.com/docs/api/events/types
+      // all event types
+      switch (event.type) {
+        case 'invoice.payment_failed': {
+          const invoice = event.data.object;
+          const externalSubscriptionId = invoice.subscription;
+
+          if (
+            !externalSubscriptionId ||
+            typeof externalSubscriptionId !== 'string'
+          ) {
+            throw new Error('Invalid subscription id');
+          }
+
+          await this.serviceSubscription.cancel(
+            externalSubscriptionId,
+            'Canceled due to payment failure',
+          );
+
+          break;
+        }
+        case 'invoice.payment_succeeded': {
+          const invoice = event.data.object;
+          const externalSubscriptionId = invoice.subscription;
+
+          if (
+            !externalSubscriptionId ||
+            typeof externalSubscriptionId !== 'string'
+          ) {
+            throw new Error('Invalid subscription id');
+          }
+
+          await this.serviceSubscription.activate(externalSubscriptionId);
+
+          break;
+        }
+
+        default:
+          this.logger.warn(`Unhandled event type ${event.type}`);
+      }
+
+      return response.send();
     } catch (error) {
+      this.logger.error((error as Error).message);
+
       return response
         .status(HttpStatus.BAD_REQUEST)
         .send(`Webhook Error: ${(error as Error).message}`);
     }
-
-    // @url https://stripe.com/docs/api/events/types
-    // all event types
-    switch (event.type) {
-      case 'invoice.payment_failed': {
-        const invoice = event.data.object;
-        const externalSubscriptionId = invoice.subscription;
-
-        if (
-          !externalSubscriptionId ||
-          typeof externalSubscriptionId !== 'string'
-        ) {
-          return response
-            .status(HttpStatus.BAD_REQUEST)
-            .send(`Webhook Error: Invalid subscription id`);
-        }
-
-        await this.serviceSubscription.cancel(externalSubscriptionId);
-
-        break;
-      }
-      case 'invoice.payment_succeeded': {
-        const invoice = event.data.object;
-        const externalSubscriptionId = invoice.subscription;
-
-        if (
-          !externalSubscriptionId ||
-          typeof externalSubscriptionId !== 'string'
-        ) {
-          return response
-            .status(HttpStatus.BAD_REQUEST)
-            .send(`Webhook Error: Invalid subscription id`);
-        }
-
-        await this.serviceSubscription.activate(externalSubscriptionId);
-
-        break;
-      }
-
-      default:
-        console.log(`Unhandled event type ${event.type}`);
-    }
-
-    return response.send();
   }
 }

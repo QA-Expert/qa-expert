@@ -8,7 +8,6 @@ import { User, Roles as RolesEnum } from '../../users/user.schema';
 import { Price, Subscription } from './subscription.schema';
 import { SubscriptionService } from './subscription.service';
 import { SubscriptionInput } from './subscription.input';
-import { SubscriptionOutput } from './subscription.output';
 
 @Resolver(() => Subscription)
 export class SubscriptionResolver {
@@ -16,7 +15,7 @@ export class SubscriptionResolver {
 
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
-  @Query(() => SubscriptionOutput, { nullable: true })
+  @Query(() => Subscription, { nullable: true })
   public async subscription(@CurrentUser() user: User) {
     return await this.service.retrieve(user._id);
   }
@@ -42,7 +41,7 @@ export class SubscriptionResolver {
   @Roles(RolesEnum.USER)
   @Mutation(() => Subscription)
   public async cancelSubscription(@Args('externalId') externalId: string) {
-    return await this.service.cancel(externalId);
+    return await this.service.cancel(externalId, 'Canceled by user');
   }
 
   @UseGuards(GqlAuthGuard, RolesGuard)

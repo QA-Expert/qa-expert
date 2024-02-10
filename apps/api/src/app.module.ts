@@ -60,9 +60,10 @@ import { EncryptionModule } from './modules/encryption/encryption.modules';
       }),
       inject: [ConfigService],
     }),
+    // @NOTE: order of modules matters
+    // first modules in order are usually the ones that have forwardRef of underlying modules in case of circular dependencies
     ConfigModule,
     EncryptionModule,
-    PaymentProviderModule,
     AnswerModule,
     AnswerValidationModule,
     QuestionModule,
@@ -74,8 +75,9 @@ import { EncryptionModule } from './modules/encryption/encryption.modules';
     SubmittedProgressModule,
     CourseProgressModule,
     ActivityModule,
-    PaymentMethodModule,
     SubscriptionModule,
+    PaymentProviderModule,
+    PaymentMethodModule,
     EmailModule,
     ClaimedBadgeModule,
     CourseLikeModule,

@@ -202,7 +202,7 @@ export const SUBSCRIBE = gql(/* GraphQL */ `
 `);
 
 export const ACTIVATE_SUBSCRIPTION = gql(/* GraphQL */ `
-  mutation ActivateSubscription(externalId: String!) {
+  mutation ActivateSubscription($externalId: String!) {
     activateSubscription(externalId: $externalId) {
       _id
     }
@@ -210,7 +210,7 @@ export const ACTIVATE_SUBSCRIPTION = gql(/* GraphQL */ `
 `);
 
 export const CANCEL_SUBSCRIPTION = gql(/* GraphQL */ `
-  mutation CancelSubscription(externalId: $externalId) {
+  mutation CancelSubscription($externalId: String!) {
     cancelSubscription(externalId: $externalId) {
       _id
     }

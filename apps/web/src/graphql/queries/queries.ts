@@ -226,6 +226,7 @@ export const GET_SUBSCRIPTION = gql(/* GraphQL */ `
       status
       currentPeriodStart
       currentPeriodEnd
+      cancelationReason
     }
   }
 `);

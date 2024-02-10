@@ -48,6 +48,10 @@ export class Subscription extends mongoose.Document {
   })
   priceId: string;
 
+  @Prop()
+  @Field(() => String, { nullable: true })
+  cancelationReason?: string;
+
   @Prop({ type: String, enum: SubscriptionStatus, required: true })
   @Field(() => SubscriptionStatus, {
     defaultValue: SubscriptionStatus.INACTIVE,

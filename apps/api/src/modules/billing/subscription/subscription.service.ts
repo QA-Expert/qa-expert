@@ -1,6 +1,7 @@
 import {
   Inject,
   Injectable,
+  Logger,
   NotFoundException,
   forwardRef,
 } from '@nestjs/common';
@@ -10,11 +11,12 @@ import { Price, Subscription, SubscriptionStatus } from './subscription.schema';
 import { SubscriptionInput } from './subscription.input';
 import { PaymentProviderService } from '../payment-provider/payment-provider.service';
 import { PaymentMethodService } from '../payment-method/payment-method.service';
-import { SubscriptionOutput } from './subscription.output';
 import Stripe from 'stripe';
 
 @Injectable()
 export class SubscriptionService {
+  private readonly logger = new Logger(SubscriptionService.name);
+
   constructor(
     @InjectModel(Subscription.name)
     private model: Model<Subscription>,
@@ -42,7 +44,7 @@ export class SubscriptionService {
       .exec();
   }
 
-  async retrieve(userId: string): Promise<SubscriptionOutput | null> {
+  async retrieve(userId: string): Promise<Subscription | null> {
     const subscriptionFromDb = await this.findOneByUserId(userId);
 
     if (!subscriptionFromDb) {
@@ -58,21 +60,17 @@ export class SubscriptionService {
           },
         );
 
-      const currentPeriodStart = (result.latest_invoice as Stripe.Invoice)
-        ?.created
-        ? new Date((result.latest_invoice as Stripe.Invoice).created * 1000)
-        : null;
-      const currentPeriodEnd = result.current_period_end
-        ? new Date(result.current_period_end * 1000)
-        : null;
+      const currentPeriodStart = new Date(result.current_period_start * 1000);
+      const currentPeriodEnd = new Date(result.current_period_end * 1000);
 
       return {
-        _id: subscriptionFromDb._id,
+        ...subscriptionFromDb.toObject(),
         currentPeriodStart,
         currentPeriodEnd,
-        status: subscriptionFromDb.status,
-      };
+      } as Subscription;
     } catch (error) {
+      this.logger.error((error as Error).message, error);
+
       throw error;
     }
   }
@@ -101,7 +99,18 @@ export class SubscriptionService {
         items: [{ price: data.priceId }],
         collection_method: 'charge_automatically',
         coupon: data.couponId,
+        expand: ['latest_invoice'],
       });
+
+    if (subscription.status !== 'active' && subscription.id) {
+      await this.servicePaymentProvider.client.subscriptions.cancel(
+        subscription.id,
+      );
+
+      throw new Error(
+        'Failed to create new subscription. There might be issue with processing payment.',
+      );
+    }
 
     const newSub: Partial<Subscription> = {
       externalId: subscription.id,
@@ -179,6 +188,16 @@ export class SubscriptionService {
           });
       }
 
+      if (subscription.status !== 'active' && subscription.id) {
+        await this.servicePaymentProvider.client.subscriptions.cancel(
+          subscription.id,
+        );
+
+        throw new Error(
+          'Failed to activate subscription. There might be issue with processing payment.',
+        );
+      }
+
       return await this.model
         .findByIdAndUpdate(
           subscriptionFromDb._id,
@@ -190,11 +209,14 @@ export class SubscriptionService {
               subscription.current_period_start * 1000,
             ),
             currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+            cancelationReason: null,
           },
           { new: true },
         )
         .exec();
     } catch (error) {
+      this.logger.error((error as Error).message, error);
+
       throw error;
     }
   }
@@ -210,7 +232,7 @@ export class SubscriptionService {
    * In that case we will look into end period date and compare it with today to figure out if we need to just
    * create new sub with end period date as first billing date OR we just create new sub with current start and future end period
    */
-  async cancel(externalId: string) {
+  async cancel(externalId: string, reason: string) {
     const subscriptionFromDb = await this.findOneByExternalId(externalId);
 
     if (!subscriptionFromDb) {
@@ -240,6 +262,7 @@ export class SubscriptionService {
         .findByIdAndUpdate(
           subscriptionFromDb._id,
           {
+            cancelationReason: reason,
             currentPeriodStart: new Date(
               subscription.current_period_start * 1000,
             ),
@@ -251,6 +274,8 @@ export class SubscriptionService {
         )
         .exec();
     } catch (error) {
+      this.logger.error((error as Error).message, error);
+
       throw error;
     }
   }

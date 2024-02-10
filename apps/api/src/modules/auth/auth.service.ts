@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../users/user.service';
 import { UserInputLogin } from '../users/login-user.input';
 import * as bcrypt from 'bcrypt';
@@ -15,6 +15,8 @@ import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
@@ -139,6 +141,8 @@ export class AuthService {
 
         return userInfo;
       } catch (error) {
+        this.logger.error((error as Error).message, error);
+
         throw new UnauthorizedException(
           `Failed to get user info from ${provider}`,
         );
@@ -186,6 +190,8 @@ export class AuthService {
 
         return userInfo;
       } catch (error) {
+        this.logger.error((error as Error).message, error);
+
         throw error;
       }
     }
