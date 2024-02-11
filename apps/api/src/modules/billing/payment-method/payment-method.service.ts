@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaymentMethod } from './payment-method.schema';
 import { EncryptionService } from 'src/modules/encryption/encryption.service';
@@ -10,6 +10,8 @@ import { PaymentMethodOutput } from './payment-method.output';
 
 @Injectable()
 export class PaymentMethodService {
+  private readonly logger = new Logger(PaymentMethodService.name);
+
   constructor(
     @InjectModel(PaymentMethod.name)
     private model: Model<PaymentMethod>,
@@ -79,6 +81,13 @@ export class PaymentMethodService {
 
       return result;
     } catch (error) {
+      this.logger.error((error as Error).message, error);
+
+      // @ts-expect-error cannot import Stripe error
+      if ('statusCode' in error && error.statusCode === 404) {
+        return null;
+      }
+
       // @ts-expect-error cannot import Stripe error
       if ('statusCode' in error && error.statusCode === 404) {
         return null;
@@ -165,6 +174,8 @@ export class PaymentMethodService {
         )
         .exec();
     } catch (error) {
+      this.logger.error((error as Error).message, error);
+
       throw new Error(
         'Failed to create or update payment method with Payment provider',
       );
@@ -201,6 +212,8 @@ export class PaymentMethodService {
 
       return result;
     } catch (error) {
+      this.logger.error((error as Error).message, error);
+
       throw new Error('Failed to remove payment method');
     }
   }

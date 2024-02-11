@@ -20,6 +20,7 @@ export interface Config {
   AUTH_GOOGLE_CLIENT_ID: string;
   AUTH_GOOGLE_CLIENT_SECRET: string;
   PAYMENT_PROVIDER_API_KEY: string;
+  PAYMENT_PROVIDER_WEBHOOK_SECRET: string;
 }
 
 export const validationSchema = Joi.object<Config>({
@@ -44,4 +45,5 @@ export const validationSchema = Joi.object<Config>({
   AUTH_GOOGLE_CLIENT_ID: Joi.string().required(),
   AUTH_GOOGLE_CLIENT_SECRET: Joi.string().required(),
   PAYMENT_PROVIDER_API_KEY: Joi.string().required(),
+  PAYMENT_PROVIDER_WEBHOOK_SECRET: Joi.string().required(),
 });

@@ -40,6 +40,9 @@ export function Subscription({ price }: Props) {
     refetchQueries: [GET_SUBSCRIPTION],
   });
 
+  const { subscription } = data;
+  const { paymentMethod } = paymentMethodData;
+
   useError([
     activationError?.message,
     deactivationError?.message,
@@ -60,7 +63,7 @@ export function Subscription({ price }: Props) {
 
       <Box sx={{ flex: 1 }}>
         <Typography variant="h3" sx={{ color: 'success.main' }}>
-          {capitalize(data.subscription?.status ?? SubscriptionStatus.Inactive)}
+          {capitalize(subscription?.status ?? SubscriptionStatus.Inactive)}
         </Typography>
 
         {price.amount ? (
@@ -72,27 +75,39 @@ export function Subscription({ price }: Props) {
           </Row>
         ) : null}
 
-        {!paymentMethodData.paymentMethod ? (
-          <Typography sx={{ color: 'text.secondary' }}>
+        {!paymentMethod ? (
+          <Typography
+            sx={{
+              textAlign: 'center',
+              color: 'secondary.main',
+            }}
+          >
             Please Add Payment Method to Activate your Subscription
           </Typography>
         ) : null}
 
-        {data.subscription?.status === SubscriptionStatus.Active &&
-        data.subscription.currentPeriodStart ? (
-          <Typography sx={{ color: 'text.secondary' }}>
-            Last Payment was on{' '}
-            {format(data.subscription.currentPeriodStart, 'MM/dd/yyyy')}
+        {subscription?.status === SubscriptionStatus.Active &&
+        subscription.currentPeriodStart ? (
+          <Typography sx={{ color: 'text.secondary', textAlign: 'center' }}>
+            Last Payment was made on{' '}
+            {format(subscription.currentPeriodStart, 'MM/dd/yyyy')}
+          </Typography>
+        ) : null}
+
+        {subscription?.cancelationReason ? (
+          <Typography sx={{ color: 'error.main', textAlign: 'center' }}>
+            {subscription.cancelationReason}
           </Typography>
         ) : null}
       </Box>
 
       <Row sx={{ justifyContent: 'center' }}>
-        {!data.subscription ? (
+        {!subscription ? (
           <LoadingButton
             variant="contained"
             color="warning"
             loading={subscribeLoading}
+            disabled={!paymentMethod}
             onClick={async () =>
               subscribe({
                 variables: {
@@ -105,38 +120,44 @@ export function Subscription({ price }: Props) {
           >
             Subscribe
           </LoadingButton>
-        ) : null}
+        ) : (
+          <>
+            {subscription.status === SubscriptionStatus.Active ? (
+              <LoadingButton
+                variant="outlined"
+                color="error"
+                loading={deactivationLoading}
+                onClick={async () =>
+                  deactivate({
+                    variables: {
+                      externalId: subscription.externalId,
+                    },
+                  })
+                }
+              >
+                Cancel
+              </LoadingButton>
+            ) : null}
 
-        {data.subscription?.status === SubscriptionStatus.Active ? (
-          <LoadingButton
-            variant="outlined"
-            color="error"
-            loading={deactivationLoading}
-            onClick={async () => deactivate()}
-          >
-            Cancel
-          </LoadingButton>
-        ) : null}
-
-        {data.subscription?.status === SubscriptionStatus.Canceled ? (
-          <LoadingButton
-            variant="contained"
-            color="warning"
-            disabled={!paymentMethodData.paymentMethod}
-            loading={activationLoading}
-            onClick={async () =>
-              activate({
-                variables: {
-                  data: {
-                    priceId: price.id,
-                  },
-                },
-              })
-            }
-          >
-            Activate
-          </LoadingButton>
-        ) : null}
+            {subscription.status === SubscriptionStatus.Canceled ? (
+              <LoadingButton
+                variant="contained"
+                color="warning"
+                disabled={!paymentMethod}
+                loading={activationLoading}
+                onClick={async () =>
+                  activate({
+                    variables: {
+                      externalId: subscription.externalId,
+                    },
+                  })
+                }
+              >
+                Activate
+              </LoadingButton>
+            ) : null}
+          </>
+        )}
       </Row>
     </Card>
   );

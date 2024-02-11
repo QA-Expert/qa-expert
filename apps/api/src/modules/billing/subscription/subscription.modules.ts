@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Subscription, SubscriptionSchema } from './subscription.schema';
@@ -14,8 +14,8 @@ import { UserModule } from 'src/modules/users/user.module';
       { name: Subscription.name, schema: SubscriptionSchema },
     ]),
     UserModule,
-    PaymentProviderModule,
-    PaymentMethodModule,
+    forwardRef(() => PaymentMethodModule),
+    forwardRef(() => PaymentProviderModule),
   ],
   providers: [SubscriptionService, SubscriptionResolver, JwtService],
   exports: [SubscriptionService],

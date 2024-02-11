@@ -37,9 +37,20 @@ export class Subscription extends mongoose.Document {
   @Prop()
   @Field({
     description:
-      'External transaction. Refer to transaction stored on side of Payment Processes like Stripe',
+      'External subscription id. Refer to subscription stored on side of Payment Processes like Stripe',
   })
   externalId: string;
+
+  @Prop()
+  @Field({
+    description:
+      'External price id. Refer to price stored on side of Payment Processes like Stripe',
+  })
+  priceId: string;
+
+  @Prop()
+  @Field(() => String, { nullable: true })
+  cancelationReason?: string;
 
   @Prop({ type: String, enum: SubscriptionStatus, required: true })
   @Field(() => SubscriptionStatus, {

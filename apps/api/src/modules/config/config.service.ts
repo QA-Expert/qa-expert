@@ -83,4 +83,8 @@ export class ConfigService {
   get paymentProviderApiKey(): string {
     return this.configService.get<string>('PAYMENT_PROVIDER_API_KEY');
   }
+
+  get paymentProviderWebhookSecret(): string {
+    return this.configService.get<string>('PAYMENT_PROVIDER_WEBHOOK_SECRET');
+  }
 }

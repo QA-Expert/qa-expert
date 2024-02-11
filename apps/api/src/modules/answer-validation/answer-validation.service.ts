@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AnswerService } from '../answers/answer.service';
 import {
   AnswerValidationRestApiOutput,
@@ -12,6 +12,8 @@ import _ from 'lodash';
 
 @Injectable()
 export class AnswerValidationService {
+  private readonly logger = new Logger(AnswerValidationService.name);
+
   constructor(private readonly serviceAnswer: AnswerService) {}
 
   async getRestApiResponse({
@@ -43,6 +45,8 @@ export class AnswerValidationService {
 
       return getRestApiResponse(expectedData, actualData);
     } catch (error) {
+      this.logger.error((error as Error).message, error);
+
       throw new Error('Invalid data format, should be stringified JSON');
     }
   }

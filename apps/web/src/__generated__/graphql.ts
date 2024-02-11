@@ -208,7 +208,7 @@ export type Mutation = {
 };
 
 export type MutationActivateSubscriptionArgs = {
-  data: SubscriptionInput;
+  externalId: Scalars['String']['input'];
 };
 
 export type MutationAddPageArgs = {
@@ -218,6 +218,10 @@ export type MutationAddPageArgs = {
 
 export type MutationAddPaymentMethodArgs = {
   data: PaymentMethodInput;
+};
+
+export type MutationCancelSubscriptionArgs = {
+  externalId: Scalars['String']['input'];
 };
 
 export type MutationClaimBadgeArgs = {
@@ -389,7 +393,7 @@ export type Query = {
   paymentMethod?: Maybe<PaymentMethodOutput>;
   prices: Array<Price>;
   submittedProgresses: Array<SubmittedProgress>;
-  subscription?: Maybe<SubscriptionOutput>;
+  subscription?: Maybe<Subscription>;
   user: User;
 };
 
@@ -478,13 +482,16 @@ export type SubmittedProgress = {
 export type Subscription = {
   __typename?: 'Subscription';
   _id: Scalars['String']['output'];
+  cancelationReason?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   /** End of the current period that the subscription has been invoiced for. At the end of this period, a new invoice will be created. */
   currentPeriodEnd: Scalars['DateTime']['output'];
   /** Start of the current period that the subscription has been invoiced for. */
   currentPeriodStart: Scalars['DateTime']['output'];
-  /** External transaction. Refer to transaction stored on side of Payment Processes like Stripe */
+  /** External subscription id. Refer to subscription stored on side of Payment Processes like Stripe */
   externalId: Scalars['String']['output'];
+  /** External price id. Refer to price stored on side of Payment Processes like Stripe */
+  priceId: Scalars['String']['output'];
   status: SubscriptionStatus;
   updatedAt: Scalars['DateTime']['output'];
   user: Scalars['String']['output'];
@@ -493,14 +500,6 @@ export type Subscription = {
 export type SubscriptionInput = {
   couponId?: InputMaybe<Scalars['String']['input']>;
   priceId: Scalars['String']['input'];
-};
-
-export type SubscriptionOutput = {
-  __typename?: 'SubscriptionOutput';
-  _id: Scalars['String']['output'];
-  currentPeriodEnd?: Maybe<Scalars['DateTime']['output']>;
-  currentPeriodStart?: Maybe<Scalars['DateTime']['output']>;
-  status: SubscriptionStatus;
 };
 
 /** Defines users subscription is active or not */
@@ -799,7 +798,7 @@ export type SubscribeMutation = {
 };
 
 export type ActivateSubscriptionMutationVariables = Exact<{
-  data: SubscriptionInput;
+  externalId: Scalars['String']['input'];
 }>;
 
 export type ActivateSubscriptionMutation = {
@@ -808,7 +807,7 @@ export type ActivateSubscriptionMutation = {
 };
 
 export type CancelSubscriptionMutationVariables = Exact<{
-  [key: string]: never;
+  externalId: Scalars['String']['input'];
 }>;
 
 export type CancelSubscriptionMutation = {
@@ -1063,11 +1062,13 @@ export type GetSubscriptionQueryVariables = Exact<{ [key: string]: never }>;
 export type GetSubscriptionQuery = {
   __typename?: 'Query';
   subscription?: {
-    __typename?: 'SubscriptionOutput';
+    __typename?: 'Subscription';
     _id: string;
+    externalId: string;
     status: SubscriptionStatus;
-    currentPeriodStart?: string | null;
-    currentPeriodEnd?: string | null;
+    currentPeriodStart: string;
+    currentPeriodEnd: string;
+    cancelationReason?: string | null;
   } | null;
 };
 
@@ -2466,12 +2467,15 @@ export const ActivateSubscriptionDocument = {
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'externalId' },
+          },
           type: {
             kind: 'NonNullType',
             type: {
               kind: 'NamedType',
-              name: { kind: 'Name', value: 'SubscriptionInput' },
+              name: { kind: 'Name', value: 'String' },
             },
           },
         },
@@ -2485,10 +2489,10 @@ export const ActivateSubscriptionDocument = {
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'data' },
+                name: { kind: 'Name', value: 'externalId' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'data' },
+                  name: { kind: 'Name', value: 'externalId' },
                 },
               },
             ],
@@ -2514,12 +2518,38 @@ export const CancelSubscriptionDocument = {
       kind: 'OperationDefinition',
       operation: 'mutation',
       name: { kind: 'Name', value: 'CancelSubscription' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'externalId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
           {
             kind: 'Field',
             name: { kind: 'Name', value: 'cancelSubscription' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'externalId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'externalId' },
+                },
+              },
+            ],
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
@@ -3216,6 +3246,7 @@ export const GetSubscriptionDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'externalId' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'status' } },
                 {
                   kind: 'Field',
@@ -3224,6 +3255,10 @@ export const GetSubscriptionDocument = {
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'currentPeriodEnd' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'cancelationReason' },
                 },
               ],
             },

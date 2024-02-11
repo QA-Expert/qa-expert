@@ -22,6 +22,7 @@ import { EmailModule } from './modules/emails/email.module';
 import { ClaimedBadgeModule } from './modules/claimed-badges/claimed-badge.modules';
 import { CourseLikeModule } from './modules/course-likes/course-likes.modules';
 import { PaymentProviderModule } from './modules/billing/payment-provider/payment-provider.modules';
+import { EncryptionModule } from './modules/encryption/encryption.modules';
 
 @Module({
   imports: [
@@ -59,7 +60,10 @@ import { PaymentProviderModule } from './modules/billing/payment-provider/paymen
       }),
       inject: [ConfigService],
     }),
+    // @NOTE: order of modules matters
+    // first modules in order are usually the ones that have forwardRef of underlying modules in case of circular dependencies
     ConfigModule,
+    EncryptionModule,
     AnswerModule,
     AnswerValidationModule,
     QuestionModule,
@@ -71,12 +75,12 @@ import { PaymentProviderModule } from './modules/billing/payment-provider/paymen
     SubmittedProgressModule,
     CourseProgressModule,
     ActivityModule,
-    PaymentMethodModule,
     SubscriptionModule,
+    PaymentProviderModule,
+    PaymentMethodModule,
     EmailModule,
     ClaimedBadgeModule,
     CourseLikeModule,
-    PaymentProviderModule,
   ],
   providers: [],
 })
