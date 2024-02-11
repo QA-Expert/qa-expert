@@ -3,6 +3,7 @@ import { ConfigService } from 'src/modules/config/config.service';
 import { Stripe } from 'stripe';
 import { Response, Request } from 'express';
 import { SubscriptionService } from '../subscription/subscription.service';
+import { SubscriptionStatus } from '../subscription/subscription.schema';
 
 @Injectable()
 export class PaymentProviderService {
@@ -54,29 +55,23 @@ export class PaymentProviderService {
             throw new Error('Invalid subscription id');
           }
 
-          await this.serviceSubscription.cancel(
-            externalSubscriptionId,
-            'Canceled due to payment failure',
-          );
-
-          break;
-        }
-        case 'invoice.payment_succeeded': {
-          const invoice = event.data.object;
-          const externalSubscriptionId = invoice.subscription;
+          const subscriptionFromDb =
+            await this.serviceSubscription.findOneByExternalId(
+              externalSubscriptionId,
+            );
 
           if (
-            !externalSubscriptionId ||
-            typeof externalSubscriptionId !== 'string'
+            subscriptionFromDb &&
+            subscriptionFromDb.status !== SubscriptionStatus.CANCELED
           ) {
-            throw new Error('Invalid subscription id');
+            await this.serviceSubscription.cancel(
+              externalSubscriptionId,
+              'Canceled due to payment failure',
+            );
           }
-
-          await this.serviceSubscription.activate(externalSubscriptionId);
 
           break;
         }
-
         default:
           this.logger.warn(`Unhandled event type ${event.type}`);
       }

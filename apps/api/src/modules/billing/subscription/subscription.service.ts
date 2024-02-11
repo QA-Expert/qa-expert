@@ -55,9 +55,6 @@ export class SubscriptionService {
       const result =
         await this.servicePaymentProvider.client.subscriptions.retrieve(
           subscriptionFromDb.externalId,
-          {
-            expand: ['latest_invoice'],
-          },
         );
 
       const currentPeriodStart = new Date(result.current_period_start * 1000);
@@ -99,7 +96,6 @@ export class SubscriptionService {
         items: [{ price: data.priceId }],
         collection_method: 'charge_automatically',
         coupon: data.couponId,
-        expand: ['latest_invoice'],
       });
 
     if (subscription.status !== 'active' && subscription.id) {
