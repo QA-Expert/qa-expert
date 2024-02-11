@@ -14,8 +14,6 @@ import { ConfigService } from '../config/config.service';
 
 @Injectable()
 export class GqlAuthGuard extends AuthGuard('jwt') {
-  private readonly logger = new Logger(GqlAuthGuard.name);
-
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
@@ -47,8 +45,6 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
 
       req.user = user;
     } catch (error) {
-      this.logger.error((error as Error).message, error);
-
       if (error instanceof Error) {
         throw new UnauthorizedException(error.message);
       }
