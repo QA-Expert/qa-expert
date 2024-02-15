@@ -34,7 +34,7 @@ export function ModalActionButtons({
         variant="contained"
         color="warning"
         onClick={onConfirm}
-        disabled={isLoading || disabled}
+        disabled={disabled}
       >
         {confirmButtonName}
       </LoadingButton>
