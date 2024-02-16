@@ -16,6 +16,10 @@ import { GET_PAYMENT_METHOD, GET_SUBSCRIPTION } from 'graphql/queries/queries';
 import { capitalize } from 'lodash';
 import { useError } from 'utils/hooks';
 import { format } from 'date-fns';
+import { CheckoutModal } from '../checkout-modal/checkout-modal';
+import { useState } from 'react';
+import { getSubscriptionButtonName } from '../utils';
+import { DATE_FORMAT } from 'constants/constants';
 
 type Props = {
   price: GetPricesQuery['prices'][number];
@@ -25,140 +29,134 @@ export function Subscription({ price }: Props) {
   const { data, error } = useSuspenseQuery(GET_SUBSCRIPTION);
   const { data: paymentMethodData, error: paymentMethodError } =
     useSuspenseQuery(GET_PAYMENT_METHOD);
-  const [subscribe, { error: subscribeError, loading: subscribeLoading }] =
-    useMutation(SUBSCRIBE, {
+  const [cancel, { error: cancelError, loading: cancelLoading }] = useMutation(
+    CANCEL_SUBSCRIPTION,
+    {
       refetchQueries: [GET_SUBSCRIPTION],
-    });
-  const [activate, { error: activationError, loading: activationLoading }] =
-    useMutation(ACTIVATE_SUBSCRIPTION, {
-      refetchQueries: [GET_SUBSCRIPTION],
-    });
-  const [
-    deactivate,
-    { error: deactivationError, loading: deactivationLoading },
-  ] = useMutation(CANCEL_SUBSCRIPTION, {
-    refetchQueries: [GET_SUBSCRIPTION],
-  });
+    },
+  );
+
+  const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
 
   const { subscription } = data;
   const { paymentMethod } = paymentMethodData;
 
-  useError([
-    activationError?.message,
-    deactivationError?.message,
-    error?.message,
-    paymentMethodError?.message,
-    subscribeError?.message,
-  ]);
+  useError([error?.message, paymentMethodError?.message, cancelError?.message]);
 
   return (
-    <Card
-      sx={{
-        width: '350px',
-        minHeight: '350px',
-        padding: '2rem',
-      }}
-    >
-      <CardTitle>Subscription</CardTitle>
+    <>
+      <Card
+        sx={{
+          width: '350px',
+          minHeight: '350px',
+          padding: '2rem',
+        }}
+      >
+        <CardTitle>Subscription</CardTitle>
 
-      <Box sx={{ flex: 1 }}>
-        <Typography variant="h3" sx={{ color: 'success.main' }}>
-          {capitalize(subscription?.status ?? SubscriptionStatus.Inactive)}
-        </Typography>
-
-        {price.amount ? (
-          <Row sx={{ justifyContent: 'center', alignItems: 'baseline' }}>
-            <Typography sx={{ color: 'secondary.main', fontSize: '2rem' }}>
-              ${price.amount / 100}
-            </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>/ month</Typography>
-          </Row>
-        ) : null}
-
-        {!paymentMethod ? (
+        <Box sx={{ flex: 1 }}>
           <Typography
-            sx={{
-              textAlign: 'center',
-              color: 'secondary.main',
-            }}
+            variant="h3"
+            sx={{ color: 'success.main', fontWeight: 'bold' }}
           >
-            Please Add Payment Method to Activate your Subscription
+            {capitalize(subscription?.status ?? SubscriptionStatus.Inactive)}
           </Typography>
-        ) : null}
 
-        {subscription?.status === SubscriptionStatus.Active &&
-        subscription.currentPeriodStart ? (
-          <Typography sx={{ color: 'text.secondary', textAlign: 'center' }}>
-            Last Payment was made on{' '}
-            {format(subscription.currentPeriodStart, 'MM/dd/yyyy')}
-          </Typography>
-        ) : null}
-
-        {subscription?.cancelationReason ? (
-          <Typography sx={{ color: 'error.main', textAlign: 'center' }}>
-            {subscription.cancelationReason}
-          </Typography>
-        ) : null}
-      </Box>
-
-      <Row sx={{ justifyContent: 'center' }}>
-        {!subscription ? (
-          <LoadingButton
-            variant="contained"
-            color="warning"
-            loading={subscribeLoading}
-            disabled={!paymentMethod}
-            onClick={async () =>
-              subscribe({
-                variables: {
-                  data: {
-                    priceId: price.id,
-                  },
-                },
-              })
-            }
-          >
-            Subscribe
-          </LoadingButton>
-        ) : (
-          <>
-            {subscription.status === SubscriptionStatus.Active ? (
-              <LoadingButton
-                variant="outlined"
-                color="error"
-                loading={deactivationLoading}
-                onClick={async () =>
-                  deactivate({
-                    variables: {
-                      externalId: subscription.externalId,
-                    },
-                  })
-                }
+          {price.amount ? (
+            <Row sx={{ justifyContent: 'center', alignItems: 'baseline' }}>
+              <Typography
+                sx={{
+                  color: 'secondary.main',
+                  fontSize: '2rem',
+                  fontWeight: 'bold',
+                }}
               >
-                Cancel
-              </LoadingButton>
-            ) : null}
+                ${price.amount / 100}
+              </Typography>
+              <Typography sx={{ color: 'text.secondary' }}>/ month</Typography>
+            </Row>
+          ) : null}
 
-            {subscription.status === SubscriptionStatus.Canceled ? (
-              <LoadingButton
-                variant="contained"
-                color="warning"
-                disabled={!paymentMethod}
-                loading={activationLoading}
-                onClick={async () =>
-                  activate({
-                    variables: {
-                      externalId: subscription.externalId,
-                    },
-                  })
-                }
-              >
-                Activate
-              </LoadingButton>
-            ) : null}
-          </>
-        )}
-      </Row>
-    </Card>
+          {!paymentMethod ? (
+            <Typography
+              sx={{
+                textAlign: 'center',
+                color: 'secondary.main',
+              }}
+            >
+              Please Add Payment Method to Activate your Subscription
+            </Typography>
+          ) : null}
+
+          {subscription?.status === SubscriptionStatus.Active ? (
+            <Box sx={{ justifyContent: 'center' }}>
+              <Typography sx={{ color: 'text.secondary' }}>
+                Current Subscription period
+              </Typography>
+              <Typography sx={{ color: 'secondary.main' }}>
+                {format(subscription.currentPeriodStart, DATE_FORMAT)}
+                {' - '}
+                {format(subscription.currentPeriodEnd, DATE_FORMAT)}
+              </Typography>
+            </Box>
+          ) : null}
+
+          {subscription?.status === SubscriptionStatus.Canceled ? (
+            <Typography sx={{ color: 'error.main', textAlign: 'center' }}>
+              {subscription.cancelationReason}
+            </Typography>
+          ) : null}
+        </Box>
+
+        <Row sx={{ justifyContent: 'center' }}>
+          {!subscription ? (
+            <LoadingButton
+              variant="contained"
+              color="warning"
+              disabled={!paymentMethod}
+              onClick={() => setCheckoutModalOpen(true)}
+            >
+              {getSubscriptionButtonName(subscription)}
+            </LoadingButton>
+          ) : (
+            <>
+              {subscription.status === SubscriptionStatus.Active ? (
+                <LoadingButton
+                  variant="outlined"
+                  color="error"
+                  loading={cancelLoading}
+                  onClick={async () =>
+                    await cancel({
+                      variables: {
+                        externalId: subscription.externalId,
+                      },
+                    })
+                  }
+                >
+                  {getSubscriptionButtonName(subscription)}
+                </LoadingButton>
+              ) : null}
+
+              {subscription.status === SubscriptionStatus.Canceled ? (
+                <LoadingButton
+                  variant="contained"
+                  color="warning"
+                  disabled={!paymentMethod}
+                  onClick={() => setCheckoutModalOpen(true)}
+                >
+                  {getSubscriptionButtonName(subscription)}
+                </LoadingButton>
+              ) : null}
+            </>
+          )}
+        </Row>
+      </Card>
+
+      <CheckoutModal
+        open={checkoutModalOpen}
+        onCancel={() => setCheckoutModalOpen(false)}
+        price={price}
+      />
+    </>
   );
 }

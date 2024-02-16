@@ -134,8 +134,8 @@ export class SubscriptionService {
    *
    * 1. We get sub from our DB
    * 2. We check that payment method was added - defensive coding
-   * 3. If db sub currentPeriodEnd <= today then we want to create sub with next billing date of currentPeriodEnd AND make proration_behavior to none
-   * 4. If db sub currentPeriodEnd > today then we want to create new sub
+   * 3. If db sub currentPeriodEnd > today then we want to create sub with next billing date of currentPeriodEnd AND make proration_behavior to none
+   * 4. If db sub currentPeriodEnd <= today then we want to create new sub
    * 5. Update db sub with new currentPeriodEnd and currentPeriodStart
    */
   async activate(externalId: string) {
@@ -166,7 +166,7 @@ export class SubscriptionService {
 
       let subscription: Stripe.Subscription;
 
-      if (currentEndPeriod <= today) {
+      if (currentEndPeriod > today) {
         subscription =
           await this.servicePaymentProvider.client.subscriptions.create({
             customer: paymentMethodFromDb?.externalCustomerId,

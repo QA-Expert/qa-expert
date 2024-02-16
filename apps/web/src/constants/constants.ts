@@ -15,3 +15,5 @@ export const PUBLIC_ROUTES = [
 export const BASE_URL = 'https://qaexpert-7g2rd.ondigitalocean.app';
 
 export const AUTH_REDIRECT_URI = global?.window?.location.href;
+
+export const DATE_FORMAT = 'MM/dd/yyyy';

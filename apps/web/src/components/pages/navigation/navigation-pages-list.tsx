@@ -2,6 +2,7 @@ import List from '@mui/material/List';
 import { GetCourseQuery } from '__generated__/graphql';
 import { NavigationPageListItem } from './navigation-page-list-item';
 import usePagination from '@mui/material/usePagination';
+import Link from 'next/link';
 
 type Props = {
   pages: GetCourseQuery['course']['pages'];
@@ -33,13 +34,14 @@ export function NavigationPagesList({
         // and there are different types of pagination items like "..." that can be used to reduce amount of shown pages "1 2 ... 9 10"
         // so we care only about actual pages
         page && type === 'page' ? (
-          <NavigationPageListItem
-            key={page}
-            currentPageNumber={page}
-            page={pages[page - 1]}
-            selected={selected}
-            onClick={() => onPageChange(page - 1)}
-          />
+          <Link key={page} href={`#${page}`}>
+            <NavigationPageListItem
+              currentPageNumber={page}
+              page={pages[page - 1]}
+              selected={selected}
+              onClick={() => onPageChange(page - 1)}
+            />
+          </Link>
         ) : null,
       )}
     </List>

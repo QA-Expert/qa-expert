@@ -92,7 +92,7 @@ const Header = styled(Typography)(({ theme }) => ({
 }));
 
 const PropName = styled(Typography)(({ theme }) => ({
-  fontWeight: 700,
+  fontWeight: 'bold',
   color: theme.palette.secondary.main,
 }));
 

@@ -27,6 +27,7 @@ export function ActivityCard({ title, description, value }: Props) {
           color: 'secondary.main',
           fontSize: '2rem',
           alignSelf: 'flex-end',
+          fontWeight: 'bold',
         }}
       >
         {value}

@@ -7,6 +7,8 @@ import { ConfirmationModal } from '@/components/confirmation-modal/confirmation-
 import { PaymentMethodCard } from './card/card';
 import { useState } from 'react';
 import { PaymentMethodModal } from './modal/modal';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import { Typography } from '@mui/material';
 
 export function PaymentMethod() {
   const [removeConfirmationModalOpen, setRemoveConfirmationModalOpen] =
@@ -51,7 +53,14 @@ export function PaymentMethod() {
         onConfirm={handleOnRemove}
         title={'Confirm payment method removal'}
         content={
-          'This action will delete the payment method from your account. You will need to add a new payment method to continue your subscription.'
+          <>
+            <WarningAmberIcon fontSize="large" />
+            <Typography>
+              This action will delete the payment method from your account. You
+              will need to add a new payment method to continue your
+              subscription.
+            </Typography>
+          </>
         }
         open={removeConfirmationModalOpen}
         buttonName={'Confirm Removal'}

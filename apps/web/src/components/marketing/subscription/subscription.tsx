@@ -6,6 +6,11 @@ import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import { useReactiveVar } from '@apollo/client';
 import { isAuthenticated } from 'apollo/store';
 import Link from 'next/link';
+import { use } from 'react';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { GET_SUBSCRIPTION } from 'graphql/queries/queries';
+import { useError } from 'utils/hooks';
+import { SubscriptionStatus } from '__generated__/graphql';
 
 const SUBSCRIPTION = {
   amount: '$30',
@@ -19,6 +24,11 @@ const SUBSCRIPTION = {
 
 export function Subscription() {
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
+  const { data: subscriptionData, error } = useSuspenseQuery(GET_SUBSCRIPTION, {
+    skip: !isUserAuthenticated,
+  });
+
+  useError([error?.message]);
 
   return (
     <Box sx={{ gap: '2rem' }}>
@@ -51,6 +61,13 @@ export function Subscription() {
       {!isUserAuthenticated ? (
         <Button size="large" color="warning" variant="contained">
           <Link href="/login">Login to Subscribe</Link>
+        </Button>
+      ) : null}
+
+      {isUserAuthenticated &&
+      subscriptionData?.subscription?.status !== SubscriptionStatus.Active ? (
+        <Button size="large" color="warning" variant="contained">
+          <Link href={'/profile#billing'}>Subscribe</Link>
         </Button>
       ) : null}
     </Box>
