@@ -55,13 +55,22 @@ export function Subscription({ price }: Props) {
         <CardTitle>Subscription</CardTitle>
 
         <Box sx={{ flex: 1 }}>
-          <Typography variant="h3" sx={{ color: 'success.main' }}>
+          <Typography
+            variant="h3"
+            sx={{ color: 'success.main', fontWeight: 'bold' }}
+          >
             {capitalize(subscription?.status ?? SubscriptionStatus.Inactive)}
           </Typography>
 
           {price.amount ? (
             <Row sx={{ justifyContent: 'center', alignItems: 'baseline' }}>
-              <Typography sx={{ color: 'secondary.main', fontSize: '2rem' }}>
+              <Typography
+                sx={{
+                  color: 'secondary.main',
+                  fontSize: '2rem',
+                  fontWeight: 'bold',
+                }}
+              >
                 ${price.amount / 100}
               </Typography>
               <Typography sx={{ color: 'text.secondary' }}>/ month</Typography>

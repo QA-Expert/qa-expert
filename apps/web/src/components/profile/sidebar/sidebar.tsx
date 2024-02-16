@@ -16,18 +16,22 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useError } from 'utils/hooks';
 import { GET_USER } from 'graphql/queries/queries';
+import Link from 'next/link';
 
 export type Section = 'badges' | 'billing' | 'activities' | 'progress';
 
 const SECTIONS: Section[] = ['badges', 'activities', 'progress', 'billing'];
 
+type Props = {
+  onSectionSelect: (section: Section) => void;
+  section: Section;
+};
+
 export function ProfileSidebar({
   onSectionSelect,
-}: {
-  onSectionSelect: (section: Section) => void;
-}) {
+  section: currentSection,
+}: Props) {
   const { data, error } = useSuspenseQuery(GET_USER);
-  const [currentSection, setCurrentSection] = useState<Section>('badges');
   const user = data?.user;
   const username = getUsername(user);
 
@@ -102,25 +106,25 @@ export function ProfileSidebar({
         }}
       >
         {SECTIONS.map((section) => (
-          <NavigationItem
-            key={section}
-            sx={{
-              padding: '0.5rem 1rem 0.5rem 1rem',
-              textTransform: 'capitalize',
-              color: 'secondary.main',
-              borderRight:
-                currentSection === section ? 'solid 15px currentcolor' : '',
-              backgroundColor:
-                currentSection === section ? 'transparent' : 'primary.dark',
-            }}
-            onClick={() => {
-              setCurrentSection(section);
-              onSectionSelect(section);
-            }}
-            selected={currentSection === section}
-          >
-            {section}
-          </NavigationItem>
+          <Link key={section} href={`#${section}`}>
+            <NavigationItem
+              sx={{
+                padding: '0.5rem 1rem 0.5rem 1rem',
+                textTransform: 'capitalize',
+                color: 'secondary.main',
+                borderRight:
+                  currentSection === section ? 'solid 15px currentcolor' : '',
+                backgroundColor:
+                  currentSection === section ? 'transparent' : 'primary.dark',
+              }}
+              onClick={() => {
+                onSectionSelect(section);
+              }}
+              selected={currentSection === section}
+            >
+              {section}
+            </NavigationItem>
+          </Link>
         ))}
       </List>
 

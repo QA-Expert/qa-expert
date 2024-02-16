@@ -89,7 +89,11 @@ export const BadgeCard = ({
         <CardContent>
           <Typography
             variant="h3"
-            sx={{ fontSize: '1.5rem', color: 'secondary.main' }}
+            sx={{
+              fontSize: '1.5rem',
+              color: 'secondary.main',
+              fontWeight: 'bold',
+            }}
           >
             {title}
           </Typography>

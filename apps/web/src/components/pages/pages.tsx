@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box } from '@/components/box/box';
 import Sidebar from '@/components/sidebar/sidebar';
 import {
@@ -26,6 +26,15 @@ interface Props {
 export function Pages({ pages, courseInfo }: Props) {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const currentPage = pages[currentPageIndex];
+
+  useEffect(() => {
+    if (global.window?.location.hash) {
+      setCurrentPageIndex(
+        // we do decrement as hash has value of page number not index
+        Number(global.window?.location.hash.replace('#', '')) - 1 ?? 0,
+      );
+    }
+  }, []);
 
   if (!currentPage) {
     return null;

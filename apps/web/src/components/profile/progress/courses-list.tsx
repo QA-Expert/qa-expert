@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography/Typography';
 import { ProgressCard } from './card';
 import { useTheme } from '@mui/material/styles';
 import { Course, States } from './progress';
+import { CardTitle } from '../card/card-title';
 
 type Props = {
   courses: Course[];
@@ -18,14 +19,11 @@ export function CoursesList({ courses, state, title }: Props) {
 
   return (
     <>
-      <Typography
-        sx={{
-          color: state === 'COMPLETED' ? 'success.main' : 'secondary.main',
-          textTransform: 'uppercase',
-        }}
+      <CardTitle
+        color={state === 'COMPLETED' ? 'success.main' : 'secondary.main'}
       >
         {title}
-      </Typography>
+      </CardTitle>
 
       <Box
         key={state}

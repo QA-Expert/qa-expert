@@ -13,6 +13,10 @@ import { getSubscriptionButtonName } from '../utils';
 import Typography from '@mui/material/Typography/Typography';
 import { add, format } from 'date-fns';
 import { DATE_FORMAT } from 'constants/constants';
+import { Row } from '@/components/row/row';
+import { styled } from '@mui/material/styles';
+import { Divider } from '@/components/divider/divider';
+import LightbulbIcon from '@mui/icons-material/Lightbulb';
 
 type Props = {
   open: boolean;
@@ -32,7 +36,7 @@ export function CheckoutModal({ open, onCancel, price }: Props) {
 
   const chargeAmountString = isCurrentPeriodPayed
     ? '$0'
-    : `$${price.amount ?? 0 / 100}`;
+    : `$${(price.amount ?? 0) / 100}`;
 
   const nextPaymentDate = isCurrentPeriodPayed
     ? format(subscription.currentPeriodEnd, DATE_FORMAT)
@@ -75,17 +79,31 @@ export function CheckoutModal({ open, onCancel, price }: Props) {
     <Modal open={open} onClose={onCancel}>
       <ModalTitle>Subscription Checkout</ModalTitle>
       <ModalContent>
-        Charge: {chargeAmountString}
         {isCurrentPeriodPayed ? (
-          <Typography>
-            Current Subscription period was payed on{' '}
-            {format(subscription.currentPeriodStart, DATE_FORMAT)}
-          </Typography>
+          <>
+            <LightbulbIcon fontSize="large" />
+            <Row>
+              <Typography>Current Subscription period was payed on </Typography>
+              <SecondaryColorText>
+                {format(subscription.currentPeriodStart, DATE_FORMAT)}
+              </SecondaryColorText>
+            </Row>
+          </>
         ) : null}
-        <Typography>
-          Next Payment will be charged on {nextPaymentDate}
-        </Typography>
+
+        <Row>
+          <Typography sx={{ fontWeight: 'bold' }}>Current Total: </Typography>
+          <SecondaryColorText>{chargeAmountString}</SecondaryColorText>
+        </Row>
+
+        <Divider />
+
+        <Row>
+          <Typography>Next Payment will be charged on </Typography>
+          <SecondaryColorText>{nextPaymentDate}</SecondaryColorText>
+        </Row>
       </ModalContent>
+
       <ModalActionButtons
         confirmButtonName={getSubscriptionButtonName(subscription)}
         isLoading={subscribeLoading || activationLoading}
@@ -95,3 +113,7 @@ export function CheckoutModal({ open, onCancel, price }: Props) {
     </Modal>
   );
 }
+
+const SecondaryColorText = styled(Typography)(({ theme }) => ({
+  color: theme.palette.secondary.main,
+}));

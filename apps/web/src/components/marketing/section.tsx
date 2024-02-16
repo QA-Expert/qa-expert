@@ -48,7 +48,7 @@ export function Section({
           color="secondary.main"
           sx={{
             fontSize: '3.125rem',
-            fontWeight: '700',
+            fontWeight: 'bold',
             lineHeight: '70px',
             textTransform: 'uppercase',
             textAlign: 'center',
@@ -69,7 +69,7 @@ export function Section({
           color="text.secondary"
           sx={{
             fontSize: '1.25rem',
-            fontWeight: '700',
+            fontWeight: 'bold',
             lineHeight: '30px',
             textTransform: 'uppercase',
             textAlign: 'center',
