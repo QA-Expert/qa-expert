@@ -56,6 +56,10 @@ export class ConfigService {
     return this.configService.get<string>('EMAIL_FROM');
   }
 
+  get emailServicePort(): string {
+    return this.configService.get<string>('EMAIL_PORT');
+  }
+
   get courseCooldownDays(): number {
     return this.configService.get<number>('COURSE_COOLDOWN');
   }

@@ -13,6 +13,7 @@ export interface Config {
   EMAIL_USERNAME: string;
   EMAIL_PASSWORD: string;
   EMAIL_FROM: string;
+  EMAIL_PORT: number;
   COURSE_COOLDOWN: number;
   ENCRYPTION_METHOD: string;
   ENCRYPTION_SECRET_KEY: string;
@@ -38,6 +39,7 @@ export const validationSchema = Joi.object<Config>({
   EMAIL_USERNAME: Joi.string().required(),
   EMAIL_PASSWORD: Joi.string().required(),
   EMAIL_FROM: Joi.string().required(),
+  EMAIL_PORT: Joi.number().required(),
   COURSE_COOLDOWN: Joi.number().required(),
   ENCRYPTION_METHOD: Joi.string().required().default('aes-256-cbc'),
   ENCRYPTION_SECRET_KEY: Joi.string().required(),
