@@ -24,7 +24,7 @@ export const matchesPathname = (
     actualPathname.split('?')[0] as string,
   );
 
-  if (baseAsPath === basePathname) {
+  if (actualPathname.includes(baseAsPath)) {
     return true;
   }
 

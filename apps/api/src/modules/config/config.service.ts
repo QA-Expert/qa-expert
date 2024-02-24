@@ -14,8 +14,8 @@ export class ConfigService {
     return this.configService.get<number>('PORT');
   }
 
-  get host(): string {
-    return this.configService.get<string>('HOST');
+  get clientBaseUrl(): string {
+    return this.configService.get<string>('CLIENT_BASE_URL');
   }
 
   get dbUri(): string {
