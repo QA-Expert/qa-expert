@@ -1,26 +1,29 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { UserInputCreate } from './create-user.input';
 import * as bcrypt from 'bcrypt';
 import { Roles, User } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import { createTransport, SendMailOptions } from 'nodemailer';
 import { randomBytes } from 'crypto';
-import { readFile } from 'fs/promises';
 import { ForgotPassword } from './forgot-password.schema';
 import { ResetPasswordInput } from './reset-password.input';
 import { UserInputUpdateNames } from './update-user-names.input';
 import { UserInputUpdatePassword } from './update-user-password.input';
 import { ConfigService } from '../config/config.service';
+import { EmailService } from '../emails/email.service';
+import { EmailData } from '../emails/email-data';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
+
   constructor(
     @InjectModel(User.name)
     private userModel: Model<User>,
     @InjectModel(ForgotPassword.name)
     private forgotPasswordModel: Model<ForgotPassword>,
     private configService: ConfigService,
+    private emailService: EmailService,
   ) {}
 
   async findById(id: string | mongoose.Types.ObjectId) {
@@ -71,94 +74,85 @@ export class UserService {
   }
 
   async forgotPassword(email: string) {
-    const user = await this.findByEmail(email);
+    try {
+      const user = await this.findByEmail(email);
 
-    const token = randomBytes(32).toString('hex');
+      const token = randomBytes(32).toString('hex');
 
-    const transporter = createTransport({
-      host: this.configService.emailServiceUrl,
-      port: 587,
-      auth: {
-        user: this.configService.emailServiceUsername,
-        pass: this.configService.emailServicePassword,
-      },
-    });
+      const mailOptions: EmailData = {
+        from: this.configService.emailFrom,
+        to: email,
+        subject: `[no-reply] Forgot Password - ${this.configService.appName}`,
+        text: '',
+        html: `<div>
+            <p>Please click follow the link to reset your password</p>
+            <a href="${this.configService.clientBaseUrl}/reset-password/${token}">Reset Password</a>
+          <div/>`,
+      };
 
-    const buffer = await readFile(
-      'src/modules/users/forgot-password-email-template.html',
-    );
-    const template = buffer
-      .toString()
-      .replace(/{{name}}/g, user.firstName ?? user.email)
-      .replace(/{{product-name}}/g, this.configService.appName)
-      .replace(/{{host}}/g, this.configService.host)
-      .replace(
-        /{{action_url}}/g,
-        `${this.configService.host}:${this.configService.port}/reset-password/${token}`,
-      );
+      await this.emailService.sendEmail(mailOptions);
 
-    const mailOptions: SendMailOptions = {
-      from: this.configService.emailFrom,
-      to: email,
-      subject: `[no-reply] Forgot Password - ${this.configService.appName}`,
-      html: template,
-    };
+      const forgotPassword = new this.forgotPasswordModel({
+        user: new mongoose.Types.ObjectId(user._id),
+        token,
+        createdBy: new mongoose.Types.ObjectId(user._id),
+        updatedBy: new mongoose.Types.ObjectId(user._id),
+      });
 
-    const response = await transporter.sendMail(mailOptions);
+      if (!forgotPassword) {
+        throw new Error('Failed to create forgot password token');
+      }
 
-    if (!response.messageId) {
-      throw new Error('Failed to sent email');
+      await forgotPassword.save();
+
+      return true;
+    } catch (error) {
+      this.logger.error((error as Error).message, error);
+
+      throw error;
     }
-
-    const forgotPassword = new this.forgotPasswordModel({
-      user: new mongoose.Types.ObjectId(user._id),
-      token,
-      createdBy: new mongoose.Types.ObjectId(user._id),
-      updatedBy: new mongoose.Types.ObjectId(user._id),
-    });
-
-    if (!forgotPassword) {
-      throw new Error('Failed to create forgot password token');
-    }
-
-    await forgotPassword.save();
-
-    return true;
   }
 
   async resetPassword(data: ResetPasswordInput): Promise<User> {
-    const storedToken = await this.forgotPasswordModel.findOne({
-      token: data.token,
-    });
+    try {
+      const storedToken = await this.forgotPasswordModel.findOne({
+        token: data.token,
+      });
 
-    if (!storedToken) {
-      throw new NotFoundException('Failed to find forgot password token');
+      if (!storedToken) {
+        throw new NotFoundException('Failed to find forgot password token');
+      }
+
+      const tokenCreatedAt = storedToken.createdAt;
+      const nowDate = new Date();
+      const hours =
+        Math.abs(nowDate.valueOf() - tokenCreatedAt.valueOf()) / 36e5;
+
+      if (hours > Number(this.configService.authForgotPasswordTokenExpiresIn)) {
+        throw new Error('Forgot password token expired');
+      }
+
+      const user = await this.findById(storedToken.user._id);
+
+      user.hashedPassword = await bcrypt.hash(
+        data.password,
+        this.configService.authSalt,
+      );
+
+      const updatedUser = await user.save();
+
+      if (!updatedUser) {
+        throw new Error('Failed to reset password');
+      }
+
+      await storedToken.remove();
+
+      return updatedUser;
+    } catch (error) {
+      this.logger.error((error as Error).message, error);
+
+      throw error;
     }
-
-    const tokenCreatedAt = storedToken.createdAt;
-    const nowDate = new Date();
-    const hours = Math.abs(nowDate.valueOf() - tokenCreatedAt.valueOf()) / 36e5;
-
-    if (hours > Number(this.configService.authForgotPasswordTokenExpiresIn)) {
-      throw new Error('Forgot password token expired');
-    }
-
-    const user = await this.findById(storedToken.user._id);
-
-    user.hashedPassword = await bcrypt.hash(
-      data.password,
-      this.configService.authSalt,
-    );
-
-    const updatedUser = await user.save();
-
-    if (!updatedUser) {
-      throw new Error('Failed to reset password');
-    }
-
-    await storedToken.remove();
-
-    return updatedUser;
   }
 
   async updateNames(

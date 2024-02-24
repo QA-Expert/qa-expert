@@ -11,6 +11,7 @@ export function AuthGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
   const path = usePathname();
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
+
   const isPublicPath = Boolean(
     PUBLIC_ROUTES.find((expectedPathname) =>
       matchesPathname(expectedPathname, path),

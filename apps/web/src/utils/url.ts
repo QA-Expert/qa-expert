@@ -28,6 +28,10 @@ export const matchesPathname = (
     return true;
   }
 
+  if (actualPathname.includes(baseAsPath)) {
+    return true;
+  }
+
   const basePathRegex = new RegExp(
     `^${basePathname.replace(
       /(\[[a-zA-Z0-9-]+\])+/g,

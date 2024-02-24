@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 export interface Config {
   APP_NAME: string;
-  HOST: string;
+  CLIENT_BASE_URL: string;
   PORT: number;
   DATABASE_URI: string;
   AUTH_SECRET: string;
@@ -27,7 +27,7 @@ export interface Config {
 export const validationSchema = Joi.object<Config>({
   APP_NAME: Joi.string().default('QA Expert'),
   PORT: Joi.number().default(3001).required(),
-  HOST: Joi.string().default('localhost').required(),
+  CLIENT_BASE_URL: Joi.string().default('http://localhost:3000').required(),
   DATABASE_URI: Joi.string()
     .default('mongodb//localhost:27017/qaexpert')
     .required(),

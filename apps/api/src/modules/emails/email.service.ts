@@ -32,11 +32,12 @@ export class EmailService {
         to: data.to,
         // We have to have verified from address to be able to send emails
         // that is why I am specifying here address within verified in AWS SES domain
-        from: 'api@qaexpert.io',
+        from: 'no-reply@qaexpert.io',
         // To be able to know how is sending us emails I specify replyTo
         replyTo: [data.from],
         subject: data.subject,
         html: data.html,
+        text: data.text,
       };
       const result = await this.#transporter.sendMail(input);
 
