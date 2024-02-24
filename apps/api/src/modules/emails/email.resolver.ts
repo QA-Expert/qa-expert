@@ -18,7 +18,7 @@ export class EmailResolver {
   public async sendBugReport(
     @CurrentUser() user: User,
     @Args('data') data: EmailInput,
-  ): Promise<string> {
+  ) {
     data.from = user.email;
 
     return await this.service.sendBugReportEmail(data);
@@ -26,9 +26,7 @@ export class EmailResolver {
 
   @Roles(RolesEnum.USER)
   @Mutation(() => String)
-  public async sendCommunication(
-    @Args('data') data: EmailInput,
-  ): Promise<string> {
+  public async sendCommunication(@Args('data') data: EmailInput) {
     return await this.service.sendCommunicationEmail(data);
   }
 }
