@@ -59,23 +59,11 @@ export const FULL_TOOL_BAR: NonNullable<ReactQuillProps['modules']> = {
 export const FULL_TOOL_BAR_WITHOUT_MEDIA: NonNullable<
   ReactQuillProps['modules']
 > = {
-  container: [
-    [{ font: [] }, { size: ['small', false, 'large', 'huge'] }], // custom dropdown
-    ['bold', 'italic', 'underline', 'strike'],
-    [{ color: [] }, { background: [] }],
-    [{ script: 'sub' }, { script: 'super' }],
-    [{ header: 1 }, { header: 2 }, 'blockquote', 'code-block'],
-    [
-      { list: 'ordered' },
-      { list: 'bullet' },
-      { indent: '-1' },
-      { indent: '+1' },
-    ],
-    [{ direction: 'rtl' }, { align: [] }],
-    ['link', 'formula'],
-    ['clean'],
-  ],
-  handlers: {},
+  container: FULL_TOOL_BAR.container.map((item: string[] | object[]) =>
+    item.filter(
+      (formatting) => formatting !== 'image' && formatting !== 'video',
+    ),
+  ),
 } as const;
 
 export const TextEditor = ({
