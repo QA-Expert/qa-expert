@@ -28,3 +28,14 @@ export const toastErrors = makeVar<Toast[]>([]);
  * @description This var is used to store course id to be able to use it to highlight course in gallery
  */
 export const selectedCourseId = makeVar<string | undefined>(undefined);
+
+/**
+ * @description This var is used to store previous route path to be able to see if we need to route.back() or route.push(...).
+ */
+export const routePathObject = makeVar<{
+  previous: string | undefined;
+  current: string | undefined;
+}>({
+  previous: undefined,
+  current: undefined,
+});

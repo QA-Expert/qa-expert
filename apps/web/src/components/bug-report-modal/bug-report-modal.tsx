@@ -10,6 +10,7 @@ type Props = {
 export function BugReportModal({ onClose, isOpen }: Props) {
   return (
     <EmailModal
+      key={Date.now()}
       isOpen={isOpen}
       onClose={onClose}
       successComponent={

@@ -80,7 +80,7 @@ export class UserService {
       const token = randomBytes(32).toString('hex');
 
       const mailOptions: EmailData = {
-        from: this.configService.emailFrom,
+        from: 'no-reply@qaexpert.io',
         to: email,
         subject: `[no-reply] Forgot Password - ${this.configService.appName}`,
         text: '',

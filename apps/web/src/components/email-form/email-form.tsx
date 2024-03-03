@@ -7,7 +7,10 @@ import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 import Button from '@mui/material/Button/Button';
 import _ from 'lodash';
 import TextField from '@mui/material/TextField/TextField';
-import { TextEditor } from '@/components/text-editor/text-editor';
+import {
+  FULL_TOOL_BAR_WITHOUT_MEDIA,
+  TextEditor,
+} from '@/components/text-editor/text-editor';
 import { Box } from '@/components/box/box';
 import Typography from '@mui/material/Typography/Typography';
 import { BorderBox } from '@/components/box/border-box';
@@ -139,6 +142,7 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
               <BorderBox
                 sx={{
                   minHeight: '260px',
+                  width: '100%',
                   borderColor: errors.text ? 'error.main' : 'secondary.main',
                 }}
               >
@@ -163,7 +167,9 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
                     }
                   }}
                   readOnly={false}
-                  allowFormatting
+                  modules={{
+                    toolbar: FULL_TOOL_BAR_WITHOUT_MEDIA,
+                  }}
                 />
               </BorderBox>
             </Box>

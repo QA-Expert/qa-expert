@@ -17,12 +17,16 @@ export function Form({
   );
 }
 
-const StyledForm = styled('form')({
+const StyledForm = styled('form')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: '1rem',
   justifyContent: 'center',
   alignItems: 'center',
   padding: '1rem',
-  width: '100%',
-});
+  minWidth: '360px',
+  maxWidth: '500px',
+  [theme.breakpoints.down('md')]: {
+    maxWidth: '360px',
+  },
+}));
