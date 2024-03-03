@@ -34,13 +34,17 @@ export function EmailModal({
   const [isSent, setIsSent] = useState(false);
 
   const handleOnSubmit = async (data: EmailInput) => {
-    await send({
-      variables: {
-        data,
-      },
-    });
+    try {
+      await send({
+        variables: {
+          data,
+        },
+      });
 
-    setIsSent(true);
+      setIsSent(true);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
   };
 
   useError([error?.message]);

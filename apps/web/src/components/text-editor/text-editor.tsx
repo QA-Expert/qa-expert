@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/monokai-sublime.css';
 import { ReactQuillProps, Value } from 'react-quill';
-import CircularProgress from '@mui/material/CircularProgress';
+import { Skeletons } from '@/components/skeleton/skeleton';
 
 const ReactQuillWrapper = dynamic(
   () => {
@@ -23,7 +23,7 @@ const ReactQuillWrapper = dynamic(
   },
   {
     ssr: false,
-    loading: () => <CircularProgress />,
+    loading: () => <Skeletons width={'360px'} height={'220px'} />,
   },
 );
 
@@ -36,7 +36,7 @@ type Props = {
 /**
  * @url https://quilljs.com/docs/modules/
  */
-const FULL_TOOL_BAR: ReactQuillProps['modules'] = {
+export const FULL_TOOL_BAR: NonNullable<ReactQuillProps['modules']> = {
   container: [
     [{ font: [] }, { size: ['small', false, 'large', 'huge'] }], // custom dropdown
     ['bold', 'italic', 'underline', 'strike'],
@@ -54,6 +54,16 @@ const FULL_TOOL_BAR: ReactQuillProps['modules'] = {
     ['clean'],
   ],
   handlers: {},
+} as const;
+
+export const FULL_TOOL_BAR_WITHOUT_MEDIA: NonNullable<
+  ReactQuillProps['modules']
+> = {
+  container: FULL_TOOL_BAR.container.map((item: string[] | object[]) =>
+    item.filter(
+      (formatting) => formatting !== 'image' && formatting !== 'video',
+    ),
+  ),
 } as const;
 
 export const TextEditor = ({

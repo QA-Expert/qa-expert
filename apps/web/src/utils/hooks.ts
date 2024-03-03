@@ -2,8 +2,15 @@
 
 import { RefObject, useEffect, useState } from 'react';
 import { debounce } from 'lodash';
-import { Toast, selectedCourseId, toastErrors } from 'apollo/store';
+import {
+  Toast,
+  routePathObject,
+  selectedCourseId,
+  toastErrors,
+} from 'apollo/store';
 import { getSelectedCourseId } from './url';
+import { usePathname } from 'next/navigation';
+import { useReactiveVar } from '@apollo/client';
 
 export const useError = (messages: (string | undefined)[]) => {
   const setToasts = toastErrors;
@@ -56,4 +63,29 @@ export const useSelectedCourseId = () => {
       selectedCourseId(idFromHash);
     }
   }, []);
+};
+
+/**
+ * @description This hook is used to store previous and current route path to be able to see if we need to route.back() or route.push(...).
+ */
+export const useSetRoutePathObject = () => {
+  const routePath = useReactiveVar(routePathObject);
+  const currentPath = usePathname();
+
+  useEffect(() => {
+    // initial routing in the app
+    if (!routePath.current && !routePath.previous) {
+      routePathObject({
+        previous: currentPath,
+        current: currentPath,
+      });
+    } else {
+      const previous = routePath.current;
+
+      routePathObject({
+        previous,
+        current: currentPath,
+      });
+    }
+  }, [currentPath]);
 };

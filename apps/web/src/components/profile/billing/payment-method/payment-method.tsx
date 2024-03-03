@@ -68,7 +68,7 @@ export function PaymentMethod() {
 
       <PaymentMethodModal
         defaultValues={data.paymentMethod}
-        key={new Date().getTime()}
+        key={Date.now()}
         type={paymentModalType}
         onCancel={() => setPaymentMethodModalOpen(false)}
         open={paymentMethodModalOpen}

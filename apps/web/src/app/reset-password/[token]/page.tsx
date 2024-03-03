@@ -41,6 +41,7 @@ function ResetPassword() {
         minWidth: '30%',
         minHeight: '30%',
         gap: '1rem',
+        padding: '2rem',
       }}
       component={Box}
     >
