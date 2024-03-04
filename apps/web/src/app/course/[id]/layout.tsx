@@ -1,8 +1,5 @@
 import Layout from '@/components/layout/layout';
 import { Row } from '@/components/row/row';
-type Props = {
-  params: { id: string };
-};
 
 export default function CourseLayout({
   children,

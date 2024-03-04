@@ -87,5 +87,6 @@ export const useSetRoutePathObject = () => {
         current: currentPath,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPath]);
 };
