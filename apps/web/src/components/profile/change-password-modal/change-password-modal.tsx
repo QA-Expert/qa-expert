@@ -6,7 +6,6 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
-import Typography from '@mui/material/Typography';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { UserInputUpdatePassword } from '__generated__/graphql';
 import { object, string } from 'yup';

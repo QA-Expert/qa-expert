@@ -9,6 +9,7 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/monokai-sublime.css';
 import { ReactQuillProps, Value } from 'react-quill';
 import { Skeletons } from '@/components/skeleton/skeleton';
+import { getToolbarConfig } from './handlers';
 
 const ReactQuillWrapper = dynamic(
   () => {
@@ -32,39 +33,6 @@ type Props = {
   modules?: ReactQuillProps['modules'];
   initialValue?: string;
 } & Required<Pick<ReactQuillProps, 'onChange' | 'readOnly'>>;
-
-/**
- * @url https://quilljs.com/docs/modules/
- */
-export const FULL_TOOL_BAR: NonNullable<ReactQuillProps['modules']> = {
-  container: [
-    [{ font: [] }, { size: ['small', false, 'large', 'huge'] }], // custom dropdown
-    ['bold', 'italic', 'underline', 'strike'],
-    [{ color: [] }, { background: [] }],
-    [{ script: 'sub' }, { script: 'super' }],
-    [{ header: 1 }, { header: 2 }, 'blockquote', 'code-block'],
-    [
-      { list: 'ordered' },
-      { list: 'bullet' },
-      { indent: '-1' },
-      { indent: '+1' },
-    ],
-    [{ direction: 'rtl' }, { align: [] }],
-    ['link', 'image', 'video', 'formula'],
-    ['clean'],
-  ],
-  handlers: {},
-} as const;
-
-export const FULL_TOOL_BAR_WITHOUT_MEDIA: NonNullable<
-  ReactQuillProps['modules']
-> = {
-  container: FULL_TOOL_BAR.container.map((item: string[] | object[]) =>
-    item.filter(
-      (formatting) => formatting !== 'image' && formatting !== 'video',
-    ),
-  ),
-} as const;
 
 export const TextEditor = ({
   initialValue,
@@ -114,7 +82,9 @@ export const TextEditor = ({
         modules={{
           ...modules,
           syntax: true,
-          toolbar: allowFormatting ? FULL_TOOL_BAR : modules?.toolbar ?? false,
+          toolbar: allowFormatting
+            ? getToolbarConfig({})
+            : modules?.toolbar ?? false,
         }}
         quillTheme="snow"
         value={content}

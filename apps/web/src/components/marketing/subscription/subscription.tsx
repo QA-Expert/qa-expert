@@ -6,7 +6,6 @@ import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import { useReactiveVar } from '@apollo/client';
 import { isAuthenticated } from 'apollo/store';
 import Link from 'next/link';
-import { use } from 'react';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_SUBSCRIPTION } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';

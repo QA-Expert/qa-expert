@@ -7,11 +7,7 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 import Typography from '@mui/material/Typography/Typography';
 import { GetPricesQuery, SubscriptionStatus } from '__generated__/graphql';
-import {
-  ACTIVATE_SUBSCRIPTION,
-  CANCEL_SUBSCRIPTION,
-  SUBSCRIBE,
-} from 'graphql/mutations/mutations';
+import { CANCEL_SUBSCRIPTION } from 'graphql/mutations/mutations';
 import { GET_PAYMENT_METHOD, GET_SUBSCRIPTION } from 'graphql/queries/queries';
 import { capitalize } from 'lodash';
 import { useError } from 'utils/hooks';

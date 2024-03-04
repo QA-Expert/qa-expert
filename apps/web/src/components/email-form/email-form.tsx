@@ -7,10 +7,7 @@ import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 import Button from '@mui/material/Button/Button';
 import _ from 'lodash';
 import TextField from '@mui/material/TextField/TextField';
-import {
-  FULL_TOOL_BAR_WITHOUT_MEDIA,
-  TextEditor,
-} from '@/components/text-editor/text-editor';
+import { TextEditor } from '@/components/text-editor/text-editor';
 import { Box } from '@/components/box/box';
 import Typography from '@mui/material/Typography/Typography';
 import { BorderBox } from '@/components/box/border-box';
@@ -21,6 +18,7 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_USER } from 'graphql/queries/queries';
 import Divider from '@mui/material/Divider/Divider';
 import { Form } from '@/components/form/form';
+import { getToolbarConfig } from '@/components/text-editor/handlers';
 
 type Props = {
   onSubmit: (values: EmailInput) => Promise<void>;
@@ -168,7 +166,7 @@ export function EmailForm({ onSubmit, onCancel, inputNames }: Props) {
                   }}
                   readOnly={false}
                   modules={{
-                    toolbar: FULL_TOOL_BAR_WITHOUT_MEDIA,
+                    toolbar: getToolbarConfig({ excludeMedia: true }),
                   }}
                 />
               </BorderBox>
