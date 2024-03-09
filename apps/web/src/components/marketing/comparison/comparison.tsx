@@ -6,6 +6,7 @@ import {
 import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
 import { Row } from '@/components/row/row';
 import { FeaturesColumn } from './features-column';
+import Image from 'next/image';
 
 export function Comparison() {
   const PLATFORMS: PlatformProps[] = [
@@ -40,7 +41,15 @@ export function Comparison() {
         { ...FEATURES[3], checked: true },
         { ...FEATURES[4], checked: true },
       ],
-      icon: <IntegrationInstructionsIcon sx={{ fontSize: '3rem' }} />,
+      icon: (
+        <Image
+          priority
+          src="images/logo.svg"
+          alt="QA Expert Logo"
+          width={48}
+          height={48}
+        />
+      ),
     },
   ];
 
