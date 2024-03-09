@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     description: 'QA Expert platform. Learn new Role or improve your skills',
     images: [
       {
-        url: '/images/hero.png',
+        url: '/icon-512x512.png',
       },
     ],
     type: 'website',

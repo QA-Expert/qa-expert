@@ -17,6 +17,8 @@ import BugReportIcon from '@mui/icons-material/BugReport';
 import IconButton from '@mui/material/IconButton';
 import { ContactUsModal } from '@/components/contact-us-modal/contact-us-modal';
 import ChatIcon from '@mui/icons-material/Chat';
+import Image from 'next/image';
+import { Box } from '@/components/box/box';
 
 export default function Nav() {
   const [bugReportModalOpen, setBugReportModalOpen] = useState(false);
@@ -32,24 +34,26 @@ export default function Nav() {
       <AppBar component="nav" position="static" sx={{ zIndex: 'appBar' }}>
         <Toolbar
           component={Row}
-          sx={{ gap: '2rem', padding: '0 2rem 0 2rem' }}
+          sx={{
+            gap: '2rem',
+            padding: '0 2rem 0 2rem',
+          }}
           disableGutters
         >
           <Link href={`/`}>
-            <Typography
-              variant="h1"
-              noWrap
-              sx={{
-                fontSize: '2rem',
-                textDecoration: 'none',
-              }}
-            >
-              QA EXPERT
-            </Typography>
+            <Box>
+              <Image
+                priority
+                src="images/logo.svg"
+                alt="QA Expert Logo"
+                width={64}
+                height={64}
+              />
+            </Box>
           </Link>
 
           <Link href={`/courses`}>
-            <Typography variant="body1" noWrap>
+            <Typography variant="body1" noWrap sx={{ color: 'warning.main' }}>
               Courses
             </Typography>
           </Link>
