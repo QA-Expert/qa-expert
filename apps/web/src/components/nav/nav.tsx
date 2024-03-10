@@ -44,7 +44,7 @@ export default function Nav() {
             <Box>
               <Image
                 priority
-                src="images/logo.svg"
+                src="/images/logo.svg"
                 alt="QA Expert Logo"
                 width={64}
                 height={64}

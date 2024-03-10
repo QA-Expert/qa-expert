@@ -34,13 +34,14 @@ export function Section({
         width: '100%',
         ...getBackgroundStyles(background, theme),
         padding: '5rem',
+        gap: '2rem',
+        scrollSnapAlign: 'start',
         [theme.breakpoints.down('md')]: {
           padding: '1rem',
           gap: '0.75rem',
           minHeight: '610px',
+          scrollSnapAlign: 'none',
         },
-        gap: '2rem',
-        scrollSnapAlign: 'start',
       }}
     >
       {title ? (
