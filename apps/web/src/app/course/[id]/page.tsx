@@ -6,7 +6,7 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useParams } from 'next/navigation';
 
 /**
- * @description Routing App component that represents a root for a Course
+ * @description Routing App component that represents a route for a Course
  */
 const Course = () => {
   const params = useParams();

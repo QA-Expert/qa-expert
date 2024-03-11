@@ -5,11 +5,16 @@ import CourseSection from '@/components/course-section/course-section';
 import QuizSection from '@/components/quiz-section/quiz-section';
 import { StatusIndicator } from '@/components/status-indicator/status-indicator';
 
+type Props = {
+  page: GetCourseQuery['course']['pages'][number];
+  onSubmit: () => void;
+};
+
 /**
  * @description Component that represents a page inside of the Course.
  * NOTE: it is not a separate routing page.
  */
-export default function Page(page: GetCourseQuery['course']['pages'][number]) {
+export default function Page({ page, onSubmit }: Props) {
   return (
     <Box
       sx={{
@@ -43,7 +48,7 @@ export default function Page(page: GetCourseQuery['course']['pages'][number]) {
             keeps the value of one of the first clicked components as
             we don't really change the position of this component in tree
             @url https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key */
-          <QuizSection key={page._id} {...page} />
+          <QuizSection key={page._id} {...page} onSubmit={onSubmit} />
         )}
       </Box>
     </Box>

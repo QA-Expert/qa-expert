@@ -14,6 +14,7 @@ import { TestAppSection } from '@/components/test-app-section/test-app-section';
 import { Section } from '@/components/section/section';
 import { Navigation } from '@/components/pages/navigation/navigation';
 import { RestApiResponseSection } from '@/components/test-app-section/rest-api-response-section';
+import { FeedbackModal } from '../feedback/modal';
 
 interface Props {
   pages: GetCourseQuery['course']['pages'];
@@ -25,7 +26,14 @@ interface Props {
  */
 export function Pages({ pages, courseInfo }: Props) {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const currentPage = pages[currentPageIndex];
+
+  const handleOnSubmit = () => {
+    if (courseInfo.progress.pagesLeftBeforeFinish === 1) {
+      setIsFeedbackModalOpen(true);
+    }
+  };
 
   useEffect(() => {
     if (global.window?.location.hash) {
@@ -59,7 +67,7 @@ export function Pages({ pages, courseInfo }: Props) {
             padding: '2rem',
           }}
         >
-          <Page {...currentPage} />
+          <Page page={{ ...currentPage }} onSubmit={handleOnSubmit} />
 
           <PagePagination
             onPageChange={setCurrentPageIndex}
@@ -78,6 +86,16 @@ export function Pages({ pages, courseInfo }: Props) {
       currentPage.question?.type === QuestionType.RestApi ? (
         <RestApiResponseSection />
       ) : null}
+
+      <FeedbackModal
+        title="How did you like the course?"
+        onClose={() => setIsFeedbackModalOpen(false)}
+        isOpen={isFeedbackModalOpen}
+        objectInfo={{
+          name: 'course',
+          id: courseInfo._id,
+        }}
+      />
     </>
   );
 }

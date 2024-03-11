@@ -3,34 +3,34 @@
 import { Duration, addDays, intervalToDuration } from 'date-fns';
 import { useEffect, useState } from 'react';
 
-export const useDurationToRetakeQuiz = (createdAt: string) => {
-  const lastSubmittedDate = new Date(createdAt);
+export const useDurationToRetakeQuiz = (submittedDate: string) => {
+  const [durationLeft, setDurationLeft] = useState<Duration>({});
+  const [canRetakeQuiz, setCanRetakeQuiz] = useState(false);
+
+  const lastSubmittedDate = new Date(submittedDate);
   const canRetakeDate = addDays(
     lastSubmittedDate,
     Number(process.env.NEXT_PUBLIC_COURSE_COOLDOWN),
   );
-  const nowDate = new Date();
-  const duration = intervalToDuration({
-    start: nowDate,
-    end: canRetakeDate,
-  });
-
-  const [durationLeft, setDurationLeft] = useState<Duration>(duration);
-  const canRetakeQuiz = nowDate >= canRetakeDate;
-
   useEffect(() => {
+    const now = new Date();
+
     const intervalId = setInterval(() => {
       const duration = intervalToDuration({
-        start: new Date(),
+        start: now,
         end: canRetakeDate,
       });
       setDurationLeft(duration);
+
+      const canRetakeQuiz = now >= canRetakeDate;
+
+      setCanRetakeQuiz(canRetakeQuiz);
     }, 1000);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [canRetakeDate]);
+  }, [canRetakeDate, submittedDate]);
 
   return {
     duration: durationLeft,
