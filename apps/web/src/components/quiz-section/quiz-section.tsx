@@ -30,7 +30,7 @@ import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 export type Props = Pick<
   GetCourseQuery['course']['pages'][number],
   '_id' | 'question' | 'progress'
->;
+> & { onSubmit: () => void };
 
 export type QuestionProps = {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -49,6 +49,7 @@ export default function QuizSection({
   question,
   progress,
   _id: pageId,
+  onSubmit,
 }: Props) {
   const router = useParams();
   const courseId = router.id as string;
@@ -113,6 +114,8 @@ export default function QuizSection({
         },
       },
     });
+
+    onSubmit();
   };
 
   const handleCHangeSingleChoiceQuestion = (
