@@ -4,5 +4,5 @@ export const getClaimedBadge = (
   claimedBadges: GetAllAndClaimedBadgesQuery['claimedBadges'],
   badgeId: string,
 ) => {
-  return claimedBadges?.find((ub) => ub.badge === badgeId);
+  return claimedBadges?.find((cb) => cb.badge._id === badgeId);
 };
