@@ -36,7 +36,7 @@ const documents = {
     types.UpdateUserNamesDocument,
   '\n  mutation UpdateUserPassword($oldPassword: String!, $newPassword: String!) {\n    updateUserPassword(\n      data: { oldPassword: $oldPassword, newPassword: $newPassword }\n    ) {\n      _id\n    }\n  }\n':
     types.UpdateUserPasswordDocument,
-  '\n  mutation ClaimBadge($badgeId: String!) {\n    claimBadge(badgeId: $badgeId) {\n      _id\n      badge\n      createdAt\n    }\n  }\n':
+  '\n  mutation ClaimBadge($badgeId: String!) {\n    claimBadge(badgeId: $badgeId) {\n      _id\n      badge {\n        _id\n      }\n      createdAt\n    }\n  }\n':
     types.ClaimBadgeDocument,
   '\n  mutation DeleteCourseProgresses($_id: String!) {\n    deleteCourseProgresses(_id: $_id)\n  }\n':
     types.DeleteCourseProgressesDocument,
@@ -70,9 +70,11 @@ const documents = {
     types.GetCoursePublicMetaDataDocument,
   '\n  query GetUser {\n    user {\n      _id\n      email\n      firstName\n      lastName\n      roles\n    }\n  }\n':
     types.GetUserDocument,
-  '\n  query GetClaimedBadges {\n    claimedBadges {\n      _id\n      badge\n      user\n      createdAt\n    }\n  }\n':
+  '\n  query GetClaimedBadge($_id: String!) {\n    claimedBadge(_id: $_id) {\n      _id\n      badge {\n        _id\n        title\n        description\n        icon\n        course {\n          _id\n          title\n        }\n      }\n      user {\n        _id\n        firstName\n        lastName\n      }\n      createdAt\n    }\n  }\n':
+    types.GetClaimedBadgeDocument,
+  '\n  query GetClaimedBadges {\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      user {\n        _id\n      }\n      createdAt\n    }\n  }\n':
     types.GetClaimedBadgesDocument,
-  '\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge\n      createdAt\n    }\n  }\n':
+  '\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      createdAt\n    }\n  }\n':
     types.GetAllAndClaimedBadgesDocument,
   '\n  query GetSubmittedUserProgressesUser {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n        level\n        progress {\n          state\n          pass\n          fail\n        }\n      }\n    }\n  }\n':
     types.GetSubmittedUserProgressesUserDocument,
@@ -176,8 +178,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation ClaimBadge($badgeId: String!) {\n    claimBadge(badgeId: $badgeId) {\n      _id\n      badge\n      createdAt\n    }\n  }\n',
-): (typeof documents)['\n  mutation ClaimBadge($badgeId: String!) {\n    claimBadge(badgeId: $badgeId) {\n      _id\n      badge\n      createdAt\n    }\n  }\n'];
+  source: '\n  mutation ClaimBadge($badgeId: String!) {\n    claimBadge(badgeId: $badgeId) {\n      _id\n      badge {\n        _id\n      }\n      createdAt\n    }\n  }\n',
+): (typeof documents)['\n  mutation ClaimBadge($badgeId: String!) {\n    claimBadge(badgeId: $badgeId) {\n      _id\n      badge {\n        _id\n      }\n      createdAt\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -278,14 +280,20 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetClaimedBadges {\n    claimedBadges {\n      _id\n      badge\n      user\n      createdAt\n    }\n  }\n',
-): (typeof documents)['\n  query GetClaimedBadges {\n    claimedBadges {\n      _id\n      badge\n      user\n      createdAt\n    }\n  }\n'];
+  source: '\n  query GetClaimedBadge($_id: String!) {\n    claimedBadge(_id: $_id) {\n      _id\n      badge {\n        _id\n        title\n        description\n        icon\n        course {\n          _id\n          title\n        }\n      }\n      user {\n        _id\n        firstName\n        lastName\n      }\n      createdAt\n    }\n  }\n',
+): (typeof documents)['\n  query GetClaimedBadge($_id: String!) {\n    claimedBadge(_id: $_id) {\n      _id\n      badge {\n        _id\n        title\n        description\n        icon\n        course {\n          _id\n          title\n        }\n      }\n      user {\n        _id\n        firstName\n        lastName\n      }\n      createdAt\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge\n      createdAt\n    }\n  }\n',
-): (typeof documents)['\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      link\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge\n      createdAt\n    }\n  }\n'];
+  source: '\n  query GetClaimedBadges {\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      user {\n        _id\n      }\n      createdAt\n    }\n  }\n',
+): (typeof documents)['\n  query GetClaimedBadges {\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      user {\n        _id\n      }\n      createdAt\n    }\n  }\n'];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      createdAt\n    }\n  }\n',
+): (typeof documents)['\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      createdAt\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -126,7 +126,9 @@ export const CLAIM_BADGE = gql(/* GraphQL */ `
   mutation ClaimBadge($badgeId: String!) {
     claimBadge(badgeId: $badgeId) {
       _id
-      badge
+      badge {
+        _id
+      }
       createdAt
     }
   }

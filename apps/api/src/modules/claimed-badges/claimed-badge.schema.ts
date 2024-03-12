@@ -13,11 +13,11 @@ export class ClaimedBadge extends mongoose.Document {
   _id: string;
 
   @Prop({ type: ObjectId, ref: Badge.name, required: true })
-  @Field(() => String)
+  @Field(() => Badge)
   badge: Badge | mongoose.Types.ObjectId;
 
   @Prop({ type: ObjectId, ref: User.name, required: true })
-  @Field(() => String)
+  @Field(() => User)
   user: User | mongoose.Types.ObjectId;
 
   @Field(() => Date)
@@ -28,13 +28,13 @@ export class ClaimedBadge extends mongoose.Document {
 
   @Prop({
     type: ObjectId,
-    ref: 'User',
+    ref: User.name,
   })
   createdBy: User | mongoose.Types.ObjectId;
 
   @Prop({
     type: ObjectId,
-    ref: 'User',
+    ref: User.name,
   })
   updatedBy: User | mongoose.Types.ObjectId;
 }

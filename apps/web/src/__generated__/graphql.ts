@@ -77,18 +77,16 @@ export type Badge = {
   description: Scalars['String']['output'];
   /** Icon url */
   icon: Scalars['String']['output'];
-  /** Sharable link. Navigating via that link use should be able to see their Badge */
-  link: Scalars['String']['output'];
   title: Scalars['String']['output'];
 };
 
 export type ClaimedBadge = {
   __typename?: 'ClaimedBadge';
   _id: Scalars['String']['output'];
-  badge: Scalars['String']['output'];
+  badge: Badge;
   createdAt: Scalars['DateTime']['output'];
   updatedAt: Scalars['DateTime']['output'];
-  user: Scalars['String']['output'];
+  user: User;
 };
 
 export type Course = {
@@ -385,6 +383,7 @@ export type Query = {
   __typename?: 'Query';
   activities: Array<Activity>;
   badges: Array<Badge>;
+  claimedBadge: ClaimedBadge;
   claimedBadges: Array<ClaimedBadge>;
   course: Course;
   coursePublic: Course;
@@ -395,6 +394,10 @@ export type Query = {
   submittedProgresses: Array<SubmittedProgress>;
   subscription?: Maybe<Subscription>;
   user: User;
+};
+
+export type QueryClaimedBadgeArgs = {
+  _id: Scalars['String']['input'];
 };
 
 export type QueryCourseArgs = {
@@ -710,8 +713,8 @@ export type ClaimBadgeMutation = {
   claimBadge: {
     __typename?: 'ClaimedBadge';
     _id: string;
-    badge: string;
     createdAt: string;
+    badge: { __typename?: 'Badge'; _id: string };
   };
 };
 
@@ -980,6 +983,33 @@ export type GetUserQuery = {
   };
 };
 
+export type GetClaimedBadgeQueryVariables = Exact<{
+  _id: Scalars['String']['input'];
+}>;
+
+export type GetClaimedBadgeQuery = {
+  __typename?: 'Query';
+  claimedBadge: {
+    __typename?: 'ClaimedBadge';
+    _id: string;
+    createdAt: string;
+    badge: {
+      __typename?: 'Badge';
+      _id: string;
+      title: string;
+      description: string;
+      icon: string;
+      course?: { __typename?: 'Course'; _id: string; title: string } | null;
+    };
+    user: {
+      __typename?: 'User';
+      _id: string;
+      firstName?: string | null;
+      lastName?: string | null;
+    };
+  };
+};
+
 export type GetClaimedBadgesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetClaimedBadgesQuery = {
@@ -987,9 +1017,9 @@ export type GetClaimedBadgesQuery = {
   claimedBadges: Array<{
     __typename?: 'ClaimedBadge';
     _id: string;
-    badge: string;
-    user: string;
     createdAt: string;
+    badge: { __typename?: 'Badge'; _id: string };
+    user: { __typename?: 'User'; _id: string };
   }>;
 };
 
@@ -1005,14 +1035,13 @@ export type GetAllAndClaimedBadgesQuery = {
     title: string;
     description: string;
     icon: string;
-    link: string;
     course?: { __typename?: 'Course'; _id: string; title: string } | null;
   }>;
   claimedBadges: Array<{
     __typename?: 'ClaimedBadge';
     _id: string;
-    badge: string;
     createdAt: string;
+    badge: { __typename?: 'Badge'; _id: string };
   }>;
 };
 
@@ -2046,7 +2075,16 @@ export const ClaimBadgeDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'badge' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'badge' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                    ],
+                  },
+                },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
               ],
             },
@@ -3038,6 +3076,109 @@ export const GetUserDocument = {
     },
   ],
 } as unknown as DocumentNode<GetUserQuery, GetUserQueryVariables>;
+export const GetClaimedBadgeDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetClaimedBadge' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: '_id' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'claimedBadge' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: '_id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: '_id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'badge' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'description' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'course' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: '_id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'title' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'user' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'firstName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'lastName' },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetClaimedBadgeQuery,
+  GetClaimedBadgeQueryVariables
+>;
 export const GetClaimedBadgesDocument = {
   kind: 'Document',
   definitions: [
@@ -3055,8 +3196,26 @@ export const GetClaimedBadgesDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'badge' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'user' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'badge' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'user' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                    ],
+                  },
+                },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
               ],
             },
@@ -3089,7 +3248,6 @@ export const GetAllAndClaimedBadgesDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'link' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'course' },
@@ -3111,7 +3269,16 @@ export const GetAllAndClaimedBadgesDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'badge' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'badge' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                    ],
+                  },
+                },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
               ],
             },

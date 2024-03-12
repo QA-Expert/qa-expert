@@ -25,13 +25,6 @@ export class Badge extends mongoose.Document {
   @Prop()
   icon: string;
 
-  @Field({
-    description:
-      'Sharable link. Navigating via that link use should be able to see their Badge',
-  })
-  @Prop()
-  link: string;
-
   @Prop({ type: ObjectId, ref: 'Course' })
   @Field(() => Course, { nullable: true })
   course?: Course | mongoose.Types.ObjectId;

@@ -153,12 +153,40 @@ export const GET_USER = gql(/* GraphQL */ `
   }
 `);
 
+export const GET_CLAIMED_BADGE = gql(/* GraphQL */ `
+  query GetClaimedBadge($_id: String!) {
+    claimedBadge(_id: $_id) {
+      _id
+      badge {
+        _id
+        title
+        description
+        icon
+        course {
+          _id
+          title
+        }
+      }
+      user {
+        _id
+        firstName
+        lastName
+      }
+      createdAt
+    }
+  }
+`);
+
 export const GET_CLAIMED_BADGES = gql(/* GraphQL */ `
   query GetClaimedBadges {
     claimedBadges {
       _id
-      badge
-      user
+      badge {
+        _id
+      }
+      user {
+        _id
+      }
       createdAt
     }
   }
@@ -171,7 +199,6 @@ export const GET_ALL_AND_CLAIMED_BADGES = gql(/* GraphQL */ `
       title
       description
       icon
-      link
       course {
         _id
         title
@@ -179,7 +206,9 @@ export const GET_ALL_AND_CLAIMED_BADGES = gql(/* GraphQL */ `
     }
     claimedBadges {
       _id
-      badge
+      badge {
+        _id
+      }
       createdAt
     }
   }
