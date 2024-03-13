@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { ClaimedBadge } from './claimed-badge.schema';
+import { Badge } from '../badges/badge.schema';
+import { Course } from '../courses/course.schema';
 
 @Injectable()
 export class ClaimedBadgeService {
@@ -15,6 +17,21 @@ export class ClaimedBadgeService {
       .find({
         user: {
           _id: userId,
+        },
+      })
+      .exec();
+  }
+
+  async findById(id: string) {
+    return await this.model
+      .findById(id)
+      .populate({ path: 'user', select: 'firstName lastName' })
+      .populate({
+        path: 'badge',
+        model: Badge.name,
+        populate: {
+          model: Course.name,
+          path: 'course',
         },
       })
       .exec();

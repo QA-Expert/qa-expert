@@ -7,7 +7,6 @@ import {
   Section as SectionName,
 } from '@/components/profile/sidebar/sidebar';
 import { Suspense, useEffect, useState } from 'react';
-import Typography from '@mui/material/Typography/Typography';
 import Divider from '@mui/material/Divider/Divider';
 import { Billing } from '@/components/profile/billing/billing';
 import { Activities } from '@/components/profile/activities/activities';
@@ -17,6 +16,7 @@ import { Row } from '@/components/row/row';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { Theme, useTheme } from '@mui/material/styles';
+import { SectionTitle } from '@/components/section/title';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY ?? '',
@@ -78,17 +78,7 @@ function Account() {
           gap: '1.5rem',
         }}
       >
-        <Typography
-          variant="h2"
-          sx={{
-            fontSize: '2rem',
-            textTransform: 'uppercase',
-            color: 'secondary.main',
-            fontWeight: 'bold',
-          }}
-        >
-          {section}
-        </Typography>
+        <SectionTitle>{section}</SectionTitle>
 
         <Divider
           variant="fullWidth"

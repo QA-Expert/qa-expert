@@ -7,8 +7,9 @@ type Props = {
   ancherEl: HTMLElement | null;
   onClose: () => void;
   menuItems: {
-    name: string;
-    handleClick: () => void;
+    name?: string;
+    element?: ReactNode;
+    handleClick?: () => void;
   }[];
   children?: ReactNode;
 };
@@ -39,9 +40,13 @@ export function DropdownMenu({
 
       {menuItems.map((item, i) => (
         <MenuItem key={i} onClick={item.handleClick}>
-          <Typography width={'100%'} textAlign="center">
-            {item.name}
-          </Typography>
+          {item.element ? item.element : null}
+
+          {item.name ? (
+            <Typography width={'100%'} textAlign="center">
+              {item.name}
+            </Typography>
+          ) : null}
         </MenuItem>
       ))}
     </MuiMenu>

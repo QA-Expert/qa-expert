@@ -21,6 +21,13 @@ export class ClaimedBadgeResolver {
     return await this.service.findAll(user._id);
   }
 
+  @Query(() => ClaimedBadge)
+  public async claimedBadge(
+    @Args('_id') _id: string,
+  ): Promise<ClaimedBadge | null> {
+    return await this.service.findById(_id);
+  }
+
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles(RolesEnum.USER)
   @Mutation(() => ClaimedBadge)

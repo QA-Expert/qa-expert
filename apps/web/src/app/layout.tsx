@@ -32,10 +32,7 @@ export const metadata: Metadata = {
     'QA',
     'testing',
   ],
-  authors: [
-    { name: 'Andrei Surzhan', url: 'https://andrei-builds.software' },
-    { name: 'Pavel Surzhan' },
-  ],
+  authors: [{ name: 'Andrei Surzhan', url: 'https://andrei-builds.software' }],
   creator: 'Andrei Surzhan',
   applicationName: 'QA Expert',
   manifest: '/manifest.json',

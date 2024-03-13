@@ -84,3 +84,14 @@ export const getUsername = (user: GetUserQuery['user'] | undefined) => {
     ? `${user.firstName} ${user.lastName}`
     : user.email;
 };
+
+export const getStudentName = (
+  user: Pick<GetUserQuery['user'], 'firstName' | 'lastName'>,
+) => {
+  const username =
+    user.firstName && user.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : user.firstName ?? user.lastName;
+
+  return username ?? 'Student';
+};
