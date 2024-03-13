@@ -5,7 +5,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
 import ShareIcon from '@mui/icons-material/Share';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { DropdownMenu } from '@/components/dropdown-menu/dropdown-menu';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
 import { GetAllAndClaimedBadgesQuery } from '__generated__/graphql';
@@ -48,27 +48,30 @@ export const BadgeCard = ({
     setAnchorElShareButton(null);
   };
 
-  const shareMenuItems = [
-    {
-      element: (
-        <LinkedinShareButton
-          title={`QA Expert - ${title}`}
-          summary={`We're thrilled to congratulate ${studentName} for successfully completing our ${course?.title} course!`}
-          source={'QA Expert'}
-          url={claimedBadgeUrl}
-        >
-          <LinkedinIcon size={32} round />
-        </LinkedinShareButton>
-      ),
-    },
-    {
-      element: (
-        <FacebookShareButton hashtag="qaexpert.io" url={claimedBadgeUrl}>
-          <FacebookIcon size={32} round />
-        </FacebookShareButton>
-      ),
-    },
-  ];
+  const shareMenuItems = useMemo(
+    () => [
+      {
+        element: (
+          <LinkedinShareButton
+            title={`QA Expert - ${title}`}
+            summary={`We're thrilled to congratulate ${studentName} for successfully completing our ${course?.title} course!`}
+            source={'QA Expert'}
+            url={claimedBadgeUrl}
+          >
+            <LinkedinIcon size={32} round />
+          </LinkedinShareButton>
+        ),
+      },
+      {
+        element: (
+          <FacebookShareButton hashtag="qaexpert.io" url={claimedBadgeUrl}>
+            <FacebookIcon size={32} round />
+          </FacebookShareButton>
+        ),
+      },
+    ],
+    [claimedBadgeUrl, course?.title, studentName, title],
+  );
 
   return (
     <>
