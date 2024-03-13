@@ -24,7 +24,6 @@ interface Props extends Badge {
   isEarned: boolean;
   unlockedDate?: string;
   claimedBadgeId?: string;
-  studentName?: string;
 }
 
 export const BadgeCard = ({
@@ -34,7 +33,6 @@ export const BadgeCard = ({
   isEarned,
   unlockedDate,
   claimedBadgeId,
-  studentName,
 }: Props) => {
   const [anchorElShareButton, setAnchorElShareButton] =
     useState<null | HTMLElement>(null);
@@ -52,12 +50,7 @@ export const BadgeCard = ({
     () => [
       {
         element: (
-          <LinkedinShareButton
-            title={`QA Expert - ${title}`}
-            summary={`We're thrilled to congratulate ${studentName} for successfully completing our ${course?.title} course!`}
-            source={'QA Expert'}
-            url={claimedBadgeUrl}
-          >
+          <LinkedinShareButton url={claimedBadgeUrl}>
             <LinkedinIcon size={32} round />
           </LinkedinShareButton>
         ),
@@ -70,7 +63,7 @@ export const BadgeCard = ({
         ),
       },
     ],
-    [claimedBadgeUrl, course?.title, studentName, title],
+    [claimedBadgeUrl],
   );
 
   return (

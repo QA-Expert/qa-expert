@@ -209,10 +209,6 @@ export const GET_ALL_AND_CLAIMED_BADGES = gql(/* GraphQL */ `
       badge {
         _id
       }
-      user {
-        firstName
-        lastName
-      }
       createdAt
     }
   }
