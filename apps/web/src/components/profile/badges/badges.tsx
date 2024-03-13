@@ -6,7 +6,6 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_ALL_AND_CLAIMED_BADGES } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
 import { getClaimedBadge } from './handlers';
-import { getStudentName } from 'utils/utils';
 
 export function Badges() {
   const { data, error: badgesFetchError } = useSuspenseQuery(
@@ -28,9 +27,6 @@ export function Badges() {
     >
       {badges?.map((badge, i) => {
         const claimedBadge = getClaimedBadge(claimedBadges, badge._id);
-        const studentName = claimedBadge?.user
-          ? getStudentName(claimedBadge.user)
-          : 'Student';
 
         return (
           <BadgeCard
@@ -39,7 +35,6 @@ export function Badges() {
             isEarned={Boolean(claimedBadge)}
             unlockedDate={claimedBadge?.createdAt}
             claimedBadgeId={claimedBadge?._id}
-            studentName={studentName}
           />
         );
       })}

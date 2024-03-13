@@ -74,7 +74,7 @@ const documents = {
     types.GetClaimedBadgeDocument,
   '\n  query GetClaimedBadges {\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      user {\n        _id\n      }\n      createdAt\n    }\n  }\n':
     types.GetClaimedBadgesDocument,
-  '\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      user {\n        firstName\n        lastName\n      }\n      createdAt\n    }\n  }\n':
+  '\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      createdAt\n    }\n  }\n':
     types.GetAllAndClaimedBadgesDocument,
   '\n  query GetSubmittedUserProgressesUser {\n    submittedProgresses {\n      _id\n      totalProgress\n      quizProgress\n      courseProgress\n      createdAt\n      course {\n        _id\n        title\n        level\n        progress {\n          state\n          pass\n          fail\n        }\n      }\n    }\n  }\n':
     types.GetSubmittedUserProgressesUserDocument,
@@ -292,8 +292,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      user {\n        firstName\n        lastName\n      }\n      createdAt\n    }\n  }\n',
-): (typeof documents)['\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      user {\n        firstName\n        lastName\n      }\n      createdAt\n    }\n  }\n'];
+  source: '\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      createdAt\n    }\n  }\n',
+): (typeof documents)['\n  query GetAllAndClaimedBadges {\n    badges {\n      _id\n      title\n      description\n      icon\n      course {\n        _id\n        title\n      }\n    }\n    claimedBadges {\n      _id\n      badge {\n        _id\n      }\n      createdAt\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

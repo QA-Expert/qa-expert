@@ -1042,11 +1042,6 @@ export type GetAllAndClaimedBadgesQuery = {
     _id: string;
     createdAt: string;
     badge: { __typename?: 'Badge'; _id: string };
-    user: {
-      __typename?: 'User';
-      firstName?: string | null;
-      lastName?: string | null;
-    };
   }>;
 };
 
@@ -3281,23 +3276,6 @@ export const GetAllAndClaimedBadgesDocument = {
                     kind: 'SelectionSet',
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: '_id' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'user' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'firstName' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'lastName' },
-                      },
                     ],
                   },
                 },
