@@ -10,12 +10,21 @@ import { DropdownMenu } from '@/components/dropdown-menu/dropdown-menu';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
 import { GetAllAndClaimedBadgesQuery } from '__generated__/graphql';
 import { Card } from '@/components/profile/card/card';
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+} from 'react-share';
+import { BASE_URL } from 'constants/constants';
 
 type Badge = GetAllAndClaimedBadgesQuery['badges'][number];
 
 interface Props extends Badge {
   isEarned: boolean;
   unlockedDate?: string;
+  claimedBadgeId?: string;
+  studentName?: string;
 }
 
 export const BadgeCard = ({
@@ -24,9 +33,12 @@ export const BadgeCard = ({
   course,
   isEarned,
   unlockedDate,
+  claimedBadgeId,
+  studentName,
 }: Props) => {
   const [anchorElShareButton, setAnchorElShareButton] =
     useState<null | HTMLElement>(null);
+  const claimedBadgeUrl = `${BASE_URL}/claimed-badge/${claimedBadgeId}`;
 
   const handleOpenShareMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElShareButton(event.currentTarget);
@@ -38,16 +50,23 @@ export const BadgeCard = ({
 
   const shareMenuItems = [
     {
-      name: 'LinkedIn',
-      handleClick: () => {
-        console.log('create post on linkedIn');
-      },
+      element: (
+        <LinkedinShareButton
+          title={`QA Expert - ${title}`}
+          summary={`We're thrilled to congratulate ${studentName} for successfully completing our ${course?.title} course!`}
+          source={'QA Expert'}
+          url={claimedBadgeUrl}
+        >
+          <LinkedinIcon size={32} round />
+        </LinkedinShareButton>
+      ),
     },
     {
-      name: 'Facebook',
-      handleClick: () => {
-        console.log('create post on facebook');
-      },
+      element: (
+        <FacebookShareButton hashtag="qaexpert.io" url={claimedBadgeUrl}>
+          <FacebookIcon size={32} round />
+        </FacebookShareButton>
+      ),
     },
   ];
 

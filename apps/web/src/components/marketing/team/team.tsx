@@ -26,23 +26,6 @@ const TEAMMATES: CardProps[] = [
       },
     ],
   },
-  {
-    name: 'Pavel Surzhan',
-    title: 'Co-Founder, Software Engineer and all other things',
-    description:
-      'Lorem ipsum dolor sit amet consectetur. Gravida vel vulputate amet nec tortor. Malesuada non commodo risus amet enim suspendisse',
-    avatar: '/images/pavel-avatar.jpg',
-    socials: [
-      {
-        name: 'linkedin',
-        url: '#',
-      },
-      {
-        name: 'facebook',
-        url: '#',
-      },
-    ],
-  },
 ];
 
 export function Team() {
