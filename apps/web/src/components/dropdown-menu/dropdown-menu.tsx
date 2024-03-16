@@ -39,7 +39,11 @@ export function DropdownMenu({
       {children ? children : null}
 
       {menuItems.map((item, i) => (
-        <MenuItem key={i} onClick={item.handleClick}>
+        <MenuItem
+          key={i}
+          onClick={item.handleClick}
+          sx={{ justifyContent: 'center' }}
+        >
           {item.element ? item.element : null}
 
           {item.name ? (

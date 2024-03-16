@@ -17,6 +17,13 @@ import MuiLink from '@mui/material/Link';
 import { format } from 'date-fns';
 import { DATE_FORMAT } from 'constants/constants';
 import { getStudentName } from 'utils/utils';
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+} from 'react-share';
+import IconButton from '@mui/material/IconButton/IconButton';
 
 /**
  * @description Routing App component that represents a route for a Claimed Badge
@@ -32,6 +39,7 @@ const ClaimedBadge = () => {
   const theme = useTheme();
   const { badge, user, createdAt } = data.claimedBadge;
   const studentName = getStudentName(user);
+  const currentUrl = global.window?.location.href;
 
   return (
     <Section
@@ -69,6 +77,25 @@ const ClaimedBadge = () => {
           <Typography sx={{ color: 'secondary.main' }}>
             Unlocked on {format(createdAt, DATE_FORMAT)}
           </Typography>
+
+          <Row sx={{ justifyContent: 'center' }}>
+            <IconButton
+              component={LinkedinShareButton}
+              url={currentUrl}
+              style={{ padding: '0.5rem' }}
+            >
+              <LinkedinIcon size={32} round />
+            </IconButton>
+
+            <IconButton
+              component={FacebookShareButton}
+              hashtag="qaexpert.io"
+              url={currentUrl}
+              style={{ padding: '0.5rem' }}
+            >
+              <FacebookIcon size={32} round />
+            </IconButton>
+          </Row>
         </Box>
 
         <Box

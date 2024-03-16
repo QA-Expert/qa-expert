@@ -1,22 +1,19 @@
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
-import ShareIcon from '@mui/icons-material/Share';
-import { useMemo, useState } from 'react';
-import { DropdownMenu } from '@/components/dropdown-menu/dropdown-menu';
-import Tooltip from '@mui/material/Tooltip/Tooltip';
 import { GetAllAndClaimedBadgesQuery } from '__generated__/graphql';
 import { Card } from '@/components/profile/card/card';
 import {
-  FacebookIcon,
   FacebookShareButton,
-  LinkedinIcon,
   LinkedinShareButton,
+  LinkedinIcon,
+  FacebookIcon,
 } from 'react-share';
-import { BASE_URL } from 'constants/constants';
+import Link from 'next/link';
+import { Row } from '@/components/row/row';
+import IconButton from '@mui/material/IconButton/IconButton';
 
 type Badge = GetAllAndClaimedBadgesQuery['badges'][number];
 
@@ -34,37 +31,7 @@ export const BadgeCard = ({
   unlockedDate,
   claimedBadgeId,
 }: Props) => {
-  const [anchorElShareButton, setAnchorElShareButton] =
-    useState<null | HTMLElement>(null);
-  const claimedBadgeUrl = `${BASE_URL}/claimed-badge/${claimedBadgeId}`;
-
-  const handleOpenShareMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElShareButton(event.currentTarget);
-  };
-
-  const handleCloseShareMenu = () => {
-    setAnchorElShareButton(null);
-  };
-
-  const shareMenuItems = useMemo(
-    () => [
-      {
-        element: (
-          <LinkedinShareButton url={claimedBadgeUrl}>
-            <LinkedinIcon size={32} round />
-          </LinkedinShareButton>
-        ),
-      },
-      {
-        element: (
-          <FacebookShareButton hashtag="qaexpert.io" url={claimedBadgeUrl}>
-            <FacebookIcon size={32} round />
-          </FacebookShareButton>
-        ),
-      },
-    ],
-    [claimedBadgeUrl],
-  );
+  const claimedBadgeUrl = `${global.window?.location.host}/claimed-badge/${claimedBadgeId}`;
 
   return (
     <>
@@ -73,11 +40,11 @@ export const BadgeCard = ({
           pointerEvents: isEarned ? 'auto' : 'none',
           opacity: isEarned ? 1 : 0.6,
           width: '300px',
-          height: '300px',
           justifyContent: 'start',
           alignItems: 'center',
           textAlign: 'center',
           padding: '0',
+          gap: '0.5rem',
         }}
       >
         <Typography
@@ -97,9 +64,9 @@ export const BadgeCard = ({
             : 'Not Unlocked Yet'}
         </Typography>
 
-        <CardMedia>
+        <Row sx={{ justifyContent: 'center', padding: '0.5rem' }}>
           <VerifiedIcon fontSize="large" />
-        </CardMedia>
+        </Row>
 
         <CardContent>
           <Typography
@@ -129,26 +96,33 @@ export const BadgeCard = ({
               Go to Course
             </Button>
 
-            <Tooltip title="Share Badge on social platforms">
-              <Button
-                startIcon={<ShareIcon sx={{ color: 'text.primary' }} />}
-                color="success"
-                variant="outlined"
-                size="small"
-                onClick={handleOpenShareMenu}
-              >
-                Share
+            <Link href={`/claimed-badge/${claimedBadgeId}`} target="_blank">
+              <Button color="secondary" variant="contained" size="small">
+                Go to Badge
               </Button>
-            </Tooltip>
+            </Link>
           </CardActions>
         )}
-      </Card>
 
-      <DropdownMenu
-        menuItems={shareMenuItems}
-        ancherEl={anchorElShareButton}
-        onClose={handleCloseShareMenu}
-      />
+        <Row sx={{ justifyContent: 'center', paddingBottom: '0.5rem' }}>
+          <IconButton
+            component={LinkedinShareButton}
+            url={claimedBadgeUrl}
+            style={{ padding: '0.5rem' }}
+          >
+            <LinkedinIcon size={32} round />
+          </IconButton>
+
+          <IconButton
+            component={FacebookShareButton}
+            hashtag="qaexpert.io"
+            url={claimedBadgeUrl}
+            style={{ padding: '0.5rem' }}
+          >
+            <FacebookIcon size={32} round />
+          </IconButton>
+        </Row>
+      </Card>
     </>
   );
 };

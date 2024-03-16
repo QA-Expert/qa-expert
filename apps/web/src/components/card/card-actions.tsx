@@ -14,7 +14,13 @@ import ShareIcon from '@mui/icons-material/Share';
 import { Row } from '@/components/row/row';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
 import Typography from '@mui/material/Typography/Typography';
-
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+} from 'react-share';
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 type Props = {
   courseId: string;
   isLiked?: boolean;
@@ -22,6 +28,7 @@ type Props = {
 };
 
 export function CardActions({ courseId, isLiked, likes }: Props) {
+  const courseUrl = `${global.window?.location.host}/courses/#course-${courseId}`;
   const isUserAuthenticated = useReactiveVar(isAuthenticated);
   const [likeCourse, { error, loading }] = useMutation(LIKE_COURSE, {
     refetchQueries: [
@@ -58,12 +65,36 @@ export function CardActions({ courseId, isLiked, likes }: Props) {
 
   const shareMenuItems = [
     {
-      name: 'Copy Course Link',
-      handleClick: () => {
-        navigator.clipboard.writeText(
-          `${global.window.location.host}/courses/#course-${courseId}`,
-        );
-      },
+      element: (
+        <IconButton component={LinkedinShareButton} url={courseUrl}>
+          <LinkedinIcon size={32} round />
+        </IconButton>
+      ),
+    },
+    {
+      element: (
+        <IconButton
+          component={FacebookShareButton}
+          hashtag="qaexpert.io"
+          url={courseUrl}
+          style={{ justifyContent: 'center' }}
+        >
+          <FacebookIcon size={32} round />
+        </IconButton>
+      ),
+    },
+    {
+      element: (
+        <Tooltip title="Copy to clipboard">
+          <IconButton
+            onClick={() => {
+              navigator.clipboard.writeText(courseUrl);
+            }}
+          >
+            <ContentCopyRoundedIcon />
+          </IconButton>
+        </Tooltip>
+      ),
     },
   ];
 
