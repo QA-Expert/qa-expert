@@ -19,6 +19,7 @@ import { ContactUsModal } from '@/components/contact-us-modal/contact-us-modal';
 import ChatIcon from '@mui/icons-material/Chat';
 import Image from 'next/image';
 import { Box } from '@/components/box/box';
+import { PreReleaseOverlay } from '../pre-release-overlay/pre-release-overlay';
 
 export default function Nav() {
   const [bugReportModalOpen, setBugReportModalOpen] = useState(false);
@@ -52,16 +53,20 @@ export default function Nav() {
             </Box>
           </Link>
 
-          <Link href={`/courses`}>
-            <Typography variant="body1" noWrap sx={{ color: 'warning.main' }}>
-              Courses
-            </Typography>
-          </Link>
+          <PreReleaseOverlay>
+            <Link href={`/courses`}>
+              <Typography variant="body1" noWrap sx={{ color: 'warning.main' }}>
+                Courses
+              </Typography>
+            </Link>
+          </PreReleaseOverlay>
 
           <Row sx={{ marginLeft: 'auto', width: 'auto' }}>
-            <IconButton onClick={() => setContactUsModalOpen(true)}>
-              <ChatIcon />
-            </IconButton>
+            <PreReleaseOverlay>
+              <IconButton onClick={() => setContactUsModalOpen(true)}>
+                <ChatIcon />
+              </IconButton>
+            </PreReleaseOverlay>
 
             {data?.user && isUserAuthenticated ? (
               <>
@@ -74,11 +79,13 @@ export default function Nav() {
                 </Suspense>
               </>
             ) : (
-              <Link href="/login">
-                <Button color="warning" variant="contained">
-                  Login
-                </Button>
-              </Link>
+              <PreReleaseOverlay>
+                <Link href="/login">
+                  <Button color="warning" variant="contained">
+                    Login
+                  </Button>
+                </Link>
+              </PreReleaseOverlay>
             )}
           </Row>
         </Toolbar>

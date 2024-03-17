@@ -10,6 +10,7 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_SUBSCRIPTION } from 'graphql/queries/queries';
 import { useError } from 'utils/hooks';
 import { SubscriptionStatus } from '__generated__/graphql';
+import { PreReleaseOverlay } from '@/components/pre-release-overlay/pre-release-overlay';
 
 const SUBSCRIPTION = {
   amount: '$30',
@@ -58,9 +59,11 @@ export function Subscription() {
       </List>
 
       {!isUserAuthenticated ? (
-        <Button size="large" color="warning" variant="contained">
-          <Link href="/login">Login to Subscribe</Link>
-        </Button>
+        <PreReleaseOverlay>
+          <Button size="large" color="warning" variant="contained">
+            <Link href="/login">Login to Subscribe</Link>
+          </Button>
+        </PreReleaseOverlay>
       ) : null}
 
       {isUserAuthenticated &&
