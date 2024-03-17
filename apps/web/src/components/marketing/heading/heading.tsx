@@ -8,6 +8,7 @@ import { useTheme } from '@mui/material/styles';
 import { getBackgroundStyles } from '../handlers';
 import Button from '@mui/material/Button/Button';
 import Link from 'next/link';
+import { PreReleaseOverlay } from '@/components/pre-release-overlay/pre-release-overlay';
 
 const CONTEXT = {
   header: "it's easy to become an IT specialist",
@@ -64,9 +65,11 @@ export function Heading() {
           {CONTEXT.paragraph}
         </Typography>
 
-        <Button size="large" color="warning" variant="contained">
-          <Link href="/courses"> Start FREE Today</Link>
-        </Button>
+        <PreReleaseOverlay>
+          <Button size="large" color="warning" variant="contained">
+            <Link href="/courses"> Start FREE Today</Link>
+          </Button>
+        </PreReleaseOverlay>
       </Box>
 
       <Box
